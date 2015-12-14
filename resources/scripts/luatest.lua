@@ -108,4 +108,4 @@ local dig_your_way_to_freedom =
 	}
 }
 
-terrain_settings = big_twisting
+terrain_settings = swiss_cheese
