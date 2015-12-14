@@ -1,0 +1,32 @@
+#version 400 core
+
+layout (location = 0) in vec3 vertex_position;
+layout (location = 1) in vec2 vertex_uv;
+layout (location = 2) in vec2 vertex_uv2;
+layout (location = 3) in vec3 vertex_normal;
+layout (location = 4) in vec3 vertex_tangent;
+
+uniform mat4 mvp_matrix;
+uniform float displacement_angle;
+
+out vec2 final_uv;
+out vec2 final_uv2;
+out vec3 final_normal;
+out vec3 final_tangent;
+
+void main()
+{
+	//vec3 delta;
+	//float y_scale = 0.1f;
+	//float radius = 5.0f;
+	//delta.x = sin (displacement_angle + vertex_position.y * y_scale) * radius;
+	//delta.z = cos (displacement_angle + vertex_position.y * y_scale) * radius;
+	//gl_Position = mvp_matrix * vec4 (vertex_position + delta, 1.0f);
+
+	gl_Position = mvp_matrix * vec4 (vertex_position, 1.0f);
+
+	final_uv = vertex_uv;
+	final_uv2 = vertex_uv2;
+	final_normal = vertex_normal;
+	final_tangent = vertex_tangent;
+}

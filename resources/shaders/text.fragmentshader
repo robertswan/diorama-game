@@ -1,0 +1,14 @@
+#version 400 core
+
+uniform sampler2D diffuse;
+
+in vec2 final_uv;
+in vec3 final_color;
+
+out vec3 color;
+
+void main()
+{
+	color = texture (diffuse, final_uv).rgb;
+	color = color * final_color;
+}
