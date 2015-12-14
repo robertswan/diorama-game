@@ -37,3 +37,14 @@ You can change the routine by reassigning the final line of the file like this:
 (remember to delete the world region files as noted above)
 
 	terrain_settings = big_twisting
+
+
+
+Licenses
+--------
+
+glFont
+	E-mail: bhf5@email.byu.edu
+	Web: http://students.cs.byu.edu/~bfish/
+
+TODO - add the licesnses for libraries I use
