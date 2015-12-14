@@ -108,4 +108,4 @@ local dig_your_way_to_freedom =
 	}
 }
 
-terrain_settings = regular_terrain
+terrain_settings = big_twisting
