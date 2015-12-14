@@ -15,7 +15,7 @@ local big_and_smooth =
 		perlin_scale = 1,
 		perlin_translate = 0,
 
-		solid_scale = 0.2 / 64,
+		solid_scale = 0.2 / 256,
 		solid_translate = -0.1
 	}
 }
@@ -108,4 +108,4 @@ local dig_your_way_to_freedom =
 	}
 }
 
-terrain_settings = swiss_cheese
+terrain_settings = regular_terrain
