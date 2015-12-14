@@ -2,10 +2,15 @@
 
 layout (location = 0) in vec3 vertex_position;
 
+uniform vec2 viewport_;
+
 out vec3 final_color;
 
 void main()
 {
-	gl_Position = vec4 (vertex_position.x, vertex_position.y, vertex_position.z, 1.0f);
+	gl_Position.x = (vertex_position.x / viewport_.x * 0.5f) - 1.0f;
+	gl_Position.y = (vertex_position.y / viewport_.y * -0.5f) + 1.0f;
+	gl_Position.z = vertex_position.z;
+	gl_Position.w = 1.0f;
 	final_color = vec3 (1.0f, 1.0f, 1.0f);
 }
