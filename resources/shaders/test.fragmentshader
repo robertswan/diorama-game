@@ -1,0 +1,15 @@
+#version 400 core
+
+uniform sampler2D diffuse_map;
+
+in vec2 frag_in_uv;
+in vec3 frag_in_color;
+
+out vec4 color;
+
+void main()
+{
+	color = texture (diffuse_map, frag_in_uv).rgba;
+	color.a = 1.0f;
+	//color = vec4 (1.0f, 1.0f, 1.0f, 0.1f);
+}
