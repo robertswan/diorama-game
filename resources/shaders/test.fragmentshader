@@ -11,5 +11,4 @@ void main()
 {
 	color = texture (diffuse_map, frag_in_uv).rgba;
 	color.a = 1.0f;
-	//color = vec4 (1.0f, 1.0f, 1.0f, 0.1f);
 }

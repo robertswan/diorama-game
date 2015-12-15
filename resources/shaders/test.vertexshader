@@ -10,8 +10,8 @@ out vec3 frag_in_color;
 
 void main()
 {
-	gl_Position.x = (vertex_position.x / viewport_.x * 2.0f) - 1.0f;
-	gl_Position.y = (vertex_position.y / viewport_.y * -2.0f) + 1.0f;
+	gl_Position.x = (vertex_position.x / (viewport_.x * 0.5f)) - 1.0f;
+	gl_Position.y = (vertex_position.y / (viewport_.y * 0.5f)) - 1.0f;
 	gl_Position.z = vertex_position.z;
 	gl_Position.w = 1.0f;
 	
