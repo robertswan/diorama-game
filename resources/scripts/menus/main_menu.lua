@@ -78,7 +78,7 @@ function addButton (menu, text, onClicked)
 
 	local button = 
 	{
-		text_unfocused = text,
+		text_unfocused = "  " .. text .. "  ",
 		text_focused = "[ " .. text .. " ]",
 		text = text,
 		x = 0,
@@ -103,6 +103,12 @@ function createMainMenu ()
 	local menu = createMenu ("MAIN MENU")
 
 	addButton (menu, "Start New Level", onStartNewLevelClicked)
+	addButton (menu, "Dummy Button", function () end)
+	addButton (menu, "Dummy Button", function () end)
+	addButton (menu, "Dummy Button", function () end)
+	addButton (menu, "Dummy Button", function () end)
+	addButton (menu, "Dummy Button", function () end)
+	addButton (menu, "Dummy Button", function () end)
 
 	addBreak (menu)
 
