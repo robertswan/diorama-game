@@ -28,6 +28,23 @@ local function onUpdate (menu, x, y, was_left_clicked)
 end
 
 --------------------------------------------------
+local function onRender (menu)
+	-- go through every item
+	-- check if the mouse is over it
+	-- if so, switch the text for a HIGHLIGHTED
+
+	local font = dio.font;
+	font.drawString (200, 0, menu.title, 0xffff0000)
+
+
+	local highlighted_item = nil
+	for i, item in ipairs (menu.items) do
+
+		font.drawString (item.x, item.y, item.text, 0xffff0000)
+	end
+end
+
+--------------------------------------------------
 local menu_construction = {}
 
 --------------------------------------------------
@@ -37,7 +54,8 @@ function menu_construction.createMenu (title)
 	{
 		title = title,
 		items = {},
-		next_y = 100
+		next_y = 100,
+		onRender = onRender
 	}
 
 	menu.onUpdate = function (x, y, was_left_clicked)
