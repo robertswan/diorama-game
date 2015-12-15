@@ -30,9 +30,7 @@ function createMainMenu ()
 
 	local menu = createMenu ("MAIN MENU")
 
-	addLabel (menu, "Hello World")
-	addLabel (menu, "Hello World2")
--- --	addLabel (menu, dio.getVersionString ())
+	addLabel (menu, dio.getVersionString ())
 
 -- --	addButton (menu, "Start New Level", onStartNewLevelClicked)
 -- --	addButton (menu, "Load Level", onLoadLevelClicked)
