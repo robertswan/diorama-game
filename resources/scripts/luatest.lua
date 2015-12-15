@@ -48,8 +48,8 @@ local big_twisting =
 
 	landscape_params = 
 	{
-		scale = 64,
-		octaves_max = 4,
+		scale = 128,
+		octaves_max = 5,
 		frequency_per_octave = 2.0,
 		amplitude_per_octave = 0.5,
 	},
