@@ -28,5 +28,56 @@ function createMainMenu ()
 	return menu
 end
 
+
+
+
+
+--[[
+
+	sessions_gamestate
+	{
+
+		int session_id = StartNewSession ();
+
+		UpdateSessions ()
+		{
+			current_alive_session->Update ();
+			all_shutting_down_sessions->UpdateShutdown ();
+		}
+
+		ShutdownSession ();
+
+		bool HasShutdown (session_id);
+
+	private:
+
+		Session * current_session_;
+		std::list <Session *> shutting_down_sessions_;
+	}
+
+
+
+	lifecycle of a session - what is it?
+
+	session = new Session ()
+	session->start (instant)
+
+	session->update (instant, repeat etc)
+
+	session->shutdown (not instant!)
+	session->updateShutdown ()
+	if (session->hasShutdown ())
+	{
+		delete sessions
+	}
+
+	
+
+
+
+]]--
+
+
+
 --------------------------------------------------
 return createMainMenu ()
