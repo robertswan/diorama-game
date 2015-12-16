@@ -3,7 +3,15 @@ local menus = require ("resources/scripts/menus/menu_construction")
 
 --------------------------------------------------
 function onStartNewLevelClicked ()
-	dio.session.requestBegin ()
+
+	-- these are not used!
+	local params =
+	{
+		player_mode = "single_player",
+		folder_directory = "my_world",
+	}
+
+	dio.session.requestBegin (params)
 end
 
 --------------------------------------------------
