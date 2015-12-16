@@ -5,7 +5,8 @@ menus =
 {
 	splash_menu = 			require ("resources/scripts/menus/splash_menu"),
 	main_menu = 			require ("resources/scripts/menus/main_menu"),
-	playing_game_menu = 	require ("resources/scripts/menus/playing_game_menu")
+	playing_game_menu = 	require ("resources/scripts/menus/playing_game_menu"),
+	quitting_menu =			require ("resources/scripts/menus/quitting_menu")
 }
 app_is_shutting_down = false
 app_is_ready_to_quit = false

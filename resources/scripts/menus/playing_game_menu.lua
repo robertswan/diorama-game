@@ -32,6 +32,7 @@ function createPlayingGameMenu ()
 	menu.onAppShouldClose = function ()
 		dio.session.terminate ()
 		onAppShouldClose (menu)
+		current_menu = menus.quitting_menu
 	end
 
 	return menu
