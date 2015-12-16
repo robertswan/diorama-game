@@ -29,6 +29,12 @@ function createMainMenu ()
 	--menus.addLabel (menu, dio.getVersionString ())
 	Menus.addLabel (menu, "TEST")
 
+	local onAppShouldClose = menu.onAppShouldClose 
+	menu.onAppShouldClose = function ()
+		dio.session.terminate ()
+		onAppShouldClose (menu)
+	end
+
 	return menu
 end
 

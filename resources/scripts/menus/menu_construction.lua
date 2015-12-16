@@ -51,6 +51,12 @@ local function onRender (menu)
 end
 
 --------------------------------------------------
+local function onAppShouldClose (menu)
+
+	app_is_shutting_down = true 
+end
+
+--------------------------------------------------
 local menu_construction = {}
 
 --------------------------------------------------
@@ -63,6 +69,7 @@ function menu_construction.createMenu (title)
 		next_y = 100,
 		onUpdate = onUpdate,
 		onRender = onRender,
+		onAppShouldClose = onAppShouldClose,
 		events = {}
 	}
 
