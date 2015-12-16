@@ -26,9 +26,9 @@ local regular_terrain =
 
 	landscape_params = 
 	{
-		scale = 128,
-		octaves_max = 5,
-		frequency_per_octave = 2.0,
+		scale = 256,
+		octaves_max = 3,
+		frequency_per_octave = 4.0,
 		amplitude_per_octave = 0.5,
 	},
 

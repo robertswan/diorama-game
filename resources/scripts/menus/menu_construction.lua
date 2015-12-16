@@ -55,12 +55,9 @@ function menu_construction.createMenu (title)
 		title = title,
 		items = {},
 		next_y = 100,
+		onUpdate = onUpdate,
 		onRender = onRender
 	}
-
-	menu.onUpdate = function (x, y, was_left_clicked)
-		onUpdate (menu, x, y, was_left_clicked)
-	end
 
 	return menu
 end

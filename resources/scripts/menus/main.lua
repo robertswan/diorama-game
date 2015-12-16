@@ -1,18 +1,26 @@
 local splash_menu = require ("resources/scripts/menus/splash_menu")
 local main_menu = require ("resources/scripts/menus/main_menu")
 
+local current_menu = nil
+
 -- --------------------------------------------------
- dio.menus.current_menu = main_menu
+ current_menu = main_menu
 
 --------------------------------------------------
-function Render ()
+function OnUpdate ()
+
+	local x = dio.inputs.mouse.x
+	local y = dio.inputs.mouse.y
+	local is_left_clicked = dio.inputs.mouse.left_button.is_clicked
 	
-	dio.menus.current_menu:onRender ();
-
-	-- local drawing = dio.graphics.drawing;
-	-- drawing:FilledSquare (0, 0, 100, 100, 0x000000ff);
-	-- drawing:Square (0, 0, 100, 100, 0xffffffff);
-
+	current_menu:onUpdate (x, y, is_left_clicked);
 end
 
-dio.onRender = Render
+--------------------------------------------------
+function OnRender ()
+
+	current_menu:onRender ();
+end
+
+dio.onRender = OnRender
+dio.onUpdate = OnUpdate
