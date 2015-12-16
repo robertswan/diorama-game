@@ -1,5 +1,5 @@
 --------------------------------------------------
-local menus = require ("resources/scripts/menus/menu_construction")
+local Menus = require ("resources/scripts/menus/menu_construction")
 
 --------------------------------------------------
 function onStartNewLevelClicked ()
@@ -13,71 +13,24 @@ function onStartNewLevelClicked ()
 	}
 
 	dio.session.requestBegin (params)
+
+	dio.inputs.mouse.setExclusive (true)
+
+	current_menu = menus.playing_game_menu
 end
 
 --------------------------------------------------
 function createMainMenu ()
 
-	local menu = menus.createMenu ("MAIN MENU")
+	local menu = Menus.createMenu ("MAIN MENU")
 
-	menus.addButton (menu, "Start New Level", onStartNewLevelClicked)
-	menus.addBreak (menu)
+	Menus.addButton (menu, "Start New Level", onStartNewLevelClicked)
+	Menus.addBreak (menu)
 	--menus.addLabel (menu, dio.getVersionString ())
-	menus.addLabel (menu, "TEST")
+	Menus.addLabel (menu, "TEST")
 
 	return menu
 end
-
-
-
-
-
---[[
-
-	sessions_gamestate
-	{
-
-		int session_id = StartNewSession ();
-
-		UpdateSessions ()
-		{
-			current_alive_session->Update ();
-			all_shutting_down_sessions->UpdateShutdown ();
-		}
-
-		ShutdownSession ();
-
-		bool HasShutdown (session_id);
-
-	private:
-
-		Session * current_session_;
-		std::list <Session *> shutting_down_sessions_;
-	}
-
-
-
-	lifecycle of a session - what is it?
-
-	session = new Session ()
-	session->start (instant)
-
-	session->update (instant, repeat etc)
-
-	session->shutdown (not instant!)
-	session->updateShutdown ()
-	if (session->hasShutdown ())
-	{
-		delete sessions
-	}
-
-	
-
-
-
-]]--
-
-
 
 --------------------------------------------------
 return createMainMenu ()

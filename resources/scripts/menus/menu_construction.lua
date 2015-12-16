@@ -25,6 +25,12 @@ local function onUpdate (menu, x, y, was_left_clicked)
 	if was_left_clicked and highlighted_item then
 		highlighted_item.onClicked ()
 	end
+
+	for event, callback in pairs (menu.events) do
+		if dio.inputs.events [event] then
+			callback ();
+		end
+	end
 end
 
 --------------------------------------------------
@@ -56,7 +62,8 @@ function menu_construction.createMenu (title)
 		items = {},
 		next_y = 100,
 		onUpdate = onUpdate,
-		onRender = onRender
+		onRender = onRender,
+		events = {}
 	}
 
 	return menu
@@ -108,6 +115,11 @@ function menu_construction.addButton (menu, text, onClicked)
 
 	menu.next_y = menu.next_y + 10
 	table.insert (menu.items, button)
+end
+
+--------------------------------------------------
+function menu_construction.addEventListener (menu, event, onFired)
+	menu.events [event] = onFired
 end
 
 --------------------------------------------------
