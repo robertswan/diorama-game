@@ -13,7 +13,7 @@ function createMainMenu ()
 
 	menus.addButton (menu, "Start New Level", onStartNewLevelClicked)
 	menus.addBreak (menu)
-	menus.addLabel (menu, dio.getVersionString ())
+	--menus.addLabel (menu, dio.getVersionString ())
 	menus.addLabel (menu, "TEST")
 
 	return menu
