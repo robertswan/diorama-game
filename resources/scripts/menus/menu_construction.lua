@@ -33,7 +33,7 @@ local function onRender (menu)
 	-- check if the mouse is over it
 	-- if so, switch the text for a HIGHLIGHTED
 
-	local font = dio.font;
+	local font = dio.drawing.font;
 	font.drawString (200, 0, menu.title, 0xffff0000)
 
 
