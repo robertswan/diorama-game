@@ -4,11 +4,12 @@ local menus = require ("resources/scripts/menus/menu_construction")
 --------------------------------------------------
 function onStartNewLevelClicked ()
 
+	dio.session.terminate () -- kills it immediately
+
 	-- these are not used!
 	local params =
 	{
-		player_mode = "single_player",
-		folder_directory = "my_world",
+		should_save = true,
 	}
 
 	dio.session.requestBegin (params)

@@ -24,3 +24,10 @@ end
 
 dio.onRender = OnRender
 dio.onUpdate = OnUpdate
+
+
+local params =
+{
+	save_folder_directory = nil,
+}
+dio.session.requestBegin (params)
