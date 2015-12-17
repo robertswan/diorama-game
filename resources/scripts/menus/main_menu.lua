@@ -2,21 +2,15 @@
 local Menus = require ("resources/scripts/menus/menu_construction")
 
 --------------------------------------------------
-function onStartNewLevelClicked ()
+function onCreateNewLevelClicked ()
 
-	dio.session.terminate () -- kills it immediately
+	return "playing_game_menu"
+end
 
-	-- these are not used!
-	local params =
-	{
-		should_save = true,
-	}
+--------------------------------------------------
+function onLoadLevel ()
 
-	dio.session.requestBegin (params)
-
-	dio.inputs.mouse.setExclusive (true)
-
-	current_menu = menus.playing_game_menu
+	return "playing_game_menu"
 end
 
 --------------------------------------------------
@@ -24,15 +18,24 @@ function createMainMenu ()
 
 	local menu = Menus.createMenu ("MAIN MENU")
 
-	Menus.addButton (menu, "Start New Level", onStartNewLevelClicked)
+	Menus.addButton (menu, "Create New Level", onCreateNewLevelClicked)
+	Menus.addButton (menu, "Load Level", onLoadLevel)
 	Menus.addBreak (menu)
-	--menus.addLabel (menu, dio.getVersionString ())
+
 	Menus.addLabel (menu, "TEST")
 
 	local onAppShouldClose = menu.onAppShouldClose 
 	menu.onAppShouldClose = function ()
 		dio.session.terminate ()
 		onAppShouldClose (menu)
+	end
+
+	menu.onEnter = function (menu)
+		dio.session.requestBegin ({false})
+	end
+
+	menu.onExit = function (menu)
+		dio.session.terminate ()
 	end
 
 	return menu

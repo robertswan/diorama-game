@@ -30,9 +30,18 @@ function createPlayingGameMenu ()
 
 	local onAppShouldClose = menu.onAppShouldClose 
 	menu.onAppShouldClose = function ()
-		dio.session.terminate ()
 		onAppShouldClose (menu)
-		current_menu = menus.quitting_menu
+		return "quitting_menu"
+	end
+
+	menu.onEnter = function (menu)
+		dio.session.requestBegin ({true})
+		dio.inputs.mouse.setExclusive (true)
+	end
+
+	menu.onExit = function (menu)
+		dio.session.terminate ()
+		dio.inputs.mouse.setExclusive (false)	
 	end
 
 	return menu
@@ -40,3 +49,4 @@ end
 
 --------------------------------------------------
 return createPlayingGameMenu ()
+
