@@ -36,7 +36,7 @@ function c:onUpdate (x, y, was_left_clicked)
 
 	for event, callback in pairs (self.events) do
 		if dio.inputs.events [event] then
-			callback ();
+			next_menu = callback ();
 		end
 	end
 

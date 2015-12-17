@@ -4,8 +4,8 @@ local MenuClass = require ("resources/scripts/menus/menu_class")
 local Mixin = require ("resources/scripts/menus/mixin")
 
 --------------------------------------------------
-local function onMouseReleasedCallback ()
-	return "in_game_pause_menu"
+local function onResumeClicked (self)
+	return "playing_game_menu"
 end
 
 --------------------------------------------------
@@ -19,19 +19,8 @@ function c:onAppShouldClose (parent_func)
 end
 
 --------------------------------------------------
-function c:onEnter ()
-	dio.inputs.mouse.setExclusive (true)
-end
-
---------------------------------------------------
-function c:onExit ()
-	dio.inputs.mouse.setExclusive (false)	
-end
-
---------------------------------------------------
 return function ()
-
-	local instance = MenuClass ("PLAYING GAME MENU")
+	local instance = MenuClass ("IN GAME PAUSE MENU")
 
 	local onAppShouldClose = instance.onAppShouldClose 
 
@@ -40,7 +29,9 @@ return function ()
 	local onAppShouldClose2 = instance.onAppShouldClose
 	instance.onAppShouldClose = function (self) return onAppShouldClose2 (self, onAppShouldClose) end
 
-	Menus.addEventListener (instance, "MOUSE_RELEASED", onMouseReleasedCallback)
+	Menus.addBreak (instance)
+	Menus.addButton (instance, "Resume", onResumeClicked)
+	Menus.addBreak (instance)
 
 	return instance
 end

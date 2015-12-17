@@ -5,12 +5,12 @@ local Mixin = require ("resources/scripts/menus/mixin")
 
 --------------------------------------------------
 local function onCreateNewLevelClicked ()
-	return "playing_game_menu"
+	return "loading_level_menu"
 end
 
 --------------------------------------------------
 local function onLoadLevel ()
-	return "playing_game_menu"
+	return "loading_level_menu"
 end
 
 --------------------------------------------------
