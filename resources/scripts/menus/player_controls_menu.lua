@@ -46,14 +46,16 @@ return function ()
 
 	local is_mouse_inverted = dio.inputs.mouse.getIsInverted ()
 
+	local keyCodes = dio.inputs.keyCodes
+
 	instance:addMenuItem (BreakMenuItem ())
 	local checkbox = instance:addMenuItem (CheckboxMenuItem ("Invert Mouse", nil, is_mouse_inverted))
-	local f = instance:addMenuItem (KeySelectMenuItem ("Forward", nil, "W"))
-	local l = instance:addMenuItem (KeySelectMenuItem ("Left", nil, "A"))
-	local b = instance:addMenuItem (KeySelectMenuItem ("Back", nil, "S"))
-	local r = instance:addMenuItem (KeySelectMenuItem ("Right", nil, "D"))
-	local j = instance:addMenuItem (KeySelectMenuItem ("Jump", nil, "SPACE"))
-	local t = instance:addMenuItem (KeySelectMenuItem ("Turbo", nil, "LEFT SHIFT"))
+	local f = instance:addMenuItem (KeySelectMenuItem ("Forward", nil, keyCodes.W))
+	local l = instance:addMenuItem (KeySelectMenuItem ("Left", nil, keyCodes.A))
+	local b = instance:addMenuItem (KeySelectMenuItem ("Back", nil, keyCodes.S))
+	local r = instance:addMenuItem (KeySelectMenuItem ("Right", nil, keyCodes.D))
+	local j = instance:addMenuItem (KeySelectMenuItem ("Jump", nil, keyCodes.SPACE))
+	local t = instance:addMenuItem (KeySelectMenuItem ("Turbo", nil, keyCodes.LEFT_SHIFT))
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Save", onSaveClicked))	
 	instance:addMenuItem (BreakMenuItem ())

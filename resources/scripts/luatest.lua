@@ -81,7 +81,7 @@ local swiss_cheese =
 		perlin_scale = 1,
 		perlin_translate = 0,
 
-		solid_scale = 0.1 / 128.0,
+		solid_scale = 0.3 / 128.0,
 		solid_translate = 0.1
 	}
 }
