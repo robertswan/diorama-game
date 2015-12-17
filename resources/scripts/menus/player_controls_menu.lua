@@ -2,6 +2,7 @@
 local BreakMenuItem = require ("resources/scripts/menus/menu_items/break_menu_item")
 local ButtonMenuItem = require ("resources/scripts/menus/menu_items/button_menu_item")
 local CheckboxMenuItem = require ("resources/scripts/menus/menu_items/checkbox_menu_item")
+local KeySelectMenuItem = require ("resources/scripts/menus/menu_items/key_select_menu_item")
 local Menus = require ("resources/scripts/menus/menu_construction")
 local MenuClass = require ("resources/scripts/menus/menu_class")
 local Mixin = require ("resources/scripts/menus/mixin")
@@ -41,20 +42,18 @@ return function ()
 
 	local instance = MenuClass ("PLAYER CONTROLS MENU")
 
-	-- local onAppShouldClose = instance.onAppShouldClose 
-
 	Mixin.CopyTo (instance, c)
 
 	local is_mouse_inverted = dio.inputs.mouse.getIsInverted ()
 
 	instance:addMenuItem (BreakMenuItem ())
 	local checkbox = instance:addMenuItem (CheckboxMenuItem ("Invert Mouse", nil, is_mouse_inverted))
-	local f = Menus.addKeyEntry (instance, "Forward", nil, "W")
-	local l = Menus.addKeyEntry (instance, "Left", nil, "A")
-	local b = Menus.addKeyEntry (instance, "Back", nil, "S")
-	local r = Menus.addKeyEntry (instance, "Right", nil, "D")
-	local j = Menus.addKeyEntry (instance, "Jump", nil, "SPACE")
-	local t = Menus.addKeyEntry (instance, "Turbo", nil, "LEFT SHIFT")
+	local f = instance:addMenuItem (KeySelectMenuItem ("Forward", nil, "W"))
+	local l = instance:addMenuItem (KeySelectMenuItem ("Left", nil, "A"))
+	local b = instance:addMenuItem (KeySelectMenuItem ("Back", nil, "S"))
+	local r = instance:addMenuItem (KeySelectMenuItem ("Right", nil, "D"))
+	local j = instance:addMenuItem (KeySelectMenuItem ("Jump", nil, "SPACE"))
+	local t = instance:addMenuItem (KeySelectMenuItem ("Turbo", nil, "LEFT SHIFT"))
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Save", onSaveClicked))	
 	instance:addMenuItem (BreakMenuItem ())

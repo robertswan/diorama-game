@@ -1,4 +1,7 @@
+--------------------------------------------------
+local Mixin = require ("resources/scripts/menus/mixin")
 
+--------------------------------------------------
 local c = {}
 
 --------------------------------------------------
@@ -56,10 +59,7 @@ return function (individual_menus, initial_menu_name)
 		next_menu_name = initial_menu_name
 	}
 
-	for key, value in pairs (c) do
-		instance [key] = value
-	end
+	Mixin.CopyTo (instance, c)
 
 	return instance
-
 end

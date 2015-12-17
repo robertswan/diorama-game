@@ -14,7 +14,9 @@ end
 --------------------------------------------------
 return function (text, onClicked, is_checked)
 
-	local instance = 
+	local instance = MenuItemBase ()
+
+	local properties =
 	{
 		decorateText = decorateText,
 		is_checked = is_checked,
@@ -32,11 +34,16 @@ return function (text, onClicked, is_checked)
 			self.is_checked = is_checked
 			self.text_unfocused = "  " .. self.decorateText (self.text_original, self.is_checked) .. "  "
 			self.text_focused = "[ " .. self.decorateText (self.text_original, self.is_checked) .. " ]"
-			self.text = "  " .. decorateText (text) .. "  "
+			self.text = "  " .. decorateText (self.text_original, self.is_checked) .. "  "
+		end,
+
+		onRender = function (self, font)
+			font.drawString (self.x, self.y, self.text, 0xffff0000)
 		end
+
 	}
 
-	Mixin.CopyTo (instance, MenuItemBase ())
+	Mixin.CopyTo (instance, properties)
 
 	return instance
 end

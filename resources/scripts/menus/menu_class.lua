@@ -21,27 +21,15 @@ function c:onUpdate (x, y, was_left_clicked)
 	-- if so, switch the text for a HIGHLIGHTED
 
 	local next_menu = nil
-	local highlighted_item = nil
 
 	for i, item in ipairs (self.items) do
 
-		if item.onClicked then
-
-			local is_over = 
-					x >= item.x and 
-					x < item.x + item.width and
-					y >= item.y and 
-					y < item.y + item.height
-
-			item.text = is_over and item.text_focused or item.text_unfocused
-			if is_over then
-				highlighted_item = item
+		if item.onUpdate then
+			local next_menu_2 = item:onUpdate (self, x, y, was_left_clicked)
+			if next_menu_2 then
+				next_menu = next_menu_2
 			end
 		end
-	end
-
-	if was_left_clicked and highlighted_item then
-		next_menu = highlighted_item:onClicked (self)
 	end
 
 	for event, callback in pairs (self.events) do
@@ -56,12 +44,19 @@ end
 --------------------------------------------------
 function c:onRender ()
 	local font = dio.drawing.font;
-	font.drawString (200, 0, self.title, 0xffff0000)
+	
+	if self.title then
+		font.drawString (200, 0, self.title, 0xffff0000)
+	end
 
 	local highlighted_item = nil
-	for i, item in ipairs (self.items) do
+	for idx, menu_item in ipairs (self.items) do
 
-		font.drawString (item.x, item.y, item.text, 0xffff0000)
+		if menu_item.onRender then
+			menu_item:onRender (font)
+		end
+
+		-- font.drawString (item.x, item.y, item.text, 0xffff0000)
 	end
 end
 
@@ -85,7 +80,7 @@ return function (title)
 	{
 		title = title,
 		items = {},
-		next_y = 100,
+		next_y = 40,
 		events = {}		
 	}
 

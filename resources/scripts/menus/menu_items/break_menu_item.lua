@@ -6,7 +6,11 @@ local Mixin = require ("resources/scripts/menus/mixin")
 return function ()
 	local instance = 
 	{
-		text = "******************************************"
+		text = "******************************************",
+
+		onRender = function (self, font)
+			font.drawString (self.x, self.y, self.text, 0xffff0000)
+		end
 	}
 
 	Mixin.CopyTo (instance, MenuItemBase ())

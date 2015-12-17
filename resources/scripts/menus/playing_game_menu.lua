@@ -31,7 +31,7 @@ end
 --------------------------------------------------
 return function ()
 
-	local instance = MenuClass ("PLAYING GAME MENU")
+	local instance = MenuClass ("")
 
 	Mixin.CopyToAndBackupParents (instance, c)
 
