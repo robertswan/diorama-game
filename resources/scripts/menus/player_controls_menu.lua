@@ -29,7 +29,7 @@ local c = {}
 
 --------------------------------------------------
 function c:onEnter ()
-	self.invert_mouse_checkbox:setIsChecked (dio.inputs.mouse.getIsInverted ())
+	self.invert_mouse_checkbox.is_checked = dio.inputs.mouse.getIsInverted ()
 end
 
 -- --------------------------------------------------

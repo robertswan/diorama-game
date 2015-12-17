@@ -32,7 +32,6 @@ return function (text, onClicked)
 	assert (text ~= nil)
 
 	local instance = MenuItemBase ()
-
 	local properties = 
 	{
 		text = text,

@@ -3,11 +3,33 @@ local MenuItemBase = require ("resources/scripts/menus/menu_items/menu_item_base
 local Mixin = require ("resources/scripts/menus/mixin")
 
 --------------------------------------------------
-local function decorateText (text, is_checked)
-	if is_checked then
-		return text .. "           [X]"
-	else
-		return text .. "           [   ]"
+local c = {}
+
+--------------------------------------------------
+function c:onUpdate (menu, x, y, was_left_clicked)
+	self.isHighlighted = 
+			x >= self.x and 
+			x < self.x + self.width and
+			y >= self.y and 
+			y < self.y + self.height
+
+	if was_left_clicked and self.isHighlighted then
+		self.is_checked = not self.is_checked
+		if self.onClicked then
+			return self:onClicked (menu)
+		end
+	end
+end
+
+--------------------------------------------------
+function c:onRender (font)
+	if self.isHighlighted then
+		font.drawString (self.x, self.y, ">", 0xffff0000)
+	end
+	font.drawString (self.x + 20, self.y, self.text, 0xffff0000)
+	font.drawString (self.x + 200, self.y, "[   ]", 0xffff0000)
+	if self.is_checked then
+		font.drawString (self.x + 205, self.y, "X", 0xffff0000)
 	end
 end
 
@@ -18,32 +40,13 @@ return function (text, onClicked, is_checked)
 
 	local properties =
 	{
-		decorateText = decorateText,
+		text = text,
 		is_checked = is_checked,
-		text_original = text,
-		text_unfocused = "  " .. decorateText (text, is_checked) .. "  ",
-		text_focused = "[ " .. decorateText (text, is_checked) .. " ]",
-		text = "  " .. decorateText (text) .. "  ",
-		onClicked = function (self) 
-			self:setIsChecked (not self.is_checked)
-			if onClicked then
-				onClicked (self)
-			end
-		end,
-		setIsChecked = function (self, is_checked)
-			self.is_checked = is_checked
-			self.text_unfocused = "  " .. self.decorateText (self.text_original, self.is_checked) .. "  "
-			self.text_focused = "[ " .. self.decorateText (self.text_original, self.is_checked) .. " ]"
-			self.text = "  " .. decorateText (self.text_original, self.is_checked) .. "  "
-		end,
-
-		onRender = function (self, font)
-			font.drawString (self.x, self.y, self.text, 0xffff0000)
-		end
-
+		onClicked = onClicked
 	}
 
 	Mixin.CopyTo (instance, properties)
+	Mixin.CopyTo (instance, c)
 
 	return instance
 end
