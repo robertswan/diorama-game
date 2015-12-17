@@ -18,27 +18,6 @@ function m.addLabel (menu, text)
 end
 
 --------------------------------------------------
-function m.addButton (menu, text, onClicked)
-
-	local button = 
-	{
-		text_unfocused = "  " .. text .. "  ",
-		text_focused = "[ " .. text .. " ]",
-		text = text,
-		x = 100,
-		y = menu.next_y,
-		w = 200,
-		h = 10,
-		onClicked = onClicked
-	}
-
-	menu.next_y = menu.next_y + 10
-	table.insert (menu.items, button)
-
-	return button
-end
-
---------------------------------------------------
 function m.addCheckbox (menu, text, onClicked, is_checked)
 
 	local function decorateText (text, is_checked)
@@ -59,8 +38,8 @@ function m.addCheckbox (menu, text, onClicked, is_checked)
 		text = "  " .. decorateText (text) .. "  ",
 		x = 100,
 		y = menu.next_y,
-		w = 200,
-		h = 10,
+		width = 200,
+		height = 10,
 		onClicked = function (self) 
 			self:setIsChecked (not self.is_checked)
 			onClicked (self)
@@ -96,8 +75,8 @@ function m.addKeyEntry (menu, text, onClicked, initial_key)
 		text = "  " .. decorateText (text, initial_key) .. "  ",
 		x = 100,
 		y = menu.next_y,
-		w = 200,
-		h = 10,
+		width = 200,
+		height = 10,
 		onClicked = function (self) 
 			if onClicked then
 				onClicked (self)

@@ -1,5 +1,6 @@
 --------------------------------------------------
 local BreakMenuItem = require ("resources/scripts/menus/menu_items/break_menu_item")
+local ButtonMenuItem = require ("resources/scripts/menus/menu_items/button_menu_item")
 local Menus = require ("resources/scripts/menus/menu_construction")
 local MenuClass = require ("resources/scripts/menus/menu_class")
 local Mixin = require ("resources/scripts/menus/mixin")
@@ -45,15 +46,10 @@ return function ()
 
 	Mixin.CopyToAndBackupParents (instance, c)
 
-	-- instance:addMenuItem (ButtonMenuItem ("Create New Level", onCreateNewLevelClicked))
-	-- instance:addMenuItem (ButtonMenuItem ("Load Level", onLoadLevelClicked))
-	-- instance:addMenuItem (BreakMenuItem ())
-	-- instance:addMenuItem (ButtonMenuItem ("Edit Player Controls", onEditPlayerControlsClicked))
-
-	Menus.addButton (instance, "Create New Level", onCreateNewLevelClicked)
-	Menus.addButton (instance, "Load Level", onLoadLevelClicked)
+	instance:addMenuItem (ButtonMenuItem ("Create New Level", onCreateNewLevelClicked))
+	instance:addMenuItem (ButtonMenuItem ("Load Level", onLoadLevelClicked))
 	instance:addMenuItem (BreakMenuItem ())
-	Menus.addButton (instance, "Edit Player Controls", onEditPlayerControlsClicked)
+	instance:addMenuItem (ButtonMenuItem ("Edit Player Controls", onEditPlayerControlsClicked))
 
 	return instance
 end

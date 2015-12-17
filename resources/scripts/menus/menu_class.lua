@@ -29,9 +29,9 @@ function c:onUpdate (x, y, was_left_clicked)
 
 			local is_over = 
 					x >= item.x and 
-					x < item.x + item.w and
+					x < item.x + item.width and
 					y >= item.y and 
-					y < item.y + item.h
+					y < item.y + item.height
 
 			item.text = is_over and item.text_focused or item.text_unfocused
 			if is_over then

@@ -1,5 +1,6 @@
 --------------------------------------------------
 local BreakMenuItem = require ("resources/scripts/menus/menu_items/break_menu_item")
+local ButtonMenuItem = require ("resources/scripts/menus/menu_items/button_menu_item")
 local Menus = require ("resources/scripts/menus/menu_construction")
 local MenuClass = require ("resources/scripts/menus/menu_class")
 local Mixin = require ("resources/scripts/menus/mixin")
@@ -60,9 +61,9 @@ return function ()
 	local j = Menus.addKeyEntry (instance, "Jump", nil, "SPACE")
 	local t = Menus.addKeyEntry (instance, "Turbo", nil, "LEFT SHIFT")
 	instance:addMenuItem (BreakMenuItem ())
-	Menus.addButton (instance, "Save", onSaveClicked)
+	instance:addMenuItem (ButtonMenuItem ("Save", onSaveClicked))	
 	instance:addMenuItem (BreakMenuItem ())
-	Menus.addButton (instance, "Cancel", onCancelClicked)
+	instance:addMenuItem (ButtonMenuItem ("Cancel", onCancelClicked))	
 
 	instance.invert_mouse_checkbox = checkbox
 
