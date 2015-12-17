@@ -62,7 +62,7 @@ function m.addCheckbox (menu, text, onClicked, is_checked)
 		if is_checked then
 			return text .. "           [X]"
 		else
-			return text .. "           [ ]"
+			return text .. "           [   ]"
 		end
 	end
 
@@ -94,6 +94,38 @@ function m.addCheckbox (menu, text, onClicked, is_checked)
 	table.insert (menu.items, checkbox)
 
 	return checkbox
+end
+
+--------------------------------------------------
+function m.addKeyEntry (menu, text, onClicked, initial_key)
+
+	local function decorateText (text, initial_key)
+		return text .. "           [" .. initial_key .. "]"
+	end
+
+	local key_entry = 
+	{
+		decorateText = decorateText,
+		initial_key = initial_key,
+		text_original = text,
+		text_unfocused = "  " .. decorateText (text, initial_key) .. "  ",
+		text_focused = "[ " .. decorateText (text, initial_key) .. " ]",
+		text = "  " .. decorateText (text, initial_key) .. "  ",
+		x = 100,
+		y = menu.next_y,
+		w = 200,
+		h = 10,
+		onClicked = function (self) 
+			if onClicked then
+				onClicked (self)
+			end
+		end,
+	}
+
+	menu.next_y = menu.next_y + 10
+	table.insert (menu.items, key_entry)
+
+	return key_entry
 end
 
 --------------------------------------------------

@@ -9,6 +9,6 @@ local c = {}
 --------------------------------------------------
 return function ()
 	local instance = MenuClass ("QUITTING MENU")
-	Mixin.CopyTo (instance, c)
+	Mixin.CopyToAndBackupParents (instance, c)
 	return instance
 end

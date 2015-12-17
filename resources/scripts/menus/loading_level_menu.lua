@@ -19,7 +19,7 @@ end
 --------------------------------------------------
 function c:onAppShouldClose (parent_func)
 	dio.session.terminate ()
-	parent_func (self)
+	self.parent.onAppShouldClose (self)
 	return "quitting_menu"
 end
 
@@ -27,12 +27,7 @@ end
 return function ()
 	local instance = MenuClass ("LOADING LEVEL MENU")
 
-	local onAppShouldClose = instance.onAppShouldClose 
-
-	Mixin.CopyTo (instance, c)
-
-	local onAppShouldClose2 = instance.onAppShouldClose
-	instance.onAppShouldClose = function (self) return onAppShouldClose2 (self, onAppShouldClose) end
+	Mixin.CopyToAndBackupParents (instance, c)
 
 	return instance
 end

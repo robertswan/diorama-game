@@ -1,4 +1,5 @@
 --------------------------------------------------
+local BreakMenuItem = require ("resources/scripts/menus/menu_items/break_menu_item")
 local Menus = require ("resources/scripts/menus/menu_construction")
 local MenuClass = require ("resources/scripts/menus/menu_class")
 local Mixin = require ("resources/scripts/menus/mixin")
@@ -22,8 +23,8 @@ end
 local c = {}
 
 --------------------------------------------------
-function c:onAppShouldClose (parent_func)
-	parent_func (self)
+function c:onAppShouldClose ()
+	self.parent.onAppShouldClose (self)
 	return "quitting_menu"
 end
 
@@ -42,18 +43,16 @@ return function ()
 
 	local instance = MenuClass ("MAIN MENU")
 
-	local onAppShouldClose = instance.onAppShouldClose 
+	Mixin.CopyToAndBackupParents (instance, c)
 
-	Mixin.CopyTo (instance, c)
-
-	-- TODO add in way to easily access parent class functions that you've overridden
-	-- Menus.AddParentFuncParameter (instance, c, onAppShouldClose)
-
-	local onAppShouldClose2 = instance.onAppShouldClose
-	instance.onAppShouldClose = function (self) return onAppShouldClose2 (self, onAppShouldClose) end
+	-- instance:addMenuItem (ButtonMenuItem ("Create New Level", onCreateNewLevelClicked))
+	-- instance:addMenuItem (ButtonMenuItem ("Load Level", onLoadLevelClicked))
+	-- instance:addMenuItem (BreakMenuItem ())
+	-- instance:addMenuItem (ButtonMenuItem ("Edit Player Controls", onEditPlayerControlsClicked))
 
 	Menus.addButton (instance, "Create New Level", onCreateNewLevelClicked)
 	Menus.addButton (instance, "Load Level", onLoadLevelClicked)
+	--Menus.addMenuItem (instance, BreakMenuItem ())
 	Menus.addBreak (instance)
 	Menus.addButton (instance, "Edit Player Controls", onEditPlayerControlsClicked)
 

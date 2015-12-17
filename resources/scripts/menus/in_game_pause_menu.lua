@@ -18,9 +18,9 @@ end
 local c = {}
 
 --------------------------------------------------
-function c:onAppShouldClose (parent_func)
+function c:onAppShouldClose ()
 	dio.session.terminate ()
-	parent_func (self)
+	self.parent.onAppShouldClose (self)
 	return "quitting_menu"
 end
 
@@ -28,12 +28,7 @@ end
 return function ()
 	local instance = MenuClass ("IN GAME PAUSE MENU")
 
-	local onAppShouldClose = instance.onAppShouldClose 
-
-	Mixin.CopyTo (instance, c)
-
-	local onAppShouldClose2 = instance.onAppShouldClose
-	instance.onAppShouldClose = function (self) return onAppShouldClose2 (self, onAppShouldClose) end
+	Mixin.CopyToAndBackupParents (instance, c)
 
 	Menus.addBreak (instance)
 	Menus.addButton (instance, "Resume", onResumeClicked)

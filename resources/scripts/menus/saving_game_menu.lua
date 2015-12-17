@@ -16,6 +16,6 @@ end
 --------------------------------------------------
 return function ()
 	local instance = MenuClass ("SAVING GAME MENU")
-	Mixin.CopyTo (instance, c)
+	Mixin.CopyToAndBackupParents (instance, c)
 	return instance
 end

@@ -9,4 +9,13 @@ function m.CopyTo (dst, src)
 end
 
 --------------------------------------------------
+function m.CopyToAndBackupParents (dst, src)
+	dst.parent = {}
+	for key, value in pairs (src) do
+		dst.parent [key] = dst [key]
+		dst [key] = value
+	end	
+end
+
+--------------------------------------------------
 return m
