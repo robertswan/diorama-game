@@ -11,7 +11,7 @@ function c:addMenuItem (menu_item)
 	self.next_y = self.next_y + menu_item.height
 	table.insert (self.items, menu_item)
 
-	return label	
+	return menu_item	
 end
 
 --------------------------------------------------

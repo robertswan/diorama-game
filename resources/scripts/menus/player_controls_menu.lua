@@ -1,6 +1,7 @@
 --------------------------------------------------
 local BreakMenuItem = require ("resources/scripts/menus/menu_items/break_menu_item")
 local ButtonMenuItem = require ("resources/scripts/menus/menu_items/button_menu_item")
+local CheckboxMenuItem = require ("resources/scripts/menus/menu_items/checkbox_menu_item")
 local Menus = require ("resources/scripts/menus/menu_construction")
 local MenuClass = require ("resources/scripts/menus/menu_class")
 local Mixin = require ("resources/scripts/menus/mixin")
@@ -44,16 +45,10 @@ return function ()
 
 	Mixin.CopyTo (instance, c)
 
-	-- TODO add in way to easily access parent class functions that you've overridden
-	-- Menus.AddParentFuncParameter (instance, c, onAppShouldClose)
-
-	-- local onAppShouldClose2 = instance.onAppShouldClose
-	-- instance.onAppShouldClose = function (self) return onAppShouldClose2 (self, onAppShouldClose) end
-
 	local is_mouse_inverted = dio.inputs.mouse.getIsInverted ()
 
 	instance:addMenuItem (BreakMenuItem ())
-	local checkbox = Menus.addCheckbox (instance, "Invert Mouse", nil, is_mouse_inverted)
+	local checkbox = instance:addMenuItem (CheckboxMenuItem ("Invert Mouse", nil, is_mouse_inverted))
 	local f = Menus.addKeyEntry (instance, "Forward", nil, "W")
 	local l = Menus.addKeyEntry (instance, "Left", nil, "A")
 	local b = Menus.addKeyEntry (instance, "Back", nil, "S")
