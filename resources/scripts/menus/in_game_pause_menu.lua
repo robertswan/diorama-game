@@ -9,6 +9,12 @@ local function onResumeClicked (self)
 end
 
 --------------------------------------------------
+local function onReturnToMainMenuClicked (self)
+	dio.session.terminate ()
+	return "saving_game_menu"
+end
+
+--------------------------------------------------
 local c = {}
 
 --------------------------------------------------
@@ -31,6 +37,8 @@ return function ()
 
 	Menus.addBreak (instance)
 	Menus.addButton (instance, "Resume", onResumeClicked)
+	Menus.addBreak (instance)
+	Menus.addButton (instance, "Return To Main Menu", onReturnToMainMenuClicked)
 	Menus.addBreak (instance)
 
 	return instance
