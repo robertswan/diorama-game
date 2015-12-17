@@ -28,7 +28,7 @@ local function main ()
 
 	local individual_menus = 
 	{
-		main_menu = 			require ("resources/scripts/menus/main_menu"),
+		main_menu = 			require ("resources/scripts/menus/main_menu") (),
 		playing_game_menu = 	require ("resources/scripts/menus/playing_game_menu"),
 		quitting_menu =			require ("resources/scripts/menus/quitting_menu")
 	}

@@ -1,45 +1,50 @@
 --------------------------------------------------
 local Menus = require ("resources/scripts/menus/menu_construction")
+local MenuClass = require ("resources/scripts/menus/menu_class")
+local Mixin = require ("resources/scripts/menus/mixin")
 
 --------------------------------------------------
-function onCreateNewLevelClicked ()
+local function onCreateNewLevelClicked ()
 
 	return "playing_game_menu"
 end
 
 --------------------------------------------------
-function onLoadLevel ()
+local function onLoadLevel ()
 
 	return "playing_game_menu"
 end
 
 --------------------------------------------------
-function createMainMenu ()
+local c = {}
 
-	local menu = Menus.createMenu ("MAIN MENU")
-
-	Menus.addButton (menu, "Create New Level", onCreateNewLevelClicked)
-	Menus.addButton (menu, "Load Level", onLoadLevel)
-	Menus.addBreak (menu)
-
-	Menus.addLabel (menu, "TEST")
-
-	local onAppShouldClose = menu.onAppShouldClose 
-	menu.onAppShouldClose = function ()
-		dio.session.terminate ()
-		onAppShouldClose (menu)
-	end
-
-	menu.onEnter = function (menu)
-		dio.session.requestBegin ({false})
-	end
-
-	menu.onExit = function (menu)
-		dio.session.terminate ()
-	end
-
-	return menu
+--------------------------------------------------
+function c:onAppShouldClose ()
+	dio.session.terminate ()
+	onAppShouldClose (self)
 end
 
 --------------------------------------------------
-return createMainMenu ()
+function c:onEnter ()
+	dio.session.requestBegin ({false})
+end
+
+--------------------------------------------------
+function c:onExit ()
+	dio.session.terminate ()
+end
+
+--------------------------------------------------
+return function ()
+
+	local instance = MenuClass ("MAIN MENU")
+
+	Mixin.CopyTo (instance, c)
+
+	Menus.addButton (instance, "Create New Level", onCreateNewLevelClicked)
+	Menus.addButton (instance, "Load Level", onLoadLevel)
+	Menus.addBreak (instance)
+	Menus.addLabel (instance, "TEST")
+
+	return instance
+end
