@@ -18,23 +18,6 @@ function m.addLabel (menu, text)
 end
 
 --------------------------------------------------
-function m.addBreak (menu)
-
-	menu.next_y = menu.next_y + 10
-	local label = 
-	{
-		text = "******************************************",
-		x = 0,
-		y = menu.next_y
-	}
-
-	menu.next_y = menu.next_y + 20
-	table.insert (menu.items, label)
-
-	return label
-end
-
---------------------------------------------------
 function m.addButton (menu, text, onClicked)
 
 	local button = 

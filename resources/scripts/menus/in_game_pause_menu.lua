@@ -1,4 +1,5 @@
 --------------------------------------------------
+local BreakMenuItem = require ("resources/scripts/menus/menu_items/break_menu_item")
 local Menus = require ("resources/scripts/menus/menu_construction")
 local MenuClass = require ("resources/scripts/menus/menu_class")
 local Mixin = require ("resources/scripts/menus/mixin")
@@ -30,11 +31,11 @@ return function ()
 
 	Mixin.CopyToAndBackupParents (instance, c)
 
-	Menus.addBreak (instance)
+	instance:addMenuItem (BreakMenuItem ())
 	Menus.addButton (instance, "Resume", onResumeClicked)
-	Menus.addBreak (instance)
+	instance:addMenuItem (BreakMenuItem ())
 	Menus.addButton (instance, "Return To Main Menu", onReturnToMainMenuClicked)
-	Menus.addBreak (instance)
+	instance:addMenuItem (BreakMenuItem ())
 
 	return instance
 end

@@ -52,8 +52,7 @@ return function ()
 
 	Menus.addButton (instance, "Create New Level", onCreateNewLevelClicked)
 	Menus.addButton (instance, "Load Level", onLoadLevelClicked)
-	--Menus.addMenuItem (instance, BreakMenuItem ())
-	Menus.addBreak (instance)
+	instance:addMenuItem (BreakMenuItem ())
 	Menus.addButton (instance, "Edit Player Controls", onEditPlayerControlsClicked)
 
 	return instance

@@ -5,6 +5,16 @@ local Mixin = require ("resources/scripts/menus/mixin")
 local c = {}
 
 --------------------------------------------------
+function c:addMenuItem (menu_item)
+	menu_item.x = 0
+	menu_item.y = self.next_y
+	self.next_y = self.next_y + menu_item.height
+	table.insert (self.items, menu_item)
+
+	return label	
+end
+
+--------------------------------------------------
 function c:onUpdate (x, y, was_left_clicked)
 	-- go through every item
 	-- check if the mouse is over it

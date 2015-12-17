@@ -1,4 +1,5 @@
 --------------------------------------------------
+local BreakMenuItem = require ("resources/scripts/menus/menu_items/break_menu_item")
 local Menus = require ("resources/scripts/menus/menu_construction")
 local MenuClass = require ("resources/scripts/menus/menu_class")
 local Mixin = require ("resources/scripts/menus/mixin")
@@ -50,7 +51,7 @@ return function ()
 
 	local is_mouse_inverted = dio.inputs.mouse.getIsInverted ()
 
-	Menus.addBreak (instance)
+	instance:addMenuItem (BreakMenuItem ())
 	local checkbox = Menus.addCheckbox (instance, "Invert Mouse", nil, is_mouse_inverted)
 	local f = Menus.addKeyEntry (instance, "Forward", nil, "W")
 	local l = Menus.addKeyEntry (instance, "Left", nil, "A")
@@ -58,9 +59,9 @@ return function ()
 	local r = Menus.addKeyEntry (instance, "Right", nil, "D")
 	local j = Menus.addKeyEntry (instance, "Jump", nil, "SPACE")
 	local t = Menus.addKeyEntry (instance, "Turbo", nil, "LEFT SHIFT")
-	Menus.addBreak (instance)
+	instance:addMenuItem (BreakMenuItem ())
 	Menus.addButton (instance, "Save", onSaveClicked)
-	Menus.addBreak (instance)
+	instance:addMenuItem (BreakMenuItem ())
 	Menus.addButton (instance, "Cancel", onCancelClicked)
 
 	instance.invert_mouse_checkbox = checkbox
