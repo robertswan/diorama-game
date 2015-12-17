@@ -9,8 +9,13 @@ local function onCreateNewLevelClicked ()
 end
 
 --------------------------------------------------
-local function onLoadLevel ()
+local function onLoadLevelClicked ()
 	return "loading_level_menu"
+end
+
+--------------------------------------------------
+local function onEditPlayerControlsClicked ()
+	return "player_controls_menu"
 end
 
 --------------------------------------------------
@@ -48,9 +53,9 @@ return function ()
 	instance.onAppShouldClose = function (self) return onAppShouldClose2 (self, onAppShouldClose) end
 
 	Menus.addButton (instance, "Create New Level", onCreateNewLevelClicked)
-	Menus.addButton (instance, "Load Level", onLoadLevel)
+	Menus.addButton (instance, "Load Level", onLoadLevelClicked)
 	Menus.addBreak (instance)
-	Menus.addLabel (instance, "TEST")
+	Menus.addButton (instance, "Edit Player Controls", onEditPlayerControlsClicked)
 
 	return instance
 end
