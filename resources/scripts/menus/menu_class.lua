@@ -48,7 +48,6 @@ function c:onRender ()
 	local font = dio.drawing.font;
 	font.drawString (200, 0, self.title, 0xffff0000)
 
-
 	local highlighted_item = nil
 	for i, item in ipairs (self.items) do
 

@@ -2,6 +2,7 @@
 local c = {}
 
 --------------------------------------------------
+local count = 0
 function c:update ()
 
 	if not app_is_shutting_down and dio.system.shouldAppClose () then

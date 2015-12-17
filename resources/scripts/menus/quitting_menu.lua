@@ -1,13 +1,14 @@
 --------------------------------------------------
 local Menus = require ("resources/scripts/menus/menu_construction")
+local MenuClass = require ("resources/scripts/menus/menu_class")
+local Mixin = require ("resources/scripts/menus/mixin")
 
 --------------------------------------------------
-function createMenu ()
+local c = {}
 
-	local menu = Menus.createMenu ("QUITTING MENU")
-
-	return menu
+--------------------------------------------------
+return function ()
+	local instance = MenuClass ("QUITTING MENU")
+	Mixin.CopyTo (instance, c)
+	return instance
 end
-
---------------------------------------------------
-return createMenu ()

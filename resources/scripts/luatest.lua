@@ -27,8 +27,8 @@ local regular_terrain =
 	landscape_params = 
 	{
 		scale = 256,
-		octaves_max = 3,
-		frequency_per_octave = 4.0,
+		octaves_max = 6,
+		frequency_per_octave = 2.0,
 		amplitude_per_octave = 0.5,
 	},
 
@@ -37,8 +37,8 @@ local regular_terrain =
 		perlin_scale = 1,
 		perlin_translate = 0,
 
-		solid_scale = 0.2 / 64,
-		solid_translate = 0.1
+		solid_scale = 0.2 / 128,
+		solid_translate = 0.0
 	}
 }
 
