@@ -8,7 +8,8 @@ local function onInvertMouseClicked ()
 end
 
 --------------------------------------------------
-local function onSaveClicked ()
+local function onSaveClicked (self, menu)
+	dio.inputs.mouse.setIsInverted (menu.invert_mouse_checkbox.is_checked)
 	return "main_menu"
 end
 
@@ -26,10 +27,10 @@ local c = {}
 -- 	return "quitting_menu"
 -- end
 
--- --------------------------------------------------
--- function c:onEnter ()
--- 	dio.session.requestBegin ({false})
--- end
+--------------------------------------------------
+function c:onEnter ()
+	self.invert_mouse_checkbox:setIsChecked (dio.inputs.mouse.getIsInverted ())
+end
 
 -- --------------------------------------------------
 -- function c:onExit ()
@@ -51,12 +52,16 @@ return function ()
 	-- local onAppShouldClose2 = instance.onAppShouldClose
 	-- instance.onAppShouldClose = function (self) return onAppShouldClose2 (self, onAppShouldClose) end
 
+	local is_mouse_inverted = dio.inputs.mouse.getIsInverted ()
+
 	Menus.addBreak (instance)
-	Menus.addCheckbox (instance, "Invert Mouse", onInvertMouseClicked, true)
+	local checkbox = Menus.addCheckbox (instance, "Invert Mouse", onInvertMouseClicked, is_mouse_inverted)
 	Menus.addBreak (instance)
 	Menus.addButton (instance, "Save", onSaveClicked)
 	Menus.addBreak (instance)
 	Menus.addButton (instance, "Cancel", onCancelClicked)
+
+	instance.invert_mouse_checkbox = checkbox
 
 	return instance
 end

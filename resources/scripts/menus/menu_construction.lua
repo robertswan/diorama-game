@@ -13,6 +13,8 @@ function m.addLabel (menu, text)
 
 	menu.next_y = menu.next_y + 10
 	table.insert (menu.items, label)
+
+	return label
 end
 
 --------------------------------------------------
@@ -28,6 +30,8 @@ function m.addBreak (menu)
 
 	menu.next_y = menu.next_y + 20
 	table.insert (menu.items, label)
+
+	return label
 end
 
 --------------------------------------------------
@@ -47,6 +51,8 @@ function m.addButton (menu, text, onClicked)
 
 	menu.next_y = menu.next_y + 10
 	table.insert (menu.items, button)
+
+	return button
 end
 
 --------------------------------------------------
@@ -73,15 +79,21 @@ function m.addCheckbox (menu, text, onClicked, is_checked)
 		w = 200,
 		h = 10,
 		onClicked = function (self) 
-			self.is_checked = not self.is_checked
+			self:setIsChecked (not self.is_checked)
+			onClicked (self)
+		end,
+		setIsChecked = function (self, is_checked)
+			self.is_checked = is_checked
 			self.text_unfocused = "  " .. self.decorateText (self.text_original, self.is_checked) .. "  "
 			self.text_focused = "[ " .. self.decorateText (self.text_original, self.is_checked) .. " ]"
-			onClicked (self)
+			self.text = "  " .. decorateText (text) .. "  "
 		end
 	}
 
 	menu.next_y = menu.next_y + 10
 	table.insert (menu.items, checkbox)
+
+	return checkbox
 end
 
 --------------------------------------------------

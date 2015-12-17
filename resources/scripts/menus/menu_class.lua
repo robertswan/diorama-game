@@ -31,7 +31,7 @@ function c:onUpdate (x, y, was_left_clicked)
 	end
 
 	if was_left_clicked and highlighted_item then
-		next_menu = highlighted_item:onClicked ()
+		next_menu = highlighted_item:onClicked (self)
 	end
 
 	for event, callback in pairs (self.events) do
