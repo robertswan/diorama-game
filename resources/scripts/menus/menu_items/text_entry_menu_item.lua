@@ -36,22 +36,33 @@ function c:onUpdate (menu, x, y, was_left_clicked)
 
 	if self.isSelected then
 
+		self.flashCount = self.flashCount < 16 and self.flashCount + 1 or 0
+
 		local keyCodeClicked = dio.inputs.keys.consumeKeyCodeClicked ()
 
 		if keyCodeClicked == dio.inputs.keyCodes.ESCAPE then
 			self.value = self.initial_value
 			self.initial_value = nil
 			self.isSelected = false
+			if self.onTextChanged then
+				self:onTextChanged (menu)
+			end
 
 		elseif keyCodeClicked == dio.inputs.keyCodes.ENTER then
 			self.initial_value = nil
 			self.isSelected = false
+			if self.onTextChangeConfirmed then
+				self:onTextChangeConfirmed (menu)
+			end
 
 		elseif keyCodeClicked == dio.inputs.keyCodes.BACKSPACE then
 
 			local stringLen = self.value:len ()
 			if stringLen > 0 then
 				self.value = self.value:sub (1, -2)
+				if self.onTextChanged then
+					self:onTextChanged (menu)
+				end
 			end
 
 		end
@@ -60,6 +71,9 @@ function c:onUpdate (menu, x, y, was_left_clicked)
 
 		if characterClicked ~= nil and self.value:len () < self.max_length then
 			self.value = self.value .. string.char (characterClicked)
+			if self.onTextChanged then
+				self:onTextChanged (menu)
+			end
 		end
 
 		-- elseif keyCodeClicked ~= nil then
@@ -87,6 +101,7 @@ function c:onUpdate (menu, x, y, was_left_clicked)
 			if not self.isSelected then
 				-- somehow stop the menu from doing other things!
 				--menu:lockHighlightToMenuItem (self)
+				self.flashCount = 0
 				self.initial_value = self.value
 				self.isSelected = true
 			end
@@ -96,22 +111,24 @@ end
 
 --------------------------------------------------
 function c:onRender (font)
+	local color = self.isHighlighted and 0xffffff or 0x00ffff
+	color = self.isSelected and 0xff0000 or color
 	if self.isHighlighted then
-		font.drawString (self.x, self.y, ">", 0xffff0000)
+		font.drawString (self.x, self.y, ">", color)
 	end
-	font.drawString (self.x + 20, self.y, self.text, 0xffff0000)
-	font.drawString (self.x + 200, self.y, "[", 0xffff0000)
-	font.drawString (self.x + 281, self.y, "]", 0xffff0000)
+	font.drawString (self.x + 20, self.y, self.text, color)
+	font.drawString (self.x + 200, self.y, "[", color)
+	font.drawString (self.x + 281, self.y, "]", color)
 
 	local value = self.value
-	if self.isSelected then
+	if self.isSelected and self.flashCount < 8 then
 		value = value .. "_"
 	end
-	font.drawString (self.x + 205, self.y, value, 0xffff0000)
+	font.drawString (self.x + 205, self.y, value, color)
 end
 
 --------------------------------------------------
-return function (text, onTextUpdated, initial_value, max_length)
+return function (text, onTextChanged, onTextChangeConfirmed, initial_value, max_length)
 
 	local instance = MenuItemBase ()
 
@@ -120,8 +137,10 @@ return function (text, onTextUpdated, initial_value, max_length)
 		text = text,
 		value = initial_value,
 		max_length = max_length,
+		flashCount = 0,
 		isSelected = false,
-		onTextUpdated = onTextUpdated
+		onTextChanged = onTextChanged,
+		onTextChangeConfirmed = onTextChangeConfirmed
 	}
 
 	Mixin.CopyTo (instance, properties)

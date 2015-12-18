@@ -23,13 +23,14 @@ end
 
 --------------------------------------------------
 function c:onRender (font)
+	local color = self.isHighlighted and 0xffffff or 0x00ffff
 	if self.isHighlighted then
-		font.drawString (self.x, self.y, ">", 0xffff0000)
+		font.drawString (self.x, self.y, ">", color)
 	end
-	font.drawString (self.x + 20, self.y, self.text, 0xffff0000)
-	font.drawString (self.x + 200, self.y, "[   ]", 0xffff0000)
+	font.drawString (self.x + 20, self.y, self.text, color)
+	font.drawString (self.x + 200, self.y, "[   ]", color)
 	if self.is_checked then
-		font.drawString (self.x + 205, self.y, "X", 0xffff0000)
+		font.drawString (self.x + 205, self.y, "X", color)
 	end
 end
 

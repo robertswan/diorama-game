@@ -32,7 +32,7 @@ end
 --------------------------------------------------
 function c:onEnter ()
 	-- if not self.isDemoSessionAlive then
-	-- 	dio.session.requestBegin ({false})
+	-- 	dio.session.requestBegin (({path = "my_world", shouldSave = false}))
 	-- 	self.isDemoSessionAlive = true
 	-- end
 end

@@ -86,7 +86,7 @@ return function ()
 	local instance = MenuClass ("PLAYER CONTROLS MENU")
 
 	Mixin.CopyTo (instance, properties)
-	Mixin.CopyTo (instance, c)
+	Mixin.CopyToAndBackupParents (instance, c)
 
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (properties.checkbox)

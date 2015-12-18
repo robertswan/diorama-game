@@ -8,7 +8,7 @@ local c = {}
 
 --------------------------------------------------
 function c:onEnter ()
-	dio.session.requestBegin ({true})
+	dio.session.requestBegin ({path = "my_world2", shouldSave = true})
 end
 
 --------------------------------------------------
