@@ -1,11 +1,10 @@
 --------------------------------------------------
 local BreakMenuItem = require ("resources/scripts/menus/menu_items/break_menu_item")
 local ButtonMenuItem = require ("resources/scripts/menus/menu_items/button_menu_item")
-local CheckboxMenuItem = require ("resources/scripts/menus/menu_items/checkbox_menu_item")
-local KeySelectMenuItem = require ("resources/scripts/menus/menu_items/key_select_menu_item")
 local Menus = require ("resources/scripts/menus/menu_construction")
 local MenuClass = require ("resources/scripts/menus/menu_class")
 local Mixin = require ("resources/scripts/menus/mixin")
+local TextEntryMenuItem = require ("resources/scripts/menus/menu_items/text_entry_menu_item")
 
 -- --------------------------------------------------
 -- local function onSaveClicked (self, menu)
@@ -62,26 +61,20 @@ end
 --------------------------------------------------
 return function ()
 
-	-- local is_mouse_inverted = dio.inputs.mouse.getIsInverted ()
-	-- local keyCodes = dio.inputs.keyCodes
-
-	-- local properties =
-	-- {
-	-- 	checkbox = CheckboxMenuItem ("Invert Mouse", nil, is_mouse_inverted),
-	-- 	f = KeySelectMenuItem ("Forward", nil, 0),
-	-- 	l = KeySelectMenuItem ("Left", nil, 0),
-	-- 	b = KeySelectMenuItem ("Back", nil, 0),
-	-- 	r = KeySelectMenuItem ("Right", nil, 0),
-	-- 	j = KeySelectMenuItem ("Jump", nil, 0),
-	-- 	t = KeySelectMenuItem ("Turbo", nil, 0)
-	-- }
-
 	local instance = MenuClass ("CREATE NEW LEVEL MENU")
 
-	-- Mixin.CopyTo (instance, properties)
+	local properties =
+	{
+		filename = TextEntryMenuItem ("Filename", nil, "MyWorld", 8),
+		randomSeed = TextEntryMenuItem ("Random Seed", nil, "seed0000", 8)
+	}
+
+	Mixin.CopyTo (instance, properties)
 	Mixin.CopyToAndBackupParents (instance, c)
 
 	instance:addMenuItem (BreakMenuItem ())
+	instance:addMenuItem (properties.filename)
+	instance:addMenuItem (properties.randomSeed)
 	instance:addMenuItem (ButtonMenuItem ("Return To Main Menu", onReturnToMainMenuClicked))	
 
 	return instance
