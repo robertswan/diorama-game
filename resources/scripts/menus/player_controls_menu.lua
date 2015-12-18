@@ -11,12 +11,15 @@ local Mixin = require ("resources/scripts/menus/mixin")
 local function onSaveClicked (self, menu)
 	dio.inputs.mouse.setIsInverted (menu.checkbox.is_checked)
 
-	dio.inputs.bindings.setKeyBinding (menu.f.keyCode)
-	-- dio.inputs.bindings.setLeft (menu.l.key_code)
-	-- dio.inputs.bindings.setBackward (menu.b.key_code)
-	-- dio.inputs.bindings.setRight (menu.r.key_code)
-	-- dio.inputs.bindings.setJump (menu.j.key_code)
-	-- dio.inputs.bindings.setTurbo (menu.t.key_code)
+	local setBinding = dio.inputs.bindings.setKeyBinding
+	local types = dio.inputs.bindingTypes
+
+	setBinding (types.FORWARD,	menu.f.keyCode)
+	setBinding (types.LEFT, 	menu.l.keyCode)
+	setBinding (types.BACKWARD,	menu.b.keyCode)
+	setBinding (types.RIGHT, 	menu.r.keyCode)
+	setBinding (types.JUMP, 	menu.j.keyCode)
+	setBinding (types.TURBO, 	menu.t.keyCode)
 
 	return "main_menu"
 end
@@ -37,13 +40,17 @@ local c = {}
 
 --------------------------------------------------
 function c:onEnter ()
+
+	local getBinding = dio.inputs.bindings.getKeyBinding
+	local types = dio.inputs.bindingTypes
+
 	self.checkbox.is_checked = dio.inputs.mouse.getIsInverted ()
-	self.f.keyCode = dio.inputs.bindings.getKeyBinding ()
-	-- self.l.keyCode = dio.inputs.bindings.getLeft ()
-	-- self.b.keyCode = dio.inputs.bindings.getBackward ()
-	-- self.r.keyCode = dio.inputs.bindings.getRight ()
-	-- self.j.keyCode = dio.inputs.bindings.getJump ()
-	-- self.t.keyCode = dio.inputs.bindings.getTurbo ()
+	self.f.keyCode = getBinding (types.FORWARD)
+	self.l.keyCode = getBinding (types.LEFT)
+	self.b.keyCode = getBinding (types.BACKWARD)
+	self.r.keyCode = getBinding (types.RIGHT)
+	self.j.keyCode = getBinding (types.JUMP)
+	self.t.keyCode = getBinding (types.TURBO)
 end
 
 -- --------------------------------------------------
@@ -60,12 +67,12 @@ return function ()
 	local properties =
 	{
 		checkbox = CheckboxMenuItem ("Invert Mouse", nil, is_mouse_inverted),
-		f = KeySelectMenuItem ("Forward", nil, dio.inputs.bindings.getKeyBinding ()),
-		l = KeySelectMenuItem ("Left", nil, keyCodes.A),
-		b = KeySelectMenuItem ("Back", nil, keyCodes.S),
-		r = KeySelectMenuItem ("Right", nil, keyCodes.D),
-		j = KeySelectMenuItem ("Jump", nil, keyCodes.SPACE),
-		t = KeySelectMenuItem ("Turbo", nil, keyCodes.LEFT_SHIFT)
+		f = KeySelectMenuItem ("Forward", nil, 0),
+		l = KeySelectMenuItem ("Left", nil, 0),
+		b = KeySelectMenuItem ("Back", nil, 0),
+		r = KeySelectMenuItem ("Right", nil, 0),
+		j = KeySelectMenuItem ("Jump", nil, 0),
+		t = KeySelectMenuItem ("Turbo", nil, 0)
 	}
 
 
