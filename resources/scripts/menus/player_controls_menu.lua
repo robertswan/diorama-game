@@ -21,6 +21,18 @@ local function onSaveClicked (self, menu)
 	setBinding (types.JUMP, 	menu.j.keyCode)
 	setBinding (types.TURBO, 	menu.t.keyCode)
 
+	local playerSettings =
+	{
+		forward = 	menu.f.keyCode,
+		left = 		menu.l.keyCode,
+		backward = 	menu.b.keyCode,
+		right = 	menu.r.keyCode,
+		jump = 		menu.j.keyCode,
+		turbo = 	menu.t.keyCode
+	}
+
+	dio.file.saveLua ("player_settings.lua", playerSettings, "playerSettings")
+
 	return "main_menu"
 end
 

@@ -11,17 +11,38 @@ local Menus = require ("resources/scripts/menus/menus")
 local menus = nil
 
 --------------------------------------------------
-function OnUpdate ()
+local function loadPlayerControls ()
+
+	local playerSettings = dio.file.loadLua ("player_settings.lua")
+
+	if playerSettings then
+
+		local setBinding = dio.inputs.bindings.setKeyBinding
+		local types = dio.inputs.bindingTypes
+
+		setBinding (types.FORWARD,	player_settings.forward)
+		setBinding (types.LEFT, 	player_settings.forward)
+		setBinding (types.BACKWARD,	player_settings.forward)
+		setBinding (types.RIGHT, 	player_settings.forward)
+		setBinding (types.JUMP, 	player_settings.forward)
+		setBinding (types.TURBO, 	player_settings.forward)
+	end
+end
+
+--------------------------------------------------
+local function OnUpdate ()
 	return menus:update ();
 end
 
 --------------------------------------------------
-function OnRender ()
+local function OnRender ()
 	menus:render ();
 end
 
 --------------------------------------------------
 local function main ()
+
+	loadPlayerControls ()
 
 	dio.onRender = OnRender
 	dio.onUpdate = OnUpdate
