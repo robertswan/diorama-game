@@ -15,6 +15,13 @@ function c:addMenuItem (menu_item)
 end
 
 --------------------------------------------------
+function c:clearAllMenuItems ()
+	self.items = {}
+	self.next_y = 40
+	self.events = {}			
+end
+
+--------------------------------------------------
 function c:onUpdate (x, y, was_left_clicked)
 	-- go through every item
 	-- check if the mouse is over it
