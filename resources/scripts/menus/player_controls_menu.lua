@@ -9,7 +9,15 @@ local Mixin = require ("resources/scripts/menus/mixin")
 
 --------------------------------------------------
 local function onSaveClicked (self, menu)
-	dio.inputs.mouse.setIsInverted (menu.invert_mouse_checkbox.is_checked)
+	dio.inputs.mouse.setIsInverted (menu.checkbox.is_checked)
+
+	dio.inputs.bindings.setKeyBinding (menu.f.keyCode)
+	-- dio.inputs.bindings.setLeft (menu.l.key_code)
+	-- dio.inputs.bindings.setBackward (menu.b.key_code)
+	-- dio.inputs.bindings.setRight (menu.r.key_code)
+	-- dio.inputs.bindings.setJump (menu.j.key_code)
+	-- dio.inputs.bindings.setTurbo (menu.t.key_code)
+
 	return "main_menu"
 end
 
@@ -29,7 +37,13 @@ local c = {}
 
 --------------------------------------------------
 function c:onEnter ()
-	self.invert_mouse_checkbox.is_checked = dio.inputs.mouse.getIsInverted ()
+	self.checkbox.is_checked = dio.inputs.mouse.getIsInverted ()
+	self.f.keyCode = dio.inputs.bindings.getKeyBinding ()
+	-- self.l.keyCode = dio.inputs.bindings.getLeft ()
+	-- self.b.keyCode = dio.inputs.bindings.getBackward ()
+	-- self.r.keyCode = dio.inputs.bindings.getRight ()
+	-- self.j.keyCode = dio.inputs.bindings.getJump ()
+	-- self.t.keyCode = dio.inputs.bindings.getTurbo ()
 end
 
 -- --------------------------------------------------
@@ -40,28 +54,38 @@ end
 --------------------------------------------------
 return function ()
 
-	local instance = MenuClass ("PLAYER CONTROLS MENU")
-
-	Mixin.CopyTo (instance, c)
-
 	local is_mouse_inverted = dio.inputs.mouse.getIsInverted ()
-
 	local keyCodes = dio.inputs.keyCodes
 
+	local properties =
+	{
+		checkbox = CheckboxMenuItem ("Invert Mouse", nil, is_mouse_inverted),
+		f = KeySelectMenuItem ("Forward", nil, dio.inputs.bindings.getKeyBinding ()),
+		l = KeySelectMenuItem ("Left", nil, keyCodes.A),
+		b = KeySelectMenuItem ("Back", nil, keyCodes.S),
+		r = KeySelectMenuItem ("Right", nil, keyCodes.D),
+		j = KeySelectMenuItem ("Jump", nil, keyCodes.SPACE),
+		t = KeySelectMenuItem ("Turbo", nil, keyCodes.LEFT_SHIFT)
+	}
+
+
+	local instance = MenuClass ("PLAYER CONTROLS MENU")
+
+	Mixin.CopyTo (instance, properties)
+	Mixin.CopyTo (instance, c)
+
 	instance:addMenuItem (BreakMenuItem ())
-	local checkbox = instance:addMenuItem (CheckboxMenuItem ("Invert Mouse", nil, is_mouse_inverted))
-	local f = instance:addMenuItem (KeySelectMenuItem ("Forward", nil, keyCodes.W))
-	local l = instance:addMenuItem (KeySelectMenuItem ("Left", nil, keyCodes.A))
-	local b = instance:addMenuItem (KeySelectMenuItem ("Back", nil, keyCodes.S))
-	local r = instance:addMenuItem (KeySelectMenuItem ("Right", nil, keyCodes.D))
-	local j = instance:addMenuItem (KeySelectMenuItem ("Jump", nil, keyCodes.SPACE))
-	local t = instance:addMenuItem (KeySelectMenuItem ("Turbo", nil, keyCodes.LEFT_SHIFT))
+	instance:addMenuItem (properties.checkbox)
+	instance:addMenuItem (properties.f)
+	instance:addMenuItem (properties.l)
+	instance:addMenuItem (properties.b)
+	instance:addMenuItem (properties.r)
+	instance:addMenuItem (properties.j)
+	instance:addMenuItem (properties.t)
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Save", onSaveClicked))	
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Cancel", onCancelClicked))	
-
-	instance.invert_mouse_checkbox = checkbox
 
 	return instance
 end

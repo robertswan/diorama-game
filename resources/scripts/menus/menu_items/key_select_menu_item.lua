@@ -45,7 +45,6 @@ function c:onUpdate (menu, x, y, was_left_clicked)
 
 			--menu:unlockHighlightToMenuItem (self)
 			self.keyCode = keyCodeClicked
-			self.keyText = dio.inputs.keys.keyCodeToString (keyCodeClicked)
 			self.isSelected = false
 		end
 
@@ -79,7 +78,8 @@ function c:onRender (font)
 	if self.isSelected then
 		font.drawString (self.x + 205, self.y, "????", 0xffff0000)
 	else
-		font.drawString (self.x + 205, self.y, self.keyText, 0xffff0000)
+		local keyText = dio.inputs.keys.keyCodeToString (self.keyCode)
+		font.drawString (self.x + 205, self.y, keyText, 0xffff0000)
 	end
 end
 
@@ -92,7 +92,6 @@ return function (text, onKeyUpdated, keyCode)
 	{
 		text = text,
 		keyCode = keyCode,
-		keyText = dio.inputs.keys.keyCodeToString (keyCode),
 		isSelected = false,
 		onKeyUpdated = onKeyUpdated
 	}
