@@ -1,8 +1,7 @@
 --------------------------------------------------
 local BreakMenuItem = require ("resources/scripts/menus/menu_items/break_menu_item")
 local ButtonMenuItem = require ("resources/scripts/menus/menu_items/button_menu_item")
-local CheckboxMenuItem = require ("resources/scripts/menus/menu_items/checkbox_menu_item")
-local KeySelectMenuItem = require ("resources/scripts/menus/menu_items/key_select_menu_item")
+local LabelMenuItem = require ("resources/scripts/menus/menu_items/label_menu_item")
 local Menus = require ("resources/scripts/menus/menu_construction")
 local MenuClass = require ("resources/scripts/menus/menu_class")
 local Mixin = require ("resources/scripts/menus/mixin")
@@ -41,6 +40,10 @@ function c:onEnter (menus)
 
 		local button = ButtonMenuItem ("Load " .. levelName, onClicked)
 		self:addMenuItem (button)
+	end
+
+	if #levels == 0 then
+		self:addMenuItem (LabelMenuItem ("No Levels Found"))
 	end
 
 	self:addMenuItem (BreakMenuItem ())
