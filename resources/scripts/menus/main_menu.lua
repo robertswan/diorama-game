@@ -56,6 +56,7 @@ return function ()
 	Mixin.CopyToAndBackupParents (instance, c)
 
 	instance:addMenuItem (ButtonMenuItem ("Create New Level", onCreateNewLevelClicked))
+	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Load Level", onLoadLevelClicked))
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Edit Player Controls", onEditPlayerControlsClicked))

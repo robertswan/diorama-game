@@ -5,13 +5,13 @@ local Mixin = require ("resources/scripts/menus/mixin")
 local c = {}
 
 --------------------------------------------------
-function c:addMenuItem (menu_item)
-	menu_item.x = 0
-	menu_item.y = self.next_y
-	self.next_y = self.next_y + menu_item.height
-	table.insert (self.items, menu_item)
+function c:addMenuItem (menuItem)
+	menuItem.x = 0
+	menuItem.y = self.next_y
+	self.next_y = self.next_y + menuItem.height
+	table.insert (self.items, menuItem)
 
-	return menu_item	
+	return menuItem	
 end
 
 --------------------------------------------------
@@ -57,10 +57,10 @@ function c:onRender ()
 	end
 
 	local highlighted_item = nil
-	for idx, menu_item in ipairs (self.items) do
+	for idx, menuItem in ipairs (self.items) do
 
-		if menu_item.onRender then
-			menu_item:onRender (font)
+		if menuItem.onRender then
+			menuItem:onRender (font)
 		end
 
 		-- font.drawString (item.x, item.y, item.text, 0xffff0000)

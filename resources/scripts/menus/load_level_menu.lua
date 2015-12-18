@@ -8,7 +8,15 @@ local Mixin = require ("resources/scripts/menus/mixin")
 
 --------------------------------------------------
 local function onPlayLevelClicked (menu, levelName)
-	menu.loadingLevelMenu:recordLevelToLoad (levelName, false)
+
+	local worldSettings =
+	{
+		path = 			levelName,
+		isNew = 		false,
+		should_save = 	true,
+	}
+
+	menu.loadingLevelMenu:recordWorldSettings (worldSettings)
 end
 
 --------------------------------------------------

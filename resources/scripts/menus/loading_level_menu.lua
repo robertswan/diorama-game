@@ -8,25 +8,27 @@ local c = {}
 
 --------------------------------------------------
 function c:onEnter ()
-	assert (self.filename ~= nil)
-
-	local worldSettings = 
-	{
-		path = self.filename,
-		isNew = self.isNew,
-		shouldSave = true
-	}
-
-	local is_ok = dio.session.requestBegin (worldSettings)
-	assert (is_ok)
-
-	self.filename = nil
-	self.isNew = nil
+	assert (self.worldSettings ~= nil)
 end
 
 --------------------------------------------------
 function c:onUpdate ()
-	return "playing_game_menu"
+
+	local isNew = self.worldSettings.isNew
+	local isOk = dio.session.requestBegin (self.worldSettings, self.roomSettings)
+
+	self.worldSettings = nil
+	self.roomSettings = nil
+
+	if isOk then
+		return "playing_game_menu"
+
+	elseif isNew then
+		return "create_new_level_menu"
+
+	else
+		return "load_level_menu"
+	end
 end
 
 --------------------------------------------------
@@ -37,9 +39,9 @@ function c:onAppShouldClose (parent_func)
 end
 
 --------------------------------------------------
-function c:recordLevelToLoad (filename, isNew)
-	self.filename = filename
-	self.isNew = isNew
+function c:recordWorldSettings (worldSettings, roomSettings)
+	self.worldSettings = worldSettings
+	self.roomSettings = roomSettings
 end
 
 --------------------------------------------------
