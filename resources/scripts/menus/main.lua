@@ -20,12 +20,12 @@ local function loadPlayerControls ()
 		local setBinding = dio.inputs.bindings.setKeyBinding
 		local types = dio.inputs.bindingTypes
 
-		setBinding (types.FORWARD,	player_settings.forward)
-		setBinding (types.LEFT, 	player_settings.forward)
-		setBinding (types.BACKWARD,	player_settings.forward)
-		setBinding (types.RIGHT, 	player_settings.forward)
-		setBinding (types.JUMP, 	player_settings.forward)
-		setBinding (types.TURBO, 	player_settings.forward)
+		setBinding (types.FORWARD,	playerSettings.forward)
+		setBinding (types.LEFT, 	playerSettings.left)
+		setBinding (types.BACKWARD,	playerSettings.backward)
+		setBinding (types.RIGHT, 	playerSettings.right)
+		setBinding (types.JUMP, 	playerSettings.jump)
+		setBinding (types.TURBO, 	playerSettings.turbo)
 	end
 end
 
