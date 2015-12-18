@@ -24,12 +24,12 @@ function c:update ()
 
 	if self.next_menu_name then
 		if self.current_menu then
-			self.current_menu:onExit ()
+			self.current_menu:onExit (self.menus)
 		end
 		self.current_menu = self.menus [self.next_menu_name]
 		self.next_menu_name = nil
 		if self.current_menu then
-			self.current_menu:onEnter ()
+			self.current_menu:onEnter (self.menus)
 		end
 	end
 
@@ -50,11 +50,11 @@ function c:render ()
 end
 
 --------------------------------------------------
-return function (individual_menus, initial_menu_name)
+return function (all_menus, initial_menu_name)
 	
 	local instance = 
 	{
-		menus = individual_menus,
+		menus = all_menus,
 		current_menu = nil,
 		next_menu_name = initial_menu_name
 	}

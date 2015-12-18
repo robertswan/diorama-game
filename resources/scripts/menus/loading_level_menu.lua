@@ -8,7 +8,19 @@ local c = {}
 
 --------------------------------------------------
 function c:onEnter ()
-	dio.session.requestBegin ({path = "my_world2", shouldSave = true})
+	assert (self.filename ~= nil)
+
+	local worldSettings = 
+	{
+		path = self.filename,
+		isNew = self.isNew,
+		shouldSave = true
+	}
+
+	dio.session.requestBegin (worldSettings)
+
+	self.filename = nil
+	self.isNew = nil
 end
 
 --------------------------------------------------
@@ -21,6 +33,12 @@ function c:onAppShouldClose (parent_func)
 	dio.session.terminate ()
 	self.parent.onAppShouldClose (self)
 	return "quitting_menu"
+end
+
+--------------------------------------------------
+function c:recordLevelToLoad (filename, isNew)
+	self.filename = filename
+	self.isNew = isNew
 end
 
 --------------------------------------------------

@@ -27,6 +27,7 @@ local function onCreateLevelClicked (menuItem, menu)
 	else
 
 		menu.warningLabel.text = ""
+		menu.loadingLevelMenu:recordLevelToLoad (menu.filename.value, true)
 		return "loading_level_menu"
 	end
 end
@@ -46,14 +47,15 @@ function c:onAppShouldClose ()
 end
 
 --------------------------------------------------
-function c:onEnter ()
+function c:onEnter (menus)
 	self.warningLabel.text = ""
+	self.loadingLevelMenu = menus.loading_level_menu
 end
 
--- --------------------------------------------------
--- function c:onExit ()
--- 	dio.session.terminate ()
--- end
+--------------------------------------------------
+function c:onExit ()
+	self.loadingLevelMenu = nil
+end
 
 --------------------------------------------------
 return function ()
@@ -62,8 +64,9 @@ return function ()
 
 	local properties =
 	{
-		filename = TextEntryMenuItem ("Filename", onFilenameChanged, nil, "MyWorld", 8),
-		randomSeed = TextEntryMenuItem ("Random Seed", nil, nil, "seed0000", 8),
+		loadingLevelMenu = nil,
+		filename = TextEntryMenuItem ("Filename", onFilenameChanged, nil, "MyWorld", 16),
+		randomSeed = TextEntryMenuItem ("Random Seed", nil, nil, "seed0000", 16),
 		createLevel = ButtonMenuItem ("Create Level", onCreateLevelClicked),
 		warningLabel = LabelMenuItem (""),
 	}

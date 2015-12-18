@@ -46,7 +46,7 @@ local function main ()
 	dio.onRender = OnRender
 	dio.onUpdate = OnUpdate
 
-	local individual_menus = 
+	local individual_menus =
 	{
 		main_menu = 			require ("resources/scripts/menus/main_menu") (),
 		create_new_level_menu = require ("resources/scripts/menus/create_new_level_menu") (),
