@@ -11,4 +11,5 @@ void main()
 {
 	vec2 rg = texture (diffuse_map, frag_in_uv).rg;
 	color = vec4 (rg.x, rg.x, rg.x, rg.y);
+	color.rgb = color.rgb * frag_in_color;
 }

@@ -36,6 +36,12 @@ local TextEntryMenuItem = require ("resources/scripts/menus/menu_items/text_entr
 -- end
 
 --------------------------------------------------
+local function onCreateLevelClicked ()
+	return "loading_level_menu"
+end
+
+
+--------------------------------------------------
 local function onReturnToMainMenuClicked ()
 	return "main_menu"
 end
@@ -75,7 +81,10 @@ return function ()
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (properties.filename)
 	instance:addMenuItem (properties.randomSeed)
-	instance:addMenuItem (ButtonMenuItem ("Return To Main Menu", onReturnToMainMenuClicked))	
+	instance:addMenuItem (BreakMenuItem ())
+	instance:addMenuItem (ButtonMenuItem ("Create Level", onCreateLevelClicked))
+	instance:addMenuItem (BreakMenuItem ())
+	instance:addMenuItem (ButtonMenuItem ("Return To Main Menu", onReturnToMainMenuClicked))
 
 	return instance
 end

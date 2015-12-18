@@ -9,7 +9,7 @@ return function ()
 		text = "------------------------",
 
 		onRender = function (self, font)
-			font.drawString (self.x + 20, self.y, self.text, 0xffff0000)
+			font.drawString (self.x + 20, self.y, self.text, 0x606060)
 		end
 	}
 

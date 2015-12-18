@@ -46,7 +46,7 @@ function c:onRender ()
 	local font = dio.drawing.font;
 	
 	if self.title then
-		font.drawString (200, 0, self.title, 0xffff0000)
+		font.drawString (200, 0, self.title, 0xffffff)
 	end
 
 	local highlighted_item = nil

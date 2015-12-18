@@ -30,5 +30,7 @@ void main()
 
 	color = texture (diffuse_map, frag_in_uv).rgba;
 
+	color.rgb = color.rgb * frag_in_color;
+
 	//color.a = 1.0f;
 }
