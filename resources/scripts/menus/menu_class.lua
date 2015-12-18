@@ -62,7 +62,10 @@ end
 
 --------------------------------------------------
 function c:onAppShouldClose ()
-	app_is_shutting_down = true 
+	app_is_shutting_down = true
+	-- TODO should this also do...
+	--dio.session.terminate ()
+	--return "quitting_menu"
 end
 
 --------------------------------------------------

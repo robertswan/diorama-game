@@ -7,12 +7,12 @@ local Mixin = require ("resources/scripts/menus/mixin")
 
 --------------------------------------------------
 local function onCreateNewLevelClicked ()
-	return "loading_level_menu"
+	return "create_new_level_menu"
 end
 
 --------------------------------------------------
 local function onLoadLevelClicked ()
-	return "loading_level_menu"
+	return "load_level_menu"
 end
 
 --------------------------------------------------
@@ -31,12 +31,15 @@ end
 
 --------------------------------------------------
 function c:onEnter ()
-	dio.session.requestBegin ({false})
+	-- if not self.isDemoSessionAlive then
+	-- 	dio.session.requestBegin ({false})
+	-- 	self.isDemoSessionAlive = true
+	-- end
 end
 
 --------------------------------------------------
 function c:onExit ()
-	dio.session.terminate ()
+	-- dio.session.terminate ()
 end
 
 --------------------------------------------------
@@ -44,6 +47,12 @@ return function ()
 
 	local instance = MenuClass ("MAIN MENU")
 
+	local properties = 
+	{
+		isDemoSessionAlive = false
+	}
+
+	Mixin.CopyTo (instance, properties)
 	Mixin.CopyToAndBackupParents (instance, c)
 
 	instance:addMenuItem (ButtonMenuItem ("Create New Level", onCreateNewLevelClicked))

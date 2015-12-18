@@ -7,7 +7,6 @@ app_is_ready_to_quit = false
 --------------------------------------------------
 local Menus = require ("resources/scripts/menus/menus")
 
-
 local menus = nil
 
 --------------------------------------------------
@@ -50,6 +49,8 @@ local function main ()
 	local individual_menus = 
 	{
 		main_menu = 			require ("resources/scripts/menus/main_menu") (),
+		create_new_level_menu = require ("resources/scripts/menus/create_new_level_menu") (),
+		load_level_menu = 		require ("resources/scripts/menus/load_level_menu") (),
 		player_controls_menu = 	require ("resources/scripts/menus/player_controls_menu") (),
 		loading_level_menu = 	require ("resources/scripts/menus/loading_level_menu") (),
 		playing_game_menu = 	require ("resources/scripts/menus/playing_game_menu") (),

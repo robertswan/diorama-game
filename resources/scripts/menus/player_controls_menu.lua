@@ -44,11 +44,11 @@ end
 --------------------------------------------------
 local c = {}
 
--- --------------------------------------------------
--- function c:onAppShouldClose (parent_func)
--- 	parent_func (self)
--- 	return "quitting_menu"
--- end
+--------------------------------------------------
+function c:onAppShouldClose (parent_func)
+	self.parent.onAppShouldClose (self)
+	return "quitting_menu"
+end
 
 --------------------------------------------------
 function c:onEnter ()
@@ -64,11 +64,6 @@ function c:onEnter ()
 	self.j.keyCode = getBinding (types.JUMP)
 	self.t.keyCode = getBinding (types.TURBO)
 end
-
--- --------------------------------------------------
--- function c:onExit ()
--- 	dio.session.terminate ()
--- end
 
 --------------------------------------------------
 return function ()
