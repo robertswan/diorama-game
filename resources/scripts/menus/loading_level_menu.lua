@@ -17,7 +17,8 @@ function c:onEnter ()
 		shouldSave = true
 	}
 
-	dio.session.requestBegin (worldSettings)
+	local is_ok = dio.session.requestBegin (worldSettings)
+	assert (is_ok)
 
 	self.filename = nil
 	self.isNew = nil
