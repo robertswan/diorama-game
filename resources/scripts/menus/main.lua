@@ -16,6 +16,8 @@ local function loadPlayerControls ()
 
 	if playerSettings then
 
+		dio.inputs.mouse.setIsInverted (playerSettings.isMouseInverted)
+
 		local setBinding = dio.inputs.bindings.setKeyBinding
 		local types = dio.inputs.bindingTypes
 

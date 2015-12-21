@@ -9,7 +9,8 @@ local Mixin = require ("resources/scripts/menus/mixin")
 
 --------------------------------------------------
 local function onSaveClicked (self, menu)
-	dio.inputs.mouse.setIsInverted (menu.checkbox.is_checked)
+
+	dio.inputs.mouse.setIsInverted (menu.invertMouse.isChecked)
 
 	local setBinding = dio.inputs.bindings.setKeyBinding
 	local types = dio.inputs.bindingTypes
@@ -23,6 +24,7 @@ local function onSaveClicked (self, menu)
 
 	local playerSettings =
 	{
+		isMouseInverted = menu.invertMouse.isChecked,
 		forward = 	menu.f.keyCode,
 		left = 		menu.l.keyCode,
 		backward = 	menu.b.keyCode,
@@ -56,7 +58,7 @@ function c:onEnter ()
 	local getBinding = dio.inputs.bindings.getKeyBinding
 	local types = dio.inputs.bindingTypes
 
-	self.checkbox.is_checked = dio.inputs.mouse.getIsInverted ()
+	self.invertMouse.isChecked = dio.inputs.mouse.getIsInverted ()
 	self.f.keyCode = getBinding (types.FORWARD)
 	self.l.keyCode = getBinding (types.LEFT)
 	self.b.keyCode = getBinding (types.BACKWARD)
@@ -68,12 +70,12 @@ end
 --------------------------------------------------
 return function ()
 
-	local is_mouse_inverted = dio.inputs.mouse.getIsInverted ()
+	local isMouseInverted = dio.inputs.mouse.getIsInverted ()
 	local keyCodes = dio.inputs.keyCodes
 
 	local properties =
 	{
-		checkbox = CheckboxMenuItem ("Invert Mouse", nil, is_mouse_inverted),
+		invertMouse = CheckboxMenuItem ("Invert Mouse", nil, isMouseInverted),
 		f = KeySelectMenuItem ("Forward", nil, 0),
 		l = KeySelectMenuItem ("Left", nil, 0),
 		b = KeySelectMenuItem ("Back", nil, 0),
@@ -82,14 +84,13 @@ return function ()
 		t = KeySelectMenuItem ("Turbo", nil, 0)
 	}
 
-
 	local instance = MenuClass ("PLAYER CONTROLS MENU")
 
 	Mixin.CopyTo (instance, properties)
 	Mixin.CopyToAndBackupParents (instance, c)
 
 	instance:addMenuItem (BreakMenuItem ())
-	instance:addMenuItem (properties.checkbox)
+	instance:addMenuItem (properties.invertMouse)
 	instance:addMenuItem (properties.f)
 	instance:addMenuItem (properties.l)
 	instance:addMenuItem (properties.b)

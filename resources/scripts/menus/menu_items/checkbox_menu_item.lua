@@ -14,7 +14,7 @@ function c:onUpdate (menu, x, y, was_left_clicked)
 			y < self.y + self.height
 
 	if was_left_clicked and self.isHighlighted then
-		self.is_checked = not self.is_checked
+		self.isChecked = not self.isChecked
 		if self.onClicked then
 			return self:onClicked (menu)
 		end
@@ -29,20 +29,20 @@ function c:onRender (font)
 	end
 	font.drawString (self.x + 20, self.y, self.text, color)
 	font.drawString (self.x + 200, self.y, "[   ]", color)
-	if self.is_checked then
+	if self.isChecked then
 		font.drawString (self.x + 205, self.y, "X", color)
 	end
 end
 
 --------------------------------------------------
-return function (text, onClicked, is_checked)
+return function (text, onClicked, isChecked)
 
 	local instance = MenuItemBase ()
 
 	local properties =
 	{
 		text = text,
-		is_checked = is_checked,
+		isChecked = isChecked,
 		onClicked = onClicked
 	}
 

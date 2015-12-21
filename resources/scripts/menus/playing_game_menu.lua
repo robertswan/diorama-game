@@ -26,7 +26,7 @@ end
 
 --------------------------------------------------
 function c:onExit ()
-	dio.inputs.mouse.setExclusive (false)	
+	dio.inputs.mouse.setExclusive (false)
 	dio.drawing.setRenderMenus (true)
 end
 
