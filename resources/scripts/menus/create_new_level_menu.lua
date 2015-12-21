@@ -31,7 +31,7 @@ local function onCreateLevelClicked (menuItem, menu)
 		{
 			path = 			menu.filename.value,
 			isNew = 		true,
-			should_save = 	true,
+			shouldSave = 	true,
 		}
 
 		local roomSettings =
