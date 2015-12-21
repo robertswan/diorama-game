@@ -7,12 +7,13 @@ local Mixin = require ("resources/scripts/menus/mixin")
 local c = {}
 
 --------------------------------------------------
-function c:onEnter ()
+function c:onEnter (menus)
 	assert (self.worldSettings ~= nil)
+	self.createNewLevelMenu = menus.create_new_level_menu
 end
 
 --------------------------------------------------
-function c:onUpdate ()
+function c:onUpdate (menus)
 
 	local isNew = self.worldSettings.isNew
 	local isOk = dio.session.requestBegin (self.worldSettings, self.roomSettings)
@@ -24,6 +25,7 @@ function c:onUpdate ()
 		return "playing_game_menu"
 
 	elseif isNew then
+		self.createNewLevelMenu:recordWorldAlreadyExistsError ()
 		return "create_new_level_menu"
 
 	else

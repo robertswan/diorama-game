@@ -105,27 +105,6 @@ function c:onRender (font, menu)
 		end
 	end
 	font.drawString (itemWidth + x - width, self.y, value, color)
-
-
-
-
-
-
-
-	-- local color = self.isHighlighted and 0xffffff or 0x00ffff
-	-- color = self.isSelected and 0xff0000 or color
-	-- if self.isHighlighted then
-	-- 	font.drawString (self.x, self.y, ">", color)
-	-- end
-	-- font.drawString (self.x + 20, self.y, self.text, color)
-	-- font.drawString (self.x + 200, self.y, "[", color)
-	-- font.drawString (self.x + 281, self.y, "]", color)
-
-	-- local value = self.value
-	-- if self.isSelected and self.flashCount < 8 then
-	-- 	value = value .. "_"
-	-- end
-	-- font.drawString (self.x + 205, self.y, value, color)
 end
 
 --------------------------------------------------

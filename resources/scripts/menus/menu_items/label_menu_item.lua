@@ -8,8 +8,9 @@ return function (text)
 	{
 		text = text,
 
-		onRender = function (self, font)
-			font.drawString (self.x + 20, self.y, self.text, 0xffffff)
+		onRender = function (self, font, menus)
+			local width = font.measureString (self.text)
+			font.drawString ((menus.width - width) * 0.5, self.y, self.text, 0xffffff)
 		end
 	}
 

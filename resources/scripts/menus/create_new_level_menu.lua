@@ -71,13 +71,23 @@ end
 
 --------------------------------------------------
 function c:onEnter (menus)
-	self.warningLabel.text = ""
 	self.loadingLevelMenu = menus.loading_level_menu
+
+	if self.doesWorldAlreadyExistError then
+		self.warningLabel.text = "World already exists. Please Rename it"
+		self.doesWorldAlreadyExistError = nil
+	end
 end
 
 --------------------------------------------------
 function c:onExit ()
+	self.warningLabel.text = ""
 	self.loadingLevelMenu = nil
+end
+
+--------------------------------------------------
+function c:recordWorldAlreadyExistsError ()
+	self.doesWorldAlreadyExistError = true
 end
 
 --------------------------------------------------
