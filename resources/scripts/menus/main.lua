@@ -50,6 +50,7 @@ local function main ()
 
 	local individual_menus =
 	{
+		readme_menu = 			require ("resources/scripts/menus/readme_menu") (),
 		main_menu = 			require ("resources/scripts/menus/main_menu") (),
 		create_new_level_menu = require ("resources/scripts/menus/create_new_level_menu") (),
 		load_level_menu = 		require ("resources/scripts/menus/load_level_menu") (),
@@ -61,7 +62,7 @@ local function main ()
 		quitting_menu =			require ("resources/scripts/menus/quitting_menu") ()
 	}
 
-	menus = Menus (individual_menus, "main_menu")
+	menus = Menus (individual_menus, "readme_menu")
 
 end
 

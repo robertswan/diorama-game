@@ -21,6 +21,11 @@ local function onEditPlayerControlsClicked ()
 end
 
 --------------------------------------------------
+local function onReadmeClicked ()
+	return "readme_menu"
+end
+
+--------------------------------------------------
 local c = {}
 
 --------------------------------------------------
@@ -60,6 +65,8 @@ return function ()
 	instance:addMenuItem (ButtonMenuItem ("Load Level", onLoadLevelClicked))
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Edit Player Controls", onEditPlayerControlsClicked))
+	instance:addMenuItem (BreakMenuItem ())
+	instance:addMenuItem (ButtonMenuItem ("Read README.TXT", onReadmeClicked))
 
 	return instance
 end
