@@ -48,11 +48,15 @@ function c:onUpdate (menu, x, y, was_left_clicked)
 
 			local isDigit = (characterClicked >= string.byte ("0") and characterClicked <= string.byte ("9"))
 			local isPeriod = (characterClicked == string.byte (".") and not self.isInteger)
+			local isNegative = (characterClicked == string.byte ("-"))
 			if isPeriod then
-				isPeriod = not string.find (self.value, "%.")
+				isPeriod = (not string.find (self.value, "%.") and self.value:len () > 0)
+			end
+			if isNegative then
+				isNegative = (self.value:len () == 0)
 			end
 
-			if isDigit or isPeriod then
+			if isDigit or isPeriod or isNegative then
 		
 				self.value = self.value .. string.char (characterClicked)
 				if self.onTextChanged then

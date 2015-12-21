@@ -36,16 +36,14 @@ local function onCreateLevelClicked (menuItem, menu)
 
 		local roomSettings =
 		{
-			path = 					"default/",
-			randomSeed = 			menu.randomSeed.value,
-			perlinSize = 			menu.perlinSize:getValueAsNumber (),
-			perlinOctavesCount = 	menu.perlinOctavesCount:getValueAsNumber (),
-			perlinFrequency = 		menu.perlinFrequency:getValueAsNumber (),
-			perlinAmplitude = 		menu.perlinAmplitude:getValueAsNumber (),
-			blah1 = 				menu.blah1:getValueAsNumber (),
-			blah2 = 				menu.blah2:getValueAsNumber (),
-			blah3 = 				menu.blah3:getValueAsNumber (),
-			blah4 = 				menu.blah4:getValueAsNumber (),
+			path = 							"default/",
+			randomSeed = 					menu.randomSeed.value,
+			perlinSize = 					menu.perlinSize:getValueAsNumber (),
+			perlinOctavesCount = 			menu.perlinOctavesCount:getValueAsNumber (),
+			perlinFrequency = 				menu.perlinFrequency:getValueAsNumber (),
+			perlinAmplitude = 				menu.perlinAmplitude:getValueAsNumber (),
+			solidityChanceChangePerY = 		menu.solidityChanceChangePerY:getValueAsNumber (),
+			solidityChanceOverallOffset = 	menu.solidityChanceOverallOffset:getValueAsNumber (),
 		}
 
 		menu.loadingLevelMenu:recordWorldSettings (worldSettings, roomSettings)
@@ -98,18 +96,16 @@ return function ()
 	local properties =
 	{
 		loadingLevelMenu = nil,
-		filename = 				TextEntryMenuItem ("Filename", onFilenameChanged, nil, "MyWorld", 16),
-		randomSeed = 			TextEntryMenuItem ("Random Seed", nil, nil, "0", 16),
-		perlinSize = 			NumberEntryMenuItem ("Perlin Initial Size", nil, nil, 128, true),
-		perlinOctavesCount = 	NumberEntryMenuItem ("Octaves Count", nil, nil, 5, true),
-		perlinFrequency = 		NumberEntryMenuItem ("Per Octave Frequency Mulitplier", nil, nil, 2, false),
-		perlinAmplitude = 		NumberEntryMenuItem ("Per Octave Amplitude Multiplier", nil, nil, 0.5, false),
-		blah1 = 				NumberEntryMenuItem ("Blah1", nil, nil, 0.003, false),
-		blah2 = 				NumberEntryMenuItem ("Blah2", nil, nil, 0, false),
-		blah3 = 				NumberEntryMenuItem ("Blah3", nil, nil, 1, false),
-		blah4 = 				NumberEntryMenuItem ("Blah4", nil, nil, 0, false),
-		createLevel = 			ButtonMenuItem ("Create Level", onCreateLevelClicked),
-		warningLabel = 			LabelMenuItem (""),
+		filename = 						TextEntryMenuItem ("Filename", onFilenameChanged, nil, "MyWorld", 16),
+		randomSeed = 					TextEntryMenuItem ("Random Seed", nil, nil, "0", 16),
+		perlinSize = 					NumberEntryMenuItem ("Perlin Initial Size", nil, nil, 128, true),
+		perlinOctavesCount = 			NumberEntryMenuItem ("Octaves Count", nil, nil, 5, true),
+		perlinFrequency = 				NumberEntryMenuItem ("Per Octave Frequency Mulitplier", nil, nil, 2, false),
+		perlinAmplitude = 				NumberEntryMenuItem ("Per Octave Amplitude Multiplier", nil, nil, 0.5, false),
+		solidityChanceChangePerY = 		NumberEntryMenuItem ("Solidity Chance Change Per Y", nil, nil, 0.003, false),
+		solidityChanceOverallOffset = 	NumberEntryMenuItem ("Solidity Chance Overall Offset", nil, nil, 0, false),
+		createLevel = 					ButtonMenuItem ("Create Level", onCreateLevelClicked),
+		warningLabel = 					LabelMenuItem (""),
 	}
 
 	Mixin.CopyTo (instance, properties)
@@ -128,10 +124,8 @@ return function ()
 	instance:addMenuItem (properties.perlinFrequency)
 	instance:addMenuItem (properties.perlinAmplitude)
 	instance:addMenuItem (LabelMenuItem (""))
-	instance:addMenuItem (properties.blah1)
-	instance:addMenuItem (properties.blah2)
-	instance:addMenuItem (properties.blah3)
-	instance:addMenuItem (properties.blah4)
+	instance:addMenuItem (properties.solidityChanceChangePerY)
+	instance:addMenuItem (properties.solidityChanceOverallOffset)
 
 	instance:addMenuItem (BreakMenuItem ())
 	
