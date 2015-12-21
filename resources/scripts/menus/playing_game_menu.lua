@@ -21,11 +21,13 @@ end
 --------------------------------------------------
 function c:onEnter ()
 	dio.inputs.mouse.setExclusive (true)
+	dio.drawing.setRenderMenus (false)
 end
 
 --------------------------------------------------
 function c:onExit ()
 	dio.inputs.mouse.setExclusive (false)	
+	dio.drawing.setRenderMenus (true)
 end
 
 --------------------------------------------------

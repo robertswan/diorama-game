@@ -38,12 +38,12 @@ function c:onUpdate (menu, x, y, was_left_clicked)
 
 		if keyCodeClicked == dio.inputs.keyCodes.ESCAPE then
 
-			--menu:unlockHighlightToMenuItem (self)
+			menu:setUpdateOnlySelectedMenuItems (false)
 			self.isSelected = false
 		
 		elseif keyCodeClicked ~= nil then
 
-			--menu:unlockHighlightToMenuItem (self)
+			menu:setUpdateOnlySelectedMenuItems (false)
 			self.keyCode = keyCodeClicked
 			self.isSelected = false
 		end
@@ -60,6 +60,7 @@ function c:onUpdate (menu, x, y, was_left_clicked)
 				-- somehow stop the menu from doing other things!
 				--menu:lockHighlightToMenuItem (self)
 
+				menu:setUpdateOnlySelectedMenuItems (true)
 				self.isSelected = true
 			end
 		end

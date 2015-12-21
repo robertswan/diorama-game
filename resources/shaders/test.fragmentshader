@@ -26,9 +26,9 @@ void main()
 	uv.x = uv.x + dx.x + dy.x;
 	uv.y = uv.y + dx.y + dy.y;
 
-	color = texture (diffuse_map, uv).rgba;
+	//color = texture (diffuse_map, uv).rgba;
 
-	//color = texture (diffuse_map, frag_in_uv).rgba;
+	color = texture (diffuse_map, frag_in_uv).rgba;
 
 	color.rgb = color.rgb * frag_in_color;
 

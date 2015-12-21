@@ -44,6 +44,7 @@ function c:onUpdate (menu, x, y, was_left_clicked)
 			self.value = self.initial_value
 			self.initial_value = nil
 			self.isSelected = false
+			menu:setUpdateOnlySelectedMenuItems (false)
 			if self.onTextChanged then
 				self:onTextChanged (menu)
 			end
@@ -51,6 +52,7 @@ function c:onUpdate (menu, x, y, was_left_clicked)
 		elseif keyCodeClicked == dio.inputs.keyCodes.ENTER then
 			self.initial_value = nil
 			self.isSelected = false
+			menu:setUpdateOnlySelectedMenuItems (false)
 			if self.onTextChangeConfirmed then
 				self:onTextChangeConfirmed (menu)
 			end
@@ -104,6 +106,7 @@ function c:onUpdate (menu, x, y, was_left_clicked)
 				self.flashCount = 0
 				self.initial_value = self.value
 				self.isSelected = true
+				menu:setUpdateOnlySelectedMenuItems (true)
 			end
 		end
 	end

@@ -18,7 +18,12 @@ end
 function c:clearAllMenuItems ()
 	self.items = {}
 	self.next_y = 40
-	self.events = {}			
+	self.events = {}
+end
+
+--------------------------------------------------
+function c:setUpdateOnlySelectedMenuItems (isSet)
+	self.isUpdatingOnlySelectedMenuItems = isSet
 end
 
 --------------------------------------------------
@@ -32,9 +37,14 @@ function c:onUpdate (x, y, was_left_clicked)
 	for i, item in ipairs (self.items) do
 
 		if item.onUpdate then
-			local next_menu_2 = item:onUpdate (self, x, y, was_left_clicked)
-			if next_menu_2 then
-				next_menu = next_menu_2
+
+			if not self.isUpdatingOnlySelectedMenuItems or item.isSelected then
+
+				local next_menu_2 = item:onUpdate (self, x, y, was_left_clicked)
+				if next_menu_2 then
+					next_menu = next_menu_2
+				end
+				
 			end
 		end
 	end

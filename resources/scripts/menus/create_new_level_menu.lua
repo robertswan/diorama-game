@@ -83,7 +83,7 @@ end
 --------------------------------------------------
 return function ()
 
-	local instance = MenuClass ("CREATE NEW LEVEL MENU")
+	local instance = MenuClass ("NEW LEVEL MENU")
 
 	local properties =
 	{
