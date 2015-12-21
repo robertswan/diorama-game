@@ -94,8 +94,6 @@ function c:onUpdate (menu, x, y, was_left_clicked)
 
 	else
 		self.isHighlighted = 
-				x >= self.x and 
-				x < self.x + self.width and
 				y >= self.y and 
 				y < self.y + self.height
 
@@ -113,21 +111,31 @@ function c:onUpdate (menu, x, y, was_left_clicked)
 end
 
 --------------------------------------------------
-function c:onRender (font)
+function c:onRender (font, menu)
+
+	local itemWidth = menu.width - 200
+	local x = 100
+
 	local color = self.isHighlighted and 0xffffff or 0x00ffff
 	color = self.isSelected and 0xff0000 or color
+
+	font.drawString (x, self.y, self.text, color)
+
 	if self.isHighlighted then
-		font.drawString (self.x, self.y, ">", color)
+		local width = font.measureString (">>>>    ")
+		font.drawString (x - width, self.y, ">>>>    ", color)
+		font.drawString (x + itemWidth, self.y, "    <<<<", color)
 	end
-	font.drawString (self.x + 20, self.y, self.text, color)
-	font.drawString (self.x + 200, self.y, "[", color)
-	font.drawString (self.x + 281, self.y, "]", color)
 
 	local value = self.value
-	if self.isSelected and self.flashCount < 8 then
-		value = value .. "_"
+	local width = font.measureString (value)	
+	if self.isSelected then
+		width = width + font.measureString ("_")
+		if self.flashCount < 8 then
+			value = value .. "_"
+		end
 	end
-	font.drawString (self.x + 205, self.y, value, color)
+	font.drawString (itemWidth + x - width, self.y, value, color)
 end
 
 --------------------------------------------------

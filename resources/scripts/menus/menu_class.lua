@@ -63,14 +63,15 @@ function c:onRender ()
 	local font = dio.drawing.font;
 	
 	if self.title then
-		font.drawString (200, 0, self.title, 0xffffff)
+		local width = font.measureString (self.title)
+		font.drawString ((self.width - width) * 0.5, 0, self.title, 0xffffff)
 	end
 
 	local highlighted_item = nil
 	for idx, menuItem in ipairs (self.items) do
 
 		if menuItem.onRender then
-			menuItem:onRender (font)
+			menuItem:onRender (font, self)
 		end
 
 		-- font.drawString (item.x, item.y, item.text, 0xffff0000)
@@ -101,7 +102,9 @@ return function (title)
 		title = title,
 		items = {},
 		next_y = 40,
-		events = {}		
+		events = {},
+		width = 512,
+		height = 256,
 	}
 
 	Mixin.CopyTo (instance, c)

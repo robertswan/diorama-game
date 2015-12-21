@@ -8,23 +8,27 @@ local c = {}
 --------------------------------------------------
 function c:onUpdate (menu, x, y, was_left_clicked)
 	self.isHighlighted = 
-			x >= self.x and 
-			x < self.x + self.width and
 			y >= self.y and 
 			y < self.y + self.height
 
 	if was_left_clicked and self.isHighlighted and self.onClicked then
 		return self:onClicked (menu)
-	end		
+	end
 end
 
 --------------------------------------------------
-function c:onRender (font)
-	local color = self.isHighlighted and 0xffffff or 0x00ffff
+function c:onRender (font, menu)
+
+	local text = self.text
 	if self.isHighlighted then
-		font.drawString (self.x, self.y, ">", color)
+		text = ">>>>    " .. text .. "    <<<<"
 	end
-	font.drawString (self.x + 20, self.y, self.text, color)
+
+	local color = self.isHighlighted and 0xffffff or 0x00ffff
+	local width = font.measureString (text)
+	local x = (menu.width - width) * 0.5
+	
+	font.drawString (x, self.y, text, color)
 end
 
 --------------------------------------------------

@@ -50,8 +50,6 @@ function c:onUpdate (menu, x, y, was_left_clicked)
 
 	else
 		self.isHighlighted = 
-				x >= self.x and 
-				x < self.x + self.width and
 				y >= self.y and 
 				y < self.y + self.height
 
