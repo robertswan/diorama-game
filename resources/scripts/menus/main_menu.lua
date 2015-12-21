@@ -1,6 +1,7 @@
 --------------------------------------------------
 local BreakMenuItem = require ("resources/scripts/menus/menu_items/break_menu_item")
 local ButtonMenuItem = require ("resources/scripts/menus/menu_items/button_menu_item")
+local LabelMenuItem = require ("resources/scripts/menus/menu_items/label_menu_item")
 local Menus = require ("resources/scripts/menus/menu_construction")
 local MenuClass = require ("resources/scripts/menus/menu_class")
 local Mixin = require ("resources/scripts/menus/mixin")
@@ -67,6 +68,15 @@ return function ()
 	instance:addMenuItem (ButtonMenuItem ("Edit Player Controls", onEditPlayerControlsClicked))
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Read README.TXT", onReadmeClicked))
+	instance:addMenuItem (BreakMenuItem ())
+
+	local versionInfo = dio.system.getVersion ()
+
+	instance:addMenuItem (LabelMenuItem (versionInfo.title))
+	instance:addMenuItem (LabelMenuItem (versionInfo.buildDate))
+	instance:addMenuItem (LabelMenuItem (""))
+	instance:addMenuItem (LabelMenuItem ("See me develop live! twitch.tv/robtheswan"))
+	instance:addMenuItem (LabelMenuItem ("See my website! robtheswan.com"))
 
 	return instance
 end
