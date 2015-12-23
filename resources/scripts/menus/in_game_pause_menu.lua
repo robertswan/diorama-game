@@ -27,6 +27,17 @@ function c:onAppShouldClose ()
 end
 
 --------------------------------------------------
+function c:onUpdate (x, y, was_left_clicked)
+
+	local keyCodeClicked = dio.inputs.keys.consumeKeyCodeClicked ()
+	if keyCodeClicked and (keyCodeClicked == dio.inputs.keyCodes.ESCAPE) then
+		return "playing_game_menu"
+	end
+
+	return self.parent.onUpdate(self, x, y, was_left_clicked)
+end
+
+--------------------------------------------------
 return function ()
 	local instance = MenuClass ("IN GAME PAUSE MENU")
 

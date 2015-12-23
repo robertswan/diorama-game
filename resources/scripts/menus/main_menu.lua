@@ -32,6 +32,12 @@ local function onReadmeClicked ()
 end
 
 --------------------------------------------------
+local function onQuitClicked ()
+	app_is_shutting_down = true
+	return "quitting_menu"
+end
+
+--------------------------------------------------
 local c = {}
 
 --------------------------------------------------
@@ -75,6 +81,8 @@ return function ()
 	instance:addMenuItem (ButtonMenuItem ("Edit Player Controls", onEditPlayerControlsClicked))
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Read README.TXT", onReadmeClicked))
+	instance:addMenuItem (BreakMenuItem ())
+	instance:addMenuItem (ButtonMenuItem ("Quit", onQuitClicked))
 	instance:addMenuItem (BreakMenuItem ())
 
 	local versionInfo = dio.system.getVersion ()
