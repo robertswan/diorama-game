@@ -1,12 +1,12 @@
 local playerSettings =
 {
-	jump = 32,
-	backward = 83,
-	turbo = 340,
-	right = 68,
-	left = 65,
-	fov = 60,
+	fov = 89,
 	isMouseInverted = false,
+	turbo = 340,
+	left = 65,
+	jump = 32,
+	right = 68,
+	backward = 83,
 	forward = 87,
 }
 

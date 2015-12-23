@@ -92,6 +92,10 @@ function c:onRender (font, menu)
 	local color = self.isHighlighted and 0xffffff or 0x00ffff
 	color = self.isSelected and 0xff0000 or color
 
+	if self.isHighlighted or self.isSelected then
+		dio.drawing.font.drawBox (0, self.y, menu.width, self.height, 0x000000)
+	end
+
 	font.drawString (x, self.y, self.text, color)
 
 	if self.isHighlighted then

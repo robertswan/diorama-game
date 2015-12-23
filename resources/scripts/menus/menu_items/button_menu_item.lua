@@ -22,6 +22,7 @@ function c:onRender (font, menu)
 	local text = self.text
 	if self.isHighlighted then
 		text = ">>>>    " .. text .. "    <<<<"
+		dio.drawing.font.drawBox (0, self.y, menu.width, self.height, 0x000000)
 	end
 
 	local color = self.isHighlighted and 0xffffff or 0x00ffff

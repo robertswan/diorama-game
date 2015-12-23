@@ -60,6 +60,13 @@ function c:onExit ()
 end
 
 --------------------------------------------------
+function c:onRender ()
+
+	return self.parent.onRender (self)
+	-- dio.session.terminate ()
+end
+
+--------------------------------------------------
 return function ()
 
 	local instance = MenuClass ("MAIN MENU")
