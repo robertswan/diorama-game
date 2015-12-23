@@ -4,6 +4,7 @@ local ButtonMenuItem = require ("resources/scripts/menus/menu_items/button_menu_
 local CheckboxMenuItem = require ("resources/scripts/menus/menu_items/checkbox_menu_item")
 local KeySelectMenuItem = require ("resources/scripts/menus/menu_items/key_select_menu_item")
 local LabelMenuItem = require ("resources/scripts/menus/menu_items/label_menu_item")
+local NumberMenuItem = require ("resources/scripts/menus/menu_items/number_menu_item")
 local Menus = require ("resources/scripts/menus/menu_construction")
 local MenuClass = require ("resources/scripts/menus/menu_class")
 local Mixin = require ("resources/scripts/menus/mixin")
@@ -41,6 +42,8 @@ local function onSaveClicked (self, menu)
 
 	dio.inputs.mouse.setIsInverted (menu.invertMouse.isChecked)
 
+	dio.inputs.hackSetFov (menu.fov:getValueAsNumber ())
+
 	local setBinding = dio.inputs.bindings.setKeyBinding
 	local types = dio.inputs.bindingTypes
 
@@ -53,13 +56,14 @@ local function onSaveClicked (self, menu)
 
 	local playerSettings =
 	{
-		isMouseInverted = menu.invertMouse.isChecked,
-		forward = 	menu.keyMenuItems [1].keyCode,
-		left = 		menu.keyMenuItems [2].keyCode,
-		backward = 	menu.keyMenuItems [3].keyCode,
-		right = 	menu.keyMenuItems [4].keyCode,
-		jump = 		menu.keyMenuItems [5].keyCode,
-		turbo = 	menu.keyMenuItems [6].keyCode
+		isMouseInverted = 	menu.invertMouse.isChecked,
+		fov = 				menu.fov:getValueAsNumber (),
+		forward = 			menu.keyMenuItems [1].keyCode,
+		left = 				menu.keyMenuItems [2].keyCode,
+		backward = 			menu.keyMenuItems [3].keyCode,
+		right = 			menu.keyMenuItems [4].keyCode,
+		jump = 				menu.keyMenuItems [5].keyCode,
+		turbo = 			menu.keyMenuItems [6].keyCode
 	}
 
 	dio.file.saveLua ("player_settings.lua", playerSettings, "playerSettings")
@@ -76,6 +80,7 @@ end
 local function onResetToDefaultsClicked (menuItem, menu)
 
 	local keyCodeFromString = dio.inputs.keys.keyCodeFromString
+	menu.fov.value = "60"
 
 	menu.invertMouse.isChecked = false 
 	menu.keyMenuItems [1].keyCode = keyCodeFromString ("W")
@@ -105,6 +110,8 @@ function c:onEnter ()
 	local getBinding = dio.inputs.bindings.getKeyBinding
 	local types = dio.inputs.bindingTypes
 
+	self.fov.value = tostring (dio.inputs.hackGetFov ())
+
 	self.invertMouse.isChecked = dio.inputs.mouse.getIsInverted ()
 	self.keyMenuItems [1].keyCode = getBinding (types.FORWARD)
 	self.keyMenuItems [2].keyCode = getBinding (types.LEFT)
@@ -125,6 +132,7 @@ return function ()
 	local properties =
 	{
 		invertMouse = CheckboxMenuItem ("Invert Mouse", nil, isMouseInverted),
+		fov = NumberMenuItem ("Field Of Vision", nil, nil, "60", true),
 
 		keyMenuItems =
 		{
@@ -148,6 +156,7 @@ return function ()
 
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (properties.invertMouse)
+	instance:addMenuItem (properties.fov)
 	instance:addMenuItem (properties.keyMenuItems [1])
 	instance:addMenuItem (properties.keyMenuItems [2])
 	instance:addMenuItem (properties.keyMenuItems [3])

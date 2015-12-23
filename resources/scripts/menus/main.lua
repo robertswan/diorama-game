@@ -18,6 +18,8 @@ local function loadPlayerControls ()
 
 		dio.inputs.mouse.setIsInverted (playerSettings.isMouseInverted)
 
+		dio.inputs.hackSetFov (playerSettings.fov)
+
 		local setBinding = dio.inputs.bindings.setKeyBinding
 		local types = dio.inputs.bindingTypes
 
