@@ -59,6 +59,16 @@ local function onReturnToMainMenuClicked ()
 end
 
 --------------------------------------------------
+local function onResetToDefaultsClicked (menuItem, menu)
+	menu.perlinSize.value = 					"128"
+	menu.perlinOctavesCount.value = 			"5"
+	menu.perlinFrequency.value = 				"2"
+	menu.perlinAmplitude.value = 				"0.5"
+	menu.solidityChanceChangePerY.value = 		"0.003"
+	menu.solidityChanceOverallOffset.value = 	"0"
+end
+
+--------------------------------------------------
 local c = {}
 
 --------------------------------------------------
@@ -132,6 +142,10 @@ return function ()
 	instance:addMenuItem (properties.createLevel)
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Return To Main Menu", onReturnToMainMenuClicked))
+	instance:addMenuItem (BreakMenuItem ())
+	instance:addMenuItem (ButtonMenuItem ("Reset To Defaults", onResetToDefaultsClicked))
+
+	instance:addMenuItem (LabelMenuItem (""))
 	instance:addMenuItem (properties.warningLabel)
 
 	return instance

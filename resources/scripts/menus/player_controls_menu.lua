@@ -44,6 +44,22 @@ local function onCancelClicked ()
 end
 
 --------------------------------------------------
+local function onResetToDefaultsClicked (menuItem, menu)
+
+	local keyCodeFromString = dio.inputs.keys.keyCodeFromString
+
+	menu.invertMouse.isChecked = false 
+	menu.f.keyCode = keyCodeFromString ("W")
+	menu.l.keyCode = keyCodeFromString ("A")
+	menu.b.keyCode = keyCodeFromString ("S")
+	menu.r.keyCode = keyCodeFromString ("D")
+	menu.j.keyCode = keyCodeFromString ("SPACE")
+	menu.t.keyCode = keyCodeFromString ("LEFT_SHIFT")
+
+	onSaveClicked (menuItem, menu)
+end
+
+--------------------------------------------------
 local c = {}
 
 --------------------------------------------------
@@ -101,6 +117,8 @@ return function ()
 	instance:addMenuItem (ButtonMenuItem ("Save", onSaveClicked))	
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Cancel", onCancelClicked))	
+	instance:addMenuItem (BreakMenuItem ())
+	instance:addMenuItem (ButtonMenuItem ("Reset To Defaults", onResetToDefaultsClicked))	
 
 	return instance
 end

@@ -17,6 +17,11 @@ local function onLoadLevelClicked ()
 end
 
 --------------------------------------------------
+local function onDeleteLevelClicked ()
+	return "delete_level_menu"
+end
+
+--------------------------------------------------
 local function onEditPlayerControlsClicked ()
 	return "player_controls_menu"
 end
@@ -64,6 +69,8 @@ return function ()
 	instance:addMenuItem (ButtonMenuItem ("New Level", onCreateNewLevelClicked))
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Load Level", onLoadLevelClicked))
+	instance:addMenuItem (BreakMenuItem ())
+	instance:addMenuItem (ButtonMenuItem ("Delete Level", onDeleteLevelClicked))
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Edit Player Controls", onEditPlayerControlsClicked))
 	instance:addMenuItem (BreakMenuItem ())

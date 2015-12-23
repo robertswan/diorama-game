@@ -6,30 +6,6 @@ local Mixin = require ("resources/scripts/menus/mixin")
 local c = {}
 
 --------------------------------------------------
--- key_entry starts deselected
--- can be highlighted, unhighlighted while deselected
--- if clicked (must be highlighted) then it becomes selected
-
--- when selected
-	-- current text in the textbox is replaced with flashing question mark
-
-	-- mouse input is ignored by the rest of the menu (or is it???? TBD)
-
-		-- if another menu item is clicked, then its the same as ESCAPE being pressed
-	
-	-- CHOICES
-	-- player presses ESCAPE ...
-		 -- original value is put back into the window
-		 -- menu item becomes deselected
-
-	-- press a valid key...
-		-- onKeyEntryUpdated ()
-		-- key value is put into the window
-		-- menu item becomes deselected
-
-	-- what happens if its selected and the player clicks it again????
-		-- (assuming nothing! it stays selected)
-
 function c:onUpdate (menu, x, y, was_left_clicked)
 
 	if self.isSelected then
@@ -84,7 +60,7 @@ function c:onRender (font, menu)
 
 	local value = "????"
 	if not self.isSelected then
-	 	value = dio.inputs.keys.keyCodeToString (self.keyCode)
+	 	value = dio.inputs.keys.stringFromKeyCode (self.keyCode)
 	end
 
 	local width = font.measureString (value)	

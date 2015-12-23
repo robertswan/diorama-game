@@ -50,16 +50,18 @@ local function main ()
 
 	local individual_menus =
 	{
-		readme_menu = 			require ("resources/scripts/menus/readme_menu") (),
-		main_menu = 			require ("resources/scripts/menus/main_menu") (),
-		create_new_level_menu = require ("resources/scripts/menus/create_new_level_menu") (),
-		load_level_menu = 		require ("resources/scripts/menus/load_level_menu") (),
-		player_controls_menu = 	require ("resources/scripts/menus/player_controls_menu") (),
-		loading_level_menu = 	require ("resources/scripts/menus/loading_level_menu") (),
-		playing_game_menu = 	require ("resources/scripts/menus/playing_game_menu") (),
-		in_game_pause_menu =	require ("resources/scripts/menus/in_game_pause_menu") (),
-		saving_game_menu =		require ("resources/scripts/menus/saving_game_menu") (),
-		quitting_menu =			require ("resources/scripts/menus/quitting_menu") ()
+		readme_menu = 				require ("resources/scripts/menus/readme_menu") (),
+		main_menu = 				require ("resources/scripts/menus/main_menu") (),
+		create_new_level_menu = 	require ("resources/scripts/menus/create_new_level_menu") (),
+		load_level_menu = 			require ("resources/scripts/menus/load_level_menu") (),
+		delete_level_menu = 		require ("resources/scripts/menus/delete_level_menu") (),
+		delete_level_confirm_menu = require ("resources/scripts/menus/delete_level_confirm_menu") (),
+		player_controls_menu = 		require ("resources/scripts/menus/player_controls_menu") (),
+		loading_level_menu = 		require ("resources/scripts/menus/loading_level_menu") (),
+		playing_game_menu = 		require ("resources/scripts/menus/playing_game_menu") (),
+		in_game_pause_menu =		require ("resources/scripts/menus/in_game_pause_menu") (),
+		saving_game_menu =			require ("resources/scripts/menus/saving_game_menu") (),
+		quitting_menu =				require ("resources/scripts/menus/quitting_menu") ()
 	}
 
 	menus = Menus (individual_menus, "readme_menu")
