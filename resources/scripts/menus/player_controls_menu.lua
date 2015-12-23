@@ -3,9 +3,38 @@ local BreakMenuItem = require ("resources/scripts/menus/menu_items/break_menu_it
 local ButtonMenuItem = require ("resources/scripts/menus/menu_items/button_menu_item")
 local CheckboxMenuItem = require ("resources/scripts/menus/menu_items/checkbox_menu_item")
 local KeySelectMenuItem = require ("resources/scripts/menus/menu_items/key_select_menu_item")
+local LabelMenuItem = require ("resources/scripts/menus/menu_items/label_menu_item")
 local Menus = require ("resources/scripts/menus/menu_construction")
 local MenuClass = require ("resources/scripts/menus/menu_class")
 local Mixin = require ("resources/scripts/menus/mixin")
+
+--------------------------------------------------
+local function warnAgainstIdenticalKeyBindings (menu)
+	menu.multiKeySelectWarning.text = ""
+
+	for startIdx = 1, (#menu.keyMenuItems - 1) do
+		local startMenuItem = menu.keyMenuItems [startIdx]
+		for compareIdx = startIdx + 1, #menu.keyMenuItems do
+			local compareMenuItem = menu.keyMenuItems [compareIdx]
+			if startMenuItem.keyCode == compareMenuItem.keyCode then 
+
+				menu.multiKeySelectWarning.text = 
+					"WARNING: " .. 
+					startMenuItem.text .. 
+					" and " .. 
+					compareMenuItem.text ..
+					" CLASH!"					
+
+				return
+			end
+		end
+	end
+end
+
+--------------------------------------------------
+local function onKeyUpdated (menuItem, menu)
+	warnAgainstIdenticalKeyBindings (menu)
+end
 
 --------------------------------------------------
 local function onSaveClicked (self, menu)
@@ -15,22 +44,22 @@ local function onSaveClicked (self, menu)
 	local setBinding = dio.inputs.bindings.setKeyBinding
 	local types = dio.inputs.bindingTypes
 
-	setBinding (types.FORWARD,	menu.f.keyCode)
-	setBinding (types.LEFT, 	menu.l.keyCode)
-	setBinding (types.BACKWARD,	menu.b.keyCode)
-	setBinding (types.RIGHT, 	menu.r.keyCode)
-	setBinding (types.JUMP, 	menu.j.keyCode)
-	setBinding (types.TURBO, 	menu.t.keyCode)
+	setBinding (types.FORWARD,	menu.keyMenuItems [1].keyCode)
+	setBinding (types.LEFT, 	menu.keyMenuItems [2].keyCode)
+	setBinding (types.BACKWARD,	menu.keyMenuItems [3].keyCode)
+	setBinding (types.RIGHT, 	menu.keyMenuItems [4].keyCode)
+	setBinding (types.JUMP, 	menu.keyMenuItems [5].keyCode)
+	setBinding (types.TURBO, 	menu.keyMenuItems [6].keyCode)
 
 	local playerSettings =
 	{
 		isMouseInverted = menu.invertMouse.isChecked,
-		forward = 	menu.f.keyCode,
-		left = 		menu.l.keyCode,
-		backward = 	menu.b.keyCode,
-		right = 	menu.r.keyCode,
-		jump = 		menu.j.keyCode,
-		turbo = 	menu.t.keyCode
+		forward = 	menu.keyMenuItems [1].keyCode,
+		left = 		menu.keyMenuItems [2].keyCode,
+		backward = 	menu.keyMenuItems [3].keyCode,
+		right = 	menu.keyMenuItems [4].keyCode,
+		jump = 		menu.keyMenuItems [5].keyCode,
+		turbo = 	menu.keyMenuItems [6].keyCode
 	}
 
 	dio.file.saveLua ("player_settings.lua", playerSettings, "playerSettings")
@@ -49,14 +78,16 @@ local function onResetToDefaultsClicked (menuItem, menu)
 	local keyCodeFromString = dio.inputs.keys.keyCodeFromString
 
 	menu.invertMouse.isChecked = false 
-	menu.f.keyCode = keyCodeFromString ("W")
-	menu.l.keyCode = keyCodeFromString ("A")
-	menu.b.keyCode = keyCodeFromString ("S")
-	menu.r.keyCode = keyCodeFromString ("D")
-	menu.j.keyCode = keyCodeFromString ("SPACE")
-	menu.t.keyCode = keyCodeFromString ("LEFT_SHIFT")
+	menu.keyMenuItems [1].keyCode = keyCodeFromString ("W")
+	menu.keyMenuItems [2].keyCode = keyCodeFromString ("A")
+	menu.keyMenuItems [3].keyCode = keyCodeFromString ("S")
+	menu.keyMenuItems [4].keyCode = keyCodeFromString ("D")
+	menu.keyMenuItems [5].keyCode = keyCodeFromString ("SPACE")
+	menu.keyMenuItems [6].keyCode = keyCodeFromString ("LEFT_SHIFT")
 
 	onSaveClicked (menuItem, menu)
+
+	warnAgainstIdenticalKeyBindings (menu)
 end
 
 --------------------------------------------------
@@ -75,12 +106,14 @@ function c:onEnter ()
 	local types = dio.inputs.bindingTypes
 
 	self.invertMouse.isChecked = dio.inputs.mouse.getIsInverted ()
-	self.f.keyCode = getBinding (types.FORWARD)
-	self.l.keyCode = getBinding (types.LEFT)
-	self.b.keyCode = getBinding (types.BACKWARD)
-	self.r.keyCode = getBinding (types.RIGHT)
-	self.j.keyCode = getBinding (types.JUMP)
-	self.t.keyCode = getBinding (types.TURBO)
+	self.keyMenuItems [1].keyCode = getBinding (types.FORWARD)
+	self.keyMenuItems [2].keyCode = getBinding (types.LEFT)
+	self.keyMenuItems [3].keyCode = getBinding (types.BACKWARD)
+	self.keyMenuItems [4].keyCode = getBinding (types.RIGHT)
+	self.keyMenuItems [5].keyCode = getBinding (types.JUMP)
+	self.keyMenuItems [6].keyCode = getBinding (types.TURBO)
+
+	warnAgainstIdenticalKeyBindings (self)
 end
 
 --------------------------------------------------
@@ -92,13 +125,21 @@ return function ()
 	local properties =
 	{
 		invertMouse = CheckboxMenuItem ("Invert Mouse", nil, isMouseInverted),
-		f = KeySelectMenuItem ("Forward", nil, 0),
-		l = KeySelectMenuItem ("Left", nil, 0),
-		b = KeySelectMenuItem ("Back", nil, 0),
-		r = KeySelectMenuItem ("Right", nil, 0),
-		j = KeySelectMenuItem ("Jump", nil, 0),
-		t = KeySelectMenuItem ("Turbo", nil, 0)
+
+		keyMenuItems =
+		{
+			KeySelectMenuItem ("Forward", onKeyUpdated, 0),
+			KeySelectMenuItem ("Left", onKeyUpdated, 0),
+			KeySelectMenuItem ("Back", onKeyUpdated, 0),
+			KeySelectMenuItem ("Right", onKeyUpdated, 0),
+			KeySelectMenuItem ("Jump", onKeyUpdated, 0),
+			KeySelectMenuItem ("Turbo", onKeyUpdated, 0),
+		},
+
+		multiKeySelectWarning = LabelMenuItem (""),
 	}
+
+	properties.multiKeySelectWarning.color = 0xff8000
 
 	local instance = MenuClass ("PLAYER CONTROLS MENU")
 
@@ -107,18 +148,20 @@ return function ()
 
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (properties.invertMouse)
-	instance:addMenuItem (properties.f)
-	instance:addMenuItem (properties.l)
-	instance:addMenuItem (properties.b)
-	instance:addMenuItem (properties.r)
-	instance:addMenuItem (properties.j)
-	instance:addMenuItem (properties.t)
+	instance:addMenuItem (properties.keyMenuItems [1])
+	instance:addMenuItem (properties.keyMenuItems [2])
+	instance:addMenuItem (properties.keyMenuItems [3])
+	instance:addMenuItem (properties.keyMenuItems [4])
+	instance:addMenuItem (properties.keyMenuItems [5])
+	instance:addMenuItem (properties.keyMenuItems [6])
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Save", onSaveClicked))	
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Cancel", onCancelClicked))	
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Reset To Defaults", onResetToDefaultsClicked))	
+	instance:addMenuItem (LabelMenuItem (""))
+	instance:addMenuItem (properties.multiKeySelectWarning)
 
 	return instance
 end

@@ -22,6 +22,10 @@ function c:onUpdate (menu, x, y, was_left_clicked)
 			menu:setUpdateOnlySelectedMenuItems (false)
 			self.keyCode = keyCodeClicked
 			self.isSelected = false
+
+			if self.onKeyUpdated then
+				self.onKeyUpdated (self, menu)
+			end
 		end
 
 	else

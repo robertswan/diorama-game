@@ -118,6 +118,8 @@ return function ()
 		warningLabel = 					LabelMenuItem (""),
 	}
 
+	properties.warningLabel.color = 0xff8000
+
 	Mixin.CopyTo (instance, properties)
 	Mixin.CopyToAndBackupParents (instance, c)
 

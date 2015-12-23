@@ -83,7 +83,7 @@ return function ()
 	instance:addMenuItem (ButtonMenuItem ("Read README.TXT", onReadmeClicked))
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Quit", onQuitClicked))
-	instance:addMenuItem (BreakMenuItem ())
+	instance:addMenuItem (LabelMenuItem (""))
 
 	local versionInfo = dio.system.getVersion ()
 

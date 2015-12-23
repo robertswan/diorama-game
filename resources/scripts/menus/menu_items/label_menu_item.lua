@@ -10,8 +10,10 @@ return function (text)
 
 		onRender = function (self, font, menus)
 			local width = font.measureString (self.text)
-			font.drawString ((menus.width - width) * 0.5, self.y, self.text, 0xffffff)
-		end
+			font.drawString ((menus.width - width) * 0.5, self.y, self.text, self.color)
+		end,
+
+		color = 0xffffff,
 	}
 
 	Mixin.CopyTo (instance, MenuItemBase ())
