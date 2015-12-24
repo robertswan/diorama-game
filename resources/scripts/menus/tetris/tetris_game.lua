@@ -2,6 +2,15 @@ local Mixin = require ("resources/scripts/menus/mixin")
 local Tetromino = require ("resources/scripts/menus/tetris/tetromino")
 
 --------------------------------------------------
+local scores =
+{
+	100,
+	250,
+	1000,
+	5000,
+}
+
+--------------------------------------------------
 local pieceTemplates = 
 {
 	Tetromino (2, "I", 		{{0, -1}, {0, 0}, {0, 1}, {0, 2}}), -- I
@@ -129,6 +138,10 @@ local function removeAndScoreSolidLines (self)
 		end
 		field [1] = createNewRow (self, 1)
 	end
+
+	if #linesRemoved > 0 then
+		self.score = self.score + self.level * scores [#linesRemoved]
+	end
 end
 
 --------------------------------------------------
@@ -146,7 +159,11 @@ function c:update ()
 
 	if self.isGameOver then
 
-		-- do something... key press to continue????
+		local keyCodeClicked = dio.inputs.keys.consumeKeyCodeClicked ()
+
+		if keyCodeClicked and keyCodeClicked == dio.inputs.keyCodes.ESCAPE then
+			self.parentMenu:recordTetrisGameOver ()
+		end
 
 	else
 
@@ -228,10 +245,14 @@ function c:render ()
 
 	dio.drawing.font.drawString (10, 10, "SCORE", 0x808080)
 	dio.drawing.font.drawString (10, 20, tostring (self.score), 0xffffff)
+
+	if self.isGameOver then
+		dio.drawing.font.drawString (10, 40, "GAME OVER. Press ESCAPE to continue", 0xffffff)
+	end
 end
 
 --------------------------------------------------
-return function ()
+return function (menu)
 
 	local instance = 
 	{
@@ -241,9 +262,11 @@ return function ()
 		l = 200,
 		t = 20,
 		score = 0,
+		level = 1,
 		dropSpeed = 30,
 		currentDropSpeed = 30,
 		dropTickCount = 0,
+		parentMenu = menu,
 	}
 
 	Mixin.CopyTo (instance, c)
