@@ -67,7 +67,6 @@ local function main ()
 	}
 
 	menus = Menus (individual_menus, "readme_menu")
-
 end
 
 main ()

@@ -12,10 +12,12 @@ in vec2 final_uv2;
 in vec3 final_normal;
 in vec3 final_tangent;
 
-out vec3 color;
+out vec4 color;
 
 void main()
 {
+	vec3 colorTemp;
+
 	vec3 bitangent = cross (final_normal, final_tangent);
 
 	vec3 offset = texture (normal_map, final_uv2).rgb * 2.0f - vec3 (1.0f);
@@ -30,12 +32,12 @@ void main()
 
 	float diffuse_lighting = dot (sunlight_direction, normal);
 	diffuse_lighting = clamp (diffuse_lighting, -1.0, 0.0);
-	color = ambient_rgb + vec3 (-diffuse_lighting) * sunlight_rgb;
+	colorTemp = ambient_rgb + vec3 (-diffuse_lighting) * sunlight_rgb;
 
-	//float tint = (vertex_position.y / 64.0f) * 0.3f + 0.7f;
-	//color = color * vec3 (tint);
+	//float tint = (vertex_position.y / 96.0f) * 0.2f + 0.8f;
+	//colorTemp = colorTemp * vec3 (tint);
 
-	color = color * texture (diffuse_map, final_uv).rgb;
+	colorTemp = colorTemp * texture (diffuse_map, final_uv).rgb;
 
 	vec3 fog_color = vec3 (47.0f / 255.0f, 188.0f / 255.0f, 235.0f / 255.0f);
 	float fog_coeff = gl_FragCoord.z;
@@ -52,5 +54,8 @@ void main()
 	
 	// look at smoothstep
 
-	color = mix (color, fog_color, fog_coeff);
+	colorTemp = mix (colorTemp, fog_color, fog_coeff);
+	color.rgb = colorTemp;
+	color.a = 1.0;
+
 }
