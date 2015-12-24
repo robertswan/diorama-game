@@ -38,6 +38,11 @@ local function onQuitClicked ()
 end
 
 --------------------------------------------------
+local function onPlayTetrisClicked ()
+	return "tetris_main_menu"
+end
+
+--------------------------------------------------
 local c = {}
 
 --------------------------------------------------
@@ -91,6 +96,8 @@ return function ()
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Quit", onQuitClicked))
 	instance:addMenuItem (LabelMenuItem (""))
+	instance:addMenuItem (ButtonMenuItem ("PLAY TETRIS", onPlayTetrisClicked))
+	instance:addMenuItem (LabelMenuItem (""))	
 
 	local versionInfo = dio.system.getVersion ()
 
