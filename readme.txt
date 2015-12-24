@@ -1,4 +1,4 @@
-Compatability test v0.0.2
+Compatibility test v0.0.2
 =========================
 
 This is not to test features, it is to test the demo runs at all on a variaty of hardware.
