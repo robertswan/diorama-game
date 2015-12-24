@@ -27,18 +27,26 @@ local colors =
 	["T"] = 0xff00ff,
 }
 
+
+--------------------------------------------------
+local function createNewRow (self, rowIdx)
+	local row = {}
+	for colIdx = 1, self.w do
+		local cell = ""
+		if colIdx == 1 or colIdx == self.w or rowIdx == self.h then
+			cell = "*"
+		end
+		table.insert (row, cell)
+	end
+
+	return row
+end
+
 --------------------------------------------------
 local function createField (self)
 	local field = {}
 	for rowIdx = 1, self.h do
-		local row = {}
-		for colIdx = 1, self.w do
-			local cell = ""
-			if colIdx == 1 or colIdx == self.w or rowIdx == self.h then
-				cell = "*"
-			end
-			table.insert (row, cell)
-		end
+		local row = createNewRow (self, rowIdx)
 		table.insert (field, row)
 	end
 	return field
@@ -74,7 +82,7 @@ local function checkCurrentPieceCollision (self, xOffset, yOffset, rotation)
 	yOffset = yOffset + self.currentPiece.y
 
 	local current = self.currentPiece
-	local blocks = current.template:getBlocks (current.rotation)
+	local blocks = current.template:getBlocks (rotation)
 	local field = self.field
 
 	for blockIdx = 1, #blocks do
@@ -94,6 +102,33 @@ local function dropPiece (self)
 	local current = self.currentPiece
 	local blocks = current.template:getBlocks (current.rotation)
 	fillFieldWithBlocks (self.field, current.x, current.y, blocks, current.template.cellId) 
+end
+
+--------------------------------------------------
+local function removeAndScoreSolidLines (self)
+	local linesRemoved = {}
+
+	local field = self.field
+	for rowIdx = 1, self.h - 1 do
+		local isFull = true
+		for colIdx = 1, self.w do
+			local cell = field [rowIdx][colIdx]
+			if cell == "" then
+				isFull = false
+			end
+		end
+		if isFull then
+			table.insert (linesRemoved, rowIdx)
+		end
+	end
+
+	for lineIdx = 1, #linesRemoved do
+		local line = linesRemoved [lineIdx]
+		for moveLineIdx = line, 1, -1 do
+			field [moveLineIdx] = field [moveLineIdx - 1]
+		end
+		field [1] = createNewRow (self, 1)
+	end
 end
 
 --------------------------------------------------
@@ -117,13 +152,14 @@ function c:update ()
 
 		local keyCodeClicked = dio.inputs.keys.consumeKeyCodeClicked ()
 		if keyCodeClicked then
+			local piece = self.currentPiece			
 			if keyCodeClicked == dio.inputs.keyCodes.LEFT then
-				if not checkCurrentPieceCollision (self, -1, 0) then
+				if not checkCurrentPieceCollision (self, -1, 0, piece.rotation) then
 					self.currentPiece.x = self.currentPiece.x - 1
 				end
 
 			elseif keyCodeClicked == dio.inputs.keyCodes.RIGHT then
-				if not checkCurrentPieceCollision (self, 1, 0) then
+				if not checkCurrentPieceCollision (self, 1, 0, piece.rotation) then
 					self.currentPiece.x = self.currentPiece.x + 1
 				end
 
@@ -131,12 +167,11 @@ function c:update ()
 				self.currentDropSpeed = 5
 
 			elseif keyCodeClicked == dio.inputs.keyCodes.SPACE then
-				local piece = self.currentPiece
 				local newRotation = piece.rotation + 1
 				if newRotation > piece.template.rotationCount then
 					newRotation = 1
 				end
-				local hasCollided = checkCurrentPieceCollision (self, 0, 1, newRotation)
+				local hasCollided = checkCurrentPieceCollision (self, 0, 0, newRotation)
 				if not hasCollided then
 					piece.rotation = newRotation
 				end
@@ -152,7 +187,7 @@ function c:update ()
 			if hasCollided then
 
 				dropPiece (self)
-			-- 	removeAndScoreSolidLines (self)
+			 	removeAndScoreSolidLines (self)
 				self.currentPiece = createNewPiece (self)
 				local isGameOver = checkCurrentPieceCollision (self, 0, 0, self.currentPiece.rotation)
 
