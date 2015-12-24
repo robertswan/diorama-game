@@ -13,7 +13,7 @@ local function onPlayLevelClicked (menu, levelName)
 	{
 		path = 			levelName,
 		isNew = 		false,
-		should_save = 	true,
+		shouldSave = 	true,
 	}
 
 	menu.loadingLevelMenu:recordWorldSettings (worldSettings)
