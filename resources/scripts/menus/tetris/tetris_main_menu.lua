@@ -59,6 +59,8 @@ end
 --------------------------------------------------
 return function ()
 
+	math.randomseed (os.time())
+
 	local instance = MenuClass ("TETRIS MENU")
 
 	local properties = 
