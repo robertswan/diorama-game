@@ -2,7 +2,7 @@ local Mixin = require ("resources/scripts/menus/mixin")
 local Tetromino = require ("resources/scripts/menus/tetris/tetromino")
 
 --------------------------------------------------
-local pieces = 
+local pieceTemplates = 
 {
 	Tetromino (2, "I", 		{{0, -1}, {0, 0}, {0, 1}, {0, 2}}), -- I
 	Tetromino (4, "L",		{{0, -2}, {0, -1}, {0, 0}, {1, 0}}), -- L
@@ -45,7 +45,55 @@ local function createField (self)
 end
 
 --------------------------------------------------
-local function createNewPiece ()
+local function createNewPiece (self)
+	local template = pieceTemplates [math.random (#pieceTemplates)]
+	local currentPiece =
+	{
+		template = template,
+
+		x = math.floor (self.w / 2),
+		y = 3, -- TODO fix the field height
+		rotation = template.rotationCount,
+	}
+
+	return currentPiece
+end
+
+--------------------------------------------------
+local function fillFieldWithBlocks (field, x, y, blocks, cellId)
+	for blockIdx = 1, #blocks do
+		local block = blocks [blockIdx]
+		field [y + block [2]][x + block [1]] = cellId
+	end
+end	
+
+--------------------------------------------------
+local function checkCurrentPieceCollision (self, xOffset, yOffset, rotation)
+
+	xOffset = xOffset + self.currentPiece.x
+	yOffset = yOffset + self.currentPiece.y
+
+	local current = self.currentPiece
+	local blocks = current.template:getBlocks (current.rotation)
+	local field = self.field
+
+	for blockIdx = 1, #blocks do
+		local block = blocks [blockIdx]
+
+		if field [yOffset + block [2]][xOffset + block [1]] ~= "" then
+			return true
+		end
+	end
+
+	return false
+
+end
+
+--------------------------------------------------
+local function dropPiece (self)
+	local current = self.currentPiece
+	local blocks = current.template:getBlocks (current.rotation)
+	fillFieldWithBlocks (self.field, current.x, current.y, blocks, current.template.cellId) 
 end
 
 --------------------------------------------------
@@ -54,16 +102,84 @@ local c = {}
 --------------------------------------------------
 function c:startGame ()
 	self.field = createField (self)
-	self.currentPiece = createNewPiece ()
+	self.currentPiece = createNewPiece (self)
+	self.dropTickCount = 0
 end
 
 --------------------------------------------------
 function c:update ()
+
+	if self.isGameOver then
+
+		-- do something... key press to continue????
+
+	else
+
+		local keyCodeClicked = dio.inputs.keys.consumeKeyCodeClicked ()
+		if keyCodeClicked then
+			if keyCodeClicked == dio.inputs.keyCodes.LEFT then
+				if not checkCurrentPieceCollision (self, -1, 0) then
+					self.currentPiece.x = self.currentPiece.x - 1
+				end
+
+			elseif keyCodeClicked == dio.inputs.keyCodes.RIGHT then
+				if not checkCurrentPieceCollision (self, 1, 0) then
+					self.currentPiece.x = self.currentPiece.x + 1
+				end
+
+			elseif keyCodeClicked == dio.inputs.keyCodes.DOWN then
+				self.currentDropSpeed = 5
+
+			elseif keyCodeClicked == dio.inputs.keyCodes.SPACE then
+				local piece = self.currentPiece
+				local newRotation = piece.rotation + 1
+				if newRotation > piece.template.rotationCount then
+					newRotation = 1
+				end
+				local hasCollided = checkCurrentPieceCollision (self, 0, 1, newRotation)
+				if not hasCollided then
+					piece.rotation = newRotation
+				end
+			end
+		end
+
+		self.dropTickCount = self.dropTickCount + 1
+		if self.dropTickCount >= self.currentDropSpeed then
+
+			self.dropTickCount = 0
+			local hasCollided = checkCurrentPieceCollision (self, 0, 1, self.currentPiece.rotation)
+
+			if hasCollided then
+
+				dropPiece (self)
+			-- 	removeAndScoreSolidLines (self)
+				self.currentPiece = createNewPiece (self)
+				local isGameOver = checkCurrentPieceCollision (self, 0, 0, self.currentPiece.rotation)
+
+				if isGameOver then
+
+				 	self.isGameOver = true
+				else
+
+					self.currentDropSpeed = self.dropSpeed
+				 	self.dropTickCount = 0			
+				end
+			else
+				self.currentPiece.y = self.currentPiece.y + 1
+			end
+		end
+	end
 end
 
 --------------------------------------------------
 function c:render ()
 	
+	-- add the current piece to the field
+	local current = self.currentPiece
+	local blocks = current.template:getBlocks (current.rotation)
+	fillFieldWithBlocks (self.field, current.x, current.y, blocks, current.template.cellId) 
+
+	-- draw field
 	for rowIdx = 1, self.h do
 		for colIdx = 1, self.w do
 			local cell = self.field [rowIdx][colIdx]
@@ -71,6 +187,12 @@ function c:render ()
 			dio.drawing.font.drawBox (self.l + colIdx * self.cellSize, self.t + rowIdx * self.cellSize, self.cellSize, self.cellSize, color)
 		end
 	end	
+
+	-- remove field
+	fillFieldWithBlocks (self.field, current.x, current.y, blocks, "") 
+
+	dio.drawing.font.drawString (10, 10, "SCORE", 0x808080)
+	dio.drawing.font.drawString (10, 20, tostring (self.score), 0xffffff)
 end
 
 --------------------------------------------------
@@ -84,9 +206,12 @@ return function ()
 		l = 200,
 		t = 20,
 		score = 0,
+		dropSpeed = 30,
+		currentDropSpeed = 30,
+		dropTickCount = 0,
 	}
 
-	Mixin.CopyToAndBackupParents (instance, c)
+	Mixin.CopyTo (instance, c)
 
 	return instance
 end
