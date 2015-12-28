@@ -13,7 +13,6 @@ Known Bugs
 
 * If you zoom too quickly to the edge of the world you can get stuck
 * It doesn't remember your world position when saving a level
-* Newly generated levels can have you start inside them. Dig!
 * You can place blocks where you are standing and get stuck. Dig!
 * Meshes update slower than collision. You can walk in blocks you just destroyed.
 * Crosshair doesn't dissappear in pause mode
