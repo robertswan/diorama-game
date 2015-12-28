@@ -12,11 +12,8 @@ Known Bugs
 ==========
 
 * It doesn't remember your world position when saving a level
-* You can place blocks where you are standing and get stuck. Dig!
 * Meshes update slower than collision. You can walk in blocks you just destroyed.
-* Crosshair doesn't dissappear in pause mode
 * Delete World option doesn't always delete it fully! Delete it again!
-* Holding jump down means you can stick to the underside of blocks.
 
 
 Controls
