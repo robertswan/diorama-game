@@ -11,13 +11,11 @@ crashes or has rendering bugs!
 Known Bugs
 ==========
 
-* If you zoom too quickly to the edge of the world you can get stuck
 * It doesn't remember your world position when saving a level
 * You can place blocks where you are standing and get stuck. Dig!
 * Meshes update slower than collision. You can walk in blocks you just destroyed.
 * Crosshair doesn't dissappear in pause mode
 * Delete World option doesn't always delete it fully! Delete it again!
-* Enter key on Numeric Keypad doesn't work for text entry fields.
 * Holding jump down means you can stick to the underside of blocks.
 
 

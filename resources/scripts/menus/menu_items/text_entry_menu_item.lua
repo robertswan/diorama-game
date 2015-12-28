@@ -49,7 +49,9 @@ function c:onUpdate (menu, x, y, was_left_clicked)
 				self:onTextChanged (menu)
 			end
 
-		elseif keyCodeClicked == dio.inputs.keyCodes.ENTER then
+		elseif keyCodeClicked == dio.inputs.keyCodes.ENTER or 
+				keyCodeClicked == dio.inputs.keyCodes.KP_ENTER then
+				
 			self.initial_value = nil
 			self.isSelected = false
 			menu:setUpdateOnlySelectedMenuItems (false)
