@@ -44,6 +44,7 @@ local function onCreateLevelClicked (menuItem, menu)
 			perlinAmplitude = 				menu.perlinAmplitude:getValueAsNumber (),
 			solidityChanceChangePerY = 		menu.solidityChanceChangePerY:getValueAsNumber (),
 			solidityChanceOverallOffset = 	menu.solidityChanceOverallOffset:getValueAsNumber (),
+			chunkSize = 					{x = 16, y = 128, z = 16},
 		}
 
 		menu.loadingLevelMenu:recordWorldSettings (worldSettings, roomSettings)
