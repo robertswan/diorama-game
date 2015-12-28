@@ -44,7 +44,12 @@ local function onCreateLevelClicked (menuItem, menu)
 			perlinAmplitude = 				menu.perlinAmplitude:getValueAsNumber (),
 			solidityChanceChangePerY = 		menu.solidityChanceChangePerY:getValueAsNumber (),
 			solidityChanceOverallOffset = 	menu.solidityChanceOverallOffset:getValueAsNumber (),
-			chunkSize = 					{x = 16, y = 128, z = 16},
+			chunkSize = 					
+			{
+				x = 16, 
+				y = menu.chunkSizeY:getValueAsNumber (), 
+				z = 16
+			},
 		}
 
 		menu.loadingLevelMenu:recordWorldSettings (worldSettings, roomSettings)
@@ -67,6 +72,7 @@ local function onResetToDefaultsClicked (menuItem, menu)
 	menu.perlinAmplitude.value = 				"0.5"
 	menu.solidityChanceChangePerY.value = 		"0.003"
 	menu.solidityChanceOverallOffset.value = 	"0"
+	menu.chunkSizeY.value =						"32"
 end
 
 --------------------------------------------------
@@ -115,6 +121,7 @@ return function ()
 		perlinAmplitude = 				NumberEntryMenuItem ("Per Octave Amplitude Multiplier", nil, nil, 0.5, false),
 		solidityChanceChangePerY = 		NumberEntryMenuItem ("Solidity Chance Change Per Y", nil, nil, 0.003, false),
 		solidityChanceOverallOffset = 	NumberEntryMenuItem ("Solidity Chance Overall Offset", nil, nil, 0, false),
+		chunkSizeY =					NumberEntryMenuItem ("Height In Voxels", nil, nil, 32, true),
 		createLevel = 					ButtonMenuItem ("Create Level", onCreateLevelClicked),
 		warningLabel = 					LabelMenuItem (""),
 	}
@@ -139,6 +146,8 @@ return function ()
 	instance:addMenuItem (LabelMenuItem (""))
 	instance:addMenuItem (properties.solidityChanceChangePerY)
 	instance:addMenuItem (properties.solidityChanceOverallOffset)
+	instance:addMenuItem (LabelMenuItem (""))
+	instance:addMenuItem (properties.chunkSizeY)
 
 	instance:addMenuItem (BreakMenuItem ())
 	
