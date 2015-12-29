@@ -1,16 +1,30 @@
 --------------------------------------------------
-local function onPlayerLoad (playerId, settings)
+local function onPlayerLoad (playerId)
 
-	dio.session.player.SetXyz (playerId, settings.xyz)
+	local filename = "player_0.lua"
+	local settings = dio.file.loadLua (filename);
+
+	if settings then
+		dio.world.setPlayerXyz (playerId, settings.xyz)
+	end
 
 end
 
 --------------------------------------------------
-local function onPlayerSave (playerId, settings)
+local function onPlayerSave (playerId)
 
-	local xyz, error = dio.session.player.GetPosition (playerId)
+	local xyz, error = dio.world.getPlayerXyz (playerId)
 	if xyz then
-		settings.xyz = xyz
+
+		local filename = "player_0.lua"
+		local settings =
+		{
+			playerId = playerId, 
+			xyz = xyz
+		}
+
+		dio.file.saveLua (filename, settings, "settings")
+
 	else
 		print (error)
 	end
