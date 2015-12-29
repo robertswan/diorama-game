@@ -17,10 +17,11 @@ local function onPlayerSave (playerId, settings)
 end
 
 --------------------------------------------------
-local function onLoadSuccessful (hooks)
+local function onLoadSuccessful ()
 
-	hooks.player.onLoad = onPlayerLoad
-	hooks.player.onSave = onPlayerSave
+	local types = dio.events.serverTypes
+	dio.events.server.addListener (types.PLAYER_LOAD, onPlayerLoad);
+	dio.events.server.addListener (types.PLAYER_SAVE, onPlayerSave);
 
 end
 
@@ -38,7 +39,7 @@ local modSettings =
 		forums = "http://www.robtheswan.com/game/mods/forums.html",
 		bugs = "http://www.robtheswan.com/game/mods/forums.html",
 		wiki = "http://www.robtheswan.com/game/mods/forums.html",
-	}
+	},
 
 	dependencies =
 	{
@@ -47,12 +48,12 @@ local modSettings =
 			minimumVersion = {major = 0, minor = 1},
 			maximumVersion = {major = 0, minor = 1},
 		},
-	}
+	},
 
 	permissionsRequired = 
 	{
 		player = true,
-	}
+	},
 }
 
 --------------------------------------------------
