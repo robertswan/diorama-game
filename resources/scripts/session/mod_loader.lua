@@ -16,16 +16,16 @@ local function main ()
 
 	local permissions = 
 	{
-		all = true,
+		all = {},
 	}
 
 	-- load
 	loadMod ("default", permissions.all)
 
-	-- activate
-	for _, mod in pairs (mods) do
-		mod:activate ()
-	end
+	-- -- activate
+	-- for _, mod in pairs (mods) do
+	-- 	mod:activate ()
+	-- end
 end
 
 
