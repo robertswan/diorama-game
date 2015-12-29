@@ -1,21 +1,27 @@
 local settings =
 {
-	playerId = 0,
 	xyz = 
 	{
-		chunkId = 
-		{
-			x = -27,
-			z = 13,
-			y = 0,
-		},
 		xyz = 
 		{
-			x = 12.7726,
-			z = 4.72821,
-			y = 17.7869,
+			y = 5.97133,
+			x = 2.7194,
+			z = 4.68759,
+		},
+		ypr = 
+		{
+			y = 2.756,
+			x = -0.0772032,
+			z = 0,
+		},
+		chunkId = 
+		{
+			y = 0,
+			x = 0,
+			z = -1,
 		},
 	},
+	playerId = 0,
 }
 
 return settings
