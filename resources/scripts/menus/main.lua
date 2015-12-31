@@ -64,6 +64,7 @@ local function main ()
 		in_game_pause_menu =		require ("resources/scripts/menus/in_game_pause_menu") (),
 		saving_game_menu =			require ("resources/scripts/menus/saving_game_menu") (),
 		quitting_menu =				require ("resources/scripts/menus/quitting_menu") (),
+		network_chat_menu =			require ("resources/scripts/menus/network_chat_menu") (),
 		tetris_main_menu =			require ("resources/scripts/menus/tetris/tetris_main_menu") (),
 	}
 

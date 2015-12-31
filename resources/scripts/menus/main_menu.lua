@@ -22,6 +22,11 @@ local function onDeleteLevelClicked ()
 end
 
 --------------------------------------------------
+local function onNetworkChatClicked ()
+	return "network_chat_menu"
+end
+
+--------------------------------------------------
 local function onEditPlayerControlsClicked ()
 	return "player_controls_menu"
 end
@@ -85,19 +90,16 @@ return function ()
 	Mixin.CopyToAndBackupParents (instance, c)
 
 	instance:addMenuItem (ButtonMenuItem ("New Level", onCreateNewLevelClicked))
-	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Load Level", onLoadLevelClicked))
-	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Delete Level", onDeleteLevelClicked))
 	instance:addMenuItem (BreakMenuItem ())
-	instance:addMenuItem (ButtonMenuItem ("Edit Player Controls", onEditPlayerControlsClicked))
+	instance:addMenuItem (ButtonMenuItem ("Network", onNetworkChatClicked))
 	instance:addMenuItem (BreakMenuItem ())
+	instance:addMenuItem (ButtonMenuItem ("Edit Player Controls", onEditPlayerControlsClicked))
 	instance:addMenuItem (ButtonMenuItem ("Read README.TXT", onReadmeClicked))
+	instance:addMenuItem (ButtonMenuItem ("PLAY TETRIS", onPlayTetrisClicked))
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Quit", onQuitClicked))
-	instance:addMenuItem (LabelMenuItem (""))
-	instance:addMenuItem (ButtonMenuItem ("PLAY TETRIS", onPlayTetrisClicked))
-	instance:addMenuItem (LabelMenuItem (""))	
 
 	local versionInfo = dio.system.getVersion ()
 
