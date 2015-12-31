@@ -29,6 +29,14 @@ RIGHT MOUSE = place BRICK
 Contributors
 ============
 
+compatibility demo v0.1.0
+-------------------------
+
+Bug fixers
+
+* RayMarch
+
+
 compatibility demo v0.0.2
 -------------------------
 
