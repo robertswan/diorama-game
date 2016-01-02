@@ -132,7 +132,7 @@ return function ()
 	local properties =
 	{
 		invertMouse = CheckboxMenuItem ("Invert Mouse", nil, isMouseInverted),
-		fov = NumberMenuItem ("Field Of Vision", nil, nil, "60", true),
+		fov = NumberMenuItem ("Field Of View", nil, nil, "60", true),
 
 		keyMenuItems =
 		{

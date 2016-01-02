@@ -70,7 +70,7 @@ return function ()
 	Mixin.CopyTo (instance, properties)
 	Mixin.CopyToAndBackupParents (instance, c)
 
-	instance:addMenuItem (ButtonMenuItem ("Play Tetris", onPlayTetrisClicked))
+	instance:addMenuItem (ButtonMenuItem ("Play The Game", onPlayTetrisClicked))
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Return To Main Menu", onMainMenuClicked))
 	instance:addMenuItem (BreakMenuItem ())
