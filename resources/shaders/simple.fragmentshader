@@ -51,6 +51,9 @@ void main()
 	fog_coeff *= fog_coeff;
 	fog_coeff *= fog_coeff;
 	fog_coeff *= fog_coeff;
+	fog_coeff *= fog_coeff;
+	fog_coeff *= fog_coeff;
+	fog_coeff *= fog_coeff;
 	
 	// look at smoothstep
 
