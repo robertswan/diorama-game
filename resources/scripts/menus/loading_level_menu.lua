@@ -16,7 +16,7 @@ end
 function c:onUpdate (menus)
 
 	local isNew = self.worldSettings.isNew
-	local isOk = dio.session.beginSinglePlayer (self.worldSettings, self.roomSettings)
+	local isOk = dio.session.beginSp (self.worldSettings, self.roomSettings)
 
 	self.worldSettings = nil
 	self.roomSettings = nil

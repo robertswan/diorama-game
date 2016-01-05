@@ -12,15 +12,16 @@ local TextEntryMenuItem = require ("resources/scripts/menus/menu_items/text_entr
 --------------------------------------------------
 local function onConnectClicked (menuItem, menu)
 
-	local connection = 
+	local params = 
 	{
-		playerName = menu.playerName.value,
 		ipAddress = menu.ipAddress.value,
 		ipPort = menu.ipPort:getValueAsNumber (),
+		playerName = menu.playerName.value,
 		onNewText = function (text) menu:onNewText (text) end
 	}
 
-	dio.network.connect (connection)
+	local isOk = dio.session.beginMp (params)
+	menu.hasSession = true
 
 end
 
@@ -47,6 +48,15 @@ function c:onNewText (text)
 end
 
 --------------------------------------------------
+function c:onAppShouldClose ()
+	if self.hasSession then
+		dio.session.terminate ()
+	end
+	self.parent.onAppShouldClose (self)
+	return "quitting_menu"
+end
+
+--------------------------------------------------
 return function ()
 
 	math.randomseed (os.time())
@@ -61,7 +71,7 @@ return function ()
 		ipAddress = 	TextEntryMenuItem ("IP Address", nil, nil, "84.92.48.10", 16),
 		ipPort = 		NumberEntryMenuItem ("Port", nil, nil, 25276, true),
 		scrollable = 	ScrollableMenuItem (scrollLines, #scrollLines),
-		scrollLines = scrollLines,
+		scrollLines = 	scrollLines,
 	}
 
 	Mixin.CopyTo (instance, properties)
