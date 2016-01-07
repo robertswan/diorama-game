@@ -21,8 +21,9 @@ local function onConnectClicked (menuItem, menu)
 	}
 
 	local isOk = dio.session.beginMp (params)
-	menu.hasSession = true
-
+	if isOk then
+		return "playing_game_menu"
+	end
 end
 
 --------------------------------------------------
@@ -45,15 +46,6 @@ end
 function c:onNewText (text)
 	table.insert (self.scrollLines, text)
 	self.scrollable.linesVisibleCount = #self.scrollLines
-end
-
---------------------------------------------------
-function c:onAppShouldClose ()
-	if self.hasSession then
-		dio.session.terminate ()
-	end
-	self.parent.onAppShouldClose (self)
-	return "quitting_menu"
 end
 
 --------------------------------------------------
