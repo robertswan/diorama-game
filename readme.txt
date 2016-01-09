@@ -46,6 +46,18 @@ RIGHT MOUSE = place BRICK
 Contributors
 ============
 
+compatibility demo v0.1.1
+-------------------------
+
+Bug fixers
+
+* Toeger
+
+QA
+
+* waterlimon
+
+
 compatibility demo v0.1.0
 -------------------------
 
