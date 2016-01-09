@@ -1,7 +1,7 @@
 --------------------------------------------------
 local function onPlayerLoad (playerId)
 
-	local filename = "player_0.lua"
+	local filename = "player_" .. playerId .. ".lua"
 	local settings = dio.file.loadLua (filename);
 
 	if settings then
@@ -16,7 +16,7 @@ local function onPlayerSave (playerId)
 	local xyz, error = dio.world.getPlayerXyz (playerId)
 	if xyz then
 
-		local filename = "player_0.lua"
+		local filename = "player_" .. playerId .. ".lua"
 		local settings =
 		{
 			playerId = playerId, 
