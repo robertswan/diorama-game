@@ -56,6 +56,14 @@ Bug fixers
 QA
 
 * waterlimon
+* whiteland92
+* AcarX
+* Swappik
+* QeraiX
+* Moopaloo
+* LazyKernal
+* FGArray
+* Snellekenny
 
 
 compatibility demo v0.1.0

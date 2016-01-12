@@ -38,8 +38,12 @@ local function OnUpdate ()
 end
 
 --------------------------------------------------
-local function OnRender ()
+local function OnRenderMenus ()
 	menus:render ();
+end
+
+--------------------------------------------------
+local function OnRender ()
 end
 
 -------------------------------------------------
@@ -47,8 +51,9 @@ local function main ()
 
 	loadPlayerControls ()
 
-	dio.onRender = OnRender
 	dio.onUpdate = OnUpdate
+	dio.onRenderMenus = OnRenderMenus
+	dio.onRender = OnRender
 
 	local individual_menus =
 	{
