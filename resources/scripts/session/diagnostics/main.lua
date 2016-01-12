@@ -1,7 +1,7 @@
 --------------------------------------------------
 local function onSessionRendered ()
-	dio.drawing.font.drawBox (0, 0, 100, 100, 0x000000)
-	dio.drawing.font.drawString (0, 0, "HELLO WORLD", 0xffffff)
+	-- dio.drawing.font.drawBox (0, 0, 100, 100, 0x000000)
+	-- dio.drawing.font.drawString (0, 0, "HELLO WORLD", 0xffffff)
 end
 
 --------------------------------------------------
@@ -39,6 +39,8 @@ local modSettings =
 
 	permissionsRequired = 
 	{
+		client = true,
+		file = true,
 		player = true,
 	},
 }

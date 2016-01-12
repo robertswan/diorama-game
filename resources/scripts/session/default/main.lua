@@ -108,6 +108,7 @@ local modSettings =
 
 	permissionsRequired = 
 	{
+		client = true,
 		player = true,
 	},
 }

@@ -16,12 +16,15 @@ local function main ()
 
 	local permissions = 
 	{
-		all = {},
+		all = false,
+		client = true,
+		file = true,
+		player = true,
 	}
 
 	-- load
 	-- loadMod ("default", permissions.all)
-	loadMod ("diagnostics", permissions.all)
+	-- loadMod ("diagnostics", permissions)
 
 	-- -- activate
 	-- for _, mod in pairs (mods) do
