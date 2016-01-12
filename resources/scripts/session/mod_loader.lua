@@ -3,7 +3,7 @@ local mods = {}
 
 --------------------------------------------------
 local function loadMod (modName, permissions)
-	local mod, error = dio.mods.load ("default", permissions)
+	local mod, error = dio.mods.load (modName, permissions)
 	if mod then
 		mods [modName] = mod
 	else
@@ -20,7 +20,8 @@ local function main ()
 	}
 
 	-- load
-	loadMod ("default", permissions.all)
+	-- loadMod ("default", permissions.all)
+	loadMod ("diagnostics", permissions.all)
 
 	-- -- activate
 	-- for _, mod in pairs (mods) do

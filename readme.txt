@@ -56,12 +56,13 @@ Bug fixers
 QA
 
 * waterlimon
+
 * whiteland92
 * AcarX
 * Swappik
 * QeraiX
 * Moopaloo
-* LazyKernal
+* LazyKernel
 * FGArray
 * Snellekenny
 
