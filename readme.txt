@@ -52,11 +52,11 @@ compatibility demo v0.1.1
 Bug fixers
 
 * Toeger
+* XForceP (raknet bugfix!!!!!!!!!!!!!!)
 
 QA
 
 * waterlimon
-
 * whiteland92
 * AcarX
 * Swappik
@@ -65,6 +65,15 @@ QA
 * LazyKernel
 * FGArray
 * Snellekenny
+
+* WizardNJ
+* Expatiator
+* MrPancakeGuy___
+* NeutralNoise
+* AmazedStream
+* Fleabum
+* CritCrank
+* IAyeCaptainKai
 
 
 compatibility demo v0.1.0

@@ -1,7 +1,18 @@
 --------------------------------------------------
 local function onSessionRendered ()
 	-- dio.drawing.font.drawBox (0, 0, 100, 100, 0x000000)
-	-- dio.drawing.font.drawString (0, 0, "HELLO WORLD", 0xffffff)
+
+	-- local font = dio.drawing.font
+	-- font.drawString (0, 0, "HELLO WORLD", 0xffffff)
+
+	-- font.drawString (0, 0, "Client chunks loaded", 0xffffff)
+	-- font.drawString (0, 0, "Client chunks updated", 0xffffff)
+	-- font.drawString (0, 0, "Client chunks rendered", 0xffffff)
+
+	-- font.drawString (0, 0, "Server chunks loading", 0xffffff)
+	-- font.drawString (0, 0, "Server chunks loaded", 0xffffff)
+	-- font.drawString (0, 0, "Server chunks ", 0xffffff)
+	-- font.drawString (0, 0, "Chunks loaded", 0xffffff)
 end
 
 --------------------------------------------------
