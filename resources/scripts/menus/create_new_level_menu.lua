@@ -60,8 +60,8 @@ local function onCreateLevelClicked (menuItem, menu)
 end
 
 --------------------------------------------------
-local function onReturnToMainMenuClicked ()
-	return "main_menu"
+local function onReturnToParentClicked ()
+	return "single_player_top_menu"
 end
 
 --------------------------------------------------
@@ -153,7 +153,7 @@ return function ()
 	
 	instance:addMenuItem (properties.createLevel)
 	instance:addMenuItem (BreakMenuItem ())
-	instance:addMenuItem (ButtonMenuItem ("Return To Main Menu", onReturnToMainMenuClicked))
+	instance:addMenuItem (ButtonMenuItem ("Return To Parent Menu", onReturnToParentClicked))
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Reset To Defaults", onResetToDefaultsClicked))
 

@@ -57,8 +57,10 @@ local function main ()
 
 	local individual_menus =
 	{
-		readme_menu = 				require ("resources/scripts/menus/readme_menu") (),
+		text_file_menu = 			require ("resources/scripts/menus/text_file_menu") (),
 		main_menu = 				require ("resources/scripts/menus/main_menu") (),
+		single_player_top_menu =	require ("resources/scripts/menus/single_player_top_menu") (),
+		multiplayer_top_menu =		require ("resources/scripts/menus/multiplayer_top_menu") (),
 		create_new_level_menu = 	require ("resources/scripts/menus/create_new_level_menu") (),
 		load_level_menu = 			require ("resources/scripts/menus/load_level_menu") (),
 		delete_level_menu = 		require ("resources/scripts/menus/delete_level_menu") (),
@@ -69,11 +71,11 @@ local function main ()
 		in_game_pause_menu =		require ("resources/scripts/menus/in_game_pause_menu") (),
 		saving_game_menu =			require ("resources/scripts/menus/saving_game_menu") (),
 		quitting_menu =				require ("resources/scripts/menus/quitting_menu") (),
-		network_chat_menu =			require ("resources/scripts/menus/network_chat_menu") (),
 		tetris_main_menu =			require ("resources/scripts/menus/tetris/tetris_main_menu") (),
 	}
 
-	menus = Menus (individual_menus, "readme_menu")
+	individual_menus.text_file_menu:recordFilename ("readme.txt")
+	menus = Menus (individual_menus, "text_file_menu")
 end
 
 main ()

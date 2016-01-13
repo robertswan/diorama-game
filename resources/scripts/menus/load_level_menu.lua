@@ -20,8 +20,8 @@ local function onPlayLevelClicked (menu, levelName)
 end
 
 --------------------------------------------------
-local function onReturnToMainMenuClicked ()
-	return "main_menu"
+local function onReturnToParentClicked ()
+	return "single_player_top_menu"
 end
 
 --------------------------------------------------
@@ -55,7 +55,7 @@ function c:onEnter (menus)
 	end
 
 	self:addMenuItem (BreakMenuItem ())
-	self:addMenuItem (ButtonMenuItem ("Return To Main Menu", onReturnToMainMenuClicked))
+	self:addMenuItem (ButtonMenuItem ("Return To Parent Menu", onReturnToParentClicked))
 
 end
 

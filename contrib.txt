@@ -1,0 +1,79 @@
+Contributors
+============
+
+compatibility demo v0.1.1
+-------------------------
+
+Bug fixers
+
+* Toeger
+* XForceP (raknet bugfix!!!!!!!!!!!!!!)
+
+QA
+
+* waterlimon
+* whiteland92
+* AcarX
+* Swappik
+* QeraiX
+* Moopaloo
+* LazyKernel
+* FGArray
+* Snellekenny
+
+* WizardNJ
+* Expatiator
+* MrPancakeGuy___
+* NeutralNoise
+* AmazedStream
+* Fleabum
+* CritCrank
+* IAyeCaptainKai
+
+
+compatibility demo v0.1.0
+-------------------------
+
+Bug fixers
+
+* RayMarch
+
+
+compatibility demo v0.0.2
+-------------------------
+
+Bug fixers
+
+* Amazedstream
+* GhassanPL
+* QeralX
+* Roblon
+* TheRustyBrick
+* waterlimon
+
+QA
+
+* dgendreau
+* Funisdangerous
+* LazyKernel
+* LuaKT
+* McBrainiac
+* Moopaloo
+* Nidaegwyn
+* NeutralNoise
+* TheRustyBrick
+* RedSquirrelsNut (@theredsquirrely)
+* SSStormy
+* xCosminPlays
+
+
+compatibility demo v0.0.1
+-------------------------
+
+Bug fixers
+
+* dgendreau
+* Pjuke
+* sp0nji
+* ticedev
+* waterlimon

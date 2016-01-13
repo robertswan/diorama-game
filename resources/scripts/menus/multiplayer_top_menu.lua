@@ -53,7 +53,7 @@ return function ()
 
 	math.randomseed (os.time())
 
-	local instance = MenuClass ("NETWORK CHAT MENU")
+	local instance = MenuClass ("MULTIPLAYER MENU")
 
 	local scrollLines = {}
 

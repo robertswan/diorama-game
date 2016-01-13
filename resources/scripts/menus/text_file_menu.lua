@@ -19,7 +19,9 @@ local c = {}
 function c:onEnter (menus)
 
 	local lines = {}
-	io.input ("readme.txt")
+	io.input (self.filename)
+	self.filename = nil
+
 	for line in io.lines () do
 		table.insert (lines, line)
 	end
@@ -46,6 +48,12 @@ function c:onUpdate (x, y, was_left_clicked)
 	end
 
 	return self.parent.onUpdate (self, x, y, was_left_clicked)
+end
+
+--------------------------------------------------
+function c:recordFilename (filename)
+	self.title = filename
+	self.filename = filename
 end
 
 --------------------------------------------------

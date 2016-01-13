@@ -7,23 +7,13 @@ local MenuClass = require ("resources/scripts/menus/menu_class")
 local Mixin = require ("resources/scripts/menus/mixin")
 
 --------------------------------------------------
-local function onCreateNewLevelClicked ()
-	return "create_new_level_menu"
+local function onSinglePlayerClicked ()
+	return "single_player_top_menu"
 end
 
 --------------------------------------------------
-local function onLoadLevelClicked ()
-	return "load_level_menu"
-end
-
---------------------------------------------------
-local function onDeleteLevelClicked ()
-	return "delete_level_menu"
-end
-
---------------------------------------------------
-local function onNetworkChatClicked ()
-	return "network_chat_menu"
+local function onMultiplayerClicked ()
+	return "multiplayer_top_menu"
 end
 
 --------------------------------------------------
@@ -32,8 +22,9 @@ local function onEditPlayerControlsClicked ()
 end
 
 --------------------------------------------------
-local function onReadmeClicked ()
-	return "readme_menu"
+local function onTextFileClicked (menu, file)
+	menu.textFileMenu:recordFilename (file)
+	return "text_file_menu"
 end
 
 --------------------------------------------------
@@ -57,7 +48,14 @@ function c:onAppShouldClose ()
 end
 
 --------------------------------------------------
-function c:onEnter ()
+function c:onEnter (menus)
+
+	assert (menus ~= nil)
+
+	assert (menus.text_file_menu ~= nil)
+
+	self.textFileMenu = menus.text_file_menu
+
 	-- if not self.isDemoSessionAlive then
 	-- 	dio.session.requestBegin (({path = "my_world", shouldSave = false}))
 	-- 	self.isDemoSessionAlive = true
@@ -66,6 +64,9 @@ end
 
 --------------------------------------------------
 function c:onExit ()
+
+	self.textFileMenu = nil
+
 	-- dio.session.terminate ()
 end
 
@@ -89,21 +90,19 @@ return function ()
 	Mixin.CopyTo (instance, properties)
 	Mixin.CopyToAndBackupParents (instance, c)
 
-	instance:addMenuItem (ButtonMenuItem ("New Level", onCreateNewLevelClicked))
-	instance:addMenuItem (ButtonMenuItem ("Load Level", onLoadLevelClicked))
-	instance:addMenuItem (ButtonMenuItem ("Delete Level", onDeleteLevelClicked))
-	instance:addMenuItem (LabelMenuItem (""))
-	instance:addMenuItem (ButtonMenuItem ("Network", onNetworkChatClicked))
+	instance:addMenuItem (ButtonMenuItem ("Single Player", onSinglePlayerClicked))
+	instance:addMenuItem (ButtonMenuItem ("Multiplayer", onMultiplayerClicked))
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Edit Player Controls", onEditPlayerControlsClicked))
+	instance:addMenuItem (BreakMenuItem ())
+	instance:addMenuItem (ButtonMenuItem ("readme.txt", function (menuItem, menu) return onTextFileClicked (menu, "readme.txt") end))
+	instance:addMenuItem (ButtonMenuItem ("contrib.txt", function (menuItem, menu) return onTextFileClicked (menu, "contrib.txt") end))
+	instance:addMenuItem (ButtonMenuItem ("licenses.txt", function (menuItem, menu) return onTextFileClicked (menu, "licenses.txt") end))
 	instance:addMenuItem (LabelMenuItem (""))
+	instance:addMenuItem (ButtonMenuItem ("Play Block Falling Game", onPlayTetrisClicked))
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Quit", onQuitClicked))
-	instance:addMenuItem (BreakMenuItem ())
-	instance:addMenuItem (LabelMenuItem (""))
-	instance:addMenuItem (ButtonMenuItem ("Read README.TXT", onReadmeClicked))
-	instance:addMenuItem (ButtonMenuItem ("Play Block Falling Game", onPlayTetrisClicked))
-
+	
 	local versionInfo = dio.system.getVersion ()
 
 	instance:addMenuItem (LabelMenuItem (""))
