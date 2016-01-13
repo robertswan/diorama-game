@@ -25,7 +25,7 @@ function c:onEnter (menus)
 	for line in io.lines () do
 		table.insert (lines, line)
 	end
-	self.scrollableMenuItem = ScrollableMenuItem (lines, 17)
+	self.scrollableMenuItem = ScrollableMenuItem (lines, 16)
 	self:addMenuItem (self.scrollableMenuItem)
 
 	self:addMenuItem (LabelMenuItem (""))
@@ -59,7 +59,7 @@ end
 --------------------------------------------------
 return function ()
 
-	local instance = MenuClass ("README.TXT")
+	local instance = MenuClass ("")
 
 	Mixin.CopyToAndBackupParents (instance, c)
 

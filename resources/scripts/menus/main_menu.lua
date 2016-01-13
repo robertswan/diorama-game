@@ -17,7 +17,7 @@ local function onMultiplayerClicked ()
 end
 
 --------------------------------------------------
-local function onEditPlayerControlsClicked ()
+local function onEditPlayerClicked ()
 	return "player_controls_menu"
 end
 
@@ -93,12 +93,11 @@ return function ()
 	instance:addMenuItem (ButtonMenuItem ("Single Player", onSinglePlayerClicked))
 	instance:addMenuItem (ButtonMenuItem ("Multiplayer", onMultiplayerClicked))
 	instance:addMenuItem (BreakMenuItem ())
-	instance:addMenuItem (ButtonMenuItem ("Edit Player Controls", onEditPlayerControlsClicked))
+	instance:addMenuItem (ButtonMenuItem ("Edit Player", onEditPlayerClicked))
 	instance:addMenuItem (BreakMenuItem ())
-	instance:addMenuItem (ButtonMenuItem ("readme.txt", function (menuItem, menu) return onTextFileClicked (menu, "readme.txt") end))
-	instance:addMenuItem (ButtonMenuItem ("contrib.txt", function (menuItem, menu) return onTextFileClicked (menu, "contrib.txt") end))
-	instance:addMenuItem (ButtonMenuItem ("licenses.txt", function (menuItem, menu) return onTextFileClicked (menu, "licenses.txt") end))
-	instance:addMenuItem (LabelMenuItem (""))
+	instance:addMenuItem (ButtonMenuItem ("Read 'readme.txt'", function (menuItem, menu) return onTextFileClicked (menu, "readme.txt") end))
+	instance:addMenuItem (ButtonMenuItem ("Read 'contrib.txt'", function (menuItem, menu) return onTextFileClicked (menu, "contrib.txt") end))
+	instance:addMenuItem (ButtonMenuItem ("Read 'licenses.txt'", function (menuItem, menu) return onTextFileClicked (menu, "licenses.txt") end))
 	instance:addMenuItem (ButtonMenuItem ("Play Block Falling Game", onPlayTetrisClicked))
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Quit", onQuitClicked))
@@ -106,10 +105,8 @@ return function ()
 	local versionInfo = dio.system.getVersion ()
 
 	instance:addMenuItem (LabelMenuItem (""))
-	instance:addMenuItem (LabelMenuItem (""))
 	instance:addMenuItem (LabelMenuItem (versionInfo.title))
 	instance:addMenuItem (LabelMenuItem (versionInfo.buildDate))
-	instance:addMenuItem (LabelMenuItem (""))
 	instance:addMenuItem (LabelMenuItem ("See me develop live!    twitch.tv/robtheswan"))
 	instance:addMenuItem (LabelMenuItem ("See my website!         robtheswan.com"))
 

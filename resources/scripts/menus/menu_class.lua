@@ -8,7 +8,7 @@ local c = {}
 function c:addMenuItem (menuItem)
 	menuItem.x = 0
 	menuItem.y = self.next_y
-	self.next_y = self.next_y + menuItem.height
+	self.next_y = self.next_y + menuItem.height + menuItem.gapY
 	table.insert (self.items, menuItem)
 
 	return menuItem	
@@ -101,7 +101,7 @@ return function (title)
 	{
 		title = title,
 		items = {},
-		next_y = 40,
+		next_y = 30,
 		events = {},
 		width = 512,
 		height = 256,
