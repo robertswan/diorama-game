@@ -1,5 +1,5 @@
 --------------------------------------------------
-local Mods = require ("mod_loader")
+local Mods = require ("resources/scripts/session/mod_loader")
 
 --------------------------------------------------
 local function main ()
@@ -11,7 +11,7 @@ local function main ()
 		player = true,
 	}
 
-	Mods.loadMod ("chat", permissions)
+	--Mods.loadMod ("chat", permissions)
 	-- Mods.loadMod ("diagnostics", permissions)
 end
 
