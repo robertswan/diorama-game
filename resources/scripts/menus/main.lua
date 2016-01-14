@@ -46,7 +46,7 @@ end
 local function OnRender ()
 end
 
--------------------------------------------------
+--------------------------------------------------
 local function main ()
 
 	loadPlayerControls ()

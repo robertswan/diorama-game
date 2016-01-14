@@ -134,30 +134,24 @@ return function ()
 	instance:addMenuItem (BreakMenuItem ())
 
 	instance:addMenuItem (properties.filename)
-
-	instance:addMenuItem (BreakMenuItem ())
-
 	instance:addMenuItem (properties.randomSeed)
-	instance:addMenuItem (LabelMenuItem (""))
 	instance:addMenuItem (properties.perlinSize)
 	instance:addMenuItem (properties.perlinOctavesCount)
 	instance:addMenuItem (properties.perlinFrequency)
 	instance:addMenuItem (properties.perlinAmplitude)
-	instance:addMenuItem (LabelMenuItem (""))
 	instance:addMenuItem (properties.solidityChanceChangePerY)
 	instance:addMenuItem (properties.solidityChanceOverallOffset)
-	instance:addMenuItem (LabelMenuItem (""))
 	instance:addMenuItem (properties.chunkSizeY)
 
 	instance:addMenuItem (BreakMenuItem ())
 	
 	instance:addMenuItem (properties.createLevel)
+
 	instance:addMenuItem (BreakMenuItem ())
+
 	instance:addMenuItem (ButtonMenuItem ("Return To Parent Menu", onReturnToParentClicked))
-	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Reset To Defaults", onResetToDefaultsClicked))
 
-	instance:addMenuItem (LabelMenuItem (""))
 	instance:addMenuItem (properties.warningLabel)
 
 	return instance
