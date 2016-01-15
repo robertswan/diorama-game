@@ -4,9 +4,19 @@ local instance = nil
 --------------------------------------------------
 local function renderChat (self)
 
-	local y = (self.linesToDraw - 1) * self.linesToDraw
+	-- local drawString = dio.drawing.font.drawString
+	-- local line = instance.lines [1]
+
+	-- if line then
+	-- 	drawString (100, 100, instance.lines [1].author, 0xffffff)
+	-- 	drawString (200, 100, instance.lines [1].text, 0xffffff)
+	-- end
+
+	local self = instance
+
 	local lineIdx = self.firstLineToDraw + self.linesToDraw - 1
-	if lineIdx >= #self.lines then
+	local y = (self.linesToDraw - 1) * self.linesToDraw
+	if lineIdx > #self.lines then
 		lineIdx = #self.lines
 	end
 
@@ -14,8 +24,8 @@ local function renderChat (self)
 
 	while y > 0 and lineIdx > 0 do
 		local line = self.lines [lineIdx]
-		drawString (self.x, instance.y + y, line.author, 0xffffff)
-		drawString (self.x + self.textOffset, instance.y + y, line.text, 0xa0a0a0)
+		drawString (self.position.x, self.position.y + y, line.author, 0xffffff)
+		drawString (self.position.x + self.textOffset, self.position.y + y, line.text, 0xa0a0a0)
 
 		y = y - self.heightPerY
 		lineIdx = lineIdx - 1
@@ -35,7 +45,7 @@ local function onChatMessageReceived (author, text)
 		text = text
 	}
 
-	instance.lines [#instance.lines] = line;
+	instance.lines [#instance.lines + 1] = line;
 
 	-- table.insert (, line);
 
@@ -45,12 +55,12 @@ end
 local function onClientRendered ()
 
 	local self = instance
-	if self.isVisible then
+	-- if self.isVisible then
 
 		renderChat (self)
 		renderTextBox (self)
 
-	end
+	-- end
 end
 
 --------------------------------------------------
@@ -59,10 +69,10 @@ local function onLoadSuccessful ()
 	instance = 
 	{
 		firstLineToDraw = 1,
-		linesToDraw = 10,
+		linesToDraw = 20,
 		position = {x = 20, y = 20},
 		heightPerY = 14,
-		textOffset = 30,
+		textOffset = 100,
 		lines = {}
 	}
 
