@@ -1,6 +1,15 @@
 Contributors
 ============
 
+FIRSTS:
+
+singleplayer tester:
+multiplayer tester: 	waterlimon
+multiplayer server: 	Expatiator
+youtube video: 			whiteland92
+custom level: 			AmazedStream
+mod:					
+
 compatibility demo v0.1.1
 -------------------------
 
@@ -20,15 +29,18 @@ QA
 * LazyKernel
 * FGArray
 * Snellekenny
-
 * WizardNJ
 * Expatiator
 * MrPancakeGuy___
 * NeutralNoise
+* Magnavode
+* clstl
+* TheRustyBrick
 * AmazedStream
 * Fleabum
 * CritCrank
 * IAyeCaptainKai
+* Walterman50
 
 
 compatibility demo v0.1.0
