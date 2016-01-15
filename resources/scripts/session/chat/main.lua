@@ -39,13 +39,22 @@ end
 --------------------------------------------------
 local function onChatMessageReceived (author, text)
 
+	local self = instance
+
 	local line = 
 	{
 		author = author, 
 		text = text
 	}
 
-	instance.lines [#instance.lines + 1] = line;
+	self.lines [#self.lines + 1] = line;
+
+	if self.autoScroll then
+		self.firstLineToDraw = #self.lines - self.linesToDraw
+		if self.firstLineToDraw < 1 then
+			self.firstLineToDraw = 1
+		end
+	end
 
 	-- table.insert (, line);
 
@@ -69,6 +78,7 @@ local function onLoadSuccessful ()
 	instance = 
 	{
 		firstLineToDraw = 1,
+		autoScroll = true,
 		linesToDraw = 20,
 		position = {x = 20, y = 20},
 		heightPerY = 14,
