@@ -2,7 +2,7 @@
 local m = {}
 
 --------------------------------------------------
-m.loadMod = function (modName, permissions)
+m.loadMod = function (mods, modName, permissions)
 	local mod, error = dio.mods.load (modName, permissions)
 	if mod then
 		mods [modName] = mod

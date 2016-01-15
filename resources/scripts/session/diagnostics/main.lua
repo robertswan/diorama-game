@@ -18,8 +18,8 @@ end
 --------------------------------------------------
 local function onLoadSuccessful ()
 
-	local types = dio.events.types
-	dio.serverEvents.addListener (types.CLIENT_SESSION_RENDERED, onSessionRendered)
+	local types = dio.game.eventTypes
+	dio.game.addListener (types.CLIENT_SESSION_RENDERED, onSessionRendered)
 
 end
 

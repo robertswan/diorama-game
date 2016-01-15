@@ -12,7 +12,7 @@ local function renderChat (self)
 
 	local drawString = dio.drawing.font.drawString
 
-	while y > 0 and lineIdx > 0 then
+	while y > 0 and lineIdx > 0 do
 		local line = self.lines [lineIdx]
 		drawString (self.x, instance.y + y, line.author, 0xffffff)
 		drawString (self.x + self.textOffset, instance.y + y, line.text, 0xa0a0a0)
@@ -63,10 +63,10 @@ local function onLoadSuccessful ()
 		lines = {}
 	}
 
-	local types = dio.events.types
-	dio.events.client.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatMessageReceived)
-	-- dio.events.client.addListener (types.CLIENT_UPDATED, onClientUpdated)
-	dio.events.client.addListener (types.CLIENT_RENDERED, onClientRendered)
+	local types = dio.game.eventTypes
+	dio.game.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatMessageReceived)
+	-- dio.game.events.addListener (types.CLIENT_UPDATED, onClientUpdated)
+	dio.game.addListener (types.CLIENT_RENDERED, onClientRendered)
 
 end
 
