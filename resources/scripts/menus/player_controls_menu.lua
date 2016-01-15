@@ -5,6 +5,7 @@ local CheckboxMenuItem = require ("resources/scripts/menus/menu_items/checkbox_m
 local KeySelectMenuItem = require ("resources/scripts/menus/menu_items/key_select_menu_item")
 local LabelMenuItem = require ("resources/scripts/menus/menu_items/label_menu_item")
 local NumberMenuItem = require ("resources/scripts/menus/menu_items/number_menu_item")
+local SliderMenuItem = require ("resources/scripts/menus/menu_items/slider_menu_item")
 local Menus = require ("resources/scripts/menus/menu_construction")
 local MenuClass = require ("resources/scripts/menus/menu_class")
 local Mixin = require ("resources/scripts/menus/mixin")
@@ -80,7 +81,7 @@ end
 local function onResetToDefaultsClicked (menuItem, menu)
 
 	local keyCodeFromString = dio.inputs.keys.keyCodeFromString
-	menu.fov.value = "60"
+	menu.fov.value = "90"
 
 	menu.invertMouse.isChecked = false 
 	menu.keyMenuItems [1].keyCode = keyCodeFromString ("W")
@@ -132,7 +133,7 @@ return function ()
 	local properties =
 	{
 		invertMouse = CheckboxMenuItem ("Invert Mouse", nil, isMouseInverted),
-		fov = NumberMenuItem ("Field Of View", nil, nil, "60", true),
+		fov = SliderMenuItem ("Field Of View", nil, nil, "60", true),
 
 		keyMenuItems =
 		{

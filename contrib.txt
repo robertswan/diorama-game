@@ -8,7 +8,7 @@ multiplayer tester: 	waterlimon
 multiplayer server: 	Expatiator
 youtube video: 			whiteland92
 custom level: 			AmazedStream
-mod:					
+menu mod:				AmazedStream (FOV slider!)
 
 compatibility demo v0.1.1
 -------------------------
