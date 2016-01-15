@@ -34,7 +34,10 @@ local function onChatMessageReceived (author, text)
 		author = author, 
 		text = text
 	}
-	table.insert (instance.lines, line);
+
+	instance.lines [#instance.lines] = line;
+
+	-- table.insert (, line);
 
 end
 
