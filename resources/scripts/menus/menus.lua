@@ -2,11 +2,30 @@
 local Mixin = require ("resources/scripts/menus/mixin")
 
 --------------------------------------------------
+local function calcBestFit (w, h, maxW, maxH)
+	local scale = 1
+
+	while w * scale <= maxW and h * scale <= maxH do 
+		scale = scale + 1
+	end
+
+	scale = scale - 1
+	scale = scale < 1 and 1 or scale
+
+	return scale
+end
+
+--------------------------------------------------
 local c = {}
 
 --------------------------------------------------
 local count = 0
 function c:update ()
+
+	local windowW, windowH = dio.drawing.getWindowSize ()
+	self.scale = calcBestFit (self.w, self.h, windowW, windowH)
+	self.x = (windowW - self.w * self.scale) / 2
+	self.y = (windowH - self.h * self.scale) / 2
 
 	if not app_is_shutting_down and dio.system.shouldAppClose () then
 		local next_menu_name = self.current_menu:onAppShouldClose ()	
@@ -33,8 +52,8 @@ function c:update ()
 		end
 	end
 
-	local x = dio.inputs.mouse.x
-	local y = dio.inputs.mouse.y
+	local x = (dio.inputs.mouse.x - self.x) / self.scale
+	local y = (dio.inputs.mouse.y - self.y) / self.scale
 	local is_left_clicked = dio.inputs.mouse.left_button.is_clicked
 
 	self.next_menu_name = self.current_menu:onUpdate (x, y, is_left_clicked);
@@ -43,10 +62,17 @@ function c:update ()
 end
 
 --------------------------------------------------
-function c:render ()
+function c:renderEarly ()
 	if self.current_menu then
+		dio.drawing.setRenderToTexture (self.menuTexture)
 		self.current_menu:onRender ();
+		dio.drawing.setRenderToTexture (nil)
 	end
+end
+
+--------------------------------------------------
+function c:renderLate ()
+	dio.drawing.drawTexture (self.menuTexture, self.x, self.y, self.w * self.scale, self.h * self.scale)
 end
 
 --------------------------------------------------
@@ -56,8 +82,13 @@ return function (all_menus, initial_menu_name)
 	{
 		menus = all_menus,
 		current_menu = nil,
-		next_menu_name = initial_menu_name
+		next_menu_name = initial_menu_name,
+		w = 512,
+		h = 256,
+		scale = 1,
 	}
+
+	instance.menuTexture = dio.drawing.createRenderToTexture (instance.w, instance.h)
 
 	Mixin.CopyTo (instance, c)
 
