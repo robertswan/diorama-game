@@ -3,7 +3,7 @@
 uniform sampler2D diffuse_map;
 
 in vec2 frag_in_uv;
-in vec3 frag_in_color;
+in vec4 frag_in_color;
 
 uniform float time;
 
@@ -30,5 +30,5 @@ void main()
 
 	color = texture (diffuse_map, frag_in_uv).rgba;
 
-	color.rgb = color.rgb * frag_in_color;
+	color.rgba = color.rgba * frag_in_color;
 }

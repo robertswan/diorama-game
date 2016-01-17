@@ -27,10 +27,10 @@ function c:onRender (font, menu)
 	local itemWidth = menu.width - 200
 	local x = 100
 
-	local color = self.isHighlighted and 0xffffff or 0x00ffff
+	local color = self.isHighlighted and 0xffffffff or 0x00ffffff
 
 	if self.isHighlighted then
-		dio.drawing.font.drawBox (0, self.y, menu.width, self.height, 0x000000)
+		dio.drawing.font.drawBox (0, self.y, menu.width, self.height, 0x000000ff)
 	end
 
 	font.drawString (x, self.y, self.text, color)

@@ -64,7 +64,7 @@ function c:onRender ()
 	
 	if self.title then
 		local width = font.measureString (self.title)
-		font.drawString ((self.width - width) * 0.5, 0, self.title, 0xffffff)
+		font.drawString ((self.width - width) * 0.5, 0, self.title, 0xffffffff)
 	end
 
 	local highlighted_item = nil

@@ -64,11 +64,11 @@ end
 function c:onRender (font, menu)
 	local x = 100
 
-	local color = self.isHighlighted and 0xffffff or 0x00ffff
-	color = self.isSelected and 0xff0000 or color
+	local color = self.isHighlighted and 0xffffffff or 0x00ffffff
+	color = self.isSelected and 0xff0000ff or color
 
 	if self.isHighlighted or self.isSelected then
-		dio.drawing.font.drawBox (0, self.y, menu.width, self.height, 0x000000)
+		dio.drawing.font.drawBox (0, self.y, menu.width, self.height, 0x000000ff)
 	end
 
 	font.drawString (x, self.y, self.text, color)
@@ -76,9 +76,9 @@ function c:onRender (font, menu)
 	local value = self.value
 	
 	local numberWidth = font.measureString (value)
-	dio.drawing.font.drawBox (self.sliderStartX, self.y, self.sliderEndX - self.sliderStartX + self.sliderPinWidth, 10, 0xFFFF99)
-	dio.drawing.font.drawBox (self.sliderStartX + self.sliderPinX, self.y, self.sliderPinWidth, 10, 0xFF00FF)
-	font.drawString (self.sliderStartX + ((self.sliderEndX - self.sliderStartX - numberWidth)/2), self.y, value, 0x990000)
+	dio.drawing.font.drawBox (self.sliderStartX, self.y, self.sliderEndX - self.sliderStartX + self.sliderPinWidth, 10, 0xffff99ff)
+	dio.drawing.font.drawBox (self.sliderStartX + self.sliderPinX, self.y, self.sliderPinWidth, 10, 0xff00ffff)
+	font.drawString (self.sliderStartX + ((self.sliderEndX - self.sliderStartX - numberWidth)/2), self.y, value, 0x990000ff)
 end
 
 --------------------------------------------------

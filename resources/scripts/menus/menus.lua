@@ -63,8 +63,8 @@ end
 
 --------------------------------------------------
 function c:renderEarly ()
-	if self.current_menu then
-		dio.drawing.setRenderToTexture (self.menuTexture)
+	if self.isVisible and self.current_menu then
+		dio.drawing.setRenderToTexture (self.renderToTexture)
 		self.current_menu:onRender ();
 		dio.drawing.setRenderToTexture (nil)
 	end
@@ -72,7 +72,14 @@ end
 
 --------------------------------------------------
 function c:renderLate ()
-	dio.drawing.drawTexture (self.menuTexture, self.x, self.y, self.w * self.scale, self.h * self.scale)
+	if self.isVisible and self.current_menu then 
+		dio.drawing.drawTexture (self.renderToTexture, self.x, self.y, self.w * self.scale, self.h * self.scale)
+	end
+end
+
+--------------------------------------------------
+function c:setIsVisible (isVisible)
+	self.isVisible = isVisible
 end
 
 --------------------------------------------------
@@ -86,9 +93,10 @@ return function (all_menus, initial_menu_name)
 		w = 512,
 		h = 256,
 		scale = 1,
+		isVisible = true,
 	}
 
-	instance.menuTexture = dio.drawing.createRenderToTexture (instance.w, instance.h)
+	instance.renderToTexture = dio.drawing.createRenderToTexture (instance.w, instance.h)
 
 	Mixin.CopyTo (instance, c)
 

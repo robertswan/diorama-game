@@ -2,12 +2,12 @@
 
 layout (location = 0) in vec3 vertex_position;
 layout (location = 1) in vec2 vertex_uv;
-layout (location = 2) in vec3 vertex_rgb;
+layout (location = 2) in vec4 vertex_rgba;
 
 uniform vec2 viewport_;
 
 out vec2 frag_in_uv;
-out vec3 frag_in_color;
+out vec4 frag_in_color;
 
 void main()
 {
@@ -18,5 +18,5 @@ void main()
 	
 	frag_in_uv = vertex_uv;
 
-	frag_in_color = vertex_rgb;
+	frag_in_color = vertex_rgba;
 }

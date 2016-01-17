@@ -3,7 +3,7 @@
 uniform sampler2D diffuse_map;
 
 in vec2 frag_in_uv;
-in vec3 frag_in_color;
+in vec4 frag_in_color;
 
 out vec4 color;
 
@@ -11,5 +11,5 @@ void main()
 {
 	vec2 rg = texture (diffuse_map, frag_in_uv).rg;
 	color = vec4 (rg.x, rg.x, rg.x, rg.y);
-	color.rgb = color.rgb * frag_in_color;
+	color.rgba = color.rgba * frag_in_color;
 }

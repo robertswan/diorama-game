@@ -12,7 +12,7 @@ function c:onRender (font, menus)
 	for idx = 0, self.linesVisibleCount do
 	 	local lineIdx = idx + self.firstLine
 	 	if lineIdx < #self.lines + 1 then
-	 		font.drawString (self.x, y, self.lines [lineIdx], 0x808080)
+	 		font.drawString (self.x, y, self.lines [lineIdx], 0x808080ff)
 	 		y = y + 10
 	 	end
 	end

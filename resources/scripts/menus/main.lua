@@ -34,7 +34,7 @@ end
 
 --------------------------------------------------
 local function OnUpdate ()
-	return menus:update ();
+	return menus:update ()
 end
 
 --------------------------------------------------
@@ -71,7 +71,7 @@ local function main ()
 		delete_level_confirm_menu = require ("resources/scripts/menus/delete_level_confirm_menu") (),
 		player_controls_menu = 		require ("resources/scripts/menus/player_controls_menu") (),
 		loading_level_menu = 		require ("resources/scripts/menus/loading_level_menu") (),
-		playing_game_menu = 		require ("resources/scripts/menus/playing_game_menu") (),
+		
 		in_game_pause_menu =		require ("resources/scripts/menus/in_game_pause_menu") (),
 		saving_game_menu =			require ("resources/scripts/menus/saving_game_menu") (),
 		quitting_menu =				require ("resources/scripts/menus/quitting_menu") (),
@@ -80,6 +80,8 @@ local function main ()
 
 	individual_menus.text_file_menu:recordFilename ("readme.txt")
 	menus = Menus (individual_menus, "text_file_menu")
+
+	individual_menus.playing_game_menu = 		require ("resources/scripts/menus/playing_game_menu") (menus)
 end
 
 main ()

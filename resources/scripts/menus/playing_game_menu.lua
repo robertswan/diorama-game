@@ -1,4 +1,4 @@
-contr--------------------------------------------------
+--------------------------------------------------
 local Menus = require ("resources/scripts/menus/menu_construction")
 local MenuClass = require ("resources/scripts/menus/menu_class")
 local Mixin = require ("resources/scripts/menus/mixin")
@@ -20,25 +20,28 @@ end
 
 --------------------------------------------------
 function c:onEnter ()
-	dio.drawing.setRenderMenus (false)
-
+	self.menus:setIsVisible (false)
 	dio.inputs.mouse.setExclusive (true)
 	dio.inputs.setArePlayingControlsEnabled (true)
 end
 
 --------------------------------------------------
 function c:onExit ()
-	dio.drawing.setRenderMenus (true)
-
+	self.menus:setIsVisible (true)
 	dio.inputs.mouse.setExclusive (false)
 	dio.inputs.setArePlayingControlsEnabled (false)
 end
 
 --------------------------------------------------
-return function ()
+return function (menus)
 
-	local instance = MenuClass ("")
+	local properties = 
+	{
+		menus = menus
+	}
 
+	local instance = MenuClass ("PLAYING GAME MENU")
+	Mixin.CopyTo (instance, properties)
 	Mixin.CopyToAndBackupParents (instance, c)
 
 	Menus.addEventListener (instance, "MOUSE_RELEASED", onMouseReleasedCallback)

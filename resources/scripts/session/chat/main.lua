@@ -2,20 +2,17 @@
 local instance = nil
 
 --------------------------------------------------
+local function renderBg (self)
+	dio.drawing.font.drawBox (0, 0, self.size.w, self.size.h, 0x0000080);
+end
+
+--------------------------------------------------
 local function renderChat (self)
-
-	-- local drawString = dio.drawing.font.drawString
-	-- local line = instance.lines [1]
-
-	-- if line then
-	-- 	drawString (100, 100, instance.lines [1].author, 0xffffff)
-	-- 	drawString (200, 100, instance.lines [1].text, 0xffffff)
-	-- end
 
 	local self = instance
 
 	local lineIdx = self.firstLineToDraw + self.linesToDraw - 1
-	local y = (self.linesToDraw - 1) * self.linesToDraw
+	local y = (self.linesToDraw - 1) * self.heightPerY
 	if lineIdx > #self.lines then
 		lineIdx = #self.lines
 	end
@@ -24,16 +21,12 @@ local function renderChat (self)
 
 	while y > 0 and lineIdx > 0 do
 		local line = self.lines [lineIdx]
-		drawString (self.position.x, self.position.y + y, line.author, 0xffffff)
-		drawString (self.position.x + self.textOffset, self.position.y + y, line.text, 0xa0a0a0)
+		drawString (0, y, line.author, 0xffffff)
+		drawString (self.textOffset, y, line.text, 0xa0a0a0)
 
 		y = y - self.heightPerY
 		lineIdx = lineIdx - 1
 	end
-end
-
---------------------------------------------------
-local function renderTextBox (self)
 end
 
 --------------------------------------------------
@@ -61,15 +54,25 @@ local function onChatMessageReceived (author, text)
 end
 
 --------------------------------------------------
-local function onClientRendered ()
+local function onEarlyRender (self)
 
 	local self = instance
 	-- if self.isVisible then
 
+		dio.drawing.setRenderToTexture (self.renderToTexture)
+
+		renderBg (self)
 		renderChat (self)
-		renderTextBox (self)
+
+		dio.drawing.setRenderToTexture (nil)
 
 	-- end
+end
+
+--------------------------------------------------
+local function onLateRender (self)
+
+	dio.drawing.drawTexture (self.renderToTexture, self.position.x, self.position.y, self.size.w * self.scale, self.size.h * self.scale)
 end
 
 --------------------------------------------------
@@ -81,15 +84,23 @@ local function onLoadSuccessful ()
 		autoScroll = true,
 		linesToDraw = 20,
 		position = {x = 20, y = 20},
+		size = {w = 300, h = 20 * 14},
 		heightPerY = 14,
 		textOffset = 100,
+		scale = 2,
 		lines = {}
 	}
+
+	instance.renderToTexture = dio.drawing.createRenderToTexture (instance.size.w, instance.size.h)
+	dio.drawing.addRenderPassBefore (function () onEarlyRender (instance) end)
+	dio.drawing.addRenderPassAfter (function () onLateRender (instance) end)
 
 	local types = dio.game.eventTypes
 	dio.game.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatMessageReceived)
 	-- dio.game.events.addListener (types.CLIENT_UPDATED, onClientUpdated)
-	dio.game.addListener (types.CLIENT_RENDERED, onClientRendered)
+	-- dio.game.addListener (types.CLIENT_RENDERED, onClientRendered)
+
+	onChatMessageReceived ("Self", "World loaded")
 
 end
 

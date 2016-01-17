@@ -10,7 +10,7 @@ return function ()
 
 		onRender = function (self, font, menu)
 			local width = font.measureString (self.text)
-			font.drawString ((menu.width - width) * 0.5, self.y, self.text, 0x00b0b0)
+			font.drawString ((menu.width - width) * 0.5, self.y, self.text, 0x00b0b0ff)
 		end
 	}
 

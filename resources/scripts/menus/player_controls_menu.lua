@@ -148,7 +148,7 @@ return function ()
 		multiKeySelectWarning = LabelMenuItem (""),
 	}
 
-	properties.multiKeySelectWarning.color = 0xff8000
+	properties.multiKeySelectWarning.color = 0xff8000ff
 
 	local instance = MenuClass ("PLAYER CONTROLS MENU")
 

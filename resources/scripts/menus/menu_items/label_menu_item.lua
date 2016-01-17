@@ -13,7 +13,7 @@ return function (text)
 			font.drawString ((menus.width - width) * 0.5, self.y, self.text, self.color)
 		end,
 
-		color = 0xffffff,
+		color = 0xffffffff,
 	}
 
 	Mixin.CopyTo (instance, MenuItemBase ())

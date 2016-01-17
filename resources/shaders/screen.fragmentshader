@@ -3,7 +3,7 @@
 uniform sampler2D diffuse_map;
 
 in vec2 frag_in_uv;
-in vec3 frag_in_color;
+in vec4 frag_in_color;
 
 out vec4 color;
 
