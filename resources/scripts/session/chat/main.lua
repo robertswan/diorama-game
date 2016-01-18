@@ -30,6 +30,27 @@ local function renderChat (self)
 end
 
 --------------------------------------------------
+local function onEarlyRender (self)
+
+	if self.isDirty then
+
+		dio.drawing.setRenderToTexture (self.renderToTexture)
+		renderBg (self)
+		renderChat (self)
+		dio.drawing.setRenderToTexture (nil)
+		self.isDirty = false
+	end
+end
+
+--------------------------------------------------
+local function onLateRender (self)
+
+	if self.isVisible then
+		dio.drawing.drawTexture (self.renderToTexture, self.position.x, self.position.y, self.size.w * self.scale, self.size.h * self.scale)
+	end
+end
+
+--------------------------------------------------
 local function onChatMessageReceived (author, text)
 
 	local self = instance
@@ -49,30 +70,16 @@ local function onChatMessageReceived (author, text)
 		end
 	end
 
-	-- table.insert (, line);
+	self.isDirty = true
 
 end
 
 --------------------------------------------------
-local function onEarlyRender (self)
-
-	local self = instance
-	-- if self.isVisible then
-
-		dio.drawing.setRenderToTexture (self.renderToTexture)
-
-		renderBg (self)
-		renderChat (self)
-
-		dio.drawing.setRenderToTexture (nil)
-
-	-- end
-end
-
---------------------------------------------------
-local function onLateRender (self)
-
-	dio.drawing.drawTexture (self.renderToTexture, self.position.x, self.position.y, self.size.w * self.scale, self.size.h * self.scale)
+local function onKeyClicked (keyCode)
+	if keyCode == self.chatAppearKeyCode then
+		self.isVisible = not self.isVisible
+		return true
+	end
 end
 
 --------------------------------------------------
@@ -88,7 +95,10 @@ local function onLoadSuccessful ()
 		heightPerY = 14,
 		textOffset = 100,
 		scale = 2,
-		lines = {}
+		lines = {},
+		isDirty = true,
+		isVisible = false,
+		chatAppearKeyCode = dio.inputs.keyCodes.T,
 	}
 
 	instance.renderToTexture = dio.drawing.createRenderToTexture (instance.size.w, instance.size.h)
@@ -97,8 +107,7 @@ local function onLoadSuccessful ()
 
 	local types = dio.game.eventTypes
 	dio.game.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatMessageReceived)
-	-- dio.game.events.addListener (types.CLIENT_UPDATED, onClientUpdated)
-	-- dio.game.addListener (types.CLIENT_RENDERED, onClientRendered)
+	dio.game.addListener (types.CLIENT_KEY_CLICKED, onKeyClicked)
 
 	onChatMessageReceived ("Self", "World loaded")
 
