@@ -79,6 +79,38 @@ function c:onRender ()
 end
 
 --------------------------------------------------
+function c:onKeyCodeClicked (keyCode)
+	local next_menu = nil
+
+	for i, item in ipairs (self.items) do
+
+		if item.onKeyCodeClicked and item.isSelected then
+
+			local wasConsumed = item:onKeyCodeClicked (self, keyCode)
+			if wasConsumed then
+				return true
+			end
+		end
+	end	
+end
+
+--------------------------------------------------
+function c:onKeyCharacterClicked (character)
+	local next_menu = nil
+
+	for i, item in ipairs (self.items) do
+
+		if item.onKeyCharacterClicked and item.isSelected then
+
+			local wasConsumed = item:onKeyCharacterClicked (self, character)
+			if wasConsumed then
+				return true
+			end
+		end
+	end	
+end
+
+--------------------------------------------------
 function c:onAppShouldClose ()
 	app_is_shutting_down = true
 	-- TODO should this also do...

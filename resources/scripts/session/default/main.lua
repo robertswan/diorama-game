@@ -50,9 +50,9 @@ local function onLoadSuccessful ()
 
 	-- dio.players.setPlayerAction (player, actions.LEFT_CLICK, outcomes.DESTROY_BLOCK)
 
-	local types = dio.game.eventTypes
-	dio.game.addListener (types.SERVER_PLAYER_LOAD, onPlayerLoad)
-	dio.game.addListener (types.SERVER_PLAYER_SAVE, onPlayerSave)
+	local types = dio.events.types
+	dio.events.addListener (types.SERVER_PLAYER_LOAD, onPlayerLoad)
+	dio.events.addListener (types.SERVER_PLAYER_SAVE, onPlayerSave)
 
 	-- dio.events.server.addListener (types.PLAYER_RIGHT_CLICK, onPlayerRightClick)
 	

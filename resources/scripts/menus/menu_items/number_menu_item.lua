@@ -12,61 +12,6 @@ function c:onUpdate (menu, x, y, was_left_clicked)
 
 		self.flashCount = self.flashCount < 16 and self.flashCount + 1 or 0
 
-		local keyCodeClicked = dio.inputs.keys.consumeKeyCodeClicked ()
-
-		if keyCodeClicked == dio.inputs.keyCodes.ESCAPE then
-			self.value = self.initial_value
-			self.initial_value = nil
-			self.isSelected = false
-			menu:setUpdateOnlySelectedMenuItems (false)
-			if self.onTextChanged then
-				self:onTextChanged (menu)
-			end
-
-		elseif keyCodeClicked == dio.inputs.keyCodes.ENTER or 
-				keyCodeClicked == dio.inputs.keyCodes.KP_ENTER then
-				
-			self.initial_value = nil
-			self.isSelected = false
-			menu:setUpdateOnlySelectedMenuItems (false)
-			if self.onTextChangeConfirmed then
-				self:onTextChangeConfirmed (menu)
-			end
-
-		elseif keyCodeClicked == dio.inputs.keyCodes.BACKSPACE then
-
-			local stringLen = self.value:len ()
-			if stringLen > 0 then
-				self.value = self.value:sub (1, -2)
-				if self.onTextChanged then
-					self:onTextChanged (menu)
-				end
-			end
-		end
-
-		local characterClicked = dio.inputs.keys.consumeCharacterClicked ()
-
-		if characterClicked ~= nil then
-
-			local isDigit = (characterClicked >= string.byte ("0") and characterClicked <= string.byte ("9"))
-			local isPeriod = (characterClicked == string.byte (".") and not self.isInteger)
-			local isNegative = (characterClicked == string.byte ("-"))
-			if isPeriod then
-				isPeriod = (not string.find (self.value, "%.") and self.value:len () > 0)
-			end
-			if isNegative then
-				isNegative = (self.value:len () == 0)
-			end
-
-			if isDigit or isPeriod or isNegative then
-		
-				self.value = self.value .. string.char (characterClicked)
-				if self.onTextChanged then
-					self:onTextChanged (menu)
-				end
-			end
-		end
-
 	else
 		self.isHighlighted = 
 				x >= 0 and
@@ -117,6 +62,69 @@ function c:onRender (font, menu)
 		end
 	end
 	font.drawString (itemWidth + x - width, self.y, value, color)
+end
+
+--------------------------------------------------
+function c:onKeyCodeClicked (menu, keyCode)
+
+	assert (self.isSelected)
+
+	local keyCodes = dio.inputs.keyCodes
+
+	if keyCode == keyCodes.ESCAPE then
+
+		self.value = self.initial_value
+		self.initial_value = nil
+		self.isSelected = false
+		menu:setUpdateOnlySelectedMenuItems (false)
+		if self.onTextChanged then
+			self:onTextChanged (menu)
+		end
+
+	elseif keyCode == keyCodes.ENTER or 
+			keyCode == keyCodes.KP_ENTER then
+			
+		self.initial_value = nil
+		self.isSelected = false
+		menu:setUpdateOnlySelectedMenuItems (false)
+		if self.onTextChangeConfirmed then
+			self:onTextChangeConfirmed (menu)
+		end
+
+	elseif keyCode == keyCodes.BACKSPACE then
+
+		local stringLen = self.value:len ()
+		if stringLen > 0 then
+			self.value = self.value:sub (1, -2)
+			if self.onTextChanged then
+				self:onTextChanged (menu)
+			end
+		end
+	end
+end
+
+--------------------------------------------------
+function c:onKeyCharacterClicked (menu, character)
+
+	local isDigit = (character >= string.byte ("0") and character <= string.byte ("9"))
+	local isPeriod = (character == string.byte (".") and not self.isInteger)
+	local isNegative = (character == string.byte ("-"))
+	if isPeriod then
+		isPeriod = (not string.find (self.value, "%.") and self.value:len () > 0)
+	end
+	if isNegative then
+		isNegative = (self.value:len () == 0)
+	end
+
+	if isDigit or isPeriod or isNegative then
+
+		self.value = self.value .. string.char (character)
+		if self.onTextChanged then
+			self:onTextChanged (menu)
+		end
+	end
+
+	return true
 end
 
 --------------------------------------------------

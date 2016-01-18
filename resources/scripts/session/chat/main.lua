@@ -45,9 +45,9 @@ end
 --------------------------------------------------
 local function onLateRender (self)
 
-	--if self.isVisible then
+	if self.isVisible then
 		dio.drawing.drawTexture (self.renderToTexture, self.position.x, self.position.y, self.size.w * self.scale, self.size.h * self.scale)
-	--end
+	end
 end
 
 --------------------------------------------------
@@ -75,11 +75,26 @@ local function onChatMessageReceived (author, text)
 end
 
 --------------------------------------------------
-local function onKeyClicked (keyCode)
-	if keyCode == self.chatAppearKeyCode then
-		self.isVisible = not self.isVisible
+local function onKeyCodeClicked (keyCode)
+
+	local self = instance
+
+	if self.isVisible then
+
+		if keyCode == dio.inputs.keyCodes.ENTER or keyCode == dio.inputs.keyCodes.ESCAPE then
+			self.isVisible = false
+			dio.inputs.setExclusiveKeys (false)
+		end
 		return true
+
+	elseif keyCode == self.chatAppearKeyCode then
+		self.isVisible = true
+		dio.inputs.setExclusiveKeys (true)
+		return true
+
 	end
+
+	return false
 end
 
 --------------------------------------------------
@@ -105,9 +120,9 @@ local function onLoadSuccessful ()
 	dio.drawing.addRenderPassBefore (function () onEarlyRender (instance) end)
 	dio.drawing.addRenderPassAfter (function () onLateRender (instance) end)
 
-	local types = dio.game.eventTypes
-	dio.game.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatMessageReceived)
-	dio.game.addListener (types.CLIENT_KEY_CLICKED, onKeyClicked)
+	local types = dio.events.types
+	dio.events.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatMessageReceived)
+	dio.events.addListener (types.CLIENT_KEY_CODE_CLICKED, onKeyCodeClicked)
 
 	onChatMessageReceived ("Self", "World loaded")
 

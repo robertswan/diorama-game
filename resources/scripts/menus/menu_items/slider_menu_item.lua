@@ -7,6 +7,7 @@ local c = {}
 
 --------------------------------------------------
 function c:onUpdate (menu, x, y, was_left_clicked)
+
 	if self.sliderPinSet == false then
 		self.sliderPinX = (self.sliderEndX - self.sliderStartX) * ((self.value - self.sliderMinVal) / (self.sliderMaxVal - self.sliderMinVal))
 		self.sliderPinSet = true
@@ -23,23 +24,18 @@ function c:onUpdate (menu, x, y, was_left_clicked)
 
 		self.value = math.floor((self.sliderMaxVal - self.sliderMinVal) * (self.sliderPinX / (self.sliderEndX - self.sliderStartX)) + self.sliderMinVal)
 		
-		local keyCodeClicked = dio.inputs.keys.consumeKeyCodeClicked ()
-
-		if keyCodeClicked == dio.inputs.keyCodes.ENTER or 
-				keyCodeClicked == dio.inputs.keyCodes.KP_ENTER or was_left_clicked == true then
+		if was_left_clicked then
 				
 			self.initial_value = nil
 			self.isSelected = false
-			self.isHighlighted = 
-					x >= 0 and
-					x <= menu.width and
-					y >= self.y and 
-					y < self.y + self.height
+			self.isHighlighted = false
+
 			menu:setUpdateOnlySelectedMenuItems (false)
 			if self.onTextChangeConfirmed then
 				self:onTextChangeConfirmed (menu)
 			end
 		end
+
 	else
 		self.isHighlighted = 
 					x >= 0 and
@@ -48,6 +44,7 @@ function c:onUpdate (menu, x, y, was_left_clicked)
 					y < self.y + self.height
 
 			if was_left_clicked and self.isHighlighted then
+
 				if not self.isSelected then
 					-- somehow stop the menu from doing other things!
 					--menu:lockHighlightToMenuItem (self)
@@ -79,6 +76,24 @@ function c:onRender (font, menu)
 	dio.drawing.font.drawBox (self.sliderStartX, self.y, self.sliderEndX - self.sliderStartX + self.sliderPinWidth, 10, 0xffff99ff)
 	dio.drawing.font.drawBox (self.sliderStartX + self.sliderPinX, self.y, self.sliderPinWidth, 10, 0xff00ffff)
 	font.drawString (self.sliderStartX + ((self.sliderEndX - self.sliderStartX - numberWidth)/2), self.y, value, 0x990000ff)
+end
+
+--------------------------------------------------
+function c:onKeyCodeClicked (menu, keyCode)
+
+	local keyCodes = dio.inputs.keyCodes
+
+	if keyCode == keyCodes.ENTER or keyCode == keyCodes.KP_ENTER then
+			
+		self.initial_value = nil
+		self.isSelected = false
+		self.isHighlighted = false
+
+		menu:setUpdateOnlySelectedMenuItems (false)
+		if self.onTextChangeConfirmed then
+			self:onTextChangeConfirmed (menu)
+		end
+	end
 end
 
 --------------------------------------------------

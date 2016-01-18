@@ -8,27 +8,8 @@ local c = {}
 --------------------------------------------------
 function c:onUpdate (menu, x, y, was_left_clicked)
 
-	if self.isSelected then
-
-		local keyCodeClicked = dio.inputs.keys.consumeKeyCodeClicked ()
-
-		if keyCodeClicked == dio.inputs.keyCodes.ESCAPE then
-
-			menu:setUpdateOnlySelectedMenuItems (false)
-			self.isSelected = false
+	if not self.isSelected then
 		
-		elseif keyCodeClicked ~= nil then
-
-			menu:setUpdateOnlySelectedMenuItems (false)
-			self.keyCode = keyCodeClicked
-			self.isSelected = false
-
-			if self.onKeyUpdated then
-				self.onKeyUpdated (self, menu)
-			end
-		end
-
-	else
 		self.isHighlighted = 
 				x >= 0 and
 				x <= menu.width and
@@ -36,10 +17,8 @@ function c:onUpdate (menu, x, y, was_left_clicked)
 				y < self.y + self.height
 
 		if was_left_clicked and self.isHighlighted then
-			if not self.isSelected then
-				-- somehow stop the menu from doing other things!
-				--menu:lockHighlightToMenuItem (self)
 
+			if not self.isSelected then
 				menu:setUpdateOnlySelectedMenuItems (true)
 				self.isSelected = true
 			end
@@ -75,6 +54,26 @@ function c:onRender (font, menu)
 
 	local width = font.measureString (value)	
 	font.drawString (itemWidth + x - width, self.y, value, color)
+end
+
+--------------------------------------------------
+function c:onKeyCodeClicked (menu, keyCode)
+
+	assert (self.isSelected)
+
+	menu:setUpdateOnlySelectedMenuItems (false)
+	self.isSelected = false
+
+	if keyCode ~= dio.inputs.keyCodes.ESCAPE then
+
+		self.keyCode = keyCode
+
+		if self.onKeyUpdated then
+			self.onKeyUpdated (self, menu)
+		end
+	end
+
+	return true
 end
 
 --------------------------------------------------
