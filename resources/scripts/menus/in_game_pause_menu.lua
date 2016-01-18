@@ -38,6 +38,17 @@ function c:onUpdate (x, y, was_left_clicked)
 end
 
 --------------------------------------------------
+function c:onKeyCodeClicked (keyCode, menus)
+
+	local keyCodes = dio.inputs.keyCodes
+	
+	if keyCode == keyCodes.ESCAPE then
+		menus.next_menu_name = "playing_game_menu"
+		return true
+	end
+end
+
+--------------------------------------------------
 return function ()
 	local instance = MenuClass ("IN GAME PAUSE MENU")
 

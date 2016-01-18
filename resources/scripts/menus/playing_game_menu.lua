@@ -33,6 +33,20 @@ function c:onExit ()
 end
 
 --------------------------------------------------
+function c:onKeyCodeClicked (keyCode)
+
+	local keyCodes = dio.inputs.keyCodes
+	
+	if keyCode == keyCodes.ESCAPE then
+		self.menus:setIsVisible (true)
+		dio.inputs.mouse.setExclusive (false)
+		dio.inputs.setArePlayingControlsEnabled (false)
+		self.menus.next_menu_name = "in_game_pause_menu"
+		return true
+	end
+end
+
+--------------------------------------------------
 return function (menus)
 
 	local properties = 

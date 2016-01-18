@@ -79,14 +79,14 @@ end
 
 --------------------------------------------------
 function c:onKeyCodeClicked (keyCode)
-	if self.isVisible and self.current_menu then
-		return self.current_menu:onKeyCodeClicked (keyCode)
+	if self.current_menu then
+		return self.current_menu:onKeyCodeClicked (keyCode, self)
 	end
 end
 
 --------------------------------------------------
 function c:onKeyCharacterClicked (keyCode)
-	if self.isVisible and self.current_menu then
+	if self.current_menu then
 		return self.current_menu:onKeyCharacterClicked (keyCode)
 	end
 end
