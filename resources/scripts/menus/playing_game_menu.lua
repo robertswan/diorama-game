@@ -4,11 +4,6 @@ local MenuClass = require ("resources/scripts/menus/menu_class")
 local Mixin = require ("resources/scripts/menus/mixin")
 
 --------------------------------------------------
-local function onMouseReleasedCallback ()
-	return "in_game_pause_menu"
-end
-
---------------------------------------------------
 local c = {}
 
 --------------------------------------------------
@@ -38,12 +33,18 @@ function c:onKeyCodeClicked (keyCode)
 	local keyCodes = dio.inputs.keyCodes
 	
 	if keyCode == keyCodes.ESCAPE then
-		self.menus:setIsVisible (true)
 		dio.inputs.mouse.setExclusive (false)
-		dio.inputs.setArePlayingControlsEnabled (false)
-		self.menus.next_menu_name = "in_game_pause_menu"
+		self:onWindowFocusLost ()
 		return true
 	end
+end
+
+--------------------------------------------------
+function c:onWindowFocusLost ()
+
+	self.menus:setIsVisible (true)
+	dio.inputs.setArePlayingControlsEnabled (false)
+	self.menus.next_menu_name = "in_game_pause_menu"
 end
 
 --------------------------------------------------
@@ -57,8 +58,6 @@ return function (menus)
 	local instance = MenuClass ("PLAYING GAME MENU")
 	Mixin.CopyTo (instance, properties)
 	Mixin.CopyToAndBackupParents (instance, c)
-
-	Menus.addEventListener (instance, "MOUSE_RELEASED", onMouseReleasedCallback)
 
 	return instance
 end

@@ -18,7 +18,6 @@ end
 function c:clearAllMenuItems ()
 	self.items = {}
 	self.next_y = 40
-	self.events = {}
 end
 
 --------------------------------------------------
@@ -46,12 +45,6 @@ function c:onUpdate (x, y, was_left_clicked)
 				end
 				
 			end
-		end
-	end
-
-	for event, callback in pairs (self.events) do
-		if dio.inputs.events [event] then
-			next_menu = callback ();
 		end
 	end
 
@@ -108,6 +101,17 @@ function c:onKeyCharacterClicked (character)
 			end
 		end
 	end	
+end
+
+--------------------------------------------------
+function c:onWindowFocusLost ()
+	local next_menu = nil
+
+	for i, item in ipairs (self.items) do
+		if item.onWindowFocusLost then
+			item:onWindowFocusLost (self, character)
+		end
+	end
 end
 
 --------------------------------------------------

@@ -34,9 +34,4 @@ function m.addKeyEntry (menu, text, onClicked, initial_key)
 end
 
 --------------------------------------------------
-function m.addEventListener (menu, event, onFired)
-	menu.events [event] = onFired
-end
-
---------------------------------------------------
 return m

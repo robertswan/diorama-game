@@ -9,10 +9,10 @@ end
 --------------------------------------------------
 local function renderChat (self)
 
-	local self = instance
+	local chatLinesToDraw = self.linesToDraw - 2
 
-	local lineIdx = self.firstLineToDraw + self.linesToDraw - 1
-	local y = (self.linesToDraw - 1) * self.heightPerY
+	local lineIdx = self.firstLineToDraw + chatLinesToDraw - 1
+	local y = (chatLinesToDraw - 1) * self.heightPerLine
 	if lineIdx > #self.lines then
 		lineIdx = #self.lines
 	end
@@ -24,9 +24,35 @@ local function renderChat (self)
 		drawString (0, y, line.author, 0xffffff)
 		drawString (self.textOffset, y, line.text, 0xa0a0a0)
 
-		y = y - self.heightPerY
+		y = y - self.heightPerLine
 		lineIdx = lineIdx - 1
 	end
+end
+
+--------------------------------------------------
+local function renderTextEntry (self)
+
+	local heightPerLine = self.heightPerLine
+	local y = (self.linesToDraw - 2) * heightPerLine
+	
+	local drawString = dio.drawing.font.drawString
+	drawString (0, y, "--------------------------------------------------------", 0xffffffff)
+	drawString (0, y + heightPerLine, self.text, 0xffffffff)
+	local width = dio.drawing.font.measureString (self.text)
+	drawString (width, y + heightPerLine, "_", 0xff0000ff)
+
+end
+
+--------------------------------------------------
+local function resetTextEntry (self)
+	self.text = ""
+end
+
+--------------------------------------------------
+local function hide (self)
+	self.isVisible = false
+	dio.inputs.setExclusiveKeys (false)
+	dio.inputs.setArePlayingControlsEnabled (true)
 end
 
 --------------------------------------------------
@@ -37,6 +63,7 @@ local function onEarlyRender (self)
 		dio.drawing.setRenderToTexture (self.renderToTexture)
 		renderBg (self)
 		renderChat (self)
+		renderTextEntry (self)
 		dio.drawing.setRenderToTexture (nil)
 		self.isDirty = false
 	end
@@ -83,22 +110,26 @@ local function onKeyCodeClicked (keyCode)
 
 		if keyCode == dio.inputs.keyCodes.ENTER then
 
-			local isOk, errorStr = dio.clientChat.send ("HELLO WORLD")
+			local isOk, errorStr = dio.clientChat.send (self.text)
 			if not isOk then
 				onChatMessageReceived ("Self", "Last message did not send! (" .. errorStr .. ")")
 			end
 
+			resetTextEntry (self)
+
 		elseif keyCode == dio.inputs.keyCodes.ESCAPE then
 
-			self.isVisible = false
-			dio.inputs.setExclusiveKeys (false)
-
+			hide (self)
 		end
+
 		return true
 
 	elseif keyCode == self.chatAppearKeyCode then
+
 		self.isVisible = true
 		dio.inputs.setExclusiveKeys (true)
+		dio.inputs.setArePlayingControlsEnabled (false)
+		resetTextEntry (self)
 		return true
 
 	end
@@ -107,22 +138,51 @@ local function onKeyCodeClicked (keyCode)
 end
 
 --------------------------------------------------
+local function onKeyCharacterClicked (character)
+
+	local self = instance
+
+	if self.isVisible then
+		self.text = self.text .. string.char (character)
+		self.isDirty = true
+		return true
+	end
+
+end
+
+--------------------------------------------------
+local function onClientWindowFocusLost ()
+
+	local self = instance
+
+	if self.isVisible then
+		hide (self)
+	end	
+
+end
+
+--------------------------------------------------
 local function onLoadSuccessful ()
+
+	local linesToDraw = 20
+	local heightPerLine = 14
+	local height = linesToDraw * heightPerLine
 
 	instance = 
 	{
 		firstLineToDraw = 1,
 		autoScroll = true,
-		linesToDraw = 20,
+		linesToDraw = linesToDraw,
 		position = {x = 20, y = 20},
-		size = {w = 512, h = 20 * 14},
-		heightPerY = 14,
+		size = {w = 512, h = height},
+		heightPerLine = heightPerLine,
 		textOffset = 100,
 		scale = 2,
 		lines = {},
 		isDirty = true,
 		isVisible = false,
 		chatAppearKeyCode = dio.inputs.keyCodes.T,
+		text = "",
 	}
 
 	instance.renderToTexture = dio.drawing.createRenderToTexture (instance.size.w, instance.size.h)
@@ -132,6 +192,8 @@ local function onLoadSuccessful ()
 	local types = dio.events.types
 	dio.events.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatMessageReceived)
 	dio.events.addListener (types.CLIENT_KEY_CODE_CLICKED, onKeyCodeClicked)
+	dio.events.addListener (types.CLIENT_KEY_CHARACTER_CLICKED, onKeyCharacterClicked)
+	dio.events.addListener (types.CLIENT_WINDOW_FOCUS_LOST, onClientWindowFocusLost)
 
 	onChatMessageReceived ("Self", "World loaded")
 

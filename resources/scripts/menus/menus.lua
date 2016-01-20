@@ -92,6 +92,13 @@ function c:onKeyCharacterClicked (keyCode)
 end
 
 --------------------------------------------------
+function c:onWindowFocusLost ()
+	if self.current_menu then
+		return self.current_menu:onWindowFocusLost ()
+	end
+end
+
+--------------------------------------------------
 function c:setIsVisible (isVisible)
 	self.isVisible = isVisible
 end
@@ -113,8 +120,8 @@ return function (all_menus, initial_menu_name)
 	instance.renderToTexture = dio.drawing.createRenderToTexture (instance.w, instance.h)
 
 	local types = dio.events.types
-  	dio.events.addListener (types.CLIENT_KEY_CODE_CLICKED, function (keyCode) return instance:onKeyCodeClicked (keyCode) end)
-  	dio.events.addListener (types.CLIENT_KEY_CHARACTER_CLICKED, function (keyCode) return instance:onKeyCharacterClicked (keyCode) end)
+	dio.events.addListener (types.CLIENT_KEY_CODE_CLICKED, function (keyCode) return instance:onKeyCodeClicked (keyCode) end)
+	dio.events.addListener (types.CLIENT_KEY_CHARACTER_CLICKED, function (keyCode) return instance:onKeyCharacterClicked (keyCode) end)
 
 	Mixin.CopyTo (instance, c)
 

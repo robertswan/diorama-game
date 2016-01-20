@@ -48,6 +48,11 @@ local function onLateRender ()
 end 
 
 --------------------------------------------------
+local function onWindowFocusLost ()
+	menus:onWindowFocusLost ()
+end
+
+--------------------------------------------------
 local function main ()
 
 	loadPlayerControls ()
@@ -58,6 +63,9 @@ local function main ()
 
 	dio.drawing.addRenderPassBefore (onEarlyRender)
 	dio.drawing.addRenderPassAfter (onLateRender)
+
+	local types = dio.events.types
+	dio.events.addListener (types.CLIENT_WINDOW_FOCUS_LOST, onWindowFocusLost)
 
 	local individual_menus =
 	{
