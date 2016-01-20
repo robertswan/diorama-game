@@ -78,16 +78,9 @@ function c:renderLate ()
 end
 
 --------------------------------------------------
-function c:onKeyCodeClicked (keyCode)
+function c:onKeyClicked (keyCode, keyCharacter, keyModifiers)
 	if self.current_menu then
-		return self.current_menu:onKeyCodeClicked (keyCode, self)
-	end
-end
-
---------------------------------------------------
-function c:onKeyCharacterClicked (keyCode)
-	if self.current_menu then
-		return self.current_menu:onKeyCharacterClicked (keyCode)
+		return self.current_menu:onKeyClicked (keyCode, keyCharacter, keyModifiers, self)
 	end
 end
 
@@ -120,8 +113,7 @@ return function (all_menus, initial_menu_name)
 	instance.renderToTexture = dio.drawing.createRenderToTexture (instance.w, instance.h)
 
 	local types = dio.events.types
-	dio.events.addListener (types.CLIENT_KEY_CODE_CLICKED, function (keyCode) return instance:onKeyCodeClicked (keyCode) end)
-	dio.events.addListener (types.CLIENT_KEY_CHARACTER_CLICKED, function (keyCode) return instance:onKeyCharacterClicked (keyCode) end)
+	dio.events.addListener (types.CLIENT_KEY_CLICKED, function (keyCode, keyCharacter, keyModifier) return instance:onKeyClicked (keyCode, keyCharacter, keyModifier) end)
 
 	Mixin.CopyTo (instance, c)
 

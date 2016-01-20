@@ -79,7 +79,7 @@ function c:onRender (font, menu)
 end
 
 --------------------------------------------------
-function c:onKeyCodeClicked (menu, keyCode)
+function c:onKeyClicked (menu, keyCode)
 
 	local keyCodes = dio.inputs.keyCodes
 
@@ -93,6 +93,8 @@ function c:onKeyCodeClicked (menu, keyCode)
 		if self.onTextChangeConfirmed then
 			self:onTextChangeConfirmed (menu)
 		end
+
+		return true
 	end
 end
 

@@ -28,7 +28,7 @@ function c:onExit ()
 end
 
 --------------------------------------------------
-function c:onKeyCodeClicked (keyCode)
+function c:onKeyClicked (keyCode, keyCharacter, keyModifiers)
 
 	local keyCodes = dio.inputs.keyCodes
 	

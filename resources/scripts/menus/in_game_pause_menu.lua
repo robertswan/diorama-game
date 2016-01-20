@@ -38,7 +38,7 @@ function c:onUpdate (x, y, was_left_clicked)
 end
 
 --------------------------------------------------
-function c:onKeyCodeClicked (keyCode, menus)
+function c:onKeyClicked (keyCode, keyCharacter, keyModifiers, menus)
 
 	local keyCodes = dio.inputs.keyCodes
 	

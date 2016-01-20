@@ -65,13 +65,35 @@ function c:onRender (font, menu)
 end
 
 --------------------------------------------------
-function c:onKeyCodeClicked (menu, keyCode)
+function c:onKeyClicked (menu, keyCode, keyCharacter, keyModifiers)
 
 	assert (self.isSelected)
 
 	local keyCodes = dio.inputs.keyCodes
 
-	if keyCode == keyCodes.ESCAPE then
+	if keyCharacter then
+
+		local isDigit = (keyCharacter >= string.byte ("0") and keyCharacter <= string.byte ("9"))
+		local isPeriod = (keyCharacter == string.byte (".") and not self.isInteger)
+		local isNegative = (keyCharacter == string.byte ("-"))
+		if isPeriod then
+			isPeriod = (not string.find (self.value, "%.") and self.value:len () > 0)
+		end
+		if isNegative then
+			isNegative = (self.value:len () == 0)
+		end
+
+		if isDigit or isPeriod or isNegative then
+
+			self.value = self.value .. string.char (keyCharacter)
+			if self.onTextChanged then
+				self:onTextChanged (menu)
+			end
+		end
+
+		return true
+
+	elseif keyCode == keyCodes.ESCAPE then
 
 		self.value = self.initial_value
 		self.initial_value = nil
@@ -101,30 +123,6 @@ function c:onKeyCodeClicked (menu, keyCode)
 			end
 		end
 	end
-end
-
---------------------------------------------------
-function c:onKeyCharacterClicked (menu, character)
-
-	local isDigit = (character >= string.byte ("0") and character <= string.byte ("9"))
-	local isPeriod = (character == string.byte (".") and not self.isInteger)
-	local isNegative = (character == string.byte ("-"))
-	if isPeriod then
-		isPeriod = (not string.find (self.value, "%.") and self.value:len () > 0)
-	end
-	if isNegative then
-		isNegative = (self.value:len () == 0)
-	end
-
-	if isDigit or isPeriod or isNegative then
-
-		self.value = self.value .. string.char (character)
-		if self.onTextChanged then
-			self:onTextChanged (menu)
-		end
-	end
-
-	return true
 end
 
 --------------------------------------------------

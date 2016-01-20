@@ -46,6 +46,7 @@ end
 --------------------------------------------------
 local function resetTextEntry (self)
 	self.text = ""
+	self.isDirty = true
 end
 
 --------------------------------------------------
@@ -102,13 +103,18 @@ local function onChatMessageReceived (author, text)
 end
 
 --------------------------------------------------
-local function onKeyCodeClicked (keyCode)
+local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 
 	local self = instance
 
 	if self.isVisible then
 
-		if keyCode == dio.inputs.keyCodes.ENTER then
+		if keyCharacter then
+
+		 	self.text = self.text .. string.char (keyCharacter)
+		 	self.isDirty = true
+
+		elseif keyCode == dio.inputs.keyCodes.ENTER then
 
 			local isOk, errorStr = dio.clientChat.send (self.text)
 			if not isOk then
@@ -130,24 +136,12 @@ local function onKeyCodeClicked (keyCode)
 		dio.inputs.setExclusiveKeys (true)
 		dio.inputs.setArePlayingControlsEnabled (false)
 		resetTextEntry (self)
+
 		return true
 
 	end
 
 	return false
-end
-
---------------------------------------------------
-local function onKeyCharacterClicked (character)
-
-	local self = instance
-
-	if self.isVisible then
-		self.text = self.text .. string.char (character)
-		self.isDirty = true
-		return true
-	end
-
 end
 
 --------------------------------------------------
@@ -191,8 +185,7 @@ local function onLoadSuccessful ()
 
 	local types = dio.events.types
 	dio.events.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatMessageReceived)
-	dio.events.addListener (types.CLIENT_KEY_CODE_CLICKED, onKeyCodeClicked)
-	dio.events.addListener (types.CLIENT_KEY_CHARACTER_CLICKED, onKeyCharacterClicked)
+	dio.events.addListener (types.CLIENT_KEY_CLICKED, onKeyClicked)
 	dio.events.addListener (types.CLIENT_WINDOW_FOCUS_LOST, onClientWindowFocusLost)
 
 	onChatMessageReceived ("Self", "World loaded")

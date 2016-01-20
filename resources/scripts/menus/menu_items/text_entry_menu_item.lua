@@ -65,13 +65,24 @@ function c:onRender (font, menu)
 end
 
 --------------------------------------------------
-function c:onKeyCodeClicked (menu, keyCode)
+function c:onKeyClicked (menu, keyCode, keyCharacter, keyModifiers)
 
 	assert (self.isSelected)
 
 	local keyCodes = dio.inputs.keyCodes
 
-	if keyCode == keyCodes.ESCAPE then
+	if keyCharacter then
+
+		if self.value:len () < self.max_length then
+			self.value = self.value .. string.char (keyCharacter)
+			if self.onTextChanged then
+				self:onTextChanged (menu)
+			end
+		end
+
+		return true		
+
+	elseif keyCode == keyCodes.ESCAPE then
 
 		self.value = self.initial_value
 		self.initial_value = nil
@@ -98,19 +109,6 @@ function c:onKeyCodeClicked (menu, keyCode)
 			if self.onTextChanged then
 				self:onTextChanged (menu)
 			end
-		end
-	end
-
-	return true
-end
-
---------------------------------------------------
-function c:onKeyCharacterClicked (menu, character)
-
-	if self.value:len () < self.max_length then
-		self.value = self.value .. string.char (character)
-		if self.onTextChanged then
-			self:onTextChanged (menu)
 		end
 	end
 

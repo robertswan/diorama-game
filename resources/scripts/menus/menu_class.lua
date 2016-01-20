@@ -72,30 +72,14 @@ function c:onRender ()
 end
 
 --------------------------------------------------
-function c:onKeyCodeClicked (keyCode)
+function c:onKeyClicked (keyCode, keyCharacter, keyModifiers)
 	local next_menu = nil
 
 	for i, item in ipairs (self.items) do
 
-		if item.onKeyCodeClicked and item.isSelected then
+		if item.onKeyClicked and item.isSelected then
 
-			local wasConsumed = item:onKeyCodeClicked (self, keyCode)
-			if wasConsumed then
-				return true
-			end
-		end
-	end	
-end
-
---------------------------------------------------
-function c:onKeyCharacterClicked (character)
-	local next_menu = nil
-
-	for i, item in ipairs (self.items) do
-
-		if item.onKeyCharacterClicked and item.isSelected then
-
-			local wasConsumed = item:onKeyCharacterClicked (self, character)
+			local wasConsumed = item:onKeyClicked (self, keyCode, keyCharacter, keyModifiers)
 			if wasConsumed then
 				return true
 			end

@@ -57,7 +57,7 @@ function c:onRender (font, menu)
 end
 
 --------------------------------------------------
-function c:onKeyCodeClicked (menu, keyCode)
+function c:onKeyClicked (menu, keyCode, keyCharacter, keyModifiers)
 
 	assert (self.isSelected)
 
