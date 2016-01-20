@@ -81,9 +81,18 @@ local function onKeyCodeClicked (keyCode)
 
 	if self.isVisible then
 
-		if keyCode == dio.inputs.keyCodes.ENTER or keyCode == dio.inputs.keyCodes.ESCAPE then
+		if keyCode == dio.inputs.keyCodes.ENTER then
+
+			local isOk, errorStr = dio.clientChat.send ("HELLO WORLD")
+			if not isOk then
+				onChatMessageReceived ("Self", "Last message did not send! (" .. errorStr .. ")")
+			end
+
+		elseif keyCode == dio.inputs.keyCodes.ESCAPE then
+
 			self.isVisible = false
 			dio.inputs.setExclusiveKeys (false)
+
 		end
 		return true
 
@@ -106,7 +115,7 @@ local function onLoadSuccessful ()
 		autoScroll = true,
 		linesToDraw = 20,
 		position = {x = 20, y = 20},
-		size = {w = 300, h = 20 * 14},
+		size = {w = 512, h = 20 * 14},
 		heightPerY = 14,
 		textOffset = 100,
 		scale = 2,
