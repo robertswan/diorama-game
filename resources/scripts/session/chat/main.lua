@@ -9,17 +9,15 @@ end
 --------------------------------------------------
 local function renderChat (self)
 
-	local chatLinesToDraw = self.linesToDraw - 2
-
-	local lineIdx = self.firstLineToDraw + chatLinesToDraw - 1
-	local y = (chatLinesToDraw - 1) * self.heightPerLine
+	local lineIdx = self.firstLineToDraw + self.chatLinesToDraw
+	local y = (self.chatLinesToDraw - 1) * self.heightPerLine
 	if lineIdx > #self.lines then
 		lineIdx = #self.lines
 	end
 
 	local drawString = dio.drawing.font.drawString
 
-	while y > 0 and lineIdx > 0 do
+	while y >= 0 and lineIdx > 0 do
 		local line = self.lines [lineIdx]
 		drawString (0, y, line.author, 0xffffff)
 		drawString (self.textOffset, y, line.text, 0xa0a0a0)
@@ -33,7 +31,7 @@ end
 local function renderTextEntry (self)
 
 	local heightPerLine = self.heightPerLine
-	local y = (self.linesToDraw - 2) * heightPerLine
+	local y = self.chatLinesToDraw * heightPerLine
 	
 	local drawString = dio.drawing.font.drawString
 	drawString (0, y, "--------------------------------------------------------", 0xffffffff)
@@ -89,10 +87,10 @@ local function onChatMessageReceived (author, text)
 		text = text
 	}
 
-	self.lines [#self.lines + 1] = line;
+	table.insert (self.lines, line)
 
 	if self.autoScroll then
-		self.firstLineToDraw = #self.lines - self.linesToDraw
+		self.firstLineToDraw = #self.lines - self.chatLinesToDraw + 1
 		if self.firstLineToDraw < 1 then
 			self.firstLineToDraw = 1
 		end
@@ -126,6 +124,14 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 		elseif keyCode == dio.inputs.keyCodes.ESCAPE then
 
 			hide (self)
+
+		elseif keyCode == dio.inputs.keyCodes.BACKSPACE then
+
+			local stringLen = self.text:len ()
+			if stringLen > 0 then
+				self.text = self.text:sub (1, -2)
+				self.isDirty = true
+			end			
 		end
 
 		return true
@@ -158,15 +164,17 @@ end
 --------------------------------------------------
 local function onLoadSuccessful ()
 
-	local linesToDraw = 20
+	local chatLinesToDraw = 18
+	local textEntryLinesToDraw = 2
 	local heightPerLine = 14
-	local height = linesToDraw * heightPerLine
+	local height = (chatLinesToDraw + textEntryLinesToDraw) * heightPerLine
 
 	instance = 
 	{
 		firstLineToDraw = 1,
 		autoScroll = true,
-		linesToDraw = linesToDraw,
+		chatLinesToDraw = chatLinesToDraw,
+		textEntryLinesToDraw = textEntryLinesToDraw,
 		position = {x = 20, y = 20},
 		size = {w = 512, h = height},
 		heightPerLine = heightPerLine,

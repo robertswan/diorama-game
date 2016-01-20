@@ -44,8 +44,9 @@ function c:onKeyClicked (keyCode, keyCharacter, keyModifiers, menus)
 	
 	if keyCode == keyCodes.ESCAPE then
 		menus.next_menu_name = "playing_game_menu"
-		return true
 	end
+
+	return true
 end
 
 --------------------------------------------------
