@@ -40,7 +40,6 @@ function c:onUpdate (x, y, was_left_clicked)
 	end
 end
 
-
 --------------------------------------------------
 function c:onRender ()
 
@@ -48,6 +47,13 @@ function c:onRender ()
 		self.tetris:render ()
 	else
 		return self.parent.onRender (self)
+	end
+end
+
+--------------------------------------------------
+function c:onKeyClicked (keyCode, keyCharacter, keyModifiers, menus)
+	if self.tetris then
+		self.tetris:onKeyClicked (keyCode, keyCharacter, keyModifiers, menus)
 	end
 end
 

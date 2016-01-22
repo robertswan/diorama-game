@@ -157,43 +157,7 @@ end
 --------------------------------------------------
 function c:update ()
 
-	if self.isGameOver then
-
-		local keyCodeClicked = dio.inputs.keys.consumeKeyCodeClicked ()
-
-		if keyCodeClicked and keyCodeClicked == dio.inputs.keyCodes.ESCAPE then
-			self.parentMenu:recordTetrisGameOver ()
-		end
-
-	else
-
-		local keyCodeClicked = dio.inputs.keys.consumeKeyCodeClicked ()
-		if keyCodeClicked then
-			local piece = self.currentPiece			
-			if keyCodeClicked == dio.inputs.keyCodes.LEFT then
-				if not checkCurrentPieceCollision (self, -1, 0, piece.rotation) then
-					self.currentPiece.x = self.currentPiece.x - 1
-				end
-
-			elseif keyCodeClicked == dio.inputs.keyCodes.RIGHT then
-				if not checkCurrentPieceCollision (self, 1, 0, piece.rotation) then
-					self.currentPiece.x = self.currentPiece.x + 1
-				end
-
-			elseif keyCodeClicked == dio.inputs.keyCodes.DOWN then
-				self.currentDropSpeed = 5
-
-			elseif keyCodeClicked == dio.inputs.keyCodes.SPACE then
-				local newRotation = piece.rotation + 1
-				if newRotation > piece.template.rotationCount then
-					newRotation = 1
-				end
-				local hasCollided = checkCurrentPieceCollision (self, 0, 0, newRotation)
-				if not hasCollided then
-					piece.rotation = newRotation
-				end
-			end
-		end
+	if not self.isGameOver then
 
 		self.dropTickCount = self.dropTickCount + 1
 		if self.dropTickCount >= self.currentDropSpeed then
@@ -249,6 +213,50 @@ function c:render ()
 	if self.isGameOver then
 		dio.drawing.font.drawString (10, 40, "GAME OVER. Press ESCAPE to continue", 0xffffff)
 	end
+end
+
+--------------------------------------------------
+function c:onKeyClicked (keyCode, keyCharacter, keyModifiers, menus)
+	
+	if self.isGameOver then
+
+		if keyCode == dio.inputs.keyCodes.ESCAPE then
+			self.parentMenu:recordTetrisGameOver ()
+		end
+
+	else
+
+		local piece = self.currentPiece			
+		if keyCode == dio.inputs.keyCodes.LEFT then
+
+			if not checkCurrentPieceCollision (self, -1, 0, piece.rotation) then
+				self.currentPiece.x = self.currentPiece.x - 1
+			end
+
+		elseif keyCode == dio.inputs.keyCodes.RIGHT then
+
+			if not checkCurrentPieceCollision (self, 1, 0, piece.rotation) then
+				self.currentPiece.x = self.currentPiece.x + 1
+			end
+
+		elseif keyCode == dio.inputs.keyCodes.DOWN then
+
+			self.currentDropSpeed = 5
+
+		elseif keyCode == dio.inputs.keyCodes.SPACE then
+
+			local newRotation = piece.rotation + 1
+			if newRotation > piece.template.rotationCount then
+				newRotation = 1
+			end
+			local hasCollided = checkCurrentPieceCollision (self, 0, 0, newRotation)
+			if not hasCollided then
+				piece.rotation = newRotation
+			end
+		end
+	end
+
+	return true
 end
 
 --------------------------------------------------
