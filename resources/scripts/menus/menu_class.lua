@@ -54,6 +54,8 @@ end
 --------------------------------------------------
 function c:onRender ()
 	local font = dio.drawing.font;
+
+	dio.drawing.font.drawBox (0, 0, self.width, self.height, 0x000000b0);
 	
 	if self.title then
 		local width = font.measureString (self.title)

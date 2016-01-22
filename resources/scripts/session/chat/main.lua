@@ -3,7 +3,7 @@ local instance = nil
 
 --------------------------------------------------
 local function renderBg (self)
-	dio.drawing.font.drawBox (0, 0, self.size.w, self.size.h, 0x0000080);
+	dio.drawing.font.drawBox (0, 0, self.size.w, self.size.h, 0x000000b0);
 end
 
 --------------------------------------------------
@@ -19,8 +19,10 @@ local function renderChat (self)
 
 	while y >= 0 and lineIdx > 0 do
 		local line = self.lines [lineIdx]
-		drawString (0, y, line.author, 0xffffff)
-		drawString (self.textOffset, y, line.text, 0xa0a0a0)
+		drawString (0, y + 2, line.author, 0x000000ff)
+		drawString (0, y, line.author, 0xff0000ff)
+		drawString (self.textOffset, y + 2, line.text, 0x000000ff)
+		drawString (self.textOffset, y, line.text, 0xffffffff)
 
 		y = y - self.heightPerLine
 		lineIdx = lineIdx - 1
