@@ -72,7 +72,7 @@
 -- local function onLateRender (self)
 
 -- 	if self.isVisible then
--- 		dio.drawing.drawTexture (self.renderToTexture, self.position.x, self.position.y, self.size.w * self.scale, self.size.h * self.scale)
+-- 		dio.drawing.drawTexture (self.renderToTexture, self.position.x, self.position.y, self.size.w * self.scale, self.size.h * self.scale, 0xffffffff)
 -- 	end
 -- end
 

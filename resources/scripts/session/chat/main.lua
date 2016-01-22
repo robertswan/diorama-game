@@ -1,3 +1,5 @@
+local TickerLine = require ("resources/scripts/session/chat/ticker_line")
+
 --------------------------------------------------
 local instance = nil
 
@@ -20,7 +22,7 @@ local function renderChat (self)
 	while y >= 0 and lineIdx > 0 do
 		local line = self.lines [lineIdx]
 		drawString (0, y + 2, line.author, 0x000000ff)
-		drawString (0, y, line.author, 0xff0000ff)
+		drawString (0, y, line.author, 0xffff00ff)
 		drawString (self.textOffset, y + 2, line.text, 0x000000ff)
 		drawString (self.textOffset, y, line.text, 0xffffffff)
 
@@ -36,7 +38,7 @@ local function renderTextEntry (self)
 	local y = self.chatLinesToDraw * heightPerLine
 	
 	local drawString = dio.drawing.font.drawString
-	drawString (0, y, "--------------------------------------------------------", 0xffffffff)
+	drawString (0, y, string.rep ("-", 40), 0xffffffff)
 	drawString (0, y + heightPerLine, self.text, 0xffffffff)
 	local width = dio.drawing.font.measureString (self.text)
 	drawString (width, y + heightPerLine, "_", 0xff0000ff)
@@ -52,9 +54,31 @@ end
 --------------------------------------------------
 local function hide (self)
 	self.isVisible = false
+	dio.inputs.mouse.setExclusive (true)
 	dio.inputs.setExclusiveKeys (false)
 	dio.inputs.setArePlayingControlsEnabled (true)
 end
+
+--------------------------------------------------
+local function addNewTickerLine (self, author, text)
+
+	local ticker = self.ticker
+
+	if #ticker.lines == ticker.linesToDraw then
+		for idx = 2, #ticker.lines do
+			ticker.lines [idx - 1] = ticker.lines [idx]			
+		end
+		table.remove (ticker.lines)
+	end
+
+	local newTickerLine = TickerLine (author, text, self.size.w, self.heightPerLine, self.textOffset)
+	table.insert (ticker.lines, newTickerLine)
+end
+
+-- TODO
+-- --------------------------------------------------
+-- local function onUpdate (self)
+-- end
 
 --------------------------------------------------
 local function onEarlyRender (self)
@@ -68,13 +92,41 @@ local function onEarlyRender (self)
 		dio.drawing.setRenderToTexture (nil)
 		self.isDirty = false
 	end
+
+	local lines = self.ticker.lines
+	local idx = 1
+
+	while idx <= #lines do
+
+		local tickerLine = lines [idx]
+		local isOk = tickerLine:update ()
+
+		if not isOk then
+			table.remove (lines, 1)
+
+		else
+			if tickerLine.isDirty then
+				tickerLine:earlyRender ()
+			end
+			idx = idx + 1
+		end
+	end
 end
 
 --------------------------------------------------
 local function onLateRender (self)
 
 	if self.isVisible then
-		dio.drawing.drawTexture (self.renderToTexture, self.position.x, self.position.y, self.size.w * self.scale, self.size.h * self.scale)
+		dio.drawing.drawTexture (self.renderToTexture, self.position.x, self.position.y, self.size.w * self.scale, self.size.h * self.scale, 0xffffffff)
+
+	else
+		local lines = self.ticker.lines
+		local y = self.position.y + ((self.textEntryLinesToDraw + #lines) * self.heightPerLine * self.scale)
+
+		for _, tickerLine in ipairs (lines) do
+			y = y - self.heightPerLine * self.scale
+			tickerLine:lateRender (self.position.x, y)
+		end
 	end
 end
 
@@ -97,6 +149,8 @@ local function onChatMessageReceived (author, text)
 			self.firstLineToDraw = 1
 		end
 	end
+
+	addNewTickerLine (self, author, text)
 
 	self.isDirty = true
 
@@ -141,6 +195,7 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 	elseif keyCode == self.chatAppearKeyCode then
 
 		self.isVisible = true
+		dio.inputs.mouse.setExclusive (false)
 		dio.inputs.setExclusiveKeys (true)
 		dio.inputs.setArePlayingControlsEnabled (false)
 		resetTextEntry (self)
@@ -155,11 +210,11 @@ end
 --------------------------------------------------
 local function onClientWindowFocusLost ()
 
-	local self = instance
+	-- local self = instance
 
-	if self.isVisible then
-		hide (self)
-	end	
+	-- if self.isVisible then
+	-- 	hide (self)
+	-- end	
 
 end
 
@@ -187,6 +242,12 @@ local function onLoadSuccessful ()
 		isVisible = false,
 		chatAppearKeyCode = dio.inputs.keyCodes.T,
 		text = "",
+
+		ticker = 
+		{
+			linesToDraw = chatLinesToDraw,
+			lines = {}
+		},
 	}
 
 	instance.renderToTexture = dio.drawing.createRenderToTexture (instance.size.w, instance.size.h)

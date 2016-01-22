@@ -73,7 +73,7 @@ end
 --------------------------------------------------
 function c:renderLate ()
 	if self.isVisible and self.current_menu then 
-		dio.drawing.drawTexture (self.renderToTexture, self.x, self.y, self.w * self.scale, self.h * self.scale)
+		dio.drawing.drawTexture (self.renderToTexture, self.x, self.y, self.w * self.scale, self.h * self.scale, 0xffffffff)
 	end
 end
 
