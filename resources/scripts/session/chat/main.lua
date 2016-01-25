@@ -83,14 +83,18 @@ end
 --------------------------------------------------
 local function onEarlyRender (self)
 
+	self.isDirty = true
+
 	if self.isDirty then
 
 		dio.drawing.setRenderToTexture (self.renderToTexture)
 		renderBg (self)
 		renderChat (self)
 		renderTextEntry (self)
+
 		dio.drawing.setRenderToTexture (nil)
 		self.isDirty = false
+
 	end
 
 	local lines = self.ticker.lines
