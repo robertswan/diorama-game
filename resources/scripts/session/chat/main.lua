@@ -204,6 +204,9 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 		dio.inputs.setArePlayingControlsEnabled (false)
 		resetTextEntry (self)
 
+		local handle = dio.clientDebug.beginDeliveryTimeTest ()		
+		self.timeTestHandles [handle] = dio.system.getTime ()
+
 		return true
 
 	end
@@ -220,6 +223,18 @@ local function onClientWindowFocusLost ()
 	-- 	hide (self)
 	-- end	
 
+end
+
+--------------------------------------------------
+local function onDeliveryTimeTestComplete (handle)
+
+	local self = instance
+
+	local now = dio.system.getTime ()
+	local timeInMs = now - self.timeTestHandles [handle]
+	self.timeTestHandles [handle] = nil
+
+	onChatMessageReceived ("SERVER", "packet delivery test = (" .. tostring (handle) .. ") took " .. tostring (timeInMs) .. " ms")
 end
 
 --------------------------------------------------
@@ -252,6 +267,8 @@ local function onLoadSuccessful ()
 			linesToDraw = chatLinesToDraw,
 			lines = {}
 		},
+
+		timeTestHandles = {},
 	}
 
 	instance.renderToTexture = dio.drawing.createRenderToTexture (instance.size.w, instance.size.h)
@@ -262,6 +279,7 @@ local function onLoadSuccessful ()
 	dio.events.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatMessageReceived)
 	dio.events.addListener (types.CLIENT_KEY_CLICKED, onKeyClicked)
 	dio.events.addListener (types.CLIENT_WINDOW_FOCUS_LOST, onClientWindowFocusLost)
+	dio.events.addListener (types.CLIENT_DELIVERY_TIME_TEST_COMPLETE, onDeliveryTimeTestComplete)
 
 	onChatMessageReceived ("Self", "World loaded")
 
