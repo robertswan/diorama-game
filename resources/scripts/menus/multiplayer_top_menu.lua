@@ -12,12 +12,16 @@ local TextEntryMenuItem = require ("resources/scripts/menus/menu_items/text_entr
 --------------------------------------------------
 local function onConnectClicked (menuItem, menu)
 
+	if menu.playerName.value == "" then
+		menu.warningLabel.text = "ERROR! Player Name must not be empty"
+		return
+	end
+
 	local params = 
 	{
 		ipAddress = menu.ipAddress.value,
 		ipPort = menu.ipPort:getValueAsNumber (),
 		playerName = menu.playerName.value,
-		onNewText = function (text) menu:onNewText (text) end
 	}
 
 	local isOk = dio.session.beginMp (params)
@@ -36,16 +40,7 @@ local c = {}
 
 --------------------------------------------------
 function c:onEnter ()
-end
-
---------------------------------------------------
-function c:onExit ()
-end
-
---------------------------------------------------
-function c:onNewText (text)
-	table.insert (self.scrollLines, text)
-	self.scrollable.linesVisibleCount = #self.scrollLines
+	self.warningLabel.text = ""
 end
 
 --------------------------------------------------
@@ -59,11 +54,10 @@ return function ()
 
 	local properties = 
 	{
-		playerName = 	TextEntryMenuItem ("Player Name", nil, nil, "Teazel", 16),
+		playerName = 	TextEntryMenuItem ("Player Name", nil, nil, "", 16),
 		ipAddress = 	TextEntryMenuItem ("IP Address", nil, nil, "84.92.48.10", 16),
 		ipPort = 		NumberEntryMenuItem ("Port", nil, nil, 25276, true),
-		scrollable = 	ScrollableMenuItem (scrollLines, #scrollLines),
-		scrollLines = 	scrollLines,
+		warningLabel = 	LabelMenuItem (""),
 	}
 
 	Mixin.CopyTo (instance, properties)
@@ -76,7 +70,9 @@ return function ()
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Return To Main Menu", onMainMenuClicked))
 	instance:addMenuItem (BreakMenuItem ())
-	instance:addMenuItem (properties.scrollable)
+	instance:addMenuItem (properties.warningLabel)
+
+	properties.warningLabel.color = 0xff8000ff
 
 	return instance
 end
