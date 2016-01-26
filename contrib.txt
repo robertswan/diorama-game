@@ -13,6 +13,10 @@ menu mod:				AmazedStream (FOV slider!)
 compatibility demo v0.1.1
 -------------------------
 
+Mods
+
+* LazyKernal
+
 Bug fixers
 
 * Toeger

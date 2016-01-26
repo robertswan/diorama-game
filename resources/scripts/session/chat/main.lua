@@ -4,6 +4,10 @@ local TickerLine = require ("resources/scripts/session/chat/ticker_line")
 local instance = nil
 
 --------------------------------------------------
+local chatHistory = {}
+local currentElement = 0
+
+--------------------------------------------------
 local function renderBg (self)
 	dio.drawing.font.drawBox (0, 0, self.size.w, self.size.h, 0x000000b0);
 end
@@ -36,7 +40,7 @@ local function renderTextEntry (self)
 
 	local heightPerLine = self.heightPerLine
 	local y = self.chatLinesToDraw * heightPerLine
-	
+
 	local drawString = dio.drawing.font.drawString
 	drawString (0, y, string.rep ("-", 40), 0xffffffff)
 	drawString (0, y + heightPerLine, self.text, 0xffffffff)
@@ -66,7 +70,7 @@ local function addNewTickerLine (self, author, text)
 
 	if #ticker.lines == ticker.linesToDraw then
 		for idx = 2, #ticker.lines do
-			ticker.lines [idx - 1] = ticker.lines [idx]			
+			ticker.lines [idx - 1] = ticker.lines [idx]
 		end
 		table.remove (ticker.lines)
 	end
@@ -83,7 +87,6 @@ end
 --------------------------------------------------
 local function onEarlyRender (self)
 
-	-- TODO move calcualations to a CLIENT_UPDATE event when one is made
 	self.isDirty = true
 
 	if self.isDirty then
@@ -140,9 +143,9 @@ local function onChatMessageReceived (author, text)
 
 	local self = instance
 
-	local line = 
+	local line =
 	{
-		author = author, 
+		author = author,
 		text = text
 	}
 
@@ -162,18 +165,43 @@ local function onChatMessageReceived (author, text)
 end
 
 --------------------------------------------------
+local function addToChatHistory (text)
+	local tmpArray = {}
+	for idx = 1, #chatHistory do
+		tmpArray [idx] = chatHistory [idx]
+	end
+
+	for idx = 1, #tmpArray do
+		chatHistory [idx + 1] = tmpArray [idx]
+	end
+
+	if #chatHistory > 10 then
+		for idx = 11, #chatHistory do
+			chatHistory [idx] = nil
+		end
+	end
+
+	chatHistory [1] = text
+end
+
+--------------------------------------------------
 local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 
 	local self = instance
 
 	if self.isVisible then
 
+		local keyCodes = dio.inputs.keyCodes
+
 		if keyCharacter then
 
 		 	self.text = self.text .. string.char (keyCharacter)
 		 	self.isDirty = true
 
-		elseif keyCode == dio.inputs.keyCodes.ENTER then
+		elseif keyCode == keyCodes.ENTER then
+
+			currentElement = 0
+			addToChatHistory (self.text)
 
 			local isOk, errorStr = dio.clientChat.send (self.text)
 			if not isOk then
@@ -182,17 +210,45 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 
 			resetTextEntry (self)
 
-		elseif keyCode == dio.inputs.keyCodes.ESCAPE then
+		elseif keyCode == keyCodes.ESCAPE then
 
+			currentElement = 0
 			hide (self)
 
-		elseif keyCode == dio.inputs.keyCodes.BACKSPACE then
+		elseif keyCode == keyCodes.BACKSPACE then
 
 			local stringLen = self.text:len ()
 			if stringLen > 0 then
 				self.text = self.text:sub (1, -2)
 				self.isDirty = true
-			end			
+
+			else
+				currentElement = 0
+
+			end
+
+		elseif keyCode == keyCodes.UP then
+
+			currentElement = currentElement + 1
+
+			if currentElement > 10 or currentElement > #chatHistory then
+				currentElement = 1
+			end
+
+			self.text = chatHistory [currentElement] or ""
+			self.isDirty = true
+
+		elseif keyCode == keyCodes.DOWN then
+
+			currentElement = currentElement - 1
+
+			if currentElement < 1 then
+				currentElement = #chatHistory
+			end
+
+			self.text = chatHistory [currentElement] or ""
+			self.isDirty = true
+
 		end
 
 		return true
@@ -205,7 +261,7 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 		dio.inputs.setArePlayingControlsEnabled (false)
 		resetTextEntry (self)
 
-		local handle = dio.clientDebug.beginDeliveryTimeTest ()		
+		local handle = dio.clientDebug.beginDeliveryTimeTest ()
 		self.timeTestHandles [handle] = dio.system.getTime ()
 
 		return true
@@ -222,7 +278,7 @@ local function onClientWindowFocusLost ()
 
 	-- if self.isVisible then
 	-- 	hide (self)
-	-- end	
+	-- end
 
 end
 
@@ -246,7 +302,7 @@ local function onLoadSuccessful ()
 	local heightPerLine = 14
 	local height = (chatLinesToDraw + textEntryLinesToDraw) * heightPerLine
 
-	instance = 
+	instance =
 	{
 		firstLineToDraw = 1,
 		autoScroll = true,
@@ -263,7 +319,7 @@ local function onLoadSuccessful ()
 		chatAppearKeyCode = dio.inputs.keyCodes.T,
 		text = "",
 
-		ticker = 
+		ticker =
 		{
 			linesToDraw = chatLinesToDraw,
 			lines = {}
@@ -287,13 +343,13 @@ local function onLoadSuccessful ()
 end
 
 --------------------------------------------------
-local modSettings = 
+local modSettings =
 {
 	name = "Chat",
 
 	description = "Can draw a chat window and allow players to type in it",
 
-	permissionsRequired = 
+	permissionsRequired =
 	{
 		client = true,
 		player = true,
