@@ -83,6 +83,7 @@ end
 --------------------------------------------------
 local function onEarlyRender (self)
 
+	-- TODO move calcualations to a CLIENT_UPDATE event when one is made
 	self.isDirty = true
 
 	if self.isDirty then

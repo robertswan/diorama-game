@@ -1,19 +1,6 @@
 --------------------------------------------------
 local Mixin = require ("resources/scripts/menus/mixin")
-
---------------------------------------------------
-local function calcBestFit (w, h, maxW, maxH)
-	local scale = 1
-
-	while w * scale <= maxW and h * scale <= maxH do 
-		scale = scale + 1
-	end
-
-	scale = scale - 1
-	scale = scale < 1 and 1 or scale
-
-	return scale
-end
+local Window = require ("resources/scripts/utils/window")
 
 --------------------------------------------------
 local c = {}
@@ -23,7 +10,7 @@ local count = 0
 function c:update ()
 
 	local windowW, windowH = dio.drawing.getWindowSize ()
-	self.scale = calcBestFit (self.w, self.h, windowW, windowH)
+	self.scale = Window.calcBestFitScale (self.w, self.h)
 	self.x = (windowW - self.w * self.scale) / 2
 	self.y = (windowH - self.h * self.scale) / 2
 
