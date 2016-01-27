@@ -34,6 +34,11 @@ local function onQuitClicked ()
 end
 
 --------------------------------------------------
+local function onPaintClicked ()
+	return "paint_main_menu"
+end
+
+--------------------------------------------------
 local function onPlayTetrisClicked ()
 	return "tetris_main_menu"
 end
@@ -98,7 +103,9 @@ return function ()
 	instance:addMenuItem (ButtonMenuItem ("Read 'readme.txt'", function (menuItem, menu) return onTextFileClicked (menu, "readme.txt") end))
 	instance:addMenuItem (ButtonMenuItem ("Read 'contrib.txt'", function (menuItem, menu) return onTextFileClicked (menu, "contrib.txt") end))
 	instance:addMenuItem (ButtonMenuItem ("Read 'licenses.txt'", function (menuItem, menu) return onTextFileClicked (menu, "licenses.txt") end))
+	instance:addMenuItem (ButtonMenuItem ("Paint", onPaintClicked))
 	instance:addMenuItem (ButtonMenuItem ("Play Block Falling Game", onPlayTetrisClicked))
+
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Quit", onQuitClicked))
 	
@@ -107,8 +114,7 @@ return function ()
 	instance:addMenuItem (LabelMenuItem (""))
 	instance:addMenuItem (LabelMenuItem (versionInfo.title))
 	instance:addMenuItem (LabelMenuItem (versionInfo.buildDate))
-	instance:addMenuItem (LabelMenuItem ("See me develop live!    twitch.tv/robtheswan"))
-	instance:addMenuItem (LabelMenuItem ("See my website!         robtheswan.com"))
+	instance:addMenuItem (LabelMenuItem ("twitch.tv/robtheswan             robtheswan.com"))
 
 	return instance
 end

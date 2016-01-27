@@ -84,6 +84,7 @@ local function main ()
 		saving_game_menu =			require ("resources/scripts/menus/saving_game_menu") (),
 		quitting_menu =				require ("resources/scripts/menus/quitting_menu") (),
 		tetris_main_menu =			require ("resources/scripts/menus/tetris/tetris_main_menu") (),
+		paint_main_menu =			require ("resources/scripts/menus/paint/paint_main") (),
 	}
 
 	individual_menus.text_file_menu:recordFilename ("readme.txt")

@@ -24,7 +24,7 @@ local function onConnectClicked (menuItem, menu)
 		playerName = menu.playerName.value,
 	}
 
-	local isOk = dio.session.beginMp (params)
+	local isOk, errorString = dio.session.beginMp (params)
 	if isOk then
 		return "playing_game_menu"
 	end
