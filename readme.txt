@@ -11,10 +11,30 @@ crashes or has rendering bugs!
 Changelog
 =========
 
-compatibility demo v0.1.0
+compatibility demo v0.1.1
 -------------------------
 
-TODO
+* Multiplayer added
+  * max 32 players per server
+  * server can be started with command line arguments
+  * chat window added (press T)
+  * players and player name visible in the game
+  * server saves level on exit
+  * server accepts command line args (-i input -s random_seed)
+* different blocks available (press 1-9)
+* menus reorganisation
+* lua api extended:
+  * mods split into client and server mods
+  * render to texture available (dio.drawing.createRenderToTexture / setRenderToTexture)
+  * render passes can be added (dio.drawing.addRenderPassBefore / addRenderPassAfter)
+  * new events for dio.events.addListener:
+	  CLIENT_CHAT_MESSAGE_RECEIVED
+	  CLIENT_KEY_CLICKED
+	  CLIENT_WINDOW_FOCUS_LOST
+	  CLIENT_WINDOW_FOCUS_LOST
+* BUGFIX: ESCAPE correctly opens / closes pause menu
+* BUGFIX: multiple key presses per tick were raised in reverse order
+* paint application added
 
 
 compatibility demo v0.1.0

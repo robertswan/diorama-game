@@ -3,48 +3,60 @@ Contributors
 
 FIRSTS:
 
-singleplayer tester:
 multiplayer tester: 	waterlimon
 multiplayer server: 	Expatiator
 youtube video: 			whiteland92 (https://www.youtube.com/watch?v=gOr01kdu_KQ&feature=youtu.bes)
 custom level: 			AmazedStream
 menu mod:				AmazedStream (FOV slider!)
+client mod:				LazyKernel
+
 
 compatibility demo v0.1.1
 -------------------------
 
 Mods
 
-* LazyKernal
+* AmazedStream
+* LazyKernel
 
 Bug fixers
 
 * Toeger
-* XForceP (raknet bugfix!!!!!!!!!!!!!!)
+* XForceP (raknet bugfix!)
 
 QA
 
-* waterlimon
-* whiteland92
 * AcarX
-* Swappik
-* QeraiX
-* Moopaloo
-* LazyKernel
-* FGArray
-* Snellekenny
-* WizardNJ
+* AmazedStream
+* Azenris
+* clstl
+* CritCrank
 * Expatiator
+* FGArray
+* Fleabum
+* HuniePop
+* IAyeCaptainKai
+* l_p_e
+* JFrap12
+* LazyKernel
+* linco95
+* Magnavode
+* Moopaloo
 * MrPancakeGuy___
 * NeutralNoise
-* Magnavode
-* clstl
+* Nidaegwyn
+* QeraiX
+* rave1000
+* Snellekenny
+* Swappik
+* tgrkzus
+* TheQuaX
 * TheRustyBrick
-* AmazedStream
-* Fleabum
-* CritCrank
-* IAyeCaptainKai
+* TinHammer
 * Walterman50
+* waterlimon
+* whiteland92
+* WizardNJ
 
 
 compatibility demo v0.1.0
