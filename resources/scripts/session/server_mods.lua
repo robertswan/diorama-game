@@ -14,7 +14,7 @@ local function main ()
 		player = true,
 	}
 
-	-- Mods.loadMod (mods, "default", permissions)
+	Mods.loadMod (mods, "default", permissions)
 end
 
 --------------------------------------------------

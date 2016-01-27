@@ -110,6 +110,7 @@ local modSettings =
 	{
 		client = true,
 		player = true,
+		file = true,
 	},
 }
 
