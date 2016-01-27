@@ -329,8 +329,8 @@ local function onLoadSuccessful ()
 	}
 
 	instance.renderToTexture = dio.drawing.createRenderToTexture (instance.size.w, instance.size.h)
-	dio.drawing.addRenderPassBefore (function () onEarlyRender (instance) end)
-	dio.drawing.addRenderPassAfter (function () onLateRender (instance) end)
+	dio.drawing.addRenderPassBefore (1.0, function () onEarlyRender (instance) end)
+	dio.drawing.addRenderPassAfter (1.0, function () onLateRender (instance) end)
 
 	local types = dio.events.types
 	dio.events.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatMessageReceived)

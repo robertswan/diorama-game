@@ -61,8 +61,8 @@ local function main ()
 	-- dio.onRenderMenus = OnRenderMenus
 	-- dio.onRender = OnRender
 
-	dio.drawing.addRenderPassBefore (onEarlyRender)
-	dio.drawing.addRenderPassAfter (onLateRender)
+	dio.drawing.addRenderPassBefore (10.0, onEarlyRender)
+	dio.drawing.addRenderPassAfter (10.0, onLateRender)
 
 	local types = dio.events.types
 	dio.events.addListener (types.CLIENT_WINDOW_FOCUS_LOST, onWindowFocusLost)

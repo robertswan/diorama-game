@@ -14,8 +14,8 @@ local function main ()
 		player = true,
 	}
 
-	Mods.loadMod (mods, "chat", permissions)
 	Mods.loadMod (mods, "inventory", permissions)
+	Mods.loadMod (mods, "chat", permissions)
 	-- Mods.loadMod (mods, "player_list", permissions)
 	-- Mods.loadMod (mods, "diagnostics", permissions)
 end
