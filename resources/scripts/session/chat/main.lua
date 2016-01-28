@@ -209,6 +209,7 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 			end
 
 			resetTextEntry (self)
+			hide (self)
 
 		elseif keyCode == keyCodes.ESCAPE then
 
@@ -272,17 +273,6 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 end
 
 --------------------------------------------------
-local function onClientWindowFocusLost ()
-
-	-- local self = instance
-
-	-- if self.isVisible then
-	-- 	hide (self)
-	-- end
-
-end
-
---------------------------------------------------
 local function onDeliveryTimeTestComplete (handle)
 
 	local self = instance
@@ -292,6 +282,16 @@ local function onDeliveryTimeTestComplete (handle)
 	self.timeTestHandles [handle] = nil
 
 	onChatMessageReceived ("SERVER", "packet delivery test = (" .. tostring (handle) .. ") took " .. tostring (timeInMs) .. " ms")
+end
+
+--------------------------------------------------
+local function onOtherClientConnected (playerId)
+	onChatMessageReceived ("SERVER", playerId .. " connected.")
+end
+
+--------------------------------------------------
+local function onOtherClientDisconnected (playerId)
+	onChatMessageReceived ("SERVER", playerId .. " disconnected.")
 end
 
 --------------------------------------------------
@@ -335,8 +335,9 @@ local function onLoadSuccessful ()
 	local types = dio.events.types
 	dio.events.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatMessageReceived)
 	dio.events.addListener (types.CLIENT_KEY_CLICKED, onKeyClicked)
-	dio.events.addListener (types.CLIENT_WINDOW_FOCUS_LOST, onClientWindowFocusLost)
 	dio.events.addListener (types.CLIENT_DELIVERY_TIME_TEST_COMPLETE, onDeliveryTimeTestComplete)
+	dio.events.addListener (types.CLIENT_OTHER_CLIENT_CONNECTED, onOtherClientConnected)
+	dio.events.addListener (types.CLIENT_OTHER_CLIENT_DISCONNECTED, onOtherClientDisconnected)
 
 	onChatMessageReceived ("Self", "World loaded")
 

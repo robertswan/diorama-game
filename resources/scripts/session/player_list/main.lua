@@ -1,219 +1,131 @@
--- --------------------------------------------------
--- local instance = nil
+local Window = require ("resources/scripts/utils/window")
 
--- --------------------------------------------------
--- local function renderBg (self)
--- 	dio.drawing.font.drawBox (0, 0, self.size.w, self.size.h, 0x0000080);
--- end
+--------------------------------------------------
+local instance = nil
 
--- --------------------------------------------------
--- local function renderChat (self)
+--------------------------------------------------
+local function renderBg (self)
+	dio.drawing.font.drawBox (0, 0, self.w, self.h, 0x0000080);
+end
 
--- 	local lineIdx = self.firstLineToDraw + self.chatLinesToDraw
--- 	local y = (self.chatLinesToDraw - 1) * self.heightPerLine
--- 	if lineIdx > #self.lines then
--- 		lineIdx = #self.lines
--- 	end
+--------------------------------------------------
+local function renderPlayerList (self)
 
--- 	local drawString = dio.drawing.font.drawString
+	local drawString = dio.drawing.font.drawString
 
--- 	while y >= 0 and lineIdx > 0 do
--- 		local line = self.lines [lineIdx]
--- 		drawString (0, y, line.author, 0xffffff)
--- 		drawString (self.textOffset, y, line.text, 0xa0a0a0)
+	drawString (0, 0, "Clients Connected", 0xffffffff)
 
--- 		y = y - self.heightPerLine
--- 		lineIdx = lineIdx - 1
--- 	end
--- end
+	local y = self.heightPerLine * 2
+	drawString (0, y, "YOU", 0xffff00ff)
 
--- --------------------------------------------------
--- local function renderTextEntry (self)
+	for idx, client in ipairs (self.clients) do
+		y = y + self.heightPerLine
+		drawString (0, y, client.accountId, 0x00ffffff)
+	end
+end
 
--- 	local heightPerLine = self.heightPerLine
--- 	local y = self.chatLinesToDraw * heightPerLine
-	
--- 	local drawString = dio.drawing.font.drawString
--- 	drawString (0, y, "--------------------------------------------------------", 0xffffffff)
--- 	drawString (0, y + heightPerLine, self.text, 0xffffffff)
--- 	local width = dio.drawing.font.measureString (self.text)
--- 	drawString (width, y + heightPerLine, "_", 0xff0000ff)
+--------------------------------------------------
+local function onEarlyRender (self)
 
--- end
+	if self.isDirty then
 
--- --------------------------------------------------
--- local function resetTextEntry (self)
--- 	self.text = ""
--- 	self.isDirty = true
--- end
+		dio.drawing.setRenderToTexture (self.renderToTexture)
+		renderBg (self)
+		renderPlayerList (self)
+		dio.drawing.setRenderToTexture (nil)
+		self.isDirty = false
+	end
+end
 
--- --------------------------------------------------
--- local function hide (self)
--- 	self.isVisible = false
--- 	dio.inputs.setExclusiveKeys (false)
--- 	dio.inputs.setArePlayingControlsEnabled (true)
--- end
+--------------------------------------------------
+local function onLateRender (self)
 
--- --------------------------------------------------
--- local function onEarlyRender (self)
+	if self.isVisible then
+		local windowW, windowH = dio.drawing.getWindowSize ()
+		local scale = Window.calcBestFitScale (self.w, self.h, windowW, windowH)
+		local x = (windowW - self.w * scale) * 0.5
+		local y = (windowH - self.h * scale) * 0.5
+		dio.drawing.drawTexture (self.renderToTexture, x, y, self.w * scale, self.h * scale, 0xffffffff)
+	end
+end
 
--- 	if self.isDirty then
+--------------------------------------------------
+local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 
--- 		dio.drawing.setRenderToTexture (self.renderToTexture)
--- 		renderBg (self)
--- 		renderChat (self)
--- 		renderTextEntry (self)
--- 		dio.drawing.setRenderToTexture (nil)
--- 		self.isDirty = false
--- 	end
--- end
+	local self = instance
 
--- --------------------------------------------------
--- local function onLateRender (self)
+	if keyCode == self.appearKeyCode then
+		self.isVisible = not self.isVisible
+		return true
+	end
 
--- 	if self.isVisible then
--- 		dio.drawing.drawTexture (self.renderToTexture, self.position.x, self.position.y, self.size.w * self.scale, self.size.h * self.scale, 0xffffffff)
--- 	end
--- end
+	return false
+end
 
--- --------------------------------------------------
--- local function onChatMessageReceived (author, text)
+--------------------------------------------------
+local function onOtherClientConnected (clientId)
+	local self = instance
+	table.insert (self.clients, {accountId = clientId})
+	self.isDirty = true
+end
 
--- 	local self = instance
+--------------------------------------------------
+local function onOtherClientDisconnected (clientId)
+	local self = instance
+	for idx, client in ipairs (self.clients) do
+		if client.accountId == clientId then
+			table.remove (self.clients, idx)
+			self.isDirty = true
+			return
+		end
+	end
+end
 
--- 	local line = 
--- 	{
--- 		author = author, 
--- 		text = text
--- 	}
+--------------------------------------------------
+local function onClientWindowFocusLost ()
 
--- 	table.insert (self.lines, line)
+	local self = instance
+	self.isVisible = false
+end
 
--- 	if self.autoScroll then
--- 		self.firstLineToDraw = #self.lines - self.chatLinesToDraw + 1
--- 		if self.firstLineToDraw < 1 then
--- 			self.firstLineToDraw = 1
--- 		end
--- 	end
+--------------------------------------------------
+local function onLoadSuccessful ()
 
--- 	self.isDirty = true
+	instance = 
+	{
+		w = 128, 
+		h = 256,
+		heightPerLine = 14,
+		clients = {},
+		isDirty = true,
+		isVisible = false,
+		appearKeyCode = dio.inputs.keyCodes.TAB,
+	}
 
--- end
+	instance.renderToTexture = dio.drawing.createRenderToTexture (instance.w, instance.h)
+	dio.drawing.addRenderPassBefore (1.0, function () onEarlyRender (instance) end)
+	dio.drawing.addRenderPassAfter (1.0, function () onLateRender (instance) end)
 
--- --------------------------------------------------
--- local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
+	local types = dio.events.types
+	dio.events.addListener (types.CLIENT_OTHER_CLIENT_CONNECTED, onOtherClientConnected)
+	dio.events.addListener (types.CLIENT_OTHER_CLIENT_DISCONNECTED, onOtherClientDisconnected)
+	dio.events.addListener (types.CLIENT_WINDOW_FOCUS_LOST, onClientWindowFocusLost)
+	dio.events.addListener (types.CLIENT_KEY_CLICKED, onKeyClicked)
+end
 
--- 	local self = instance
+--------------------------------------------------
+local modSettings = 
+{
+	name = "Chat",
 
--- 	if self.isVisible then
+	description = "Can draw a chat window and allow players to type in it",
 
--- 		if keyCharacter then
+	permissionsRequired = 
+	{
+		client = true,
+		player = true,
+	},
+}
 
--- 		 	self.text = self.text .. string.char (keyCharacter)
--- 		 	self.isDirty = true
-
--- 		elseif keyCode == dio.inputs.keyCodes.ENTER then
-
--- 			local isOk, errorStr = dio.clientChat.send (self.text)
--- 			if not isOk then
--- 				onChatMessageReceived ("Self", "Last message did not send! (" .. errorStr .. ")")
--- 			end
-
--- 			resetTextEntry (self)
-
--- 		elseif keyCode == dio.inputs.keyCodes.ESCAPE then
-
--- 			hide (self)
-
--- 		elseif keyCode == dio.inputs.keyCodes.BACKSPACE then
-
--- 			local stringLen = self.text:len ()
--- 			if stringLen > 0 then
--- 				self.text = self.text:sub (1, -2)
--- 				self.isDirty = true
--- 			end			
--- 		end
-
--- 		return true
-
--- 	elseif keyCode == self.chatAppearKeyCode then
-
--- 		self.isVisible = true
--- 		dio.inputs.setExclusiveKeys (true)
--- 		dio.inputs.setArePlayingControlsEnabled (false)
--- 		resetTextEntry (self)
-
--- 		return true
-
--- 	end
-
--- 	return false
--- end
-
--- --------------------------------------------------
--- local function onClientWindowFocusLost ()
-
--- 	local self = instance
-
--- 	if self.isVisible then
--- 		hide (self)
--- 	end	
-
--- end
-
--- --------------------------------------------------
--- local function onLoadSuccessful ()
-
--- 	local chatLinesToDraw = 18
--- 	local textEntryLinesToDraw = 2
--- 	local heightPerLine = 14
--- 	local height = (chatLinesToDraw + textEntryLinesToDraw) * heightPerLine
-
--- 	instance = 
--- 	{
--- 		firstLineToDraw = 1,
--- 		autoScroll = true,
--- 		chatLinesToDraw = chatLinesToDraw,
--- 		textEntryLinesToDraw = textEntryLinesToDraw,
--- 		position = {x = 20, y = 20},
--- 		size = {w = 512, h = height},
--- 		heightPerLine = heightPerLine,
--- 		textOffset = 100,
--- 		scale = 2,
--- 		lines = {},
--- 		isDirty = true,
--- 		isVisible = false,
--- 		chatAppearKeyCode = dio.inputs.keyCodes.T,
--- 		text = "",
--- 	}
-
--- 	instance.renderToTexture = dio.drawing.createRenderToTexture (instance.size.w, instance.size.h)
--- 	dio.drawing.addRenderPassBefore (1.0, function () onEarlyRender (instance) end)
--- 	dio.drawing.addRenderPassAfter (1.0, function () onLateRender (instance) end)
-
--- 	local types = dio.events.types
--- 	dio.events.addListener (types.CLIENT_OTHER_PLAYER_CONNECTED, onOtherPlayerConnected)
--- 	dio.events.addListener (types.CLIENT_OTHER_PLAYER_DISCONNECTED, onOtherPlayerDisconnected)
--- 	dio.events.addListener (types.CLIENT_KEY_CLICKED, onKeyClicked)
--- 	dio.events.addListener (types.CLIENT_WINDOW_FOCUS_LOST, onClientWindowFocusLost)
-
--- 	onChatMessageReceived ("Self", "World loaded")
-
--- end
-
--- --------------------------------------------------
--- local modSettings = 
--- {
--- 	name = "Chat",
-
--- 	description = "Can draw a chat window and allow players to type in it",
-
--- 	permissionsRequired = 
--- 	{
--- 		client = true,
--- 		player = true,
--- 	},
--- }
-
--- --------------------------------------------------
--- return modSettings, onLoadSuccessful
+--------------------------------------------------
+return modSettings, onLoadSuccessful
