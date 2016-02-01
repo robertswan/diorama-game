@@ -39,13 +39,22 @@ end
 local function renderTextEntry (self)
 
 	local heightPerLine = self.heightPerLine
+	local x = 0
 	local y = self.chatLinesToDraw * heightPerLine
+
+	if self.text ~= "" then
+		local textLength = dio.drawing.font.measureString (self.text .. "_")
+
+	 	if textLength > self.size.w then
+	 		x = self.size.w - textLength
+	 	end
+ 	end
 
 	local drawString = dio.drawing.font.drawString
 	drawString (0, y, string.rep ("-", 40), 0xffffffff)
-	drawString (0, y + heightPerLine, self.text, 0xffffffff)
+	drawString (x, y + heightPerLine, self.text, 0xffffffff)
 	local width = dio.drawing.font.measureString (self.text)
-	drawString (width, y + heightPerLine, "_", 0xff0000ff)
+	drawString (x + width, y + heightPerLine, "_", 0xff0000ff)
 
 end
 
@@ -138,18 +147,39 @@ local function onLateRender (self)
 	end
 end
 
+
+
 --------------------------------------------------
 local function onChatMessageReceived (author, text)
 
 	local self = instance
 
-	local line =
-	{
-		author = author,
-		text = text
-	}
+	local spaceLeft = self.size.w - self.textOffset
+	local spaceWidth = dio.drawing.font.measureString (" ") -- this should probably be in instance properties
+	local currentLine = ""
+	local linesAdded = {}
 
-	table.insert (self.lines, line)
+	local author2 = author
+
+	for word in string.gmatch (text, "%S+") do
+		local wordLength = dio.drawing.font.measureString (word)
+
+		if wordLength + spaceWidth > spaceLeft then
+			table.insert (self.lines, { author = author2, text = currentLine })
+			table.insert (linesAdded, currentLine)
+			currentLine = word .. " "
+			spaceLeft = self.size.w - self.textOffset - wordLength
+			author2 = ""
+		else
+			spaceLeft = spaceLeft - (wordLength + spaceWidth)
+			currentLine = currentLine .. word .. " "
+		end
+	end
+
+	if currentLine ~= "" then
+		table.insert (self.lines, { author = author2, text = currentLine })
+		table.insert (linesAdded, currentLine)
+	end
 
 	if self.autoScroll then
 		self.firstLineToDraw = #self.lines - self.chatLinesToDraw + 1
@@ -158,8 +188,16 @@ local function onChatMessageReceived (author, text)
 		end
 	end
 
-	addNewTickerLine (self, author, text)
-
+	if #linesAdded == 0 then
+		addNewTickerLine (self, author, text)
+	else
+		author2 = author
+		for idx = 1, #linesAdded do 
+			addNewTickerLine (self, author2, linesAdded [idx])
+			author2 = ""
+		end
+	end
+	
 	self.isDirty = true
 
 end
@@ -262,26 +300,11 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 		dio.inputs.setArePlayingControlsEnabled (false)
 		resetTextEntry (self)
 
-		local handle = dio.clientDebug.beginDeliveryTimeTest ()
-		self.timeTestHandles [handle] = dio.system.getTime ()
-
 		return true
 
 	end
 
 	return false
-end
-
---------------------------------------------------
-local function onDeliveryTimeTestComplete (handle)
-
-	local self = instance
-
-	local now = dio.system.getTime ()
-	local timeInMs = now - self.timeTestHandles [handle]
-	self.timeTestHandles [handle] = nil
-
-	onChatMessageReceived ("SERVER", "packet delivery test = (" .. tostring (handle) .. ") took " .. tostring (timeInMs) .. " ms")
 end
 
 --------------------------------------------------
@@ -324,8 +347,6 @@ local function onLoadSuccessful ()
 			linesToDraw = chatLinesToDraw,
 			lines = {}
 		},
-
-		timeTestHandles = {},
 	}
 
 	instance.renderToTexture = dio.drawing.createRenderToTexture (instance.size.w, instance.size.h)
@@ -335,7 +356,6 @@ local function onLoadSuccessful ()
 	local types = dio.events.types
 	dio.events.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatMessageReceived)
 	dio.events.addListener (types.CLIENT_KEY_CLICKED, onKeyClicked)
-	dio.events.addListener (types.CLIENT_DELIVERY_TIME_TEST_COMPLETE, onDeliveryTimeTestComplete)
 	dio.events.addListener (types.CLIENT_OTHER_CLIENT_CONNECTED, onOtherClientConnected)
 	dio.events.addListener (types.CLIENT_OTHER_CLIENT_DISCONNECTED, onOtherClientDisconnected)
 
