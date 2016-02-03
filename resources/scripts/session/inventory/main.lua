@@ -7,7 +7,7 @@ local blocks =
 	"mud",
 	"granite",
 	"water",
-	"sand",
+	"BLOCK",	-- 5 is the magic code
 	"snowy grass",
 	"brick",
 	"tnt",
