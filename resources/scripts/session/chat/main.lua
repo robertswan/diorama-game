@@ -358,10 +358,17 @@ local function onLoadSuccessful ()
 	dio.events.addListener (types.CLIENT_KEY_CLICKED, onKeyClicked)
 	dio.events.addListener (types.CLIENT_OTHER_CLIENT_CONNECTED, onOtherClientConnected)
 	dio.events.addListener (types.CLIENT_OTHER_CLIENT_DISCONNECTED, onOtherClientDisconnected)
+	-- dio.events.addListener (types.CLIENT_KEY_BINDINGS_MENU_OPENED, onThing)
 
 	onChatMessageReceived ("Self", "World loaded")
 
 end
+
+-- --------------------------------------------------
+-- local function onThing (menu)
+-- {
+-- 	menu.addBindingOption ("CHAT", function (keyCode) instance.chatAppearKeyCode = keyCode end)
+-- }
 
 --------------------------------------------------
 local modSettings =
@@ -375,6 +382,11 @@ local modSettings =
 		client = true,
 		player = true,
 	},
+
+	-- keyBindingsAvailable = 
+	-- {
+	-- 	{name = "Chat", default = dio.inputs.keyCodes.T}
+	-- }
 }
 
 --------------------------------------------------
