@@ -6,13 +6,14 @@ local blocks =
 	"grass",
 	"mud",
 	"granite",
-	"water",
-	"BLOCK",	-- 5 is the magic code
+	"obsidian not water",
+	"BLOCK",
 	"snowy grass",
 	"brick",
 	"tnt",
 	"pumpkin",
 }
+local blocksCount = 9
 
 --------------------------------------------------
 local instance = nil
@@ -38,7 +39,33 @@ local function renderText (self)
 end
 
 --------------------------------------------------
-local function onEarlyRender (self)
+local function onUpdate (self)
+
+	local scrollWheel = dio.inputs.mouse.getScrollWheelDelta ()
+
+	if scrollWheel ~= 0 then
+		if scrollWheel > 0 then
+			self.currentBlockId = self.currentBlockId - 1
+		else
+			self.currentBlockId = self.currentBlockId + 1
+		end
+
+		if self.currentBlockId > blocksCount then
+			self.currentBlockId = 1
+		elseif self.currentBlockId < 1 then
+			self.currentBlockId = blocksCount
+		end
+
+		dio.inputs.setPlayerBlockId (1, self.currentBlockId)
+		self.isDirty = true
+	end
+
+end
+
+--------------------------------------------------
+local function onEarlyRender (self)	
+	-- Not the most ideal way to call onUpdate
+	onUpdate (self)
 
 	if self.isDirty then
 		dio.drawing.setRenderToTexture (self.renderToTexture)
@@ -47,11 +74,12 @@ local function onEarlyRender (self)
 		dio.drawing.setRenderToTexture (nil)
 		self.isDirty = false
 	end
+
 end
 
 --------------------------------------------------
 local function onLateRender (self)
-
+	
 	local scale = Window.calcBestFitScale (self.w, self.h)
 	local windowW = dio.drawing.getWindowSize ()
 	local x = (windowW - (self.w * scale)) * 0.5
@@ -71,13 +99,20 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 		dio.inputs.setPlayerBlockId (1, self.currentBlockId)
 		self.isDirty = true
 		return true
+	else 
 	end
-
+	dio.inputs.setPlayerBlockId (1, self.currentBlockId)
 	return false
 end
 
 --------------------------------------------------
 local function onLoadSuccessful ()
+
+	local stringToMeasure = ""
+	for i=1,9 do
+		stringToMeasure = "[" .. tostring(i) .. ":" .. stringToMeasure .. blocks[i] .. "]"
+	end
+	local widthSize = 5 + dio.drawing.font.measureString(stringToMeasure) + 5
 
 	instance = 
 	{
@@ -88,7 +123,7 @@ local function onLoadSuccessful ()
 
 		x = 20,
 		y = 0,
-		w = 440,
+		w = widthSize,
 		h = 12,
 	}
 
