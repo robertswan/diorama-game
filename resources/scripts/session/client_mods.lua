@@ -9,11 +9,13 @@ local function main ()
 
 	local permissions = 
 	{
+		blocks = true,
 		client = true,
 		file = true,
 		player = true,
 	}
 
+	Mods.loadMod (mods, "blocks", permissions)
 	Mods.loadMod (mods, "inventory", permissions)
 	Mods.loadMod (mods, "chat", permissions)
 	Mods.loadMod (mods, "player_list", permissions)

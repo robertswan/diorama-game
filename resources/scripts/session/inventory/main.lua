@@ -3,44 +3,70 @@ local Window = require ("resources/scripts/utils/window")
 --------------------------------------------------
 local blocks =
 {
-	"grass",
-	"mud",
-	"granite",
-	"obsidian",
-	"sand",
-	"snowy grass",
-	"brick",
-	"tnt",
-	"pumpkin",
-	"jump pad",
-	"cobble",
-	"trunk",
-	"wood",
-	"leaf",
-	"cobble",
-	"cobble",
-	"cobble",
-	"cobble",
-	"cobble",
-	"cobble",
-	"cobble",
-	"cobble",
-	"cobble",
-	"cobble",
-	"cobble",
-	"cobble",
-	"cobble",
-	"cobble",
-	"cobble",
-	"cobble",
-	"cobble",
-	"cobble",
-	"cobble",
+	"grass",			
+	"mud",				
+	"granite",			
+	"obsidian",			
+	"sand",				
+	"snowy grass",		
+	"brick",			
+	"tnt",				
+	"pumpkin",			
+
+	"jump pad",			
+	"cobble",			
+	"trunk",			
+	"wood",				
+	"leaf",				
+	"glass",			
+	"lit pumpkin",		
+	"melon",			
+	"table",	
+
+	"gold",				
+	"slab",				
+	"big slab",			
+	"gravel",			
+	"bedrock",			
+	"panel",		
+	"books",			
+	"mossy",		
+	"stone brick",		
+
+	"sponge",			
+	"herringbone",		
+	"black",			
+	"dark",		
+	"light",		
+	"white",			
+	"dk cyan",		
+	"brown",			
+	"pink",			
+
+	"blue",		
+	"green",	
+	"yellow",			
+	"orange",			
+	"red",			
+	"violet",			
+	"purple",			
+	"dk blue",		
+	"dk green",		
 }
-local blocksCount = 9
 
 --------------------------------------------------
 local instance = nil
+
+--------------------------------------------------
+local function testIdBounds (self)
+	if self.currentBlockId > self.highestBlockId then
+		self.currentBlockId = self.highestBlockId
+	end
+	
+	if self.currentBlockId < self.lowestBlockId then 
+		self.currentBlockId = self.lowestBlockId
+	end
+end
 
 --------------------------------------------------
 local function renderBg (self)
@@ -54,11 +80,13 @@ local function renderText (self)
 
 	local x = 5
 	local y = 1
-	for idx = self.lowestBlockId, self.highestBlockId do
-		local text = "[" .. tostring (idx) .. ":" .. blocks [idx] .. "]"
-		local colour = idx == self.currentBlockId and 0xffffffff or 0x000000ff 
-		font.drawString (x, y, text, colour)
-		x = x + font.measureString (text);
+	for idx = 1, self.blocksPerPage do
+		if blocks [idx + self.currentPage * self.blocksPerPage] ~= nil then
+			local text = "[" .. tostring (idx) .. ":" .. blocks [idx + self.currentPage * self.blocksPerPage] .. "]"
+			local colour = idx + self.currentPage * self.blocksPerPage == self.currentBlockId and 0xffffffff or 0x000000ff 
+			font.drawString (x, y, text, colour)
+			x = x + font.measureString (text);
+		end
 	end
 end
 
@@ -74,10 +102,28 @@ local function onUpdate (self)
 			self.currentBlockId = self.currentBlockId + 1
 		end
 
-		if self.currentBlockId > blocksCount then
-			self.currentBlockId = 1
-		elseif self.currentBlockId < 1 then
-			self.currentBlockId = blocksCount
+		if self.currentBlockId > self.blocksPerPage + self.currentPage * self.blocksPerPage or self.currentBlockId > self.highestBlockId then
+			self.currentPage = self.currentPage + 1
+			
+			if self.currentPage > self.pages then
+				self.currentPage = 0
+			end
+			
+			self.currentBlockId = 1 + self.currentPage * self.blocksPerPage
+			
+		elseif self.currentBlockId < 1 + self.currentPage * self.blocksPerPage then
+			self.currentPage = self.currentPage - 1
+			
+			if self.currentPage < 0 then
+				self.currentPage = self.pages
+			end
+			
+			if self.blocksPerPage + self.currentPage * self.blocksPerPage > self.highestBlockId then
+				self.currentBlockId = self.highestBlockId
+			else 
+				self.currentBlockId = self.blocksPerPage + self.currentPage * self.blocksPerPage
+			end
+			
 		end
 
 		dio.inputs.setPlayerBlockId (1, self.currentBlockId)
@@ -119,12 +165,62 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 	local self = instance
 
 	if keyCode >= keyCodes ["1"] and keyCode <= keyCodes ["9"] then
-		self.currentBlockId = keyCode - keyCodes ["1"] + 1
-		dio.inputs.setPlayerBlockId (1, self.currentBlockId)
+		if blocks [(keyCode - keyCodes ["1"] + 1) + self.currentPage * self.blocksPerPage] ~= nil then
+			self.currentBlockId = (keyCode - keyCodes ["1"] + 1) + self.currentPage * self.blocksPerPage
+			dio.inputs.setPlayerBlockId (1, self.currentBlockId)
+			self.isDirty = true
+			return true
+		end
+		
+	elseif keyCode >= keyCodes ["F1"] and keyCode <= keyCodes ["F12"] then
+		if keyCode - keyCodes ["F1"] >= 0 and keyCode - keyCodes ["F1"]	<= self.pages then
+			local oldPage = self.currentPage
+			self.currentPage = (keyCode - keyCodes ["F1"])
+			self.currentBlockId = self.currentBlockId + (self.currentPage - oldPage) * self.blocksPerPage
+			testIdBounds (self)
+			self.isDirty = true
+		end
+	
+	elseif keyCode == keyCodes ["RIGHT"] then
+		self.currentPage = self.currentPage + 1
+		
+		if self.currentPage > self.pages then
+			self.currentPage = 0
+			self.currentBlockId = self.currentBlockId - self.blocksPerPage * self.pages
+			testIdBounds (self)
+			dio.inputs.setPlayerBlockId (1, self.currentBlockId)
+			
+		else
+			self.currentBlockId = self.currentBlockId + self.blocksPerPage	
+			testIdBounds (self)
+			dio.inputs.setPlayerBlockId (1, self.currentBlockId)
+			
+		end
+
 		self.isDirty = true
 		return true
-	else 
+	
+	elseif keyCode == keyCodes ["LEFT"] then
+		self.currentPage = self.currentPage - 1
+		
+		if self.currentPage < 0 then
+			self.currentPage = self.pages
+			self.currentBlockId = self.currentBlockId + self.blocksPerPage * self.pages
+			testIdBounds (self)
+			dio.inputs.setPlayerBlockId (1, self.currentBlockId)
+			
+		else 
+			self.currentBlockId = self.currentBlockId - self.blocksPerPage		
+			testIdBounds (self)
+			dio.inputs.setPlayerBlockId (1, self.currentBlockId)
+			
+		end
+		
+		self.isDirty = true
+		return true
+	
 	end
+	
 	dio.inputs.setPlayerBlockId (1, self.currentBlockId)
 	return false
 end
@@ -133,7 +229,7 @@ end
 local function onLoadSuccessful ()
 
 	local stringToMeasure = ""
-	for i=1,9 do
+	for i = 1, 9 do
 		stringToMeasure = "[" .. tostring(i) .. ":" .. stringToMeasure .. blocks[i] .. "]"
 	end
 	local widthSize = 5 + dio.drawing.font.measureString(stringToMeasure) + 5
@@ -141,9 +237,12 @@ local function onLoadSuccessful ()
 	instance = 
 	{
 		lowestBlockId = 1,
-		highestBlockId = 9,
+		highestBlockId = #blocks,
 		currentBlockId = 7,
-		isDirty = true,
+		currentPage = 0,
+		blocksPerPage = 9,
+		pages = 0, -- 0 indexed
+		isDirty = true,	
 
 		x = 20,
 		y = 0,
@@ -152,6 +251,7 @@ local function onLoadSuccessful ()
 	}
 
 	instance.renderToTexture = dio.drawing.createRenderToTexture (instance.w, instance.h)
+	instance.pages = math.ceil (instance.highestBlockId / instance.blocksPerPage) - 1
 
 	dio.drawing.addRenderPassBefore (1, function () onEarlyRender (instance) end)
 	dio.drawing.addRenderPassAfter (1, function () onLateRender (instance) end)
