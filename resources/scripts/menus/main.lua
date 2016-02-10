@@ -1,10 +1,4 @@
 --------------------------------------------------
--- global variables
--- TODO get these out of globals
-app_is_shutting_down = false
-app_is_ready_to_quit = false
-
---------------------------------------------------
 local Menus = require ("resources/scripts/menus/menus")
 
 local menus = nil
@@ -33,7 +27,7 @@ local function loadPlayerControls ()
 end
 
 --------------------------------------------------
-local function OnUpdate ()
+local function onUpdated ()
 	return menus:update ()
 end
 
@@ -53,19 +47,40 @@ local function onWindowFocusLost ()
 end
 
 --------------------------------------------------
+local function onSessionStarted ()
+	menus:onSessionStarted ()
+end
+
+--------------------------------------------------
+local function onSessionShutdownBegun ()
+	menus:onSessionShutdownBegun ()
+end
+
+--------------------------------------------------
+local function onSessionShutdownCompleted ()
+	menus:onSessionShutdownCompleted ()
+end
+
+--------------------------------------------------
+local function onApplicationShutdown ()
+	return menus:onApplicationShutdown ()
+end
+
+--------------------------------------------------
 local function main ()
 
 	loadPlayerControls ()
-
-	dio.onUpdate = OnUpdate
-	-- dio.onRenderMenus = OnRenderMenus
-	-- dio.onRender = OnRender
 
 	dio.drawing.addRenderPassBefore (10.0, onEarlyRender)
 	dio.drawing.addRenderPassAfter (10.0, onLateRender)
 
 	local types = dio.events.types
-	dio.events.addListener (types.CLIENT_WINDOW_FOCUS_LOST, onWindowFocusLost)
+	dio.events.addListener (types.CLIENT_UPDATED,			 			onUpdated)
+	dio.events.addListener (types.CLIENT_WINDOW_FOCUS_LOST, 			onWindowFocusLost)
+	dio.events.addListener (types.CLIENT_SESSION_STARTED, 				onSessionStarted)
+	dio.events.addListener (types.CLIENT_SESSION_SHUTDOWN_BEGUN, 		onSessionShutdownBegun)
+	dio.events.addListener (types.CLIENT_SESSION_SHUTDOWN_COMPLETED, 	onSessionShutdownCompleted)
+	dio.events.addListener (types.CLIENT_APPLICATION_SHUTDOWN, 			onApplicationShutdown)
 
 	local individual_menus =
 	{

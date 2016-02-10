@@ -37,7 +37,7 @@ end
 function c:onAppShouldClose (parent_func)
 	dio.session.terminate ()
 	self.parent.onAppShouldClose (self)
-	return "quitting_menu"
+	return "quitting_menu", true
 end
 
 --------------------------------------------------

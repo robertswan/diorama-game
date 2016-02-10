@@ -12,18 +12,28 @@ end
 
 --------------------------------------------------
 local function onReturnToMainMenuClicked (self)
+	print ("onReturnToMainMenuClicked")
 	dio.session.terminate ()
-	return "saving_game_menu"
 end
 
 --------------------------------------------------
 local c = {}
 
 --------------------------------------------------
+function c:onSessionShutdownBegun ()
+	return "saving_game_menu"
+end
+
+--------------------------------------------------
+function c:onSessionShutdownCompleted ()
+	return "main_menu"
+end
+
+--------------------------------------------------
 function c:onAppShouldClose ()
 	dio.session.terminate ()
 	self.parent.onAppShouldClose (self)
-	return "quitting_menu"
+	return "quitting_menu", true
 end
 
 --------------------------------------------------

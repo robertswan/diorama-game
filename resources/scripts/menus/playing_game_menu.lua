@@ -10,7 +10,17 @@ local c = {}
 function c:onAppShouldClose ()
 	dio.session.terminate ()
 	self.parent.onAppShouldClose (self)
-	return "quitting_menu"
+	return "quitting_menu", true
+end
+
+--------------------------------------------------
+function c:onSessionShutdownBegun ()
+	return "saving_game_menu"
+end
+
+--------------------------------------------------
+function c:onSessionShutdownCompleted ()
+	return "main_menu"
 end
 
 --------------------------------------------------

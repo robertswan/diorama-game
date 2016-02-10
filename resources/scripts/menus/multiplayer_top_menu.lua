@@ -54,8 +54,9 @@ return function ()
 
 	local properties = 
 	{
-		playerName = 	TextEntryMenuItem ("Player Name", nil, nil, "", 15),
-		ipAddress = 	TextEntryMenuItem ("IP Address", nil, nil, "84.92.48.10", 16),
+		playerName = 	TextEntryMenuItem ("Player Name", nil, nil, "RobTheSwan", 15),
+		-- ipAddress = 	TextEntryMenuItem ("IP Address", nil, nil, "84.92.48.10", 16),
+		ipAddress = 	TextEntryMenuItem ("IP Address", nil, nil, "127.0.0.1", 16),
 		ipPort = 		NumberEntryMenuItem ("Port", nil, nil, 25276, true),
 		warningLabel = 	LabelMenuItem (""),
 	}

@@ -14,21 +14,10 @@ function c:update ()
 	self.x = (windowW - self.w * self.scale) / 2
 	self.y = (windowH - self.h * self.scale) / 2
 
-	if not app_is_shutting_down and dio.system.shouldAppClose () then
-		local next_menu_name = self.current_menu:onAppShouldClose ()	
-		if next_menu_name then
-			self.next_menu_name = next_menu_name
-		end
-	end
-
-	if app_is_shutting_down then
-		app_is_ready_to_quit = dio.session.hasTerminated ()
-		if app_is_ready_to_quit then
-			return true
-		end
-	end
-
 	if self.next_menu_name then
+
+		print ("changing to menu... " .. self.next_menu_name)
+
 		if self.current_menu then
 			self.current_menu:onExit (self.menus)
 		end
@@ -73,9 +62,44 @@ end
 
 --------------------------------------------------
 function c:onWindowFocusLost ()
-	if self.current_menu then
-		return self.current_menu:onWindowFocusLost ()
+	if self.current_menu and self.current_menu.onWindowFocusLost then
+		self.next_menu_name = self.current_menu:onWindowFocusLost () or self.next_menu_name
 	end
+end
+
+--------------------------------------------------
+function c:onSessionStarted ()
+	print ("onSessionStarted")
+	if self.current_menu and self.current_menu.onSessionStarted then
+		self.next_menu_name = self.current_menu:onSessionStarted () or self.next_menu_name
+	end
+end
+
+--------------------------------------------------
+function c:onSessionShutdownBegun ()
+	print ("onSessionShutdownBegun")
+	if self.current_menu and self.current_menu.onSessionShutdownBegun then
+		self.next_menu_name = self.current_menu:onSessionShutdownBegun () or self.next_menu_name
+	end
+end
+
+--------------------------------------------------
+function c:onSessionShutdownCompleted ()
+	print ("onSessionShutdownCompleted")
+	if self.current_menu and self.current_menu.onSessionShutdownCompleted then
+		self.next_menu_name = self.current_menu:onSessionShutdownCompleted () or self.next_menu_name
+	end
+end
+
+--------------------------------------------------
+function c:onApplicationShutdown ()
+	print ("onApplicationShutdown")
+	if self.current_menu and self.current_menu.onAppShouldClose then
+		local nextMenuName, shouldCancel = self.current_menu:onAppShouldClose ()
+		self.next_menu_name = nextMenuName or self.next_menu_name
+		return shouldCancel
+	end
+	return false
 end
 
 --------------------------------------------------
