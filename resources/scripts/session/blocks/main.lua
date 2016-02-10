@@ -11,12 +11,12 @@ local definitions =
 	{name = "tnt",				uvs = {8, 0, 9, 0, 10, 0}},
 	{name = "pumpkin",			uvs = {7, 7, 6, 7, 6, 7, 6, 7, 6, 6, 6, 6}},
 
-	{name = "jump pad",			uvs = {12, 6, 11, 6, 13, 6}, 	properties = {"JUMP"}},
+	{name = "jump pad",			uvs = {12, 6, 11, 6, 13, 6}},
 	{name = "cobble",			uvs = {0, 1}},
 	{name = "trunk",			uvs = {4, 1, 5, 1, 5, 1}},
 	{name = "wood",				uvs = {4, 0}},
-	{name = "leaf",				uvs = {4, 3}, 					properties = {"TRANSPARENT"}},
-	{name = "glass",			uvs = {1, 3}},
+	{name = "leaf",				uvs = {4, 3}, 					isTransparent = true},
+	{name = "glass",			uvs = {1, 3},					isTransparent = true,	hidesMatching = true},
 	{name = "lit pumpkin",		uvs = {8, 7, 6, 7, 6, 7, 6, 7, 6, 6, 6, 6}},
 	{name = "melon",			uvs = {8, 8, 9, 8, 9, 8}},
 	{name = "crafting table",	uvs = {11, 2}},
@@ -41,7 +41,7 @@ local definitions =
 	{name = "brown W",			uvs = {1, 10}},
 	{name = "pink W",			uvs = {2, 8}},
 
-	{name = "light blue W",		uvs = {2, 11}},
+	{name = "light blue W",		uvs = {2, 11}}, -- 36
 	{name = "light green W",	uvs = {2, 9}},
 	{name = "yellow W",			uvs = {2, 10}},
 	{name = "orange W",			uvs = {2, 13}},

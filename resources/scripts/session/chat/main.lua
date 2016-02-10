@@ -360,8 +360,6 @@ local function onLoadSuccessful ()
 	dio.events.addListener (types.CLIENT_OTHER_CLIENT_DISCONNECTED, onOtherClientDisconnected)
 	-- dio.events.addListener (types.CLIENT_KEY_BINDINGS_MENU_OPENED, onThing)
 
-	onChatMessageReceived ("Self", "World loaded")
-
 end
 
 -- --------------------------------------------------
