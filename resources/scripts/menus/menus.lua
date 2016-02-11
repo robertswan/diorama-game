@@ -6,7 +6,29 @@ local Window = require ("resources/scripts/utils/window")
 local c = {}
 
 --------------------------------------------------
-local count = 0
+function c:changeMenu (newMenuName)
+
+	if newMenuName then
+
+		if self.current_menu then
+			print ("changing to menu " .. newMenuName .. " from " .. self.current_menu_name)
+		else
+			print ("changing to menu " .. newMenuName)
+		end
+
+		if self.current_menu then
+			self.current_menu:onExit (self.menus)
+		end
+		self.current_menu = self.menus [newMenuName]
+		self.current_menu_name = newMenuName
+		
+		if self.current_menu then
+			self.current_menu:onEnter (self.menus)
+		end	
+	end
+end
+
+--------------------------------------------------
 function c:update ()
 
 	local windowW, windowH = dio.drawing.getWindowSize ()
@@ -14,27 +36,12 @@ function c:update ()
 	self.x = (windowW - self.w * self.scale) / 2
 	self.y = (windowH - self.h * self.scale) / 2
 
-	if self.next_menu_name then
-
-		print ("changing to menu... " .. self.next_menu_name)
-
-		if self.current_menu then
-			self.current_menu:onExit (self.menus)
-		end
-		self.current_menu = self.menus [self.next_menu_name]
-		self.next_menu_name = nil
-		if self.current_menu then
-			self.current_menu:onEnter (self.menus)
-		end
-	end
-
 	local x = (dio.inputs.mouse.x - self.x) / self.scale
 	local y = (dio.inputs.mouse.y - self.y) / self.scale
 	local is_left_clicked = dio.inputs.mouse.left_button.is_clicked
 
-	self.next_menu_name = self.current_menu:onUpdate (x, y, is_left_clicked);
-
-	return false
+	local nextMenuName = self.current_menu:onUpdate (x, y, is_left_clicked);
+	self:changeMenu (nextMenuName)
 end
 
 --------------------------------------------------
@@ -63,40 +70,40 @@ end
 --------------------------------------------------
 function c:onWindowFocusLost ()
 	if self.current_menu and self.current_menu.onWindowFocusLost then
-		self.next_menu_name = self.current_menu:onWindowFocusLost () or self.next_menu_name
+		local nextMenuName = self.current_menu:onWindowFocusLost ()
+		self:changeMenu (nextMenuName)
 	end
 end
 
 --------------------------------------------------
 function c:onSessionStarted ()
-	print ("onSessionStarted")
 	if self.current_menu and self.current_menu.onSessionStarted then
-		self.next_menu_name = self.current_menu:onSessionStarted () or self.next_menu_name
+		local nextMenuName = self.current_menu:onSessionStarted ()
+		self:changeMenu (nextMenuName)
 	end
 end
 
 --------------------------------------------------
 function c:onSessionShutdownBegun (reason)
-	print ("onSessionShutdownBegun")
 	if self.current_menu and self.current_menu.onSessionShutdownBegun then
-		self.next_menu_name = self.current_menu:onSessionShutdownBegun (reason) or self.next_menu_name
+		local nextMenuName = self.current_menu:onSessionShutdownBegun (reason)
+		self:changeMenu (nextMenuName)
 	end
 end
 
 --------------------------------------------------
 function c:onSessionShutdownCompleted ()
-	print ("onSessionShutdownCompleted")
 	if self.current_menu and self.current_menu.onSessionShutdownCompleted then
-		self.next_menu_name = self.current_menu:onSessionShutdownCompleted () or self.next_menu_name
+		local nextMenuName = self.current_menu:onSessionShutdownCompleted ()
+		self:changeMenu (nextMenuName)
 	end
 end
 
 --------------------------------------------------
 function c:onApplicationShutdown ()
-	print ("onApplicationShutdown")
 	if self.current_menu and self.current_menu.onAppShouldClose then
 		local nextMenuName, shouldCancel = self.current_menu:onAppShouldClose ()
-		self.next_menu_name = nextMenuName or self.next_menu_name
+		self:changeMenu (nextMenuName)
 		return shouldCancel
 	end
 	return false
@@ -114,7 +121,6 @@ return function (all_menus, initial_menu_name)
 	{
 		menus = all_menus,
 		current_menu = nil,
-		next_menu_name = initial_menu_name,
 		w = 512,
 		h = 256,
 		scale = 1,
@@ -127,6 +133,8 @@ return function (all_menus, initial_menu_name)
 	dio.events.addListener (types.CLIENT_KEY_CLICKED, function (keyCode, keyCharacter, keyModifier) return instance:onKeyClicked (keyCode, keyCharacter, keyModifier) end)
 
 	Mixin.CopyTo (instance, c)
+
+	instance:changeMenu (initial_menu_name)
 
 	return instance
 end

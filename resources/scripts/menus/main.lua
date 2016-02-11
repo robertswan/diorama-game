@@ -28,7 +28,7 @@ end
 
 --------------------------------------------------
 local function onUpdated ()
-	return menus:update ()
+	menus:update ()
 end
 
 --------------------------------------------------
@@ -61,19 +61,19 @@ local reasonsStrings =
 }
 
 local function onSessionShutdownBegun (reason)
-
 	print ("onSessionShutdownBegun = " .. reasonsStrings [reason])
-
 	menus:onSessionShutdownBegun (reason)
 end
 
 --------------------------------------------------
 local function onSessionShutdownCompleted ()
+	print ("onSessionShutdownCompleted")
 	menus:onSessionShutdownCompleted ()
 end
 
 --------------------------------------------------
 local function onApplicationShutdown ()
+	print ("onApplicationShutdown")
 	return menus:onApplicationShutdown ()
 end
 
