@@ -15,7 +15,14 @@ end
 
 --------------------------------------------------
 function c:onSessionShutdownBegun (reason)
-	return "saving_game_menu"
+	local reasons = dio.events.sessionShutdownBegun.reasons
+	if reason == reasons.PLAYER_QUIT then
+		return "saving_game_menu"
+
+	else
+		-- self.menus.game_not_connected_menu:setReason (reason)
+		return "game_not_connected_menu"
+	end
 end
 
 --------------------------------------------------

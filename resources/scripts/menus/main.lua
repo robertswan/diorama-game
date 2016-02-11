@@ -105,8 +105,9 @@ local function main ()
 		delete_level_confirm_menu = require ("resources/scripts/menus/delete_level_confirm_menu") (),
 		player_controls_menu = 		require ("resources/scripts/menus/player_controls_menu") (),
 		loading_level_menu = 		require ("resources/scripts/menus/loading_level_menu") (),
-		
+
 		in_game_pause_menu =		require ("resources/scripts/menus/in_game_pause_menu") (),
+		game_not_connected_menu =	require ("resources/scripts/menus/game_not_connected_menu") (),
 		saving_game_menu =			require ("resources/scripts/menus/saving_game_menu") (),
 		quitting_menu =				require ("resources/scripts/menus/quitting_menu") (),
 		tetris_main_menu =			require ("resources/scripts/menus/tetris/tetris_main_menu") (),
