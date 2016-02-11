@@ -67,10 +67,10 @@ local function onChatMessagePreSent (text)
 			self.isVisible = false
 		end
 
-		return false
+		return true
 	end
 
-	return true
+	return false
 end
 
 --------------------------------------------------
