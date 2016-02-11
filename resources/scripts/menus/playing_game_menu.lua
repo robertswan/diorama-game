@@ -14,7 +14,7 @@ function c:onAppShouldClose ()
 end
 
 --------------------------------------------------
-function c:onSessionShutdownBegun ()
+function c:onSessionShutdownBegun (reason)
 	return "saving_game_menu"
 end
 

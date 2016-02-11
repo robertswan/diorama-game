@@ -52,8 +52,19 @@ local function onSessionStarted ()
 end
 
 --------------------------------------------------
-local function onSessionShutdownBegun ()
-	menus:onSessionShutdownBegun ()
+local reasonsStrings = 
+{
+	[dio.events.sessionShutdownBegun.reasons.NETWORK_CONNECTION_ATTEMPT_FAILED]	= "NETWORK_CONNECTION_ATTEMPT_FAILED",
+	[dio.events.sessionShutdownBegun.reasons.PLAYER_QUIT]						= "PLAYER_QUIT",
+	[dio.events.sessionShutdownBegun.reasons.NETWORK_CONNECTION_LOST]			= "NETWORK_CONNECTION_LOST",
+	[dio.events.sessionShutdownBegun.reasons.KICKED_FROM_SERVER]				= "KICKED_FROM_SERVER",	
+}
+
+local function onSessionShutdownBegun (reason)
+
+	print ("onSessionShutdownBegun = " .. reasonsStrings [reason])
+
+	menus:onSessionShutdownBegun (reason)
 end
 
 --------------------------------------------------

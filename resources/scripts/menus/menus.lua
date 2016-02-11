@@ -76,10 +76,10 @@ function c:onSessionStarted ()
 end
 
 --------------------------------------------------
-function c:onSessionShutdownBegun ()
+function c:onSessionShutdownBegun (reason)
 	print ("onSessionShutdownBegun")
 	if self.current_menu and self.current_menu.onSessionShutdownBegun then
-		self.next_menu_name = self.current_menu:onSessionShutdownBegun () or self.next_menu_name
+		self.next_menu_name = self.current_menu:onSessionShutdownBegun (reason) or self.next_menu_name
 	end
 end
 
