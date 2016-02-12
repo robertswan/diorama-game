@@ -22,6 +22,7 @@ local function loadPlayerControls ()
 		setBinding (types.BACKWARD,	playerSettings.backward)
 		setBinding (types.RIGHT, 	playerSettings.right)
 		setBinding (types.JUMP, 	playerSettings.jump)
+		setBinding (types.CROUCH, 	playerSettings.crouch)
 		setBinding (types.TURBO, 	playerSettings.turbo)
 	end
 end
