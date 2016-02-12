@@ -1,10 +1,4 @@
 --------------------------------------------------
--- global variables
--- TODO get these out of globals
-app_is_shutting_down = false
-app_is_ready_to_quit = false
-
---------------------------------------------------
 local Menus = require ("resources/scripts/menus/menus")
 
 local menus = nil
@@ -28,13 +22,14 @@ local function loadPlayerControls ()
 		setBinding (types.BACKWARD,	playerSettings.backward)
 		setBinding (types.RIGHT, 	playerSettings.right)
 		setBinding (types.JUMP, 	playerSettings.jump)
+		setBinding (types.CROUCH, 	playerSettings.crouch)
 		setBinding (types.TURBO, 	playerSettings.turbo)
 	end
 end
 
 --------------------------------------------------
-local function OnUpdate ()
-	return menus:update ()
+local function onUpdated ()
+	menus:update ()
 end
 
 --------------------------------------------------
@@ -53,19 +48,51 @@ local function onWindowFocusLost ()
 end
 
 --------------------------------------------------
+local function onSessionStarted ()
+	menus:onSessionStarted ()
+end
+
+--------------------------------------------------
+local reasonsStrings = 
+{
+	[dio.events.sessionShutdownBegun.reasons.NETWORK_CONNECTION_ATTEMPT_FAILED]	= "NETWORK_CONNECTION_ATTEMPT_FAILED",
+	[dio.events.sessionShutdownBegun.reasons.PLAYER_QUIT]						= "PLAYER_QUIT",
+	[dio.events.sessionShutdownBegun.reasons.NETWORK_CONNECTION_LOST]			= "NETWORK_CONNECTION_LOST",
+	[dio.events.sessionShutdownBegun.reasons.KICKED_FROM_SERVER]				= "KICKED_FROM_SERVER",	
+}
+
+local function onSessionShutdownBegun (reason)
+	print ("onSessionShutdownBegun = " .. reasonsStrings [reason])
+	menus:onSessionShutdownBegun (reason)
+end
+
+--------------------------------------------------
+local function onSessionShutdownCompleted ()
+	print ("onSessionShutdownCompleted")
+	menus:onSessionShutdownCompleted ()
+end
+
+--------------------------------------------------
+local function onApplicationShutdown ()
+	print ("onApplicationShutdown")
+	return menus:onApplicationShutdown ()
+end
+
+--------------------------------------------------
 local function main ()
 
 	loadPlayerControls ()
-
-	dio.onUpdate = OnUpdate
-	-- dio.onRenderMenus = OnRenderMenus
-	-- dio.onRender = OnRender
 
 	dio.drawing.addRenderPassBefore (10.0, onEarlyRender)
 	dio.drawing.addRenderPassAfter (10.0, onLateRender)
 
 	local types = dio.events.types
-	dio.events.addListener (types.CLIENT_WINDOW_FOCUS_LOST, onWindowFocusLost)
+	dio.events.addListener (types.CLIENT_UPDATED,			 			onUpdated)
+	dio.events.addListener (types.CLIENT_WINDOW_FOCUS_LOST, 			onWindowFocusLost)
+	dio.events.addListener (types.CLIENT_SESSION_STARTED, 				onSessionStarted)
+	dio.events.addListener (types.CLIENT_SESSION_SHUTDOWN_BEGUN, 		onSessionShutdownBegun)
+	dio.events.addListener (types.CLIENT_SESSION_SHUTDOWN_COMPLETED, 	onSessionShutdownCompleted)
+	dio.events.addListener (types.CLIENT_APPLICATION_SHUTDOWN, 			onApplicationShutdown)
 
 	local individual_menus =
 	{
@@ -79,8 +106,9 @@ local function main ()
 		delete_level_confirm_menu = require ("resources/scripts/menus/delete_level_confirm_menu") (),
 		player_controls_menu = 		require ("resources/scripts/menus/player_controls_menu") (),
 		loading_level_menu = 		require ("resources/scripts/menus/loading_level_menu") (),
-		
+
 		in_game_pause_menu =		require ("resources/scripts/menus/in_game_pause_menu") (),
+		game_not_connected_menu =	require ("resources/scripts/menus/game_not_connected_menu") (),
 		saving_game_menu =			require ("resources/scripts/menus/saving_game_menu") (),
 		quitting_menu =				require ("resources/scripts/menus/quitting_menu") (),
 		tetris_main_menu =			require ("resources/scripts/menus/tetris/tetris_main_menu") (),

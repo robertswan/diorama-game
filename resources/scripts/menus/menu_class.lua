@@ -75,8 +75,6 @@ end
 
 --------------------------------------------------
 function c:onKeyClicked (keyCode, keyCharacter, keyModifiers)
-	local next_menu = nil
-
 	for i, item in ipairs (self.items) do
 
 		if item.onKeyClicked and item.isSelected then
@@ -102,10 +100,6 @@ end
 
 --------------------------------------------------
 function c:onAppShouldClose ()
-	app_is_shutting_down = true
-	-- TODO should this also do...
-	--dio.session.terminate ()
-	--return "quitting_menu"
 end
 
 --------------------------------------------------

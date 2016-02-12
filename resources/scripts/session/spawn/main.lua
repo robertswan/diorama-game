@@ -21,29 +21,29 @@ local function onChatMessagePreSent (text)
 	elseif string.sub (text, 1, string.len(".tp "))==".tp " then
 
 		local author = dio.world.getPlayerNames () [1]
-		firstWhiteSpace = -1
-		secondWhiteSpace = -1
-		thirdWhiteSpace = -1
+		local words = {}
 
-		for i=1, string.len(text), 1 do
-			if string.sub(text, i, i) == " " then
-				if firstWhiteSpace == -1 then
-					firstWhiteSpace = i
-				elseif secondWhiteSpace == -1 then
-					secondWhiteSpace = i
-				elseif thirdWhiteSpace == -1 then
-					thirdWhiteSpace = i
-					break
-				end
-			end
+		for word in string.gmatch(text, "[^ ]+") do
+			table.insert (words, word)
 		end
 
-		if firstWhiteSpace ~= -1 and secondWhiteSpace ~= -1 and thirdWhiteSpace ~= -1 then
-			xPosString = string.sub(text, firstWhiteSpace+1,secondWhiteSpace)
-			yPosString = string.sub(text, secondWhiteSpace+1,thirdWhiteSpace)
-			zPosString = string.sub(text, thirdWhiteSpace+1,string.len(text))
+		print ("input = " .. text)
+		for _, word in ipairs (words) do
+			print (" word = " .. word)
+		end
 
-			teleportTo (author, math.floor(xPosString), math.floor(yPosString), math.floor(zPosString))
+		if #words == 2 then
+			local xyz, error = dio.world.getPlayerXyz (words [2])
+			if xyz then
+				local x = math.floor (xyz.chunkId.x * 16 + xyz.xyz.x)
+				local y = math.floor (xyz.xyz.y)
+				local z = math.floor (xyz.chunkId.z * 16 + xyz.xyz.z)
+				teleportTo (author, math.floor(x), math.floor(y), math.floor(z))
+			end
+
+		elseif #words == 4 then
+			teleportTo (author, math.floor(words [2]), math.floor(words [3]), math.floor(words [4]))
+
 		end
 		
 	elseif string.sub(text,1,string.len(".coords"))==".coords" then

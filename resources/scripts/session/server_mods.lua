@@ -7,14 +7,15 @@ local mods = {}
 --------------------------------------------------
 local function main ()
 
-	local permissions = 
+	local regularPermissions = 
 	{
 		client = true,
 		file = true,
 		player = true,
 	}
 
-	Mods.loadMod (mods, "default", permissions)
+	-- Mods.loadMod (mods, "blocks", regularPermissions)
+	Mods.loadMod (mods, "default", regularPermissions)
 end
 
 --------------------------------------------------

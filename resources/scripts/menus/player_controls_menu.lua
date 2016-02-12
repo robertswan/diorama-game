@@ -53,7 +53,8 @@ local function onSaveClicked (self, menu)
 	setBinding (types.BACKWARD,	menu.keyMenuItems [3].keyCode)
 	setBinding (types.RIGHT, 	menu.keyMenuItems [4].keyCode)
 	setBinding (types.JUMP, 	menu.keyMenuItems [5].keyCode)
-	setBinding (types.TURBO, 	menu.keyMenuItems [6].keyCode)
+	setBinding (types.CROUCH, 	menu.keyMenuItems [6].keyCode)
+	setBinding (types.TURBO, 	menu.keyMenuItems [7].keyCode)
 
 	local playerSettings =
 	{
@@ -64,7 +65,8 @@ local function onSaveClicked (self, menu)
 		backward = 			menu.keyMenuItems [3].keyCode,
 		right = 			menu.keyMenuItems [4].keyCode,
 		jump = 				menu.keyMenuItems [5].keyCode,
-		turbo = 			menu.keyMenuItems [6].keyCode
+		crouch = 			menu.keyMenuItems [6].keyCode,
+		turbo = 			menu.keyMenuItems [7].keyCode
 	}
 
 	dio.file.saveLua ("player_settings.lua", playerSettings, "playerSettings")
@@ -89,7 +91,8 @@ local function onResetToDefaultsClicked (menuItem, menu)
 	menu.keyMenuItems [3].keyCode = keyCodeFromString ("S")
 	menu.keyMenuItems [4].keyCode = keyCodeFromString ("D")
 	menu.keyMenuItems [5].keyCode = keyCodeFromString ("SPACE")
-	menu.keyMenuItems [6].keyCode = keyCodeFromString ("LEFT_SHIFT")
+	menu.keyMenuItems [6].keyCode = keyCodeFromString ("LEFT_CONTROL")
+	menu.keyMenuItems [7].keyCode = keyCodeFromString ("LEFT_SHIFT")
 
 	onSaveClicked (menuItem, menu)
 
@@ -119,7 +122,8 @@ function c:onEnter ()
 	self.keyMenuItems [3].keyCode = getBinding (types.BACKWARD)
 	self.keyMenuItems [4].keyCode = getBinding (types.RIGHT)
 	self.keyMenuItems [5].keyCode = getBinding (types.JUMP)
-	self.keyMenuItems [6].keyCode = getBinding (types.TURBO)
+	self.keyMenuItems [6].keyCode = getBinding (types.CROUCH)
+	self.keyMenuItems [7].keyCode = getBinding (types.TURBO)
 
 	warnAgainstIdenticalKeyBindings (self)
 end
@@ -142,6 +146,7 @@ return function ()
 			KeySelectMenuItem ("Back", onKeyUpdated, 0),
 			KeySelectMenuItem ("Right", onKeyUpdated, 0),
 			KeySelectMenuItem ("Jump", onKeyUpdated, 0),
+			KeySelectMenuItem ("Crouch", onKeyUpdated, 0),
 			KeySelectMenuItem ("Turbo", onKeyUpdated, 0),
 		},
 
@@ -164,6 +169,7 @@ return function ()
 	instance:addMenuItem (properties.keyMenuItems [4])
 	instance:addMenuItem (properties.keyMenuItems [5])
 	instance:addMenuItem (properties.keyMenuItems [6])
+	instance:addMenuItem (properties.keyMenuItems [7])
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Save", onSaveClicked))	
 	instance:addMenuItem (BreakMenuItem ())
