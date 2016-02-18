@@ -74,6 +74,21 @@ local function onChatMessagePreSent (text)
 end
 
 --------------------------------------------------
+local function onClientUpdated ()
+
+	local self = instance
+	if self.isVisible then
+		local author = dio.world.getPlayerNames () [1]
+		local xyz, error = dio.world.getPlayerXyz (author)
+		if xyz then
+			xyz.ypr.y = xyz.ypr.y + 0.005
+			dio.world.setPlayerXyz (author, xyz)
+		end
+	end
+end
+
+
+--------------------------------------------------
 local function onLoadSuccessful ()
 
 	local types = dio.events.types
@@ -90,6 +105,8 @@ local function onLoadSuccessful ()
 	instance.renderToTexture = dio.drawing.createRenderToTexture (instance.w, instance.h)
 	dio.drawing.addRenderPassBefore (1.0, function () onEarlyRender (instance) end)
 	dio.drawing.addRenderPassAfter (1.0, function () onLateRender (instance) end)
+
+	dio.events.addListener (types.CLIENT_UPDATED, onClientUpdated)
 end
 
 --------------------------------------------------

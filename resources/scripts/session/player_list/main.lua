@@ -116,9 +116,9 @@ end
 --------------------------------------------------
 local modSettings = 
 {
-	name = "Chat",
+	name = "PLayer List",
 
-	description = "Can draw a chat window and allow players to type in it",
+	description = "Shows all connected players",
 
 	permissionsRequired = 
 	{
