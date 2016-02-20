@@ -47,9 +47,9 @@ local function onPlayerLoad (event)
 		playerName = event.playerName,
 		screenName = event.playerName,
 		password = event.password,
-		permissionLevel = "tourist",
+		permissionLevel = event.isSinglePlayer and "builder" or "tourist",
 		isPasswordCorrect = isPasswordCorrect,
-		needsSaving = false,
+		needsSaving = event.isSinglePlayer,
 	}
 
 	if settings and isPasswordCorrect then
@@ -114,9 +114,14 @@ local function onChatReceived (event)
 	local connection = connections [event.authorConnectionId]
 	local canPromoteTo = permissions [connection.permissionLevel].canPromoteTo
 
-	if canPromoteTo then
+	if event.text == ".group" then
 
-		local commandIdx = event.text:find (".setPermissions")
+		event.targetConnectionId = event.authorConnectionId
+		event.text = "Your group = " .. connection.permissionLevel
+
+	elseif canPromoteTo then
+
+		local commandIdx = event.text:find (".setGroup")
 
 		if commandIdx == 1 then
 
@@ -126,7 +131,7 @@ local function onChatReceived (event)
 			end
 
 			event.targetConnectionId = event.authorConnectionId
-			event.text = "FAILED: .setPermissions [playerName] [permissionLevel]";
+			event.text = "FAILED: .setGroup [playerName] [permissionLevel]";
 
 			if #words >= 3 then
 
@@ -145,7 +150,7 @@ local function onChatReceived (event)
 					end
 
 					if hasPromoted then
-						event.text = "SUCCESS: .setPermissions " .. playerToPromote .. " set to " .. levelToSet;						
+						event.text = "SUCCESS: .setGroup " .. playerToPromote .. " -> " .. levelToSet;						
 					end
 				end
 			end
