@@ -32,7 +32,7 @@ local function onChatMessagePreSent (text)
 				local z = math.floor (xyz.chunkId.z * 16 + xyz.xyz.z)
 				teleportTo (author , math.floor(x), math.floor(y), math.floor(z))
             end
-        dio.clientChat.send ("tp'd home")        
+                
 
 	elseif string.sub (text, 1, string.len(".tp "))==".tp " then
 
