@@ -150,7 +150,7 @@ end
 
 
 --------------------------------------------------
-local function onChatMessageReceived (author, text)
+function onChatMessageReceived (author, text)
 
 	local self = instance
 
