@@ -1,49 +1,157 @@
 --------------------------------------------------
-local function onPlayerLoad (playerId)
+local permissions =
+{
+	tourist = 
+	{
+		canChat = true,
+	},
+	builder = 
+	{
+		canBuild = true,
+		canDestroy = true,
+		canChat = true,
+	},
+	mod = 
+	{
+		canBuild = true,
+		canDestroy = true,
+		canChat = true,
+		canPromoteTo = {tourist = true, builder = true},
+	},
+	admin = 
+	{
+		canBuild = true,
+		canDestroy = true,
+		canChat = true,
+		canPromoteTo = {tourist = true, builder = true, mod = true},
+	}
+}
 
-	local filename = "player_" .. playerId .. ".lua"
-	local settings = dio.file.loadLua (filename);
+--------------------------------------------------
+local connections = {}
 
+--------------------------------------------------
+local function onPlayerLoad (event)
+
+	local filename = "player_" .. event.playerName .. ".lua"
+	local settings = dio.file.loadLua (filename)
+
+	local isPasswordCorrect = true
 	if settings then
-		dio.world.setPlayerXyz (playerId, settings.xyz)
+		isPasswordCorrect = (settings.password == event.password)
 	end
 
+	local connection =
+	{
+		connectionId = event.connectionId,
+		playerName = event.playerName,
+		screenName = event.playerName,
+		password = event.password,
+		permissionLevel = "tourist",
+		isPasswordCorrect = isPasswordCorrect,
+		needsSaving = false,
+	}
+
+	if settings and isPasswordCorrect then
+		connection.permissionLevel = settings.permissionLevel
+		connection.needsSaving = true
+		dio.world.setPlayerXyz (event.playerName, settings.xyz)
+	end
+
+	connection.screenName = connection.screenName .. " [" .. connection.permissionLevel .. "]"
+
+	connections [event.connectionId] = connection
 end
 
 --------------------------------------------------
-local function onPlayerSave (playerId)
+local function onPlayerSave (event)
 
-	local xyz, error = dio.world.getPlayerXyz (playerId)
-	if xyz then
+	local connection = connections [event.connectionId]
+	local permissions = permissions [connection.permissionLevel]
 
-		local filename = "player_" .. playerId .. ".lua"
-		local settings =
-		{
-			playerId = playerId, 
-			xyz = xyz
-		}
+	if connection.needsSaving then
 
-		dio.file.saveLua (filename, settings, "settings")
+		local xyz, error = dio.world.getPlayerXyz (event.playerName)
+		if xyz then
 
-	else
-		print (error)
+			local filename = "player_" .. event.playerName .. ".lua"
+			local settings =
+			{
+				xyz = xyz,
+				password = connection.password,
+				permissionLevel = connection.permissionLevel,
+			}
+
+			dio.file.saveLua (filename, settings, "settings")
+
+		else
+			print (error)
+		end
 	end
+
+	connections [event.connectionId] = nil
 end
 
--- --------------------------------------------------
--- local function onPlayerRightClick (event)
--- 	if event.blockType == blockTypes.GRANITE then
--- 		event.cancel ()
--- 	else
--- 		event.player.inventory.addItems (event.blockType)
--- 		dio.audio.playSound (sounds.CRUNCH)
--- 	end
--- end
+--------------------------------------------------
+local function onEntityPlaced (event)
+	local connection = connections [event.playerId]
+	local canBuild = permissions [connection.permissionLevel].canBuild
+	event.cancel = not canBuild
+	print ("cancel???  " .. tostring (event.cancel))
+end
 
--- --------------------------------------------------
--- local function onComputerActivated (event)
--- 	event.player.inventory.addItems (blockType.Gold, 100)
--- end
+--------------------------------------------------
+local function onEntityDestroyed (event)
+	local connection = connections [event.playerId]
+	local canDestroy = permissions [connection.permissionLevel].canDestroy
+	event.cancel = not canDestroy
+	print ("cancel???  " .. tostring (event.cancel))
+end
+
+--------------------------------------------------
+local function onChatReceived (event)
+
+	local connection = connections [event.authorConnectionId]
+	local canPromoteTo = permissions [connection.permissionLevel].canPromoteTo
+
+	if canPromoteTo then
+
+		local commandIdx = event.text:find (".setPermissions")
+
+		if commandIdx == 1 then
+
+			local words = {}
+			for word in event.text:gmatch ("[^ ]+") do
+				table.insert (words, word)
+			end
+
+			event.targetConnectionId = event.authorConnectionId
+			event.text = "FAILED: .setPermissions [playerName] [permissionLevel]";
+
+			if #words >= 3 then
+
+				local levelToSet = words [3]
+
+				if canPromoteTo [levelToSet] and permissions [levelToSet] then
+					local playerToPromote = words [2]
+
+					local hasPromoted = false
+					for _, promoteConnection in pairs (connections) do
+						if promoteConnection.playerName == playerToPromote and promoteConnection.isPasswordCorrect then
+							promoteConnection.permissionLevel = levelToSet
+							promoteConnection.needsSaving = true
+							hasPromoted = true
+						end
+					end
+
+					if hasPromoted then
+						event.text = "SUCCESS: .setPermissions " .. playerToPromote .. " set to " .. levelToSet;						
+					end
+				end
+			end
+		end
+	end
+end
 
 --------------------------------------------------
 local function onLoadSuccessful ()
@@ -53,31 +161,9 @@ local function onLoadSuccessful ()
 	local types = dio.events.types
 	dio.events.addListener (types.SERVER_PLAYER_LOAD, onPlayerLoad)
 	dio.events.addListener (types.SERVER_PLAYER_SAVE, onPlayerSave)
-
-	-- dio.events.server.addListener (types.PLAYER_RIGHT_CLICK, onPlayerRightClick)
-	
-	-- local block = dio.blockTypes.addNewBLock ("computer", "texture_default", 54, 54, 54, 54, 54, 54)
-	-- block.onAction (permissions.MOD, action.PLACE)
-	-- block.onAction (permissions.MOD, action.DESTROY)
-	-- block.onAction (permissions.EVERYONE, action.ACTIVATE, 
-	-- 		function (event)
-	-- 			-- can only be used once per 10 seconds by any player
-	-- 			if event.instance.lastUsedTime + 1000 * 10 > event.timeNow then
-	-- 				event.player.inventory.addItems (blockType.Gold, 100)
-	-- 				event.instance.lastUsedTime = event.timeNow
-	-- 			end
-	-- 		end)
-
-	-- block.onAction (permissions.EVERYONE, action.ACTIVATE, 
-	-- 	function (event)
-	-- 		-- each player can only use it once per 10 seconds
-	-- 		local player = event.player
-	-- 		local computer = player.computerBlocks [event.instanceId]
-	-- 		if computer.lastUsedTime + 1000 * 10 > event.timeNow then
-	-- 			player.inventory.addItems (blockType.Gold, 100)
-	-- 			computer.lastUsedTime = event.timeNow|
-	-- 		end
-	-- 	end)
+	dio.events.addListener (types.SERVER_ENTITY_PLACED, onEntityPlaced)
+	dio.events.addListener (types.SERVER_ENTITY_DESTROYED, onEntityDestroyed)
+	dio.events.addListener (types.SERVER_CHAT_RECEIVED, onChatReceived)
 
 end
 

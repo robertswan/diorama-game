@@ -22,6 +22,7 @@ local function onConnectClicked (menuItem, menu)
 		ipAddress = menu.ipAddress.value,
 		ipPort = menu.ipPort:getValueAsNumber (),
 		playerName = menu.playerName.value,
+		playerPassword = menu.password.value,
 	}
 
 	local isOk, errorString = dio.session.beginMp (params)
@@ -55,6 +56,7 @@ return function ()
 	local properties = 
 	{
 		playerName = 	TextEntryMenuItem ("Player Name", nil, nil, "", 15),
+		password = 		TextEntryMenuItem ("Password", nil, nil, "", 15),
 		ipAddress = 	TextEntryMenuItem ("IP Address", nil, nil, "84.92.48.10", 16),
 		ipPort = 		NumberEntryMenuItem ("Port", nil, nil, 25276, true),
 		warningLabel = 	LabelMenuItem (""),
@@ -64,6 +66,7 @@ return function ()
 	Mixin.CopyToAndBackupParents (instance, c)
 
 	instance:addMenuItem (properties.playerName)
+	instance:addMenuItem (properties.password)
 	instance:addMenuItem (properties.ipAddress)
 	instance:addMenuItem (properties.ipPort)
 	instance:addMenuItem (ButtonMenuItem ("Connect To Server", onConnectClicked))
