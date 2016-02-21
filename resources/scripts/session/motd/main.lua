@@ -1,5 +1,6 @@
 --------------------------------------------------
-local motd = "(http://twtich.tv/RobTheSwan) Press T to chat. Type '.help' in chat for available commands."
+local motdAuthor = "MOTD"
+local motd = "(http://twitch.tv/RobTheSwan) Press T to chat. Type '.help' in chat for available commands."
 
 --------------------------------------------------
 local connections = {}
@@ -7,30 +8,22 @@ local connections = {}
 --------------------------------------------------
 local function onPlayerLoad (event)
 
-	dio.serverChat.send (event.connectionId, motd)
+	dio.serverChat.send (event.connectionId, motdAuthor, motd)
 
 end
 
 --------------------------------------------------
 local function onChatReceived (event)
 
-	print ("onChatReceived START")
-
 	if event.text:sub (1, 1) ~= "." then
 		return
 	end
 
-	print ("onChatReceived MIDDLE")
-
 	if event.text == ".motd" then
 
-		print ("onChatReceived END")
-		print (motd)
-
 		event.targetConnectionId = event.authorConnectionId
+		event.author = motdAuthor
 		event.text = motd
-
-		print (event.text)
 
 	end
 end
