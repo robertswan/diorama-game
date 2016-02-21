@@ -116,7 +116,7 @@ local function onChatReceived (event)
 	if event.text == ".help" then
 
 		event.targetConnectionId = event.authorConnectionId
-		event.text = ".help, .spawn, .tp <X> <Y> <Z>, .tp <player>, .coords, .coords <player>, .group, .showPassword, .listPlayerGroups, .listGroups"
+		event.text = ".help, .motd, .spawn, .tp <X> <Y> <Z>, .tp <player>, .coords, .coords <player>, .group, .showPassword, .listPlayerGroups, .listGroups"
 
 	elseif event.text == ".help mod" then
 
@@ -129,9 +129,9 @@ local function onChatReceived (event)
 
 		event.targetConnectionId = event.authorConnectionId
 		if connection.isPasswordCorrect then
-			event.text = "Your password (UNVALIDATED) = " .. connection.password
+			event.text = "Your password (validated) = " .. connection.password
 		else
-			event.text = "Your password (VALIDATED) = " .. connection.password
+			event.text = "Your password (UNVALIDATED) = " .. connection.password
 		end
 
 	elseif event.text == ".group" then
