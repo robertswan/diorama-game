@@ -15,7 +15,7 @@ local function main ()
 	}
 
 	-- Mods.loadMod (mods, "blocks", regularPermissions)
-	Mods.loadMod (mods, "default", regularPermissions)
+	Mods.loadMod (mods, "creative", regularPermissions)
 end
 
 --------------------------------------------------
