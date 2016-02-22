@@ -12,10 +12,12 @@ local function main ()
 		client = true,
 		file = true,
 		player = true,
+		serverChat = true,
 	}
 
 	-- Mods.loadMod (mods, "blocks", regularPermissions)
-	Mods.loadMod (mods, "default", regularPermissions)
+	Mods.loadMod (mods, "creative", regularPermissions)
+	Mods.loadMod (mods, "motd", regularPermissions)
 end
 
 --------------------------------------------------

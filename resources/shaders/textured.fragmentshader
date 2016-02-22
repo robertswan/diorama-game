@@ -16,4 +16,22 @@ void main()
 	}
 
 	color = color * final_rgba;
+
+	vec3 fog_color = vec3 (47.0f / 255.0f, 188.0f / 255.0f, 235.0f / 255.0f);
+	float fog_coeff = gl_FragCoord.z;
+	fog_coeff *= fog_coeff;
+	fog_coeff *= fog_coeff;
+	fog_coeff *= fog_coeff;
+	fog_coeff *= fog_coeff;
+	fog_coeff *= fog_coeff;
+	fog_coeff *= fog_coeff;
+	fog_coeff *= fog_coeff;
+	fog_coeff *= fog_coeff;
+	fog_coeff *= fog_coeff;
+	fog_coeff *= fog_coeff;
+	fog_coeff *= fog_coeff;
+	fog_coeff *= fog_coeff;
+	fog_coeff *= fog_coeff;	
+
+	color.rgb = mix (color.rgb, fog_color, fog_coeff);
 }
