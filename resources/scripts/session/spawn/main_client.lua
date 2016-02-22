@@ -1,7 +1,4 @@
 --------------------------------------------------
-local homeLocation = nil
-
---------------------------------------------------
 local function teleportTo (author, x, y, z)
 	setting =
 	{
@@ -122,8 +119,8 @@ local modSettings =
 		[".spawn"] = 	{usage = ".spawn", 		description = "teleports you to the safe spawn"},
 		[".tp"] = 		{usage = ".tp x y z", 	description = "teleports you coordinates (x, y, z)"},
 		[".coords"] = 	{usage = ".coords ", 	description = "prints your or N players coordinates"},
-        [".sethome"] =  {usage = ".sethome",    description = "sets a home location for the current session"},
-        [".home"] =     {usage = ".home",       description = "teleports you back to your set home location"},
+		[".sethome"] =  {usage = ".sethome",    description = "sets a home location for the current session"},
+		[".home"] =     {usage = ".home",       description = "teleports you back to your set home location"},
 	},
 
 	permissionsRequired =
