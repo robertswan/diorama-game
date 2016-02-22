@@ -1,3 +1,5 @@
+--------------------------------------------------
+local homeLocation = nil
 
 --------------------------------------------------
 local function teleportTo (author, x, y, z)
@@ -19,21 +21,6 @@ local function onChatMessagePreSent (text)
 		local author = dio.world.getPlayerNames () [1]
 		teleportTo (author, 0, 128, 0)
         
-    elseif text == ".sethome" then
-        homelocxyz = dio.world.getPlayerXyz (dio.world.getPlayerNames () [1])
-        dio.clientChat.send ("set their home")
-    
-    elseif text == ".home" then
-        local author = dio.world.getPlayerNames () [1]
-        local xyz, error = homelocxyz
-			if xyz then
-				local x = math.floor (xyz.chunkId.x * 16 + xyz.xyz.x)
-				local y = math.floor (xyz.xyz.y)
-				local z = math.floor (xyz.chunkId.z * 16 + xyz.xyz.z)
-				teleportTo (author , math.floor(x), math.floor(y), math.floor(z))
-            end
-                
-
 	elseif string.sub (text, 1, string.len(".tp "))==".tp " then
 
 		local author = dio.world.getPlayerNames () [1]
@@ -98,10 +85,29 @@ local function onChatMessagePreSent (text)
 end
 
 --------------------------------------------------
+function onChatMessageReceived (author, text)
+	if author == ".home" then
+
+		local words = {}
+		for word in string.gmatch(text, "[^ ]+") do
+			table.insert (words, word)
+		end
+
+		local x = tonumber (words [1])
+		local y = tonumber (words [2])
+		local z = tonumber (words [3])
+
+		local playerId = dio.world.getPlayerNames () [1]
+		teleportTo (playerId, x, y, z)
+	end
+end
+
+--------------------------------------------------
 local function onLoadSuccessful ()
 
 	local types = dio.events.types
 	dio.events.addListener (types.CLIENT_CHAT_MESSAGE_PRE_SENT, onChatMessagePreSent)
+	dio.events.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatMessageReceived)
 end
 
 --------------------------------------------------
