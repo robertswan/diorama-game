@@ -116,7 +116,7 @@ local function onChatReceived (event)
 	if event.text == ".help" then
 
 		event.targetConnectionId = event.authorConnectionId
-		event.text = ".help, .motd, .spawn, .tp <X> <Y> <Z>, .tp <player>, .coords, .coords <player>, .group, .showPassword, .listPlayerGroups, .listGroups"
+		event.text = ".help, .motd, .spawn, .tp <X> <Y> <Z>, .tp <player>, .coords, .coords <player>, .group, .showPassword, .listPlayerGroups, .listGroups, .setHome, .home"
 
 	elseif event.text == ".help mod" then
 
