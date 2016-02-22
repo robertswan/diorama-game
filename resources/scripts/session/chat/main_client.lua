@@ -148,7 +148,7 @@ local function onLateRender (self)
 end
 
 --------------------------------------------------
-function onChatMessageReceived (author, text)
+local function onChatMessageReceived (author, text)
 
 	local self = instance
 

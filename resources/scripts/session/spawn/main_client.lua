@@ -82,7 +82,7 @@ local function onChatMessagePreSent (text)
 end
 
 --------------------------------------------------
-function onChatMessageReceived (author, text)
+local function onChatMessageReceived (author, text)
 	if author == ".home" then
 
 		local words = {}
