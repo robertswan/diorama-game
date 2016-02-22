@@ -6,6 +6,7 @@ local Menus = require ("resources/scripts/menus/menu_construction")
 local MenuClass = require ("resources/scripts/menus/menu_class")
 local Mixin = require ("resources/scripts/menus/mixin")
 local NumberEntryMenuItem = require ("resources/scripts/menus/menu_items/number_menu_item")
+local PasswordTextEntryMenuItem = require ("resources/scripts/menus/menu_items/password_text_entry_menu_item")
 local ScrollableMenuItem = require ("resources/scripts/menus/menu_items/scrollable_menu_item")
 local TextEntryMenuItem = require ("resources/scripts/menus/menu_items/text_entry_menu_item")
 
@@ -56,7 +57,7 @@ return function ()
 	local properties = 
 	{
 		playerName = 	TextEntryMenuItem ("Player Name", nil, nil, "", 15),
-		password = 		TextEntryMenuItem ("Password", nil, nil, "", 15),
+		password = 		PasswordTextEntryMenuItem ("Password", nil, nil, "", 15),
 		ipAddress = 	TextEntryMenuItem ("IP Address", nil, nil, "84.92.48.10", 16),
 		ipPort = 		NumberEntryMenuItem ("Port", nil, nil, 25276, true),
 		warningLabel = 	LabelMenuItem (""),
