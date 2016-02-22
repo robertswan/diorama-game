@@ -1,3 +1,4 @@
+
 --------------------------------------------------
 local function teleportTo (author, x, y, z)
 	setting =
@@ -17,6 +18,21 @@ local function onChatMessagePreSent (text)
 		
 		local author = dio.world.getPlayerNames () [1]
 		teleportTo (author, 0, 128, 0)
+        
+    elseif text == ".sethome" then
+        homelocxyz = dio.world.getPlayerXyz (dio.world.getPlayerNames () [1])
+        dio.clientChat.send ("set their home")
+    
+    elseif text == ".home" then
+        local author = dio.world.getPlayerNames () [1]
+        local xyz, error = homelocxyz
+			if xyz then
+				local x = math.floor (xyz.chunkId.x * 16 + xyz.xyz.x)
+				local y = math.floor (xyz.xyz.y)
+				local z = math.floor (xyz.chunkId.z * 16 + xyz.xyz.z)
+				teleportTo (author , math.floor(x), math.floor(y), math.floor(z))
+            end
+                
 
 	elseif string.sub (text, 1, string.len(".tp "))==".tp " then
 
@@ -100,6 +116,8 @@ local modSettings =
 		[".spawn"] = 	{usage = ".spawn", 		description = "teleports you to the safe spawn"},
 		[".tp"] = 		{usage = ".tp x y z", 	description = "teleports you coordinates (x, y, z)"},
 		[".coords"] = 	{usage = ".coords ", 	description = "prints your or N players coordinates"},
+        [".sethome"] =  {usage = ".sethome",    description = "sets a home location for the current session"},
+        [".home"] =     {usage = ".home",       description = "teleports you back to your set home location"},
 	},
 
 	permissionsRequired =
