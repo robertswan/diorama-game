@@ -267,7 +267,7 @@ end
 local modSettings = 
 {
 	name = "Inventory",
-
+	
 	description = "Allows players to change the blocks they are placing",
 
 	permissionsRequired = 

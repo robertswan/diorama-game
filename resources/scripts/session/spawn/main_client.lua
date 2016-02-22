@@ -17,7 +17,7 @@ local function onChatMessagePreSent (text)
 		
 		local author = dio.world.getPlayerNames () [1]
 		teleportTo (author, 0, 128, 0)
-
+        
 	elseif string.sub (text, 1, string.len(".tp "))==".tp " then
 
 		local author = dio.world.getPlayerNames () [1]
@@ -82,10 +82,29 @@ local function onChatMessagePreSent (text)
 end
 
 --------------------------------------------------
+local function onChatMessageReceived (author, text)
+	if author == ".home" then
+
+		local words = {}
+		for word in string.gmatch(text, "[^ ]+") do
+			table.insert (words, word)
+		end
+
+		local x = tonumber (words [1])
+		local y = tonumber (words [2])
+		local z = tonumber (words [3])
+
+		local playerId = dio.world.getPlayerNames () [1]
+		teleportTo (playerId, x, y, z)
+	end
+end
+
+--------------------------------------------------
 local function onLoadSuccessful ()
 
 	local types = dio.events.types
 	dio.events.addListener (types.CLIENT_CHAT_MESSAGE_PRE_SENT, onChatMessagePreSent)
+	dio.events.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatMessageReceived)
 end
 
 --------------------------------------------------
@@ -100,6 +119,8 @@ local modSettings =
 		[".spawn"] = 	{usage = ".spawn", 		description = "teleports you to the safe spawn"},
 		[".tp"] = 		{usage = ".tp x y z", 	description = "teleports you coordinates (x, y, z)"},
 		[".coords"] = 	{usage = ".coords ", 	description = "prints your or N players coordinates"},
+		[".sethome"] =  {usage = ".sethome",    description = "sets a home location for the current session"},
+		[".home"] =     {usage = ".home",       description = "teleports you back to your set home location"},
 	},
 
 	permissionsRequired =

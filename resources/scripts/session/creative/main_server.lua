@@ -60,7 +60,6 @@ local function onPlayerLoad (event)
 
 	connection.screenName = connection.screenName .. " [" .. connection.groupId .. "]"
 
-	print ("onPlayerLoad " .. event.connectionId)
 	connections [event.connectionId] = connection
 end
 
@@ -122,7 +121,7 @@ local function onChatReceived (event)
 	elseif event.text == ".help mod" then
 
 		event.targetConnectionId = event.authorConnectionId
-		event.text = "setGroup <player> <group>"
+		event.text = ".setGroup <player> <group>"
 
 	elseif event.text == ".showPassword" then
 
@@ -165,8 +164,6 @@ local function onChatReceived (event)
 		end
 
 	else
-
-		print ("onChatReceived " .. event.authorConnectionId)
 
 		local connection = connections [event.authorConnectionId]
 		local canPromoteTo = groups [connection.groupId].canPromoteTo
