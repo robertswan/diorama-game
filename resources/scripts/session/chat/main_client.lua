@@ -25,9 +25,9 @@ local function renderChat (self)
 
 	while y >= 0 and lineIdx > 0 do
 		local line = self.lines [lineIdx]
-		drawString (0, y + 2, line.author, 0x000000ff)
-		drawString (0, y, line.author, 0xffff00ff)
-		drawString (self.textOffset, y + 2, line.text, 0x000000ff)
+		drawString (0, y + 2, line.author, 0x000000ff, true)
+		drawString (0, y, line.author, 0xffff00ff, true)
+		drawString (self.textOffset, y + 2, line.text, 0x000000ff, true)
 		drawString (self.textOffset, y, line.text, 0xffffffff)
 
 		y = y - self.heightPerLine
@@ -52,7 +52,7 @@ local function renderTextEntry (self)
 
 	local drawString = dio.drawing.font.drawString
 	drawString (0, y, string.rep ("-", 40), 0xffffffff)
-	drawString (x, y + heightPerLine, self.text, 0xffffffff)
+	drawString (x, y + heightPerLine, self.text, 0xffffffff, true, true)
 	local width = dio.drawing.font.measureString (self.text)
 	drawString (x + width, y + heightPerLine, "_", 0xff0000ff)
 

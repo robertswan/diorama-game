@@ -3,32 +3,49 @@ local groups =
 {
 	tourist = 
 	{
+		color = "%aaa",
 		canChat = true,
+		canColourText = false,
 	},
 	builder = 
 	{
+		color = "%fff",
 		canBuild = true,
 		canDestroy = true,
 		canChat = true,
+		canColourText = true,
 	},
 	mod = 
 	{
-		canBuild = true,
+		color = "%f44",
+		canBuild = true,true
 		canDestroy = true,
 		canChat = true,
+		canColourText = true,	
 		canPromoteTo = {tourist = true, builder = true},
 	},
 	admin = 
 	{
+		color = "%ff4",
 		canBuild = true,
 		canDestroy = true,
 		canChat = true,
+		canColourText = true,	
 		canPromoteTo = {tourist = true, builder = true, mod = true},
 	}
 }
 
 --------------------------------------------------
 local connections = {}
+
+--------------------------------------------------
+local function stripColourCodes (text)
+
+	local stripped = text:gsub ("\\%%", "{REPLACE}")
+	local stripped = stripped:gsub ("%%...", "")
+	local stripped = stripped:gsub ("{REPLACE}", "\\%%")
+	return stripped
+end
 
 --------------------------------------------------
 local function onPlayerLoad (event)
@@ -109,6 +126,16 @@ end
 --------------------------------------------------
 local function onChatReceived (event)
 
+	local connection = connections [event.authorConnectionId]
+	local group = groups [connection.groupId]
+	local canColourText = group.canColourText	
+
+	if not canColourText then
+		print ("INCOMING CHAT " .. event.text)
+		event.text = stripColourCodes (event.text)
+		print ("OUTGOING CHAT " .. event.text)
+	end
+
 	if event.text:sub (1, 1) ~= "." then
 		return
 	end
@@ -150,12 +177,12 @@ local function onChatReceived (event)
 
 		event.targetConnectionId = event.authorConnectionId
 		event.text = ""
-		for groupId in pairs (groups) do
+		for groupId, group in pairs (groups) do
 			local isNewAdd = true
 			for _, connection in pairs (connections) do
 				if connection.groupId == groupId then
 					if isNewAdd then
-						event.text = event.text .. "[" .. groupId .. "] = "
+						event.text = group.color .. event.text .. "[" .. groupId .. "] = "
 						isNewAdd = false
 					end
 					event.text = event.text .. connection.playerName .. ", "
