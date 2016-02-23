@@ -105,6 +105,7 @@ local function main ()
 		delete_level_menu = 		require ("resources/scripts/menus/delete_level_menu") (),
 		delete_level_confirm_menu = require ("resources/scripts/menus/delete_level_confirm_menu") (),
 		player_controls_menu = 		require ("resources/scripts/menus/player_controls_menu") (),
+        player_controls_menu_in_game = 		require ("resources/scripts/menus/player_controls_menu_in_game") (),
 		loading_level_menu = 		require ("resources/scripts/menus/loading_level_menu") (),
 
 		in_game_pause_menu =		require ("resources/scripts/menus/in_game_pause_menu") (),

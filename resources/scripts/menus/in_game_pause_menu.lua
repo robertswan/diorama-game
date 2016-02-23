@@ -16,6 +16,10 @@ local function onReturnToMainMenuClicked (self)
 	dio.session.terminate ()
 end
 
+local function onPlayerSettingsClicked (self)
+    return "player_controls_menu_in_game"
+end
+
 --------------------------------------------------
 local c = {}
 
@@ -75,6 +79,7 @@ return function ()
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Resume", onResumeClicked))
 	instance:addMenuItem (BreakMenuItem ())
+    instance:addMenuItem (ButtonMenuItem ("Player Settings", onPlayerSettingsClicked))
 	instance:addMenuItem (ButtonMenuItem ("Return To Main Menu", onReturnToMainMenuClicked))	
 	instance:addMenuItem (BreakMenuItem ())
 
