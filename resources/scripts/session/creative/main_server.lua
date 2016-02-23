@@ -4,18 +4,21 @@ local groups =
 	tourist = 
 	{
 		canChat = true,
+		canColourText = false,
 	},
 	builder = 
 	{
 		canBuild = true,
 		canDestroy = true,
 		canChat = true,
+		canColourText = false,
 	},
 	mod = 
 	{
 		canBuild = true,
 		canDestroy = true,
 		canChat = true,
+		canColourText = true,	
 		canPromoteTo = {tourist = true, builder = true},
 	},
 	admin = 
@@ -23,12 +26,22 @@ local groups =
 		canBuild = true,
 		canDestroy = true,
 		canChat = true,
+		canColourText = true,	
 		canPromoteTo = {tourist = true, builder = true, mod = true},
 	}
 }
 
 --------------------------------------------------
 local connections = {}
+
+--------------------------------------------------
+local function stripColourCodes (text)
+
+	local stripped = text:gsub ("\\%%", "{REPLACE}")
+	local stripped = stripped:gsub ("%%...", "")
+	local stripped = stripped:gsub ("{REPLACE}", "\\%%")
+	return stripped
+end
 
 --------------------------------------------------
 local function onPlayerLoad (event)
@@ -108,6 +121,16 @@ end
 
 --------------------------------------------------
 local function onChatReceived (event)
+
+	local connection = connections [event.authorConnectionId]
+	local group = groups [connection.groupId]
+	local canColourText = group.canColourText	
+
+	if not canColourText then
+		print ("INCOMING CHAT " .. event.text)
+		event.text = stripColourCodes (event.text)
+		print ("OUTGOING CHAT " .. event.text)
+	end
 
 	if event.text:sub (1, 1) ~= "." then
 		return

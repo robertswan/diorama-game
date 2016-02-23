@@ -35,7 +35,7 @@ function c:earlyRender ()
 
 	drawString (0, 2, self.author, 0x000000ff)
 	drawString (0, 0, self.author, 0xffff00ff)
-	drawString (self.textOffset, 2, self.text, 0x000000ff)
+	drawString (self.textOffset, 2, self.text, 0x000000ff, true)
 	drawString (self.textOffset, 0, self.text, 0xffffffff)
 
 	dio.drawing.setRenderToTexture (nil)
