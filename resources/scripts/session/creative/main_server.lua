@@ -3,19 +3,22 @@ local groups =
 {
 	tourist = 
 	{
+		color = "%aaa",
 		canChat = true,
 		canColourText = false,
 	},
 	builder = 
 	{
+		color = "%fff",
 		canBuild = true,
 		canDestroy = true,
 		canChat = true,
-		canColourText = false,
+		canColourText = true,
 	},
 	mod = 
 	{
-		canBuild = true,
+		color = "%f44",
+		canBuild = true,true
 		canDestroy = true,
 		canChat = true,
 		canColourText = true,	
@@ -23,6 +26,7 @@ local groups =
 	},
 	admin = 
 	{
+		color = "%ff4",
 		canBuild = true,
 		canDestroy = true,
 		canChat = true,
@@ -173,12 +177,12 @@ local function onChatReceived (event)
 
 		event.targetConnectionId = event.authorConnectionId
 		event.text = ""
-		for groupId in pairs (groups) do
+		for groupId, group in pairs (groups) do
 			local isNewAdd = true
 			for _, connection in pairs (connections) do
 				if connection.groupId == groupId then
 					if isNewAdd then
-						event.text = event.text .. "[" .. groupId .. "] = "
+						event.text = group.color .. event.text .. "[" .. groupId .. "] = "
 						isNewAdd = false
 					end
 					event.text = event.text .. connection.playerName .. ", "
