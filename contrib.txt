@@ -9,15 +9,19 @@ youtube video: 			whiteland92 (https://www.youtube.com/watch?v=gOr01kdu_KQ&featu
 custom level: 			AmazedStream
 menu mod:				AmazedStream (FOV slider!)
 client mod:				LazyKernel
+github mod:				QLcrisis
+reverse engineering:	XForceP
 
 
-
-compatibility demo v0.1.2
+compatibility demo v0.1.5
 -------------------------
 
 Mods
 
 * LazyKernel
+* kxait
+* XForceP
+* QLcrisis
 
 
 compatibility demo v0.1.1
