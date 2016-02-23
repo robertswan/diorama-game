@@ -24,6 +24,8 @@ local function onConnectClicked (menuItem, menu)
 		ipPort = menu.ipPort:getValueAsNumber (),
 		playerName = menu.playerName.value,
 		playerPassword = menu.password.value,
+		avatarTop = menu.avatarTop.value,
+		avatarBottom = menu.avatarBottom.value,
 	}
 
 	local isOk, errorString = dio.session.beginMp (params)
@@ -60,6 +62,8 @@ return function ()
 		password = 		PasswordTextEntryMenuItem ("Password", nil, nil, "", 15),
 		ipAddress = 	TextEntryMenuItem ("IP Address", nil, nil, "84.92.48.10", 16),
 		ipPort = 		NumberEntryMenuItem ("Port", nil, nil, 25276, true),
+		avatarTop =		NumberEntryMenuItem ("Avatar Top Block", nil, nil, 9, true),
+		avatarBottom = 	NumberEntryMenuItem ("Avatar Bottom Block", nil, nil, 8, true),
 		warningLabel = 	LabelMenuItem (""),
 	}
 
@@ -76,6 +80,8 @@ return function ()
 	instance:addMenuItem (properties.password)
 	instance:addMenuItem (properties.ipAddress)
 	instance:addMenuItem (properties.ipPort)
+	instance:addMenuItem (properties.avatarTop)
+	instance:addMenuItem (properties.avatarBottom)
 	instance:addMenuItem (ButtonMenuItem ("Connect To Server", onConnectClicked))
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (ButtonMenuItem ("Return To Main Menu", onMainMenuClicked))
