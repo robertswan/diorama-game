@@ -4,19 +4,19 @@ local Mixin = require ("resources/scripts/menus/mixin")
 
 --------------------------------------------------
 return function (text)
-	local instance = 
-	{
-		text = text,
+    local instance = 
+    {
+        text = text,
 
-		onRender = function (self, font, menus)
-			local width = font.measureString (self.text)
-			font.drawString ((menus.width - width) * 0.5, self.y, self.text, self.color)
-		end,
+        onRender = function (self, font, menus)
+            local width = font.measureString (self.text)
+            font.drawString ((menus.width - width) * 0.5, self.y, self.text, self.color)
+        end,
 
-		color = 0xffffffff,
-	}
+        color = 0xffffffff,
+    }
 
-	Mixin.CopyTo (instance, MenuItemBase ())
+    Mixin.CopyTo (instance, MenuItemBase ())
 
-	return instance
+    return instance
 end

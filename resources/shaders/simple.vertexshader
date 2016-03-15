@@ -16,17 +16,17 @@ out vec3 final_tangent;
 
 void main()
 {
-	gl_Position = mvp_matrix * vec4 (vertex_position, 1.0f);
+    gl_Position = mvp_matrix * vec4 (vertex_position, 1.0f);
 
-	//vec3 delta;
-	//float y_scale = 0.1f;
-	//float radius = 5.0f;
-	//delta.x = sin (displacement_angle + vertex_position.y * y_scale) * radius;
-	//delta.z = cos (displacement_angle + vertex_position.y * y_scale) * radius;
-	//gl_Position = mvp_matrix * vec4 (vertex_position + delta, 1.0f);
+    //vec3 delta;
+    //float y_scale = 0.1f;
+    //float radius = 5.0f;
+    //delta.x = sin (displacement_angle + vertex_position.y * y_scale) * radius;
+    //delta.z = cos (displacement_angle + vertex_position.y * y_scale) * radius;
+    //gl_Position = mvp_matrix * vec4 (vertex_position + delta, 1.0f);
 
-	final_uv = vertex_uv;
-	final_uv2 = vertex_uv2;
-	final_normal = vertex_normal;
-	final_tangent = vertex_tangent;
+    final_uv = vertex_uv;
+    final_uv2 = vertex_uv2;
+    final_normal = vertex_normal;
+    final_tangent = vertex_tangent;
 }

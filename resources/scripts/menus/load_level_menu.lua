@@ -9,19 +9,19 @@ local Mixin = require ("resources/scripts/menus/mixin")
 --------------------------------------------------
 local function onPlayLevelClicked (menu, levelName)
 
-	local worldSettings =
-	{
-		path = 			levelName,
-		isNew = 		false,
-		shouldSave = 	true,
-	}
+    local worldSettings =
+    {
+        path =             levelName,
+        isNew =         false,
+        shouldSave =     true,
+    }
 
-	menu.loadingLevelMenu:recordWorldSettings (worldSettings)
+    menu.loadingLevelMenu:recordWorldSettings (worldSettings)
 end
 
 --------------------------------------------------
 local function onReturnToParentClicked ()
-	return "single_player_top_menu"
+    return "single_player_top_menu"
 end
 
 --------------------------------------------------
@@ -29,53 +29,53 @@ local c = {}
 
 --------------------------------------------------
 function c:onAppShouldClose ()
-	self.parent.onAppShouldClose (self)
-	return "quitting_menu"
+    self.parent.onAppShouldClose (self)
+    return "quitting_menu"
 end
 
 --------------------------------------------------
 function c:onEnter (menus)
 
-	self.loadingLevelMenu = menus.loading_level_menu
+    self.loadingLevelMenu = menus.loading_level_menu
 
-	local levels = dio.file.listExistingWorlds ()
-	for idx, levelName in ipairs (levels) do
+    local levels = dio.file.listExistingWorlds ()
+    for idx, levelName in ipairs (levels) do
 
-		local function onClicked ()
-			onPlayLevelClicked (self, levelName)
-			return "loading_level_menu"
-		end
+        local function onClicked ()
+            onPlayLevelClicked (self, levelName)
+            return "loading_level_menu"
+        end
 
-		local button = ButtonMenuItem ("Load " .. levelName, onClicked)
-		self:addMenuItem (button)
-	end
+        local button = ButtonMenuItem ("Load " .. levelName, onClicked)
+        self:addMenuItem (button)
+    end
 
-	if #levels == 0 then
-		self:addMenuItem (LabelMenuItem ("No Levels Found"))
-	end
+    if #levels == 0 then
+        self:addMenuItem (LabelMenuItem ("No Levels Found"))
+    end
 
-	self:addMenuItem (BreakMenuItem ())
-	self:addMenuItem (ButtonMenuItem ("Return To Parent Menu", onReturnToParentClicked))
+    self:addMenuItem (BreakMenuItem ())
+    self:addMenuItem (ButtonMenuItem ("Return To Parent Menu", onReturnToParentClicked))
 
 end
 
 --------------------------------------------------
 function c:onExit ()
-	self.loadingLevelMenu = nil
-	self:clearAllMenuItems ();
+    self.loadingLevelMenu = nil
+    self:clearAllMenuItems ();
 end
 
 --------------------------------------------------
 return function ()
 
-	local instance = MenuClass ("LOAD LEVEL MENU")
+    local instance = MenuClass ("LOAD LEVEL MENU")
 
-	local properties =
-	{
-	}
+    local properties =
+    {
+    }
 
-	Mixin.CopyTo (instance, properties)
-	Mixin.CopyToAndBackupParents (instance, c)
+    Mixin.CopyTo (instance, properties)
+    Mixin.CopyToAndBackupParents (instance, c)
 
-	return instance
+    return instance
 end

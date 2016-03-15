@@ -11,24 +11,24 @@ out vec4 color;
 
 void main()
 {
-	float offset = 16.0f;
-	float offset2 = 10.0f;
+    float offset = 16.0f;
+    float offset2 = 10.0f;
 
-	vec2 dx = vec2 (
-			sin (time + frag_in_uv.x * offset2) / (512.0f / offset),
-			cos (time + frag_in_uv.x * offset2) / (512.0f / offset));
+    vec2 dx = vec2 (
+            sin (time + frag_in_uv.x * offset2) / (512.0f / offset),
+            cos (time + frag_in_uv.x * offset2) / (512.0f / offset));
 
-	vec2 dy = vec2 (
-			sin (time + frag_in_uv.y * offset2) / (256.0f / offset),
-			cos (time + frag_in_uv.y * offset2) / (256.0f / offset));
+    vec2 dy = vec2 (
+            sin (time + frag_in_uv.y * offset2) / (256.0f / offset),
+            cos (time + frag_in_uv.y * offset2) / (256.0f / offset));
 
-	vec2 uv = frag_in_uv;
-	uv.x = uv.x + dx.x + dy.x;
-	uv.y = uv.y + dx.y + dy.y;
+    vec2 uv = frag_in_uv;
+    uv.x = uv.x + dx.x + dy.x;
+    uv.y = uv.y + dx.y + dy.y;
 
-	//color = texture (diffuse_map, uv).rgba;
+    //color = texture (diffuse_map, uv).rgba;
 
-	color = texture (diffuse_map, frag_in_uv).rgba;
+    color = texture (diffuse_map, frag_in_uv).rgba;
 
-	color.rgba = color.rgba * frag_in_color;
+    color.rgba = color.rgba * frag_in_color;
 }

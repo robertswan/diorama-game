@@ -9,7 +9,7 @@ out vec4 color;
 
 void main()
 {
-	vec2 rg = texture (diffuse_map, frag_in_uv).rg;
-	color = vec4 (rg.x, rg.x, rg.x, rg.y);
-	color.rgba = color.rgba * frag_in_color;
+    vec2 rg = texture (diffuse_map, frag_in_uv).rg;
+    color = vec4 (rg.x, rg.x, rg.x, rg.y);
+    color.rgba = color.rgba * frag_in_color;
 }

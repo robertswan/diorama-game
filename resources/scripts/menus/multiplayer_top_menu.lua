@@ -13,35 +13,35 @@ local TextEntryMenuItem = require ("resources/scripts/menus/menu_items/text_entr
 --------------------------------------------------
 local function onConnectClicked (menuItem, menu)
 
-	if menu.playerName.value == "" then
-		menu.warningLabel.text = "ERROR! Player Name must not be empty"
-		return
+    if menu.playerName.value == "" then
+        menu.warningLabel.text = "ERROR! Player Name must not be empty"
+        return
 
-	elseif menu.password.value == "" then
-		menu.warningLabel.text = "ERROR! Player Password must not be empty"
-		return
+    elseif menu.password.value == "" then
+        menu.warningLabel.text = "ERROR! Player Password must not be empty"
+        return
 
-	end
+    end
 
-	local params = 
-	{
-		ipAddress = menu.ipAddress.value,
-		ipPort = menu.ipPort:getValueAsNumber (),
-		playerName = menu.playerName.value,
-		playerPassword = menu.password.value,
-		avatarTop = menu.avatarTop.value,
-		avatarBottom = menu.avatarBottom.value,
-	}
+    local params = 
+    {
+        ipAddress = menu.ipAddress.value,
+        ipPort = menu.ipPort:getValueAsNumber (),
+        playerName = menu.playerName.value,
+        playerPassword = menu.password.value,
+        avatarTop = menu.avatarTop.value,
+        avatarBottom = menu.avatarBottom.value,
+    }
 
-	local isOk, errorString = dio.session.beginMp (params)
-	if isOk then
-		return "playing_game_menu"
-	end
+    local isOk, errorString = dio.session.beginMp (params)
+    if isOk then
+        return "playing_game_menu"
+    end
 end
 
 --------------------------------------------------
 local function onMainMenuClicked ()
-	return "main_menu"
+    return "main_menu"
 end
 
 --------------------------------------------------
@@ -49,50 +49,50 @@ local c = {}
 
 --------------------------------------------------
 function c:onEnter ()
-	self.warningLabel.text = ""
+    self.warningLabel.text = ""
 end
 
 --------------------------------------------------
 return function ()
 
-	math.randomseed (os.time())
+    math.randomseed (os.time())
 
-	local instance = MenuClass ("MULTIPLAYER MENU")
+    local instance = MenuClass ("MULTIPLAYER MENU")
 
-	local scrollLines = {}
+    local scrollLines = {}
 
-	local properties = 
-	{
-		playerName = 	TextEntryMenuItem ("Player Name", nil, nil, "", 15),
-		password = 		PasswordTextEntryMenuItem ("Player Password", nil, nil, "", 15),
-		ipAddress = 	TextEntryMenuItem ("Server IP Address", nil, nil, "84.92.48.10", 16),
-		ipPort = 		NumberEntryMenuItem ("Server Port", nil, nil, 25276, true),
-		avatarTop =		NumberEntryMenuItem ("Avatar Top Block", nil, nil, 9, true),
-		avatarBottom = 	NumberEntryMenuItem ("Avatar Bottom Block", nil, nil, 8, true),
-		warningLabel = 	LabelMenuItem (""),
-	}
+    local properties = 
+    {
+        playerName =     TextEntryMenuItem ("Player Name", nil, nil, "", 15),
+        password =         PasswordTextEntryMenuItem ("Player Password", nil, nil, "", 15),
+        ipAddress =     TextEntryMenuItem ("Server IP Address", nil, nil, "84.92.48.10", 16),
+        ipPort =         NumberEntryMenuItem ("Server Port", nil, nil, 25276, true),
+        avatarTop =        NumberEntryMenuItem ("Avatar Top Block", nil, nil, 9, true),
+        avatarBottom =     NumberEntryMenuItem ("Avatar Bottom Block", nil, nil, 8, true),
+        warningLabel =     LabelMenuItem (""),
+    }
 
-	Mixin.CopyTo (instance, properties)
-	Mixin.CopyToAndBackupParents (instance, c)
+    Mixin.CopyTo (instance, properties)
+    Mixin.CopyToAndBackupParents (instance, c)
 
-	instance:addMenuItem (LabelMenuItem ("Passwords are per server and stored in plain text.")) 
-	instance:addMenuItem (LabelMenuItem ("DO NOT REUSE important passwords."))
-	instance:addMenuItem (LabelMenuItem ("Passwords are tied to a username when a user is promoted"))
-	instance:addMenuItem (LabelMenuItem ("to a builder (type '.group' into chat to check)"))
-	instance:addMenuItem (BreakMenuItem ())
-	instance:addMenuItem (properties.playerName)
-	instance:addMenuItem (properties.password)
-	instance:addMenuItem (properties.ipAddress)
-	instance:addMenuItem (properties.ipPort)
-	instance:addMenuItem (properties.avatarTop)
-	instance:addMenuItem (properties.avatarBottom)
-	instance:addMenuItem (ButtonMenuItem ("Connect To Server", onConnectClicked))
-	instance:addMenuItem (BreakMenuItem ())
-	instance:addMenuItem (ButtonMenuItem ("Return To Main Menu", onMainMenuClicked))
-	instance:addMenuItem (BreakMenuItem ())
-	instance:addMenuItem (properties.warningLabel)
+    instance:addMenuItem (LabelMenuItem ("Passwords are per server and stored in plain text.")) 
+    instance:addMenuItem (LabelMenuItem ("DO NOT REUSE important passwords."))
+    instance:addMenuItem (LabelMenuItem ("Passwords are tied to a username when a user is promoted"))
+    instance:addMenuItem (LabelMenuItem ("to a builder (type '.group' into chat to check)"))
+    instance:addMenuItem (BreakMenuItem ())
+    instance:addMenuItem (properties.playerName)
+    instance:addMenuItem (properties.password)
+    instance:addMenuItem (properties.ipAddress)
+    instance:addMenuItem (properties.ipPort)
+    instance:addMenuItem (properties.avatarTop)
+    instance:addMenuItem (properties.avatarBottom)
+    instance:addMenuItem (ButtonMenuItem ("Connect To Server", onConnectClicked))
+    instance:addMenuItem (BreakMenuItem ())
+    instance:addMenuItem (ButtonMenuItem ("Return To Main Menu", onMainMenuClicked))
+    instance:addMenuItem (BreakMenuItem ())
+    instance:addMenuItem (properties.warningLabel)
 
-	properties.warningLabel.color = 0xff8000ff
+    properties.warningLabel.color = 0xff8000ff
 
-	return instance
+    return instance
 end

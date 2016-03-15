@@ -8,12 +8,12 @@ local c = {}
 
 --------------------------------------------------
 function c:onSessionShutdownCompleted ()
-	return "main_menu"
+    return "main_menu"
 end
 
 --------------------------------------------------
 return function ()
-	local instance = MenuClass ("SAVING GAME MENU")
-	Mixin.CopyToAndBackupParents (instance, c)
-	return instance
+    local instance = MenuClass ("SAVING GAME MENU")
+    Mixin.CopyToAndBackupParents (instance, c)
+    return instance
 end

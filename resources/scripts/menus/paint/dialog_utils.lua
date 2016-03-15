@@ -108,7 +108,7 @@ function d.drawDialog (x, y, sizeX, sizeY, color, title)
     dialogProperties.text = text
 
     -- dialog background
-	dio.drawing.font.drawBox (x, y, sizeX, sizeY, color)
+    dio.drawing.font.drawBox (x, y, sizeX, sizeY, color)
 
     local xColor = 0xeeeeeeff
     local rColor = 0xc80815ff
