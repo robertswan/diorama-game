@@ -50,6 +50,8 @@ local definitions =
 	{name = "purple W",			uvs = {1, 12}},
 	{name = "dark blue W",		uvs = {1, 11}},
 	{name = "dark green W",		uvs = {1, 9}},
+
+	{name = "SIGN",				uvs = {0, 0}},
 }
 
 --------------------------------------------------

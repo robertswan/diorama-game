@@ -51,8 +51,27 @@ local blocks =
 	"violet",			
 	"purple",			
 	"dk blue",		
-	"dk green",		
+	"dk green",	
+
+	"sign"	
 }
+
+local entities =
+{
+	sign = 
+	{
+		type = "SIGN", 
+		text = "NOT_SET",
+	}
+}
+
+-- local entities = 
+-- {
+-- 	{name = "sign", type = "SIGN", text = "NOT_SET"},
+-- 	{name = "torch", type = "TORCH", radius = 6, rgb = 0xff00ff},
+-- 	{name = "chest (locked)", type = "CHEST", locked = true},
+-- 	{name = "chest (unlocked)", type = "CHEST", locked = false},
+-- }
 
 --------------------------------------------------
 local instance = nil
@@ -91,6 +110,19 @@ local function renderText (self)
 end
 
 --------------------------------------------------
+local function setInventoryItem (id)
+	local blockName = blocks [id]
+
+	local entity = entities [blockName]
+	if entity then
+		dio.inputs.setPlayerEntityId (1, id, entity.text)
+	else
+		dio.inputs.setPlayerBlockId (1, id)
+	end
+	
+end
+
+--------------------------------------------------
 local function onUpdate (self)
 
 	local scrollWheel = dio.inputs.mouse.getScrollWheelDelta ()
@@ -126,7 +158,7 @@ local function onUpdate (self)
 			
 		end
 
-		dio.inputs.setPlayerBlockId (1, self.currentBlockId)
+		setInventoryItem (self.currentBlockId)
 		self.isDirty = true
 	end
 
@@ -167,7 +199,7 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 	if keyCode >= keyCodes ["1"] and keyCode <= keyCodes ["9"] then
 		if blocks [(keyCode - keyCodes ["1"] + 1) + self.currentPage * self.blocksPerPage] ~= nil then
 			self.currentBlockId = (keyCode - keyCodes ["1"] + 1) + self.currentPage * self.blocksPerPage
-			dio.inputs.setPlayerBlockId (1, self.currentBlockId)
+			setInventoryItem (self.currentBlockId)
 			self.isDirty = true
 			return true
 		end
@@ -188,15 +220,14 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 			self.currentPage = 0
 			self.currentBlockId = self.currentBlockId - self.blocksPerPage * self.pages
 			testIdBounds (self)
-			dio.inputs.setPlayerBlockId (1, self.currentBlockId)
 			
 		else
 			self.currentBlockId = self.currentBlockId + self.blocksPerPage	
 			testIdBounds (self)
-			dio.inputs.setPlayerBlockId (1, self.currentBlockId)
 			
 		end
 
+		setInventoryItem (self.currentBlockId)
 		self.isDirty = true
 		return true
 	
@@ -207,21 +238,35 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 			self.currentPage = self.pages
 			self.currentBlockId = self.currentBlockId + self.blocksPerPage * self.pages
 			testIdBounds (self)
-			dio.inputs.setPlayerBlockId (1, self.currentBlockId)
 			
 		else 
 			self.currentBlockId = self.currentBlockId - self.blocksPerPage		
 			testIdBounds (self)
-			dio.inputs.setPlayerBlockId (1, self.currentBlockId)
 			
 		end
 		
+		setInventoryItem (self.currentBlockId)
 		self.isDirty = true
 		return true
 	
 	end
 	
-	dio.inputs.setPlayerBlockId (1, self.currentBlockId)
+	setInventoryItem (self.currentBlockId)
+	return false
+end
+
+--------------------------------------------------
+local function onChatMessagePreSent (text)
+
+	local command = ".setSign "
+	local compare = text:sub (1, command:len())
+
+	if compare == command then
+		local message = text:sub (command:len() + 1)
+		entities.sign.text = message
+		return true	
+	end
+
 	return false
 end
 
@@ -258,8 +303,9 @@ local function onLoadSuccessful ()
 
 	local types = dio.events.types
 	dio.events.addListener (types.CLIENT_KEY_CLICKED, onKeyClicked)
+	dio.events.addListener (types.CLIENT_CHAT_MESSAGE_PRE_SENT, onChatMessagePreSent)
 
-	dio.inputs.setPlayerBlockId (1, instance.currentBlockId)
+	setInventoryItem (instance.currentBlockId)
 
 end
 

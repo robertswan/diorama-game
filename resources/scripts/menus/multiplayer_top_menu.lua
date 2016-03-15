@@ -16,6 +16,11 @@ local function onConnectClicked (menuItem, menu)
 	if menu.playerName.value == "" then
 		menu.warningLabel.text = "ERROR! Player Name must not be empty"
 		return
+
+	elseif menu.password.value == "" then
+		menu.warningLabel.text = "ERROR! Player Password must not be empty"
+		return
+
 	end
 
 	local params = 
@@ -59,9 +64,9 @@ return function ()
 	local properties = 
 	{
 		playerName = 	TextEntryMenuItem ("Player Name", nil, nil, "", 15),
-		password = 		PasswordTextEntryMenuItem ("Password", nil, nil, "", 15),
-		ipAddress = 	TextEntryMenuItem ("IP Address", nil, nil, "84.92.48.10", 16),
-		ipPort = 		NumberEntryMenuItem ("Port", nil, nil, 25276, true),
+		password = 		PasswordTextEntryMenuItem ("Player Password", nil, nil, "", 15),
+		ipAddress = 	TextEntryMenuItem ("Server IP Address", nil, nil, "84.92.48.10", 16),
+		ipPort = 		NumberEntryMenuItem ("Server Port", nil, nil, 25276, true),
 		avatarTop =		NumberEntryMenuItem ("Avatar Top Block", nil, nil, 9, true),
 		avatarBottom = 	NumberEntryMenuItem ("Avatar Bottom Block", nil, nil, 8, true),
 		warningLabel = 	LabelMenuItem (""),
@@ -70,11 +75,10 @@ return function ()
 	Mixin.CopyTo (instance, properties)
 	Mixin.CopyToAndBackupParents (instance, c)
 
-	instance:addMenuItem (LabelMenuItem ("Passwords are per server and stored in PLAIN TEXT.")) 
+	instance:addMenuItem (LabelMenuItem ("Passwords are per server and stored in plain text.")) 
 	instance:addMenuItem (LabelMenuItem ("DO NOT REUSE important passwords."))
-	instance:addMenuItem (BreakMenuItem ())
-	instance:addMenuItem (LabelMenuItem ("Passwords are tied to a username the first time the"))
-	instance:addMenuItem (LabelMenuItem ("user is promoted to a builder (type '.group' into chat)"))
+	instance:addMenuItem (LabelMenuItem ("Passwords are tied to a username when a user is promoted"))
+	instance:addMenuItem (LabelMenuItem ("to a builder (type '.group' into chat to check)"))
 	instance:addMenuItem (BreakMenuItem ())
 	instance:addMenuItem (properties.playerName)
 	instance:addMenuItem (properties.password)

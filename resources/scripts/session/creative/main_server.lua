@@ -18,7 +18,7 @@ local groups =
 	mod = 
 	{
 		color = "%f44",
-		canBuild = true,true
+		canBuild = true,
 		canDestroy = true,
 		canChat = true,
 		canColourText = true,	
