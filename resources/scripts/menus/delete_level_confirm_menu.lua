@@ -11,13 +11,13 @@ local populateMenus = nil
 
 --------------------------------------------------
 local function onConfirmDeleteClicked (menuItem, menu)
-	dio.file.deleteWorld (menu.filenameLabel.text)
-	return "delete_level_menu"
+    dio.file.deleteWorld (menu.filenameLabel.text)
+    return "delete_level_menu"
 end
 
 --------------------------------------------------
 local function onCancelDeleteClicked ()
-	return "delete_level_menu"
+    return "delete_level_menu"
 end
 
 --------------------------------------------------
@@ -25,58 +25,58 @@ local c = {}
 
 --------------------------------------------------
 function c:onAppShouldClose ()
-	self.parent.onAppShouldClose (self)
-	return "quitting_menu"
+    self.parent.onAppShouldClose (self)
+    return "quitting_menu"
 end
 
 --------------------------------------------------
 function c:onEnter (menus)
-	assert (self.filenameLabel.text ~= "")
+    assert (self.filenameLabel.text ~= "")
 end
 
 --------------------------------------------------
 function c:onExit ()
-	self.filenameLabel.text = ""
+    self.filenameLabel.text = ""
 end
 
 --------------------------------------------------
 function c:recordWorldToDelete (worldFilename)
-	self.filenameLabel.text = worldFilename
-	self.deleteConfirmedButton.text = "Confirm Delete " .. worldFilename
+    self.filenameLabel.text = worldFilename
+    self.deleteConfirmedButton.text = "Confirm Delete " .. worldFilename
 end
 
 --------------------------------------------------
 return function ()
 
-	local instance = MenuClass ("DELETE LEVEL CONFIRM MENU")
+    local instance = MenuClass ("DELETE LEVEL CONFIRM MENU")
 
-	local properties =
-	{
-		filenameLabel = LabelMenuItem (""),
-		deleteConfirmedButton = ButtonMenuItem ("", onConfirmDeleteClicked),
-	}
+    local properties =
+    {
+        filenameLabel = LabelMenuItem (""),
+        deleteConfirmedButton = ButtonMenuItem ("", onConfirmDeleteClicked),
+    }
 
-	Mixin.CopyTo (instance, properties)
-	Mixin.CopyToAndBackupParents (instance, c)
+    Mixin.CopyTo (instance, properties)
+    Mixin.CopyToAndBackupParents (instance, c)
 
-	instance:addMenuItem (LabelMenuItem ("WARNING"))
-	instance:addMenuItem (LabelMenuItem ("Are you sure you want to"))
-	instance:addMenuItem (LabelMenuItem ("delete the following world:"))
-	instance:addMenuItem (LabelMenuItem (""))
-	instance:addMenuItem (properties.filenameLabel)
-	instance:addMenuItem (LabelMenuItem (""))
+    instance:addMenuItem (LabelMenuItem ("WARNING"))
+    instance:addMenuItem (LabelMenuItem ("Are you sure you want to"))
+    instance:addMenuItem (LabelMenuItem ("delete the following world:"))
+    instance:addMenuItem (LabelMenuItem (""))
+    instance:addMenuItem (properties.filenameLabel)
+    instance:addMenuItem (LabelMenuItem (""))
 
-	instance:addMenuItem (BreakMenuItem ())
-	instance:addMenuItem (ButtonMenuItem ("Cancel Delete", onCancelDeleteClicked))
+    instance:addMenuItem (BreakMenuItem ())
+    instance:addMenuItem (ButtonMenuItem ("Cancel Delete", onCancelDeleteClicked))
 
-	instance:addMenuItem (LabelMenuItem (""))
-	instance:addMenuItem (LabelMenuItem (""))
-	instance:addMenuItem (LabelMenuItem (""))
-	instance:addMenuItem (LabelMenuItem (""))
-	instance:addMenuItem (LabelMenuItem (""))
-	instance:addMenuItem (LabelMenuItem (""))
-	instance:addMenuItem (BreakMenuItem ())
-	instance:addMenuItem (properties.deleteConfirmedButton)
+    instance:addMenuItem (LabelMenuItem (""))
+    instance:addMenuItem (LabelMenuItem (""))
+    instance:addMenuItem (LabelMenuItem (""))
+    instance:addMenuItem (LabelMenuItem (""))
+    instance:addMenuItem (LabelMenuItem (""))
+    instance:addMenuItem (LabelMenuItem (""))
+    instance:addMenuItem (BreakMenuItem ())
+    instance:addMenuItem (properties.deleteConfirmedButton)
 
-	return instance
+    return instance
 end

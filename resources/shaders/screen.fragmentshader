@@ -9,5 +9,5 @@ out vec4 color;
 
 void main()
 {
-	color = texture (diffuse_map, frag_in_uv).rgba;
+    color = texture (diffuse_map, frag_in_uv).rgba;
 }

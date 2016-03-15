@@ -16,7 +16,7 @@ function d.savePaintFile (canvas, fileName, h, w)
     local emptyFile = true
 
     for rowIdx = 1, h do
-		for colIdx = 1, w do
+        for colIdx = 1, w do
             local color = canvas [rowIdx][colIdx]
 
             if emptyFile and color ~= 1 then

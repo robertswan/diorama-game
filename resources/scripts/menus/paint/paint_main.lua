@@ -33,17 +33,17 @@ end
 --------------------------------------------------
 function c:onUpdate (x, y, was_left_clicked)
     if self.paint then
-		self.paint:update (x, y, was_left_clicked)
-	else
-		return self.parent.onUpdate (self, x, y, was_left_clicked)
-	end
+        self.paint:update (x, y, was_left_clicked)
+    else
+        return self.parent.onUpdate (self, x, y, was_left_clicked)
+    end
 end
 
 --------------------------------------------------
 function c:onKeyClicked (keyCode, keyCharacter, keyModifiers, menus)
-	if self.paint then
-		self.paint:onKeyClicked (keyCode, keyCharacter, keyModifiers, menus)
-	end
+    if self.paint then
+        self.paint:onKeyClicked (keyCode, keyCharacter, keyModifiers, menus)
+    end
 end
 
 --------------------------------------------------
@@ -62,20 +62,20 @@ end
 
 --------------------------------------------------
 return function()
-	local instance = MenuClass ("Paint Menu")
+    local instance = MenuClass ("Paint Menu")
 
-	local properties =
-	{
+    local properties =
+    {
         paint = nil,
-	}
+    }
 
-	Mixin.CopyTo (instance, properties)
-	Mixin.CopyToAndBackupParents (instance, c)
+    Mixin.CopyTo (instance, properties)
+    Mixin.CopyToAndBackupParents (instance, c)
 
-	instance:addMenuItem (ButtonMenuItem ("Paint", onUsePaintClicked))
-	instance:addMenuItem (BreakMenuItem ())
-	instance:addMenuItem (ButtonMenuItem ("Return To Main Menu", onMainMenuClicked))
-	instance:addMenuItem (BreakMenuItem ())
+    instance:addMenuItem (ButtonMenuItem ("Paint", onUsePaintClicked))
+    instance:addMenuItem (BreakMenuItem ())
+    instance:addMenuItem (ButtonMenuItem ("Return To Main Menu", onMainMenuClicked))
+    instance:addMenuItem (BreakMenuItem ())
 
-	return instance
+    return instance
 end

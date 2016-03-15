@@ -8,22 +8,22 @@ local Mixin = require ("resources/scripts/menus/mixin")
 
 --------------------------------------------------
 local function onCreateNewLevelClicked ()
-	return "create_new_level_menu"
+    return "create_new_level_menu"
 end
 
 --------------------------------------------------
 local function onLoadLevelClicked ()
-	return "load_level_menu"
+    return "load_level_menu"
 end
 
 --------------------------------------------------
 local function onDeleteLevelClicked ()
-	return "delete_level_menu"
+    return "delete_level_menu"
 end
 
 --------------------------------------------------
 local function onReturnToMainMenuClicked ()
-	return "main_menu"
+    return "main_menu"
 end
 
 --------------------------------------------------
@@ -31,22 +31,22 @@ local c = {}
 
 --------------------------------------------------
 function c:onAppShouldClose ()
-	self.parent.onAppShouldClose (self)
-	return "quitting_menu"
+    self.parent.onAppShouldClose (self)
+    return "quitting_menu"
 end
 
 --------------------------------------------------
 return function ()
 
-	local instance = MenuClass ("SINGLE PLAYER MENU")
+    local instance = MenuClass ("SINGLE PLAYER MENU")
 
-	Mixin.CopyToAndBackupParents (instance, c)
+    Mixin.CopyToAndBackupParents (instance, c)
 
-	instance:addMenuItem (ButtonMenuItem ("New Level", onCreateNewLevelClicked))
-	instance:addMenuItem (ButtonMenuItem ("Load Level", onLoadLevelClicked))
-	instance:addMenuItem (ButtonMenuItem ("Delete Level", onDeleteLevelClicked))
-	instance:addMenuItem (LabelMenuItem (""))
-	instance:addMenuItem (ButtonMenuItem ("Return To Main Menu", onReturnToMainMenuClicked))
+    instance:addMenuItem (ButtonMenuItem ("New Level", onCreateNewLevelClicked))
+    instance:addMenuItem (ButtonMenuItem ("Load Level", onLoadLevelClicked))
+    instance:addMenuItem (ButtonMenuItem ("Delete Level", onDeleteLevelClicked))
+    instance:addMenuItem (LabelMenuItem (""))
+    instance:addMenuItem (ButtonMenuItem ("Return To Main Menu", onReturnToMainMenuClicked))
 
-	return instance
+    return instance
 end

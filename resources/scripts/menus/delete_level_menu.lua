@@ -11,13 +11,13 @@ local populateMenus = nil
 
 --------------------------------------------------
 local function onDeleteLevelClicked (menu, worldName)
-	menu.deleteLevelConfirmMenu:recordWorldToDelete  (worldName)
-	return "delete_level_confirm_menu"
+    menu.deleteLevelConfirmMenu:recordWorldToDelete  (worldName)
+    return "delete_level_confirm_menu"
 end
 
 --------------------------------------------------
 local function onReturnToParentClicked ()
-	return "single_player_top_menu"
+    return "single_player_top_menu"
 end
 
 --------------------------------------------------
@@ -25,52 +25,52 @@ local c = {}
 
 --------------------------------------------------
 function c:onAppShouldClose ()
-	self.parent.onAppShouldClose (self)
-	return "quitting_menu"
+    self.parent.onAppShouldClose (self)
+    return "quitting_menu"
 end
 
 --------------------------------------------------
 function c:onEnter (menus)
-	
-	self.deleteLevelConfirmMenu = menus.delete_level_confirm_menu
+    
+    self.deleteLevelConfirmMenu = menus.delete_level_confirm_menu
 
-	local levels = dio.file.listExistingWorlds ()
-	for idx, worldName in ipairs (levels) do
+    local levels = dio.file.listExistingWorlds ()
+    for idx, worldName in ipairs (levels) do
 
-		local function onClicked ()
-			return onDeleteLevelClicked (self, worldName)
-		end
+        local function onClicked ()
+            return onDeleteLevelClicked (self, worldName)
+        end
 
-		local button = ButtonMenuItem ("Delete " .. worldName, onClicked)
-		self:addMenuItem (button)
-	end
+        local button = ButtonMenuItem ("Delete " .. worldName, onClicked)
+        self:addMenuItem (button)
+    end
 
-	if #levels == 0 then
-		self:addMenuItem (LabelMenuItem ("No Levels Found"))
-	end
+    if #levels == 0 then
+        self:addMenuItem (LabelMenuItem ("No Levels Found"))
+    end
 
-	self:addMenuItem (BreakMenuItem ())
-	self:addMenuItem (ButtonMenuItem ("Return To Parent Menu", onReturnToParentClicked))
+    self:addMenuItem (BreakMenuItem ())
+    self:addMenuItem (ButtonMenuItem ("Return To Parent Menu", onReturnToParentClicked))
 
 end
 
 --------------------------------------------------
 function c:onExit ()
-	self.deleteLevelConfirmMenu = nil
-	self:clearAllMenuItems ();
+    self.deleteLevelConfirmMenu = nil
+    self:clearAllMenuItems ();
 end
 
 --------------------------------------------------
 return function ()
 
-	local instance = MenuClass ("DELETE LEVEL MENU")
+    local instance = MenuClass ("DELETE LEVEL MENU")
 
-	local properties =
-	{
-	}
+    local properties =
+    {
+    }
 
-	Mixin.CopyTo (instance, properties)
-	Mixin.CopyToAndBackupParents (instance, c)
+    Mixin.CopyTo (instance, properties)
+    Mixin.CopyToAndBackupParents (instance, c)
 
-	return instance
+    return instance
 end

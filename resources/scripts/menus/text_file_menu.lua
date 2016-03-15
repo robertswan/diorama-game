@@ -9,7 +9,7 @@ local Mixin = require ("resources/scripts/menus/mixin")
 
 --------------------------------------------------
 local function onReturnToMainMenuClicked ()
-	return "main_menu"
+    return "main_menu"
 end
 
 --------------------------------------------------
@@ -18,50 +18,50 @@ local c = {}
 --------------------------------------------------
 function c:onEnter (menus)
 
-	local lines = {}
-	io.input (self.filename)
-	self.filename = nil
+    local lines = {}
+    io.input (self.filename)
+    self.filename = nil
 
-	for line in io.lines () do
-		table.insert (lines, line)
-	end
-	self.scrollableMenuItem = ScrollableMenuItem (lines, 16)
-	self:addMenuItem (self.scrollableMenuItem)
+    for line in io.lines () do
+        table.insert (lines, line)
+    end
+    self.scrollableMenuItem = ScrollableMenuItem (lines, 16)
+    self:addMenuItem (self.scrollableMenuItem)
 
-	self:addMenuItem (LabelMenuItem (""))
-	self:addMenuItem (BreakMenuItem ())
-	self:addMenuItem (ButtonMenuItem ("Return To Main Menu", onReturnToMainMenuClicked))
+    self:addMenuItem (LabelMenuItem (""))
+    self:addMenuItem (BreakMenuItem ())
+    self:addMenuItem (ButtonMenuItem ("Return To Main Menu", onReturnToMainMenuClicked))
 
 end
 
 --------------------------------------------------
 function c:onExit ()
-	self.scrollableMenuItem = nil
-	self:clearAllMenuItems ();
+    self.scrollableMenuItem = nil
+    self:clearAllMenuItems ();
 end
 
 --------------------------------------------------
 function c:onUpdate (x, y, was_left_clicked)
-	local scrollWheel = dio.inputs.mouse.getScrollWheelDelta ()
-	if scrollWheel ~= 0 then
-		self.scrollableMenuItem:scroll (-scrollWheel)
-	end
+    local scrollWheel = dio.inputs.mouse.getScrollWheelDelta ()
+    if scrollWheel ~= 0 then
+        self.scrollableMenuItem:scroll (-scrollWheel)
+    end
 
-	return self.parent.onUpdate (self, x, y, was_left_clicked)
+    return self.parent.onUpdate (self, x, y, was_left_clicked)
 end
 
 --------------------------------------------------
 function c:recordFilename (filename)
-	self.title = filename
-	self.filename = filename
+    self.title = filename
+    self.filename = filename
 end
 
 --------------------------------------------------
 return function ()
 
-	local instance = MenuClass ("")
+    local instance = MenuClass ("")
 
-	Mixin.CopyToAndBackupParents (instance, c)
+    Mixin.CopyToAndBackupParents (instance, c)
 
-	return instance
+    return instance
 end

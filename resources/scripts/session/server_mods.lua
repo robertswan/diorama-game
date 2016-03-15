@@ -7,18 +7,18 @@ local mods = {}
 --------------------------------------------------
 local function main ()
 
-	local regularPermissions = 
-	{
-		client = true,
-		file = true,
-		player = true,
-		serverChat = true,
-	}
+    local regularPermissions = 
+    {
+        client = true,
+        file = true,
+        player = true,
+        serverChat = true,
+    }
 
-	-- Mods.loadMod (mods, "blocks", regularPermissions)
-	Mods.loadMod (mods, "creative", regularPermissions)
-	Mods.loadMod (mods, "motd", regularPermissions)
-	Mods.loadMod (mods, "spawn", regularPermissions)
+    -- Mods.loadMod (mods, "blocks", regularPermissions)
+    Mods.loadMod (mods, "creative", regularPermissions)
+    Mods.loadMod (mods, "motd", regularPermissions)
+    Mods.loadMod (mods, "spawn", regularPermissions)
 end
 
 --------------------------------------------------

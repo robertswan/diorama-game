@@ -69,8 +69,8 @@ end
 --------------------------------------------------
 -- type: 1 = button, 2 = textfield
 return function (x, y, sizeX, sizeY, text, onClicked, type)
-	local instance =
-	{
+    local instance =
+    {
         x = x,
         y = y,
         sizeX = sizeX,
@@ -80,9 +80,9 @@ return function (x, y, sizeX, sizeY, text, onClicked, type)
         type = type,
         isFocused = false,
         mouseOver = false,
-	}
+    }
 
-	Mixin.CopyTo (instance, c)
+    Mixin.CopyTo (instance, c)
 
-	return instance
+    return instance
 end
