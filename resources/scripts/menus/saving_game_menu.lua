@@ -7,10 +7,8 @@ local Mixin = require ("resources/scripts/menus/mixin")
 local c = {}
 
 --------------------------------------------------
-function c.onUpdate ()
-	if dio.session.hasTerminated () then
-		return "main_menu"
-	end
+function c:onSessionShutdownCompleted ()
+	return "main_menu"
 end
 
 --------------------------------------------------

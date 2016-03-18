@@ -29,7 +29,7 @@ end
 
 --------------------------------------------------
 local function onQuitClicked ()
-	app_is_shutting_down = true
+	dio.system.closeApplication ()
 	return "quitting_menu"
 end
 
@@ -54,32 +54,19 @@ end
 
 --------------------------------------------------
 function c:onEnter (menus)
-
 	assert (menus ~= nil)
-
 	assert (menus.text_file_menu ~= nil)
-
 	self.textFileMenu = menus.text_file_menu
-
-	-- if not self.isDemoSessionAlive then
-	-- 	dio.session.requestBegin (({path = "my_world", shouldSave = false}))
-	-- 	self.isDemoSessionAlive = true
-	-- end
 end
 
 --------------------------------------------------
 function c:onExit ()
-
 	self.textFileMenu = nil
-
-	-- dio.session.terminate ()
 end
 
 --------------------------------------------------
 function c:onRender ()
-
 	return self.parent.onRender (self)
-	-- dio.session.terminate ()
 end
 
 --------------------------------------------------
@@ -87,10 +74,7 @@ return function ()
 
 	local instance = MenuClass ("MAIN MENU")
 
-	local properties = 
-	{
-		isDemoSessionAlive = false
-	}
+	local properties = {}
 
 	Mixin.CopyTo (instance, properties)
 	Mixin.CopyToAndBackupParents (instance, c)

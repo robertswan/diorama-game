@@ -6,7 +6,29 @@ local Window = require ("resources/scripts/utils/window")
 local c = {}
 
 --------------------------------------------------
-local count = 0
+function c:changeMenu (newMenuName)
+
+	if newMenuName then
+
+		if self.current_menu then
+			print ("changing to menu " .. newMenuName .. " from " .. self.current_menu_name)
+		else
+			print ("changing to menu " .. newMenuName)
+		end
+
+		if self.current_menu then
+			self.current_menu:onExit (self.menus)
+		end
+		self.current_menu = self.menus [newMenuName]
+		self.current_menu_name = newMenuName
+		
+		if self.current_menu then
+			self.current_menu:onEnter (self.menus)
+		end	
+	end
+end
+
+--------------------------------------------------
 function c:update ()
 
 	local windowW, windowH = dio.drawing.getWindowSize ()
@@ -14,38 +36,12 @@ function c:update ()
 	self.x = (windowW - self.w * self.scale) / 2
 	self.y = (windowH - self.h * self.scale) / 2
 
-	if not app_is_shutting_down and dio.system.shouldAppClose () then
-		local next_menu_name = self.current_menu:onAppShouldClose ()	
-		if next_menu_name then
-			self.next_menu_name = next_menu_name
-		end
-	end
-
-	if app_is_shutting_down then
-		app_is_ready_to_quit = dio.session.hasTerminated ()
-		if app_is_ready_to_quit then
-			return true
-		end
-	end
-
-	if self.next_menu_name then
-		if self.current_menu then
-			self.current_menu:onExit (self.menus)
-		end
-		self.current_menu = self.menus [self.next_menu_name]
-		self.next_menu_name = nil
-		if self.current_menu then
-			self.current_menu:onEnter (self.menus)
-		end
-	end
-
 	local x = (dio.inputs.mouse.x - self.x) / self.scale
 	local y = (dio.inputs.mouse.y - self.y) / self.scale
 	local is_left_clicked = dio.inputs.mouse.left_button.is_clicked
 
-	self.next_menu_name = self.current_menu:onUpdate (x, y, is_left_clicked);
-
-	return false
+	local nextMenuName = self.current_menu:onUpdate (x, y, is_left_clicked);
+	self:changeMenu (nextMenuName)
 end
 
 --------------------------------------------------
@@ -73,9 +69,44 @@ end
 
 --------------------------------------------------
 function c:onWindowFocusLost ()
-	if self.current_menu then
-		return self.current_menu:onWindowFocusLost ()
+	if self.current_menu and self.current_menu.onWindowFocusLost then
+		local nextMenuName = self.current_menu:onWindowFocusLost ()
+		self:changeMenu (nextMenuName)
 	end
+end
+
+--------------------------------------------------
+function c:onSessionStarted ()
+	if self.current_menu and self.current_menu.onSessionStarted then
+		local nextMenuName = self.current_menu:onSessionStarted ()
+		self:changeMenu (nextMenuName)
+	end
+end
+
+--------------------------------------------------
+function c:onSessionShutdownBegun (reason)
+	if self.current_menu and self.current_menu.onSessionShutdownBegun then
+		local nextMenuName = self.current_menu:onSessionShutdownBegun (reason)
+		self:changeMenu (nextMenuName)
+	end
+end
+
+--------------------------------------------------
+function c:onSessionShutdownCompleted ()
+	if self.current_menu and self.current_menu.onSessionShutdownCompleted then
+		local nextMenuName = self.current_menu:onSessionShutdownCompleted ()
+		self:changeMenu (nextMenuName)
+	end
+end
+
+--------------------------------------------------
+function c:onApplicationShutdown ()
+	if self.current_menu and self.current_menu.onAppShouldClose then
+		local nextMenuName, shouldCancel = self.current_menu:onAppShouldClose ()
+		self:changeMenu (nextMenuName)
+		return shouldCancel
+	end
+	return false
 end
 
 --------------------------------------------------
@@ -90,7 +121,6 @@ return function (all_menus, initial_menu_name)
 	{
 		menus = all_menus,
 		current_menu = nil,
-		next_menu_name = initial_menu_name,
 		w = 512,
 		h = 256,
 		scale = 1,
@@ -103,6 +133,8 @@ return function (all_menus, initial_menu_name)
 	dio.events.addListener (types.CLIENT_KEY_CLICKED, function (keyCode, keyCharacter, keyModifier) return instance:onKeyClicked (keyCode, keyCharacter, keyModifier) end)
 
 	Mixin.CopyTo (instance, c)
+
+	instance:changeMenu (initial_menu_name)
 
 	return instance
 end

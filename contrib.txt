@@ -11,6 +11,15 @@ menu mod:				AmazedStream (FOV slider!)
 client mod:				LazyKernel
 
 
+
+compatibility demo v0.1.2
+-------------------------
+
+Mods
+
+* LazyKernel
+
+
 compatibility demo v0.1.1
 -------------------------
 

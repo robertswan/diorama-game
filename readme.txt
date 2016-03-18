@@ -1,5 +1,5 @@
-Compatibility test v0.1.1
-=========================
+Compatibility test v0.1.5.0
+===========================
 
 This is not to test features, it is to test the demo runs at all on a variety
 of hardware. If you have problems let me know on www.twitch.tv/robtheswan
@@ -10,6 +10,12 @@ crashes or has rendering bugs!
 
 Changelog
 =========
+
+
+compatibility demo v0.1.2
+-------------------------
+
+
 
 compatibility demo v0.1.1
 -------------------------

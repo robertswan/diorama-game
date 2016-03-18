@@ -2,18 +2,20 @@
 local m = {}
 
 --------------------------------------------------
-function m.calcBestFitScale (w, h)
+function m.calcBestFitScale (w, h, maxW, maxH)
 
-	local windowW, windowH = dio.drawing.getWindowSize ()
+	if maxW == nil or maxH == nil then
+		maxW, maxH = dio.drawing.getWindowSize ()
+	end
 	
 	assert (w > 0)
 	assert (h > 0)
-	assert (windowW >= 0)
-	assert (windowH >= 0)
+	assert (maxW >= 0)
+	assert (maxH >= 0)
 
 	local scale = 1
 
-	while w * (scale + 1) <= windowW and h * (scale + 1) <= windowH do
+	while w * (scale + 1) <= maxW and h * (scale + 1) <= maxH do
 		scale = scale + 1
 	end
 

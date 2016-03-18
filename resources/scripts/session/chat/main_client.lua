@@ -39,13 +39,22 @@ end
 local function renderTextEntry (self)
 
 	local heightPerLine = self.heightPerLine
+	local x = 0
 	local y = self.chatLinesToDraw * heightPerLine
+
+	if self.text ~= "" then
+		local textLength = dio.drawing.font.measureString (self.text .. "_")
+
+	 	if textLength > self.size.w then
+	 		x = self.size.w - textLength
+	 	end
+ 	end
 
 	local drawString = dio.drawing.font.drawString
 	drawString (0, y, string.rep ("-", 40), 0xffffffff)
-	drawString (0, y + heightPerLine, self.text, 0xffffffff)
+	drawString (x, y + heightPerLine, self.text, 0xffffffff)
 	local width = dio.drawing.font.measureString (self.text)
-	drawString (width, y + heightPerLine, "_", 0xff0000ff)
+	drawString (x + width, y + heightPerLine, "_", 0xff0000ff)
 
 end
 
@@ -143,13 +152,32 @@ local function onChatMessageReceived (author, text)
 
 	local self = instance
 
-	local line =
-	{
-		author = author,
-		text = text
-	}
+	local spaceLeft = self.size.w - self.textOffset
+	local spaceWidth = dio.drawing.font.measureString (" ") -- this should probably be in instance properties
+	local currentLine = ""
+	local linesAdded = {}
 
-	table.insert (self.lines, line)
+	local author2 = author
+
+	for word in string.gmatch (text, "%S+") do
+		local wordLength = dio.drawing.font.measureString (word)
+
+		if wordLength + spaceWidth > spaceLeft then
+			table.insert (self.lines, { author = author2, text = currentLine })
+			table.insert (linesAdded, currentLine)
+			currentLine = word .. " "
+			spaceLeft = self.size.w - self.textOffset - wordLength
+			author2 = ""
+		else
+			spaceLeft = spaceLeft - (wordLength + spaceWidth)
+			currentLine = currentLine .. word .. " "
+		end
+	end
+
+	if currentLine ~= "" then
+		table.insert (self.lines, { author = author2, text = currentLine })
+		table.insert (linesAdded, currentLine)
+	end
 
 	if self.autoScroll then
 		self.firstLineToDraw = #self.lines - self.chatLinesToDraw + 1
@@ -158,8 +186,16 @@ local function onChatMessageReceived (author, text)
 		end
 	end
 
-	addNewTickerLine (self, author, text)
-
+	if #linesAdded == 0 then
+		addNewTickerLine (self, author, text)
+	else
+		author2 = author
+		for idx = 1, #linesAdded do 
+			addNewTickerLine (self, author2, linesAdded [idx])
+			author2 = ""
+		end
+	end
+	
 	self.isDirty = true
 
 end
@@ -209,6 +245,7 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 			end
 
 			resetTextEntry (self)
+			hide (self)
 
 		elseif keyCode == keyCodes.ESCAPE then
 
@@ -261,9 +298,6 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 		dio.inputs.setArePlayingControlsEnabled (false)
 		resetTextEntry (self)
 
-		local handle = dio.clientDebug.beginDeliveryTimeTest ()
-		self.timeTestHandles [handle] = dio.system.getTime ()
-
 		return true
 
 	end
@@ -272,26 +306,13 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 end
 
 --------------------------------------------------
-local function onClientWindowFocusLost ()
-
-	-- local self = instance
-
-	-- if self.isVisible then
-	-- 	hide (self)
-	-- end
-
+local function onOtherClientConnected (playerId)
+	onChatMessageReceived ("SERVER", playerId .. " connected.")
 end
 
 --------------------------------------------------
-local function onDeliveryTimeTestComplete (handle)
-
-	local self = instance
-
-	local now = dio.system.getTime ()
-	local timeInMs = now - self.timeTestHandles [handle]
-	self.timeTestHandles [handle] = nil
-
-	onChatMessageReceived ("SERVER", "packet delivery test = (" .. tostring (handle) .. ") took " .. tostring (timeInMs) .. " ms")
+local function onOtherClientDisconnected (playerId)
+	onChatMessageReceived ("SERVER", playerId .. " disconnected.")
 end
 
 --------------------------------------------------
@@ -324,8 +345,6 @@ local function onLoadSuccessful ()
 			linesToDraw = chatLinesToDraw,
 			lines = {}
 		},
-
-		timeTestHandles = {},
 	}
 
 	instance.renderToTexture = dio.drawing.createRenderToTexture (instance.size.w, instance.size.h)
@@ -335,12 +354,17 @@ local function onLoadSuccessful ()
 	local types = dio.events.types
 	dio.events.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatMessageReceived)
 	dio.events.addListener (types.CLIENT_KEY_CLICKED, onKeyClicked)
-	dio.events.addListener (types.CLIENT_WINDOW_FOCUS_LOST, onClientWindowFocusLost)
-	dio.events.addListener (types.CLIENT_DELIVERY_TIME_TEST_COMPLETE, onDeliveryTimeTestComplete)
-
-	onChatMessageReceived ("Self", "World loaded")
+	dio.events.addListener (types.CLIENT_OTHER_CLIENT_CONNECTED, onOtherClientConnected)
+	dio.events.addListener (types.CLIENT_OTHER_CLIENT_DISCONNECTED, onOtherClientDisconnected)
+	-- dio.events.addListener (types.CLIENT_KEY_BINDINGS_MENU_OPENED, onThing)
 
 end
+
+-- --------------------------------------------------
+-- local function onThing (menu)
+-- {
+-- 	menu.addBindingOption ("CHAT", function (keyCode) instance.chatAppearKeyCode = keyCode end)
+-- }
 
 --------------------------------------------------
 local modSettings =
@@ -354,6 +378,11 @@ local modSettings =
 		client = true,
 		player = true,
 	},
+
+	-- keyBindingsAvailable = 
+	-- {
+	-- 	{name = "Chat", default = dio.inputs.keyCodes.T}
+	-- }
 }
 
 --------------------------------------------------

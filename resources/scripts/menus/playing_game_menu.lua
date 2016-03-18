@@ -10,21 +10,36 @@ local c = {}
 function c:onAppShouldClose ()
 	dio.session.terminate ()
 	self.parent.onAppShouldClose (self)
-	return "quitting_menu"
+	return "quitting_menu", true
 end
 
 --------------------------------------------------
-function c:onEnter ()
+function c:onSessionShutdownBegun (reason)
+
+	local reasons = dio.events.sessionShutdownBegun.reasons
+	if reason == reasons.PLAYER_QUIT then
+		return "saving_game_menu"
+
+	else
+		self.allMenus.game_not_connected_menu:setReason (reason)
+		return "game_not_connected_menu"
+	end
+end
+
+--------------------------------------------------
+function c:onEnter (allMenus)
 	self.menus:setIsVisible (false)
 	dio.inputs.mouse.setExclusive (true)
 	dio.inputs.setArePlayingControlsEnabled (true)
+	self.allMenus = allMenus
 end
 
 --------------------------------------------------
-function c:onExit ()
+function c:onExit (allMenus)
 	self.menus:setIsVisible (true)
 	dio.inputs.mouse.setExclusive (false)
 	dio.inputs.setArePlayingControlsEnabled (false)
+	self.allMenus = nil
 end
 
 --------------------------------------------------
@@ -44,7 +59,7 @@ function c:onWindowFocusLost ()
 
 	self.menus:setIsVisible (true)
 	dio.inputs.setArePlayingControlsEnabled (false)
-	self.menus.next_menu_name = "in_game_pause_menu"
+	self.menus:changeMenu ("in_game_pause_menu")
 end
 
 --------------------------------------------------
