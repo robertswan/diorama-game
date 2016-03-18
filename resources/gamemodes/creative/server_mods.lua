@@ -35,7 +35,7 @@ local function main ()
     for _, modData in ipairs (modsToLoad) do
         local mod, error = dio.mods.load (modData, regularPermissions)
         if mod then
-            return mod
+            mods [modData.modName] = mod
         else
             print (error)
         end
