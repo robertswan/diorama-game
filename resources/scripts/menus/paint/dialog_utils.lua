@@ -1,4 +1,5 @@
 local DialogElement = require ("resources/scripts/menus/paint/dialog_element")
+local IconDrawer = require ("resources/scripts/menus/paint/here_we_go")
 
 --------------------------------------------------
 local d = {}
@@ -91,6 +92,59 @@ function d.drawCustomButton (x, y, scale, text, isMouseOver)
         dio.drawing.font.drawBox (x + 2, y + 2, scale * 3.5, scale * 2.5, 0x555555ff)
         dio.drawing.font.drawString (x + 5, y + 6, text, 0xffffffff)
     end
+end
+
+--------------------------------------------------
+function d.drawCustomInputField (x, y, scale, text, isMouseOver, isFocused)
+    if isMouseOver then
+        dio.drawing.font.drawBox (x, y, scale * 4, scale * 2, 0x444444ff)
+        dio.drawing.font.drawString (x + 4, y + 5, text, 0xeeeeeeff)
+
+        if isFocused then
+            local strLen = dio.drawing.font.measureString (text)
+            dio.drawing.font.drawString (x + 4 + strLen, y + 5, "_", 0xdd0000ff)
+        end
+
+    else
+        dio.drawing.font.drawBox (x, y, scale * 4, scale * 2, 0x555555ff)
+        dio.drawing.font.drawString (x + 4, y + 5, text, 0xffffffff)
+
+        if isFocused then
+            local strLen = dio.drawing.font.measureString (text)
+            dio.drawing.font.drawString (x + 4 + strLen, y + 5, "_", 0xee0000ff)
+        end
+
+    end
+end
+
+--------------------------------------------------
+function d.drawPen (x, y, scale, isMouseOver, isCurrentTool)
+    IconDrawer.drawPen (x, y, scale, isMouseOver, isCurrentTool)
+end
+
+--------------------------------------------------
+function d.drawFill (x, y, scale, isMouseOver, isCurrentTool)
+    IconDrawer.drawFill (x, y, scale, isMouseOver, isCurrentTool)
+end
+
+--------------------------------------------------
+function d.drawEraser (x, y, scale, isMouseOver, isCurrentTool)
+    IconDrawer.drawEraser (x, y, scale, isMouseOver, isCurrentTool)
+end
+
+--------------------------------------------------
+function d.drawPicker (x, y, scale, isMouseOver, isCurrentTool)
+    IconDrawer.drawPicker (x, y, scale, isMouseOver, isCurrentTool)
+end
+
+--------------------------------------------------
+function d.drawUndo (x, y, scale, isMouseOver)
+    IconDrawer.drawUndo (x, y, scale, isMouseOver)
+end
+
+--------------------------------------------------
+function d.drawRedo (x, y, scale, isMouseOver)
+    IconDrawer.drawRedo (x, y, scale, isMouseOver)
 end
 
 --------------------------------------------------
