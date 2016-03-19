@@ -377,7 +377,7 @@ local modSettings =
     {
         client = true,
         player = true,
-        inputs = true,
+        input = true
     },
 
     -- keyBindingsAvailable = 
