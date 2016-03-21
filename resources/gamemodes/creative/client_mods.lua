@@ -44,6 +44,7 @@ local function main ()
         client = true,
         file = true,
         player = true,
+        input = true,
     }
 
     for _, modData in ipairs (modsToLoad) do
