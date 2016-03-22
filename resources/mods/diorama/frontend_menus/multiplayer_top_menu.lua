@@ -25,13 +25,15 @@ local function onConnectClicked (menuItem, menu)
 
     local params = 
     {
-        ipAddress = menu.ipAddress.value,
-        ipPort = menu.ipPort:getValueAsNumber (),
-        playerName = menu.playerName.value,
-        playerPassword = menu.password.value,
-        avatarTop = menu.avatarTop.value,
-        avatarBottom = menu.avatarBottom.value,
+        ipAddress =         menu.ipAddress.value,
+        ipPort =            menu.ipPort:getValueAsNumber (),
+        playerName =        menu.playerName.value,
+        playerPassword =    menu.password.value,
+        avatarTop =         menu.avatarTop.value,
+        avatarBottom =      menu.avatarBottom.value,
     }
+
+    dio.file.saveLua ("multiplayer_settings.lua", params, "multiplayerSettings")
 
     local isOk, errorString = dio.session.beginMp (params)
     if isOk then
@@ -61,16 +63,34 @@ return function ()
 
     local scrollLines = {}
 
-    local properties = 
-    {
-        playerName =     TextEntryMenuItem ("Player Name", nil, nil, "", 15),
-        password =         PasswordTextEntryMenuItem ("Player Password", nil, nil, "", 15),
-        ipAddress =     TextEntryMenuItem ("Server IP Address", nil, nil, "84.92.48.10", 16),
-        ipPort =         NumberEntryMenuItem ("Server Port", nil, nil, 25276, true),
-        avatarTop =        NumberEntryMenuItem ("Avatar Top Block", nil, nil, 9, true),
-        avatarBottom =     NumberEntryMenuItem ("Avatar Bottom Block", nil, nil, 8, true),
-        warningLabel =     LabelMenuItem (""),
-    }
+    local properties = nil
+
+    local savedMultiplayerSettings = dio.file.loadLua ("multiplayer_settings.lua")
+    
+    if savedMultiplayerSettings then
+
+        properties = 
+        {
+            playerName =    TextEntryMenuItem ("Player Name", nil, nil, savedMultiplayerSettings.playerName, 15),
+            password =      PasswordTextEntryMenuItem ("Password", nil, nil, savedMultiplayerSettings.playerPassword, 15),
+            ipAddress =     TextEntryMenuItem ("IP Address", nil, nil, savedMultiplayerSettings.ipAddress, 16),
+            ipPort =        NumberEntryMenuItem ("Port", nil, nil, savedMultiplayerSettings.ipPort, true),
+            avatarTop =     NumberEntryMenuItem ("Avatar Top Block", nil, nil, savedMultiplayerSettings.avatarTop, true),
+            avatarBottom =  NumberEntryMenuItem ("Avatar Bottom Block", nil, nil, savedMultiplayerSettings.avatarBottom, true),
+            warningLabel =  LabelMenuItem (""),
+        }
+    else
+        properties = 
+        {
+            playerName =    TextEntryMenuItem ("Player Name", nil, nil, "", 15),
+            password =      PasswordTextEntryMenuItem ("Password", nil, nil, "", 15),
+            ipAddress =     TextEntryMenuItem ("IP Address", nil, nil, "84.92.48.10", 16),
+            ipPort =        NumberEntryMenuItem ("Port", nil, nil, 25276, true),
+            avatarTop =     NumberEntryMenuItem ("Avatar Top Block", nil, nil, 9, true),
+            avatarBottom =  NumberEntryMenuItem ("Avatar Bottom Block", nil, nil, 8, true),
+            warningLabel =  LabelMenuItem (""),
+        }
+    end
 
     Mixin.CopyTo (instance, properties)
     Mixin.CopyToAndBackupParents (instance, c)
