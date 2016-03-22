@@ -29,27 +29,21 @@ local function onCreateLevelClicked (menuItem, menu)
 
         local worldSettings =
         {
-            path =             menu.filename.value,
-            isNew =         true,
-            shouldSave =     true,
+            path =              menu.filename.value,
+            isNew =             true,
+            shouldSave =        true,
         }
 
         local roomSettings =
         {
-            path =                             "default/",
-            randomSeed =                     menu.randomSeed.value,
-            perlinSize =                     menu.perlinSize:getValueAsNumber (),
-            perlinOctavesCount =             menu.perlinOctavesCount:getValueAsNumber (),
-            perlinFrequency =                 menu.perlinFrequency:getValueAsNumber (),
-            perlinAmplitude =                 menu.perlinAmplitude:getValueAsNumber (),
-            solidityChanceChangePerY =         menu.solidityChanceChangePerY:getValueAsNumber (),
-            solidityChanceOverallOffset =     menu.solidityChanceOverallOffset:getValueAsNumber (),
-            chunkSize =                     
-            {
-                x = 16, 
-                y = menu.chunkSizeY:getValueAsNumber (), 
-                z = 16
-            },
+            path =                              "default/",
+            randomSeed =                        menu.randomSeed.value,
+            perlinSize =                        menu.perlinSize:getValueAsNumber (),
+            perlinOctavesCount =                menu.perlinOctavesCount:getValueAsNumber (),
+            perlinFrequency =                   menu.perlinFrequency:getValueAsNumber (),
+            perlinAmplitude =                   menu.perlinAmplitude:getValueAsNumber (),
+            solidityChanceChangePerY =          menu.solidityChanceChangePerY:getValueAsNumber (),
+            solidityChanceOverallOffset =       menu.solidityChanceOverallOffset:getValueAsNumber (),
         }
 
         menu.loadingLevelMenu:recordWorldSettings (worldSettings, roomSettings)
@@ -66,13 +60,12 @@ end
 
 --------------------------------------------------
 local function onResetToDefaultsClicked (menuItem, menu)
-    menu.perlinSize.value =                     "128"
-    menu.perlinOctavesCount.value =             "5"
-    menu.perlinFrequency.value =                 "2"
-    menu.perlinAmplitude.value =                 "0.5"
-    menu.solidityChanceChangePerY.value =         "0.003"
-    menu.solidityChanceOverallOffset.value =     "0"
-    menu.chunkSizeY.value =                        "32"
+    menu.perlinSize.value =                         "128"
+    menu.perlinOctavesCount.value =                 "5"
+    menu.perlinFrequency.value =                    "2"
+    menu.perlinAmplitude.value =                    "0.5"
+    menu.solidityChanceChangePerY.value =           "0.0"
+    menu.solidityChanceOverallOffset.value =        "0.2"
 end
 
 --------------------------------------------------
@@ -113,17 +106,16 @@ return function ()
     local properties =
     {
         loadingLevelMenu = nil,
-        filename =                         TextEntryMenuItem ("Filename", onFilenameChanged, nil, "MyWorld", 16),
-        randomSeed =                     TextEntryMenuItem ("Random Seed", nil, nil, "0", 16),
-        perlinSize =                     NumberEntryMenuItem ("Perlin Initial Size", nil, nil, 128, true),
-        perlinOctavesCount =             NumberEntryMenuItem ("Octaves Count", nil, nil, 5, true),
-        perlinFrequency =                 NumberEntryMenuItem ("Per Octave Frequency Mulitplier", nil, nil, 2, false),
-        perlinAmplitude =                 NumberEntryMenuItem ("Per Octave Amplitude Multiplier", nil, nil, 0.5, false),
-        solidityChanceChangePerY =         NumberEntryMenuItem ("Solidity Chance Change Per Y", nil, nil, 0.003, false),
-        solidityChanceOverallOffset =     NumberEntryMenuItem ("Solidity Chance Overall Offset", nil, nil, 0, false),
-        chunkSizeY =                    NumberEntryMenuItem ("Height In Voxels", nil, nil, 32, true),
-        createLevel =                     ButtonMenuItem ("Create Level", onCreateLevelClicked),
-        warningLabel =                     LabelMenuItem (""),
+        filename =                          TextEntryMenuItem ("Filename", onFilenameChanged, nil, "MyWorld", 16),
+        randomSeed =                        TextEntryMenuItem ("Random Seed", nil, nil, "Wauteurz", 16),
+        perlinSize =                        NumberEntryMenuItem ("Perlin Initial Size", nil, nil, 128, true),
+        perlinOctavesCount =                NumberEntryMenuItem ("Octaves Count", nil, nil, 5, true),
+        perlinFrequency =                   NumberEntryMenuItem ("Per Octave Frequency Mulitplier", nil, nil, 2, false),
+        perlinAmplitude =                   NumberEntryMenuItem ("Per Octave Amplitude Multiplier", nil, nil, 0.5, false),
+        solidityChanceChangePerY =          NumberEntryMenuItem ("Solidity Chance Change Per Y", nil, nil, 0.0, false),
+        solidityChanceOverallOffset =       NumberEntryMenuItem ("Solidity Chance Overall Offset", nil, nil, 0.2, false),
+        createLevel =                       ButtonMenuItem ("Create Level", onCreateLevelClicked),
+        warningLabel =                      LabelMenuItem (""),
     }
 
     properties.warningLabel.color = 0xff8000ff
@@ -141,7 +133,6 @@ return function ()
     instance:addMenuItem (properties.perlinAmplitude)
     instance:addMenuItem (properties.solidityChanceChangePerY)
     instance:addMenuItem (properties.solidityChanceOverallOffset)
-    instance:addMenuItem (properties.chunkSizeY)
 
     instance:addMenuItem (BreakMenuItem ())
     

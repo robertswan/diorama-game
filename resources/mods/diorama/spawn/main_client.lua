@@ -35,9 +35,9 @@ local function onChatMessagePreSent (text)
         if #words == 2 then
             local xyz, error = dio.world.getPlayerXyz (words [2])
             if xyz then
-                local x = math.floor (xyz.chunkId.x * 16 + xyz.xyz.x)
-                local y = math.floor (xyz.xyz.y)
-                local z = math.floor (xyz.chunkId.z * 16 + xyz.xyz.z)
+                local x = math.floor (xyz.chunkId.x * 32 + xyz.xyz.x)
+                local y = math.floor (xyz.chunkId.y * 32 + xyz.xyz.y)
+                local z = math.floor (xyz.chunkId.z * 32 + xyz.xyz.z)
                 teleportTo (author, math.floor(x), math.floor(y), math.floor(z))
             end
 
@@ -55,9 +55,9 @@ local function onChatMessagePreSent (text)
             if nameCount > 1 then
                 local xyz, error = dio.world.getPlayerXyz (playerName)
                 if xyz then
-                    local x = math.floor (xyz.chunkId.x * 16 + xyz.xyz.x)
-                    local y = math.floor (xyz.xyz.y)
-                    local z = math.floor (xyz.chunkId.z * 16 + xyz.xyz.z)
+                    local x = math.floor (xyz.chunkId.x * 32 + xyz.xyz.x)
+                    local y = math.floor (xyz.chunkId.y * 32 + xyz.xyz.y)
+                    local z = math.floor (xyz.chunkId.z * 32 + xyz.xyz.z)
                     dio.clientChat.send ("Coords for " .. playerName .. " = (" .. x .. ", " .. y .. ", " .. z .. ")")
                 end
             end
@@ -67,9 +67,9 @@ local function onChatMessagePreSent (text)
             local author = dio.world.getPlayerNames () [1]
             local xyz, error = dio.world.getPlayerXyz (author)
             if xyz then
-                local x = math.floor (xyz.chunkId.x * 16 + xyz.xyz.x)
-                local y = math.floor (xyz.xyz.y)
-                local z = math.floor (xyz.chunkId.z * 16 + xyz.xyz.z)
+                local x = math.floor (xyz.chunkId.x * 32 + xyz.xyz.x)
+                local y = math.floor (xyz.chunkId.y * 32 + xyz.xyz.y)
+                local z = math.floor (xyz.chunkId.z * 32 + xyz.xyz.z)
                 dio.clientChat.send ("Coords for " .. author .. " = (" .. x .. ", " .. y .. ", " .. z .. ")")
             end
         end
