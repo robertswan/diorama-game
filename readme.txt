@@ -12,7 +12,7 @@ Changelog
 =========
 
 
-compatibility demo v0.1.2
+compatibility demo v0.1.9
 -------------------------
 
 

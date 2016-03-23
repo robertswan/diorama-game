@@ -3,6 +3,9 @@ local Window = require ("resources/_scripts/utils/window")
 --------------------------------------------------
 local blocks =
 {
+    -- needs to match the data in the blocks mod
+
+    -- 1
     "grass",            
     "mud",                
     "granite",            
@@ -13,6 +16,7 @@ local blocks =
     "tnt",                
     "pumpkin",            
 
+    -- 10
     "jump pad",            
     "cobble",            
     "trunk",            
@@ -23,6 +27,7 @@ local blocks =
     "melon",            
     "table",    
 
+    -- 19
     "gold",                
     "slab",                
     "big slab",            
@@ -33,6 +38,7 @@ local blocks =
     "mossy",        
     "stone brick",        
 
+    -- 28
     "sponge",            
     "herringbone",        
     "black",            
@@ -43,6 +49,7 @@ local blocks =
     "brown",            
     "pink",            
 
+    -- 37
     "blue",        
     "green",    
     "yellow",            
@@ -53,7 +60,22 @@ local blocks =
     "dk blue",        
     "dk green",    
 
-    "sign"    
+    --46
+    "sign",
+    "grass",                
+    "flower red",           
+    "flower yellow",        
+    "mush red",             
+    "mush brown",           
+    "sapling",              
+    "bamboo",               
+    "wheat",                
+
+    -- 55
+    "bush",                 
+    "stem",                 
+    "cactus top",           
+    "cactus body", 
 }
 
 local entities =

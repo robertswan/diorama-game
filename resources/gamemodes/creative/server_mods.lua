@@ -8,6 +8,11 @@ local modsToLoad =
     },
     {
         folder = "diorama",
+        modName = "blocks",
+        versionRequired = {major = 1, minor = 0},
+    },    
+    {
+        folder = "diorama",
         modName = "motd",
         versionRequired = {major = 1, minor = 0},
     },
@@ -26,6 +31,7 @@ local function main ()
 
     local regularPermissions = 
     {
+        blocks = true,
         client = true,
         file = true,
         player = true,
