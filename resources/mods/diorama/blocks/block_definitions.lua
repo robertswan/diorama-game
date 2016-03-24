@@ -18,7 +18,7 @@ local definitions =
     {name = "cobble",               uvs = {0, 1}},
     {name = "trunk",                uvs = {4, 1, 5, 1, 5, 1}},
     {name = "wood",                 uvs = {4, 0}},
-    {name = "leaf",                 uvs = {4, 3},                    isTransparent = true},
+    {name = "leaf",                 uvs = {4, 3},                    }, -- isTransparent = true},
     {name = "glass",                uvs = {1, 3},                    isTransparent = true,    hidesMatching = true},
     {name = "lit pumpkin",          uvs = {8, 7, 6, 7, 6, 7, 6, 7, 6, 6, 6, 6}},
     {name = "melon",                uvs = {8, 8, 9, 8, 9, 8}},
