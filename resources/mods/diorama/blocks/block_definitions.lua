@@ -59,18 +59,18 @@ local definitions =
 
     -- 46
     {name = "SIGN",                 uvs = {0, 0}},
-    {name = "grass",                uvs = {7, 2},           shape = "cross", isCollidable = false},
-    {name = "flower red",           uvs = {12, 0},          shape = "cross", isCollidable = false},
-    {name = "flower yellow",        uvs = {13, 0},          shape = "cross", isCollidable = false},
-    {name = "mush red",             uvs = {12, 1},          shape = "cross", isCollidable = false},
-    {name = "mush brown",           uvs = {13, 1},          shape = "cross", isCollidable = false},
-    {name = "sapling",              uvs = {15, 0},          shape = "cross", isCollidable = false},
-    {name = "bamboo",               uvs = {9, 4},           shape = "cross", isCollidable = false},
-    {name = "wheat",                uvs = {15, 5},          shape = "cross", isCollidable = false},
+    {name = "grass",                uvs = {7, 2},           shape = "cross",    isSolid = false},
+    {name = "flower red",           uvs = {12, 0},          shape = "cross",    isSolid = false},
+    {name = "flower yellow",        uvs = {13, 0},          shape = "cross",    isSolid = false},
+    {name = "mush red",             uvs = {12, 1},          shape = "cross",    isSolid = false},
+    {name = "mush brown",           uvs = {13, 1},          shape = "cross",    isSolid = false},
+    {name = "sapling",              uvs = {15, 0},          shape = "cross",    isSolid = false},
+    {name = "bamboo",               uvs = {9, 4},           shape = "cross",    isSolid = false},
+    {name = "wheat",                uvs = {15, 5},          shape = "cross",    isSolid = false},
 
     -- 55
-    {name = "bush",                 uvs = {7, 3},           shape = "cross", isCollidable = false},
-    {name = "stem",                 uvs = {15, 6},          shape = "cross", isCollidable = false},
+    {name = "bush",                 uvs = {7, 3},           shape = "cross",    isSolid = false},
+    {name = "stem",                 uvs = {15, 6},          shape = "cross",    isSolid = false},
     {name = "cactus top",           uvs = {6, 4, 5, 4, 7, 4}},
     {name = "cactus body",          uvs = {6, 4, 7, 4, 7, 4}},
 }
