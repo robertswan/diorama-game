@@ -63,12 +63,12 @@ local blocks =
     --46
     "sign",
     "grass",                
-    "flower red",           
-    "flower yellow",        
-    "mush red",             
-    "mush brown",           
-    "sapling",              
-    "bamboo",               
+    "rose",           
+    "daffy",        
+    "toadstool",             
+    "mushroom",           
+    "sprout",              
+    "cane",               
     "wheat",                
 
     -- 55
