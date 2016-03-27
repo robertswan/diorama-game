@@ -61,7 +61,7 @@ local function onChatReceived (event)
             event.author = ".home"
             event.text = 
                 tostring (t.chunkId.x * 16 + t.xyz.x) .. " " .. 
-                tostring (t.xyz.y) .. " " .. 
+                tostring (t.chunkId.y * 16 + t.xyz.y) .. " " .. 
                 tostring (t.chunkId.z * 16 + t.xyz.z)
         else
             event.author = "SERVER"
