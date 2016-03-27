@@ -31,7 +31,7 @@ local modsToLoad =
         modName = "spawn",
         versionRequired = {major = 1, minor = 0},
     },
-	{
+    {
         folder = "diorama",
         modName = "coords",
         versionRequired = {major = 1, minor = 0},

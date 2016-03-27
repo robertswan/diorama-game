@@ -17,23 +17,29 @@ local function onEarlyRender (self)
 		local windowW, windowH = dio.drawing.getWindowSize ()
 		self.position.y = windowH - (self.size.h + 50)
 		
-		local author = dio.world.getPlayerNames () [1]
-		local xyz, error = dio.world.getPlayerXyz (author)
-		local text = nil
+        dio.drawing.setRenderToTexture (self.renderToTexture)
+        renderBg (self)
 
-		if xyz then
-			local x = math.floor (xyz.chunkId.x * 32 + xyz.xyz.x)
-			local y = math.floor (xyz.chunkId.y * 32 + xyz.xyz.y)
-			local z = math.floor (xyz.chunkId.z * 32 + xyz.xyz.z)
+        local playerNames = dio.world.getPlayerNames ()
 
-			text = "x: " .. x ..  " y: " .. y .. " z: " .. z
+        if #playerNames > 0 then
+    		local author = dio.world.getPlayerNames () [1]
+    		local xyz, error = dio.world.getPlayerXyz (author)
+    		local text = nil
 
-			self.size.w = dio.drawing.font.measureString(text) + (self.border * 2)
-		end
+    		if xyz then
+    			local x = math.floor (xyz.chunkId.x * 32 + xyz.xyz.x)
+    			local y = math.floor (xyz.chunkId.y * 32 + xyz.xyz.y)
+    			local z = math.floor (xyz.chunkId.z * 32 + xyz.xyz.z)
 
-		dio.drawing.setRenderToTexture (self.renderToTexture)
-		renderBg (self)
-		renderCoords (self, text)
+    			text = "x: " .. x ..  " y: " .. y .. " z: " .. z
+
+    			self.size.w = dio.drawing.font.measureString(text) + (self.border * 2)
+                renderCoords (self, text)
+    		end
+
+        end
+
 		dio.drawing.setRenderToTexture (nil)
 	end
 end
