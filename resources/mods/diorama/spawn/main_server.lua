@@ -60,9 +60,9 @@ local function onChatReceived (event)
             local t = connection.homeLocation
             event.author = ".home"
             event.text = 
-                tostring (t.chunkId.x * 16 + t.xyz.x) .. " " .. 
-                tostring (t.chunkId.y * 16 + t.xyz.y) .. " " .. 
-                tostring (t.chunkId.z * 16 + t.xyz.z)
+                tostring (t.chunkId.x * 32 + t.xyz.x) .. " " .. 
+                tostring (t.chunkId.y * 32 + t.xyz.y) .. " " .. 
+                tostring (t.chunkId.z * 32 + t.xyz.z)
         else
             event.author = "SERVER"
             event.text = "No home position set."
