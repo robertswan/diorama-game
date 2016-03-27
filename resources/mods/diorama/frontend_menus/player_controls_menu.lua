@@ -137,7 +137,7 @@ return function ()
     local properties =
     {
         invertMouse = CheckboxMenuItem ("Invert Mouse", nil, isMouseInverted),
-        fov = SliderMenuItem ("Field Of View", nil, nil, "60", true),
+        fov = SliderMenuItem ("Field Of View", nil, nil, "90", true),
 
         keyMenuItems =
         {
