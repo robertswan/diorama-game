@@ -33,7 +33,7 @@ local modsToLoad =
     },
     {
         folder = "diorama",
-        modName = "coords",
+        modName = "diagnostics",
         versionRequired = {major = 1, minor = 0},
     },
 }
@@ -47,6 +47,7 @@ local function main ()
     {
         blocks = true,
         client = true,
+        diagnostics = true,
         file = true,
         player = true,
         input = true,
