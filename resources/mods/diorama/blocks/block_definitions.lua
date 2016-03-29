@@ -73,6 +73,7 @@ local definitions =
     {name = "stem",                 uvs = {15, 6},          shape = "cross",    isSolid = false},
     {name = "cactus top",           uvs = {6, 4, 5, 4, 7, 4}},
     {name = "cactus body",          uvs = {6, 4, 7, 4, 7, 4}},
+    {name = "gravity",              uvs = {10, 6}},
 }
 
 return definitions
