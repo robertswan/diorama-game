@@ -76,6 +76,7 @@ local blocks =
     "stem",                 
     "cactus top",           
     "cactus body", 
+    "GRAVITY",
 }
 
 local entities =
