@@ -227,16 +227,16 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
             return true
         end
         
-    elseif keyCode >= keyCodes ["F1"] and keyCode <= keyCodes ["F12"] then
-        if keyCode - keyCodes ["F1"] >= 0 and keyCode - keyCodes ["F1"]    <= self.pages then
+    elseif keyCode >= keyCodes.F1 and keyCode <= keyCodes.F12 then
+        if keyCode - keyCodes.F1 >= 0 and keyCode - keyCodes.F1    <= self.pages then
             local oldPage = self.currentPage
-            self.currentPage = (keyCode - keyCodes ["F1"])
+            self.currentPage = (keyCode - keyCodes.F1)
             self.currentBlockId = self.currentBlockId + (self.currentPage - oldPage) * self.blocksPerPage
             testIdBounds (self)
             self.isDirty = true
         end
     
-    elseif keyCode == keyCodes ["RIGHT"] then
+    elseif keyCode == keyCodes.RIGHT then
         self.currentPage = self.currentPage + 1
         
         if self.currentPage > self.pages then
@@ -254,7 +254,7 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
         self.isDirty = true
         return true
     
-    elseif keyCode == keyCodes ["LEFT"] then
+    elseif keyCode == keyCodes.LEFT then
         self.currentPage = self.currentPage - 1
         
         if self.currentPage < 0 then
@@ -272,6 +272,31 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
         self.isDirty = true
         return true
     
+    -- hijack inventory to add temporary gravity changing buttons
+    elseif keyCode == keyCodes.INSERT then
+        dio.inputs.setMyGravity (dio.inputs.gravityDirections.UP)
+        return true
+
+    elseif keyCode == keyCodes.PAGE_UP then
+        dio.inputs.setMyGravity (dio.inputs.gravityDirections.DOWN)
+        return true
+
+    elseif keyCode == keyCodes.HOME then
+        dio.inputs.setMyGravity (dio.inputs.gravityDirections.NORTH)
+        return true
+
+    elseif keyCode == keyCodes.END then
+        dio.inputs.setMyGravity (dio.inputs.gravityDirections.SOUTH)
+        return true
+
+    elseif keyCode == keyCodes.DELETE then
+        dio.inputs.setMyGravity (dio.inputs.gravityDirections.WEST)
+        return true
+
+    elseif keyCode == keyCodes.PAGE_DOWN then
+        dio.inputs.setMyGravity (dio.inputs.gravityDirections.EAST)
+        return true
+
     end
     
     setInventoryItem (self.currentBlockId)
