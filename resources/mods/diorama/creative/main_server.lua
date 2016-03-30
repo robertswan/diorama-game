@@ -91,7 +91,7 @@ local function onPlayerLoad (event)
         groupId = event.isSinglePlayer and "builder" or "tourist",
         isPasswordCorrect = isPasswordCorrect,
         needsSaving = event.isSinglePlayer,
-        gravityDir = settings.gravityDir or "DOWN"
+        gravityDir = settings and settings.gravityDir or "DOWN",
     }
 
     if settings and isPasswordCorrect then
