@@ -1,20 +1,8 @@
-Compatibility test v0.1.5.0
-===========================
+Compatibility test v0.1.10.0
+============================
 
-This is not to test features, it is to test the demo runs at all on a variety
-of hardware. If you have problems let me know on www.twitch.tv/robtheswan
-
-It may have bugs, it may run slow, but I'm only really interested in if it
-crashes or has rendering bugs!
-
-
-Changelog
-=========
-
-
-compatibility demo v0.1.9
--------------------------
-
+* variable gravity directions (NORTH, SOUTH, EAST, WEST, UP, DOWN)
+* infinite Height levels
 
 
 compatibility demo v0.1.1
