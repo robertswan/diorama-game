@@ -36,6 +36,30 @@ local groups =
 }
 
 --------------------------------------------------
+local gravityDirNames =
+{
+    -- TODO should be using io.inputs.gravityDirs but inputs is not for the server
+    [0] =  "NORTH",
+    [1] =   "EAST",
+    [2] =  "SOUTH",
+    [3] =   "WEST",
+    [4] =     "UP",
+    [5] =   "DOWN",
+}
+
+--------------------------------------------------
+local gravityDirIndices =
+{
+    -- TODO should be using io.inputs.gravityDirs but inputs is not for the server
+    NORTH =  0,
+    EAST =   1,
+    SOUTH =  2,
+    WEST =   3,
+    UP =     4,
+    DOWN =   5,
+}
+
+--------------------------------------------------
 local connections = {}
 
 --------------------------------------------------
@@ -67,12 +91,14 @@ local function onPlayerLoad (event)
         groupId = event.isSinglePlayer and "builder" or "tourist",
         isPasswordCorrect = isPasswordCorrect,
         needsSaving = event.isSinglePlayer,
+        gravityDir = settings.gravityDir or "DOWN"
     }
 
     if settings and isPasswordCorrect then
         connection.groupId = settings.permissionLevel
         connection.needsSaving = true
         dio.world.setPlayerXyz (event.playerName, settings.xyz)
+        dio.world.setPlayerGravity (event.playerName, gravityDirIndices [settings.gravityDir])
     end
 
     connection.screenName = connection.screenName .. " [" .. connection.groupId .. "]"
@@ -97,6 +123,7 @@ local function onPlayerSave (event)
                 xyz = xyz,
                 password = connection.password,
                 permissionLevel = connection.groupId,
+                gravityDir = gravityDirNames [dio.world.getPlayerGravity (event.playerName)],
             }
 
             dio.file.saveLua (filename, settings, "settings")
@@ -271,8 +298,9 @@ local modSettings =
 
     permissionsRequired = 
     {
-        player = true,
         file = true,
+        inputs = true,
+        player = true,
     },
 }
 
