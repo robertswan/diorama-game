@@ -236,14 +236,18 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 
         elseif keyCode == keyCodes.ENTER then
 
-            currentElement = 0
-            addToChatHistory (self.text)
+            local trimmedText = self.text:gsub ("^%s*", "")
 
-            local isOk, errorStr = dio.clientChat.send (self.text)
-            if not isOk then
-                onChatMessageReceived ("Self", "Last message did not send! (" .. errorStr .. ")")
+            if (trimmedText ~= "") then
+                currentElement = 0
+                addToChatHistory (trimmedText)
+                
+                local isOk, errorStr = dio.clientChat.send (trimmedText)
+                if not isOk then
+                    onChatMessageReceived ("Self", "Last message did not send! (" .. errorStr .. ")")
+                end
             end
-
+			
             resetTextEntry (self)
             hide (self)
 
