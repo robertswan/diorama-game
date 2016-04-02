@@ -26,6 +26,7 @@ function c:onUpdate (menu, x, y, was_left_clicked)
                 self.flashCount = 0
                 self.initial_value = self.value
                 self.isSelected = true
+
                 menu:setUpdateOnlySelectedMenuItems (true)
             end
         end

@@ -13,17 +13,18 @@ local function loadPlayerControls ()
         dio.inputs.mouse.setIsInverted (playerSettings.isMouseInverted)
 
         dio.inputs.hackSetFov (playerSettings.fov)
+        dio.inputs.hackSetGravityBlend (playerSettings.gravity)
 
         local setBinding = dio.inputs.bindings.setKeyBinding
         local types = dio.inputs.bindingTypes
 
-        setBinding (types.FORWARD,    playerSettings.forward)
-        setBinding (types.LEFT,     playerSettings.left)
-        setBinding (types.BACKWARD,    playerSettings.backward)
-        setBinding (types.RIGHT,     playerSettings.right)
-        setBinding (types.JUMP,     playerSettings.jump)
-        setBinding (types.CROUCH,     playerSettings.crouch)
-        setBinding (types.TURBO,     playerSettings.turbo)
+        setBinding (types.FORWARD,      playerSettings.forward)
+        setBinding (types.LEFT,         playerSettings.left)
+        setBinding (types.BACKWARD,     playerSettings.backward)
+        setBinding (types.RIGHT,        playerSettings.right)
+        setBinding (types.JUMP,         playerSettings.jump)
+        setBinding (types.CROUCH,       playerSettings.crouch)
+        setBinding (types.TURBO,        playerSettings.turbo)
     end
 end
 

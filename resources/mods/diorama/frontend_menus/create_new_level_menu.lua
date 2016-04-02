@@ -2,7 +2,7 @@
 local BreakMenuItem = require ("resources/mods/diorama/frontend_menus/menu_items/break_menu_item")
 local ButtonMenuItem = require ("resources/mods/diorama/frontend_menus/menu_items/button_menu_item")
 local LabelMenuItem = require ("resources/mods/diorama/frontend_menus/menu_items/label_menu_item")
-local NumberEntryMenuItem = require ("resources/mods/diorama/frontend_menus/menu_items/number_menu_item")
+local NumberMenuItem = require ("resources/mods/diorama/frontend_menus/menu_items/number_menu_item")
 local Menus = require ("resources/mods/diorama/frontend_menus/menu_construction")
 local MenuClass = require ("resources/mods/diorama/frontend_menus/menu_class")
 local Mixin = require ("resources/mods/diorama/frontend_menus/mixin")
@@ -108,12 +108,12 @@ return function ()
         loadingLevelMenu = nil,
         filename =                          TextEntryMenuItem ("Filename", onFilenameChanged, nil, "MyWorld", 16),
         randomSeed =                        TextEntryMenuItem ("Random Seed", nil, nil, "Wauteurz", 16),
-        perlinSize =                        NumberEntryMenuItem ("Perlin Initial Size", nil, nil, 128, true),
-        perlinOctavesCount =                NumberEntryMenuItem ("Octaves Count", nil, nil, 5, true),
-        perlinFrequency =                   NumberEntryMenuItem ("Per Octave Frequency Mulitplier", nil, nil, 2, false),
-        perlinAmplitude =                   NumberEntryMenuItem ("Per Octave Amplitude Multiplier", nil, nil, 0.5, false),
-        solidityChanceChangePerY =          NumberEntryMenuItem ("Solidity Chance Change Per Y", nil, nil, 0.0, false),
-        solidityChanceOverallOffset =       NumberEntryMenuItem ("Solidity Chance Overall Offset", nil, nil, 0.2, false),
+        perlinSize =                        NumberMenuItem ("Perlin Initial Size", nil, nil, 128, true),
+        perlinOctavesCount =                NumberMenuItem ("Octaves Count", nil, nil, 5, true),
+        perlinFrequency =                   NumberMenuItem ("Per Octave Frequency Mulitplier", nil, nil, 2, false),
+        perlinAmplitude =                   NumberMenuItem ("Per Octave Amplitude Multiplier", nil, nil, 0.5, false),
+        solidityChanceChangePerY =          NumberMenuItem ("Solidity Chance Change Per Y", nil, nil, 0.0, false),
+        solidityChanceOverallOffset =       NumberMenuItem ("Solidity Chance Overall Offset", nil, nil, 0.2, false),
         createLevel =                       ButtonMenuItem ("Create Level", onCreateLevelClicked),
         warningLabel =                      LabelMenuItem (""),
     }

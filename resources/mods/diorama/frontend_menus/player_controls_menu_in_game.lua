@@ -44,29 +44,31 @@ local function onSaveClicked (self, menu)
     dio.inputs.mouse.setIsInverted (menu.invertMouse.isChecked)
 
     dio.inputs.hackSetFov (menu.fov:getValueAsNumber ())
+    dio.inputs.hackSetGravityBlend (menu.gravity:getValueAsNumber ())
 
     local setBinding = dio.inputs.bindings.setKeyBinding
     local types = dio.inputs.bindingTypes
 
-    setBinding (types.FORWARD,    menu.keyMenuItems [1].keyCode)
-    setBinding (types.LEFT,     menu.keyMenuItems [2].keyCode)
-    setBinding (types.BACKWARD,    menu.keyMenuItems [3].keyCode)
-    setBinding (types.RIGHT,     menu.keyMenuItems [4].keyCode)
-    setBinding (types.JUMP,     menu.keyMenuItems [5].keyCode)
-    setBinding (types.CROUCH,     menu.keyMenuItems [6].keyCode)
-    setBinding (types.TURBO,     menu.keyMenuItems [7].keyCode)
+    setBinding (types.FORWARD,      menu.keyMenuItems [1].keyCode)
+    setBinding (types.LEFT,         menu.keyMenuItems [2].keyCode)
+    setBinding (types.BACKWARD,     menu.keyMenuItems [3].keyCode)
+    setBinding (types.RIGHT,        menu.keyMenuItems [4].keyCode)
+    setBinding (types.JUMP,         menu.keyMenuItems [5].keyCode)
+    setBinding (types.CROUCH,       menu.keyMenuItems [6].keyCode)
+    setBinding (types.TURBO,        menu.keyMenuItems [7].keyCode)
 
     local playerSettings =
     {
-        isMouseInverted =     menu.invertMouse.isChecked,
-        fov =                 menu.fov:getValueAsNumber (),
-        forward =             menu.keyMenuItems [1].keyCode,
-        left =                 menu.keyMenuItems [2].keyCode,
-        backward =             menu.keyMenuItems [3].keyCode,
-        right =             menu.keyMenuItems [4].keyCode,
-        jump =                 menu.keyMenuItems [5].keyCode,
-        crouch =             menu.keyMenuItems [6].keyCode,
-        turbo =             menu.keyMenuItems [7].keyCode
+        isMouseInverted =       menu.invertMouse.isChecked,
+        fov =                   menu.fov:getValueAsNumber (),
+        gravity =               menu.gravity:getValueAsNumber (),
+        forward =               menu.keyMenuItems [1].keyCode,
+        left =                  menu.keyMenuItems [2].keyCode,
+        backward =              menu.keyMenuItems [3].keyCode,
+        right =                 menu.keyMenuItems [4].keyCode,
+        jump =                  menu.keyMenuItems [5].keyCode,
+        crouch =                menu.keyMenuItems [6].keyCode,
+        turbo =                 menu.keyMenuItems [7].keyCode
     }
 
     dio.file.saveLua ("player_settings.lua", playerSettings, "playerSettings")
@@ -84,6 +86,7 @@ local function onResetToDefaultsClicked (menuItem, menu)
 
     local keyCodeFromString = dio.inputs.keys.keyCodeFromString
     menu.fov.value = "90"
+    menu.gravity.value = "90"
 
     menu.invertMouse.isChecked = false 
     menu.keyMenuItems [1].keyCode = keyCodeFromString ("W")
@@ -115,6 +118,7 @@ function c:onEnter ()
     local types = dio.inputs.bindingTypes
 
     self.fov.value = tostring (dio.inputs.hackGetFov ())
+    self.gravity.value = tostring (dio.inputs.hackGetGravityBlend ())
 
     self.invertMouse.isChecked = dio.inputs.mouse.getIsInverted ()
     self.keyMenuItems [1].keyCode = getBinding (types.FORWARD)
@@ -138,6 +142,7 @@ return function ()
     {
         invertMouse = CheckboxMenuItem ("Invert Mouse", nil, isMouseInverted),
         fov = SliderMenuItem ("Field Of View", nil, nil, "90", true),
+        gravity = NumberMenuItem ("Gravity Blend", nil, nil, 0.075, false),
 
         keyMenuItems =
         {
@@ -163,6 +168,7 @@ return function ()
     instance:addMenuItem (BreakMenuItem ())
     instance:addMenuItem (properties.invertMouse)
     instance:addMenuItem (properties.fov)
+    instance:addMenuItem (properties.gravity)
     instance:addMenuItem (properties.keyMenuItems [1])
     instance:addMenuItem (properties.keyMenuItems [2])
     instance:addMenuItem (properties.keyMenuItems [3])
@@ -172,11 +178,8 @@ return function ()
     instance:addMenuItem (properties.keyMenuItems [7])
     instance:addMenuItem (BreakMenuItem ())
     instance:addMenuItem (ButtonMenuItem ("Save", onSaveClicked))    
-    instance:addMenuItem (BreakMenuItem ())
     instance:addMenuItem (ButtonMenuItem ("Cancel", onCancelClicked))    
-    instance:addMenuItem (BreakMenuItem ())
     instance:addMenuItem (ButtonMenuItem ("Reset To Defaults", onResetToDefaultsClicked))    
-    instance:addMenuItem (LabelMenuItem (""))
     instance:addMenuItem (properties.multiKeySelectWarning)
 
     return instance
