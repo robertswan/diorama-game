@@ -77,6 +77,7 @@ local blocks =
     "cactus top",           
     "cactus body", 
     "GRAVITY",
+    "all grass",
 }
 
 local entities =
