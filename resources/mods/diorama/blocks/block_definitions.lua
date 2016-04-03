@@ -1,17 +1,17 @@
 --------------------------------------------------
+-- TODO turn this into an enum
 local modes =
 {
     repeat1x1 = 0,
-    repeat2x2 = 0,
+    repeat2x2 = 1,
 }
 
 --------------------------------------------------
 local tiles = 
 {
-    {mode = modes.repeat1x1, uvs = {3, 0}},                    -- side of grass (1)
-    -- [2] = {mode = modes.repeat2x2, uvs = {7, 1, 8, 1, 7, 2, 8, 2}},  -- grass (2)
-    {mode = modes.repeat1x1, uvs = {0, 0}},  -- grass (2)
-    {mode = modes.repeat1x1, uvs = {2, 0}},                    -- mud (2)
+    {mode = modes.repeat1x1, uvs = {3, 0}},                         -- side of grass (1)
+    {mode = modes.repeat2x2, uvs = {7, 12, 8, 12, 7, 13, 8, 13}},   -- grass (2)
+    {mode = modes.repeat1x1, uvs = {2, 0}},                         -- mud (2)
 }
 
 --------------------------------------------------
@@ -20,7 +20,6 @@ local blocks =
     -- 0 = air
     -- 1
     {name = "grass",                tiles = {1, 2, 3}},
-    -- {name = "grass",                tiles = {1}},
     {name = "mud",                  tiles = {3}},
     {name = "granite",              uvs = {1, 0}},
     {name = "obsidian",             uvs = {5, 2}},

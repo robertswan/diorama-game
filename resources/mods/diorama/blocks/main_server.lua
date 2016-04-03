@@ -7,7 +7,7 @@ local function onLoadSuccessful ()
         local definitionId = dio.blocks.createNewDefinitionId ()
         definition.definitionId = definitionId
         dio.blocks.setDefinition (definition, definitions.tiles)
-    end
+    end 
 end
 
 --------------------------------------------------
