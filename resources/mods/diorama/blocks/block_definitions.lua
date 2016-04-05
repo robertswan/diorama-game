@@ -1,10 +1,26 @@
 --------------------------------------------------
-local definitions =
+-- TODO turn this into an enum
+local modes =
+{
+    repeat1x1 = 0,
+    repeat2x2 = 1,
+}
+
+--------------------------------------------------
+local tiles = 
+{
+    {mode = modes.repeat1x1, uvs = {3, 0}},                         -- side of grass (1)
+    {mode = modes.repeat2x2, uvs = {7, 12, 8, 12, 7, 13, 8, 13}},   -- grass (2)
+    {mode = modes.repeat1x1, uvs = {2, 0}},                         -- mud (2)
+}
+
+--------------------------------------------------
+local blocks =
 {
     -- 0 = air
     -- 1
-    {name = "grass",                uvs = {3, 0, 0, 0, 2, 0}},
-    {name = "mud",                  uvs = {2, 0}},
+    {name = "grass",                tiles = {1, 2, 3}},
+    {name = "mud",                  tiles = {3}},
     {name = "granite",              uvs = {1, 0}},
     {name = "obsidian",             uvs = {5, 2}},
     {name = "sand",                 uvs = {2, 1}},
@@ -77,4 +93,4 @@ local definitions =
     {name = "all grass",            uvs = {0, 0}},
 }
 
-return definitions
+return {blocks = blocks, tiles = tiles}
