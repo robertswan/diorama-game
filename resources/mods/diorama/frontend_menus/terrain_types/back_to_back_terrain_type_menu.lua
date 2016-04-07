@@ -1,52 +1,35 @@
 --------------------------------------------------
-local BaseTerrainTypeMenu = require ("resources/mods/diorama/frontend_menus/terrain_types/base_terrain_type_menu")
+local BreakMenuItem = require ("resources/mods/diorama/frontend_menus/menu_items/break_menu_item")
+local ButtonMenuItem = require ("resources/mods/diorama/frontend_menus/menu_items/button_menu_item")
+local LabelMenuItem = require ("resources/mods/diorama/frontend_menus/menu_items/label_menu_item")
+local MenuClass = require ("resources/mods/diorama/frontend_menus/menu_class")
+local Mixin = require ("resources/mods/diorama/frontend_menus/mixin")
 
 --------------------------------------------------
-local options =
-{
-    {
-        id = "perlinSize",
-        description = "Perlin Initial Size",
-        default = 128, 
-        isInteger = true
-    },
-    {
-        id = "perlinOctavesCount",
-        description = "Octaves Count",
-        default = 5, 
-        isInteger = true
-    },
-    {
-        id = "perlinFrequency",
-        description = "Per Octave Frequency Mulitplier",
-        default = 2, 
-        isInteger = false
-    },
-    {
-        id = "perlinAmplitude",
-        description = "Per Octave Amplitude Multiplier",
-        default = 0.5, 
-        isInteger = false
-    },
-    {
-        id = "solidityChanceOverallOffset",
-        description = "Solidity Chance Overall Offset",
-        default = 0.2, 
-        isInteger = false
-    },
-}
+local function onReturnToParentClicked ()
+    return "create_new_level_menu"
+end
+
+--------------------------------------------------
+local c = {}
 
 --------------------------------------------------
 return function ()
 
+    local instance = MenuClass ("Create Back To Back Level")
+
     local properties =
     {
-        description = "Create Back to Back Level",
-        terrainId = "backToBack",
-        terrainVersion = 1,
-        options = options,
     }
 
-    local instance = BaseTerrainTypeMenu (properties)
+    Mixin.CopyTo (instance, properties)
+    Mixin.CopyToAndBackupParents (instance, c)
+
+    instance:addMenuItem (LabelMenuItem ("PLACEHOLDER!"))
+
+    instance:addMenuItem (BreakMenuItem ())
+
+    instance:addMenuItem (ButtonMenuItem ("Return To Parent Menu", onReturnToParentClicked))
+    
     return instance
 end
