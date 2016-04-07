@@ -17,13 +17,13 @@ local options =
         isInteger = true
     },
     {
-        id = "perlinFrequency",
+        id = "frequencyPerOctave",
         description = "Per Octave Frequency Mulitplier",
         default = 2, 
         isInteger = false
     },
     {
-        id = "perlinAmplitude",
+        id = "amplitudePerOctave",
         description = "Per Octave Amplitude Multiplier",
         default = 0.5, 
         isInteger = false

@@ -28,8 +28,8 @@ local function onCreateLevelClicked (menuItem, menu)
         local roomSettings =
         {
             path =                              "default/",
-            terrain_type =                      "floatingIslands",
-            randomSeed =                        menu.randomSeed.value,
+            terrainId =                         menu.menuProperties.terrainId,
+            randomSeedAsString =                menu.randomSeed.value,
         }
 
         for _, v in ipairs (menu.menuProperties.options) do
