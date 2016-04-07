@@ -95,32 +95,44 @@ local function main ()
     dio.events.addListener (types.CLIENT_SESSION_SHUTDOWN_COMPLETED,     onSessionShutdownCompleted)
     dio.events.addListener (types.CLIENT_APPLICATION_SHUTDOWN,             onApplicationShutdown)
 
+    local menu_path = "resources/mods/diorama/frontend_menus/"
+    local terrain_path = menu_path .. "terrain_types/"
+
     local individual_menus =
     {
-        text_file_menu =             require ("resources/mods/diorama/frontend_menus/text_file_menu") (),
-        main_menu =                 require ("resources/mods/diorama/frontend_menus/main_menu") (),
-        single_player_top_menu =    require ("resources/mods/diorama/frontend_menus/single_player_top_menu") (),
-        multiplayer_top_menu =        require ("resources/mods/diorama/frontend_menus/multiplayer_top_menu") (),
-        create_new_level_menu =     require ("resources/mods/diorama/frontend_menus/create_new_level_menu") (),
-        load_level_menu =             require ("resources/mods/diorama/frontend_menus/load_level_menu") (),
-        delete_level_menu =         require ("resources/mods/diorama/frontend_menus/delete_level_menu") (),
-        delete_level_confirm_menu = require ("resources/mods/diorama/frontend_menus/delete_level_confirm_menu") (),
-        player_controls_menu =         require ("resources/mods/diorama/frontend_menus/player_controls_menu") (),
-        player_controls_menu_in_game =         require ("resources/mods/diorama/frontend_menus/player_controls_menu_in_game") (),
-        loading_level_menu =         require ("resources/mods/diorama/frontend_menus/loading_level_menu") (),
+        text_file_menu =                require (menu_path .. "text_file_menu") (),
+        main_menu =                     require (menu_path .. "main_menu") (),
+        single_player_top_menu =        require (menu_path .. "single_player_top_menu") (),
+        multiplayer_top_menu =          require (menu_path .. "multiplayer_top_menu") (),
+        create_new_level_menu =         require (menu_path .. "create_new_level_menu") (),
+        load_level_menu =               require (menu_path .. "load_level_menu") (),
+        delete_level_menu =             require (menu_path .. "delete_level_menu") (),
+        delete_level_confirm_menu =     require (menu_path .. "delete_level_confirm_menu") (),
+        player_controls_menu =          require (menu_path .. "player_controls_menu") (),
+        player_controls_menu_in_game =  require (menu_path .. "player_controls_menu_in_game") (),
+        loading_level_menu =            require (menu_path .. "loading_level_menu") (),
 
-        in_game_pause_menu =        require ("resources/mods/diorama/frontend_menus/in_game_pause_menu") (),
-        game_not_connected_menu =    require ("resources/mods/diorama/frontend_menus/game_not_connected_menu") (),
-        saving_game_menu =            require ("resources/mods/diorama/frontend_menus/saving_game_menu") (),
-        quitting_menu =                require ("resources/mods/diorama/frontend_menus/quitting_menu") (),
-        tetris_main_menu =            require ("resources/mods/diorama/frontend_menus/tetris/tetris_main_menu") (),
-        paint_main_menu =            require ("resources/mods/diorama/frontend_menus/paint/paint_main") (),
+        back_to_back_terrain_type_menu =        require (terrain_path .. "back_to_back_terrain_type_menu") (),
+        cubic_terrain_type_menu =               require (terrain_path .. "cubic_terrain_type_menu") (),
+        flat_terrain_type_menu =                require (terrain_path .. "flat_terrain_type_menu") (),
+        parallel_facing_terrain_type_menu =     require (terrain_path .. "parallel_facing_terrain_type_menu") (),
+        square_ring_terrain_type_menu =         require (terrain_path .. "square_ring_terrain_type_menu") (),
+        hollow_earth_terrain_type_menu =        require (terrain_path .. "hollow_earth_terrain_type_menu") (),
+        floating_islands_terrain_type_menu =    require (terrain_path .. "floating_islands_terrain_type_menu") (),
+
+        in_game_pause_menu =            require (menu_path .. "in_game_pause_menu") (),
+        game_not_connected_menu =       require (menu_path .. "game_not_connected_menu") (),
+        saving_game_menu =              require (menu_path .. "saving_game_menu") (),
+        quitting_menu =                 require (menu_path .. "quitting_menu") (),
+        tetris_main_menu =              require (menu_path .. "tetris/tetris_main_menu") (),
+        paint_main_menu =               require (menu_path .. "paint/paint_main") (),
+
     }
 
     individual_menus.text_file_menu:recordFilename ("readme.txt")
     menus = Menus (individual_menus, "text_file_menu")
 
-    individual_menus.playing_game_menu =         require ("resources/mods/diorama/frontend_menus/playing_game_menu") (menus)
+    individual_menus.playing_game_menu =         require (menu_path .. "playing_game_menu") (menus)
 end
 
 main ()
