@@ -214,14 +214,21 @@ function c:setCellColor (x, y)
 				if self.currentTool == 0 then
 					local cell = self.canvas [rowIdx][colIdx]
 					local curA = bit32.band (self.currentColor, 255)
+					local cellA = bit32.band (cell, 255)
 
-					if cell == 0 or curA == 255 then
-						self.canvas [rowIdx][colIdx] = self.currentColor
-					else
-						self.canvas [rowIdx][colIdx] = Utils.blendColors (cell, self.currentColor)
+					if curA ~= 0 then
+						if curA == 255 or cellA == 0 then
+							self.canvas [rowIdx][colIdx] = self.currentColor
+						else
+						    if cellA > curA then
+							    self.canvas [rowIdx][colIdx] = Utils.blendColors (self.currentColor, cell)
+	                        else
+	                            self.canvas [rowIdx][colIdx] = Utils.blendColors (cell, self.currentColor)
+	                        end
+						end
+
+						TimeTraveller.addPenEvent (colIdx, rowIdx, cell, self.canvas [rowIdx][colIdx])
 					end
-
-					TimeTraveller.addPenEvent (colIdx, rowIdx, cell, self.canvas [rowIdx][colIdx])
 
 				elseif self.currentTool == 1 then
 					local oldCanvas = Utils.deepcopy (self.canvas)
