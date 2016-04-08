@@ -18,20 +18,24 @@ local basicGenerator =
             mode = "replace",
 
             scale = 128,
-            octaves = 3,
+            octaves = 5,
             perOctaveAmplitude = 0.5,
             perOctaveFrequency = 2.0,
             normalize = true,
-        }
+        },
+        -- {
+        --     type = "treePass",
+        --     frequency = 1,
+        -- }
     },
+
     voxelPass =
     {
-        -- {
-        --     type = "addGrass",
+        {
+            type = "addGrass",
 
-        --     axis = "y",
-        --     mud_height = 4,
-        -- }
+            mudHeight = 4,
+        }
     }
 }
 
