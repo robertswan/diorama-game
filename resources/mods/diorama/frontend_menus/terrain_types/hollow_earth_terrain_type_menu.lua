@@ -1,35 +1,64 @@
 --------------------------------------------------
-local BreakMenuItem = require ("resources/mods/diorama/frontend_menus/menu_items/break_menu_item")
-local ButtonMenuItem = require ("resources/mods/diorama/frontend_menus/menu_items/button_menu_item")
-local LabelMenuItem = require ("resources/mods/diorama/frontend_menus/menu_items/label_menu_item")
-local MenuClass = require ("resources/mods/diorama/frontend_menus/menu_class")
-local Mixin = require ("resources/mods/diorama/frontend_menus/mixin")
+local BaseTerrainTypeMenu = require ("resources/mods/diorama/frontend_menus/terrain_types/base_terrain_type_menu")
 
 --------------------------------------------------
-local function onReturnToParentClicked ()
-    return "create_new_level_menu"
-end
-
---------------------------------------------------
-local c = {}
+local options =
+{
+    {
+        id = "internalCubeRadius",
+        description = "Internal Cube Radius (chunks)",
+        default = 2, 
+        isInteger = true
+    },
+    {
+        id = "roughnessDepth",
+        description = "Roughness Depth (voxels)",
+        default = 32, 
+        isInteger = true
+    },
+    {
+        id = "perlinSize",
+        description = "Perlin Initial Size",
+        default = 128, 
+        isInteger = true
+    },
+    {
+        id = "perlinOctavesCount",
+        description = "Octaves Count",
+        default = 5, 
+        isInteger = true
+    },
+    {
+        id = "frequencyPerOctave",
+        description = "Per Octave Frequency Mulitplier",
+        default = 2, 
+        isInteger = false
+    },
+    {
+        id = "amplitudePerOctave",
+        description = "Per Octave Amplitude Multiplier",
+        default = 0.5, 
+        isInteger = false
+    },
+    {
+        id = "solidityChanceOverallOffset",
+        description = "Solidity Chance Overall Offset",
+        default = 0.2, 
+        isInteger = false
+    },
+}
 
 --------------------------------------------------
 return function ()
 
-    local instance = MenuClass ("Create Hollow Earth Level")
-
     local properties =
     {
+        description = "Create Hollow Earth Level",
+        terrainId = "singleHollowEarth",
+        terrainVersion = 1,
+        options = options,
     }
 
-    Mixin.CopyTo (instance, properties)
-    Mixin.CopyToAndBackupParents (instance, c)
-
-    instance:addMenuItem (LabelMenuItem ("PLACEHOLDER!"))
-
-    instance:addMenuItem (BreakMenuItem ())
-
-    instance:addMenuItem (ButtonMenuItem ("Return To Parent Menu", onReturnToParentClicked))
-    
+    local instance = BaseTerrainTypeMenu (properties)
     return instance
 end
