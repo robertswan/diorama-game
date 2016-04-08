@@ -9,19 +9,19 @@ local Mixin = require ("resources/mods/diorama/frontend_menus/mixin")
 local TextEntryMenuItem = require ("resources/mods/diorama/frontend_menus/menu_items/text_entry_menu_item")
 
 --------------------------------------------------
-local basic_biome = 
+local basicGenerator = 
 {
     weightPass =
     {
         {
-            type = perlin_noise,
-            mode = multiply,
+            type = "perlin_noise",
+            mode = "multiply",
             params =
             {
                 scale = 128,
-                ocatves = 5,
+                ocatves = 3,
                 perOctaveAmplitude = 0.5,
-                perOctaveFrequency = 0.5,
+                perOctaveFrequency = 2.0,
                 normalise = true,
             }
         }
@@ -29,7 +29,7 @@ local basic_biome =
     voxelPass =
     {
         {
-            type = add_grass,
+            type = "add_grass",
             params =
             {
                 axis = "y",
@@ -59,7 +59,7 @@ local function onCreateLevelClicked (menuItem, menu)
         local roomSettings =
         {
             path =                              "default/",
-            biomes =                            {basic_biome},
+            generators =                        {basicGenerator},
             terrainId =                         "biomes",
             randomSeedAsString =                menu.randomSeed.value,
         }
