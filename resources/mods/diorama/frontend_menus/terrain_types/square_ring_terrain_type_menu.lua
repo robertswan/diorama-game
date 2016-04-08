@@ -14,28 +14,24 @@ local basicGenerator =
     weightPass =
     {
         {
-            type = "perlin_noise",
-            mode = "multiply",
-            params =
-            {
-                scale = 128,
-                ocatves = 3,
-                perOctaveAmplitude = 0.5,
-                perOctaveFrequency = 2.0,
-                normalise = true,
-            }
+            type = "perlinNoise",
+            mode = "replace",
+
+            scale = 128,
+            octaves = 3,
+            perOctaveAmplitude = 0.5,
+            perOctaveFrequency = 2.0,
+            normalize = true,
         }
     },
     voxelPass =
     {
-        {
-            type = "add_grass",
-            params =
-            {
-                axis = "y",
-                mud_height = 4,
-            }
-        }
+        -- {
+        --     type = "addGrass",
+
+        --     axis = "y",
+        --     mud_height = 4,
+        -- }
     }
 }
 
@@ -60,7 +56,7 @@ local function onCreateLevelClicked (menuItem, menu)
         {
             path =                              "default/",
             generators =                        {basicGenerator},
-            terrainId =                         "biomes",
+            terrainId =                         "paramaterized",
             randomSeedAsString =                menu.randomSeed.value,
         }
 
