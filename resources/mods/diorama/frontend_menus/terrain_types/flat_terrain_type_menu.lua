@@ -5,8 +5,20 @@ local BaseTerrainTypeMenu = require ("resources/mods/diorama/frontend_menus/terr
 local options =
 {
     {
-        id = "heightRange",
-        description = "Height Range (voxels)",
+        id = "base",
+        description = "Height Base (voxels)",
+        default = 128, 
+        isInteger = true
+    },
+    {
+        id = "height",
+        description = "Height (voxels above base)",
+        default = 128, 
+        isInteger = true
+    },
+    {
+        id = "water",
+        description = "Water Level (voxels above base)",
         default = 128, 
         isInteger = true
     },
