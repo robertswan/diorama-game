@@ -21,7 +21,6 @@ local basicGenerator =
             octaves = 5,
             perOctaveAmplitude = 0.5,
             perOctaveFrequency = 2.0,
-            normalize = true,
         },
         -- {
         --     type = "treePass",
