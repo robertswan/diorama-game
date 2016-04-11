@@ -9,6 +9,19 @@ local Mixin = require ("resources/mods/diorama/frontend_menus/mixin")
 local TextEntryMenuItem = require ("resources/mods/diorama/frontend_menus/menu_items/text_entry_menu_item")
 
 --------------------------------------------------
+-- how to create landscape
+
+-- do perlin noise weight for every voxel
+-- create a threshold - turn weight into solid / air for every voxel
+-- add grass
+-- add tree primitives (it requires knowing gravity and solid / air) 
+-- convert all primitives into blocks
+
+-- looking ahead
+-- i need to be able to collate ALL CSG primitives that can affect a chunk
+-- some of these have requirements that affect neighbours, and other aspects of terrain generation
+
+
 local basicGenerator = 
 {
     weightPass =
@@ -22,19 +35,23 @@ local basicGenerator =
             perOctaveAmplitude = 0.5,
             perOctaveFrequency = 2.0,
         },
-        -- {
-        --     type = "treePass",
-        --     frequency = 1,
-        -- }
     },
+
+    -- Q: where do we convert weights, into voxel data?
 
     voxelPass =
     {
         {
+            type = "addTrees",
+            chanceOfTree = 0.001,
+            sizeRange = 4,
+            sizeMin = 2,
+            trunkHeight = 3,
+        },
+        {
             type = "addGrass",
-
             mudHeight = 4,
-        }
+        },
     }
 }
 
