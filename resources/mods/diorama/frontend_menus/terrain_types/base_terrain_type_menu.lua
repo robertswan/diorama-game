@@ -30,6 +30,7 @@ local function onCreateLevelClicked (menuItem, menu)
             path =                              "default/",
             terrainId =                         menu.menuProperties.terrainId,
             randomSeedAsString =                menu.randomSeed.value,
+            generators =                        menu.menuProperties.generators,
         }
 
         for _, v in ipairs (menu.menuProperties.options) do
@@ -106,7 +107,7 @@ return function (menuProperties)
         createLevel =                       ButtonMenuItem ("Create Level", onCreateLevelClicked),
         warningLabel =                      LabelMenuItem (""),
 
-        menuProperties = menuProperties,
+        menuProperties =                    menuProperties,
     }
 
     for _, v in ipairs (menuProperties.options) do

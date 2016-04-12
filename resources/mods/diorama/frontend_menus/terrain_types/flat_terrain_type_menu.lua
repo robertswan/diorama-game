@@ -2,50 +2,50 @@
 local BaseTerrainTypeMenu = require ("resources/mods/diorama/frontend_menus/terrain_types/base_terrain_type_menu")
 
 --------------------------------------------------
+local basicGenerator = 
+{
+    weightPass =
+    {
+        {
+            type = "gradient",
+            mode = "replace",
+
+            --axis = "y",
+            baseVoxel = -256,
+            heightInVoxels = 256,
+        },        
+        {
+            type = "perlinNoise",
+            mode = "lessThan",
+
+            scale = 128,
+            octaves = 5,
+            perOctaveAmplitude = 0.5,
+            perOctaveFrequency = 2.0,
+        },
+    },
+
+    -- Q: where do we convert weights, into voxel data?
+
+    voxelPass =
+    {
+        {
+            type = "addTrees",
+            chanceOfTree = 0.005,
+            sizeRange = 3,
+            sizeMin = 2,
+            trunkHeight = 2,
+        },
+        {
+            type = "addGrass",
+            mudHeight = 4,
+        },
+    }
+}
+
+--------------------------------------------------
 local options =
 {
-    {
-        id = "base",
-        description = "Height Base (voxels)",
-        default = 128, 
-        isInteger = true
-    },
-    {
-        id = "height",
-        description = "Height (voxels above base)",
-        default = 128, 
-        isInteger = true
-    },
-    {
-        id = "water",
-        description = "Water Level (voxels above base)",
-        default = 128, 
-        isInteger = true
-    },
-    {
-        id = "perlinSize",
-        description = "Perlin Start Size (voxels)",
-        default = 128, 
-        isInteger = true
-    },
-    {
-        id = "perlinOctavesCount",
-        description = "Octaves Count",
-        default = 5, 
-        isInteger = true
-    },
-    {
-        id = "frequencyPerOctave",
-        description = "Per Octave Frequency Mulitplier",
-        default = 2, 
-        isInteger = false
-    },
-    {
-        id = "amplitudePerOctave",
-        description = "Per Octave Amplitude Multiplier",
-        default = 0.5, 
-        isInteger = false
-    },
 }
 
 --------------------------------------------------
@@ -53,10 +53,11 @@ return function ()
 
     local properties =
     {
-        description = "Create Flat Level",
-        terrainId = "flat",
-        terrainVersion = 1,
-        options = options,
+        description =       "Create Flat Level",
+        terrainId =         "paramaterized",
+        terrainVersion =    1,
+        options =           options,
+        generators =        {basicGenerator},
     }
 
     local instance = BaseTerrainTypeMenu (properties)
