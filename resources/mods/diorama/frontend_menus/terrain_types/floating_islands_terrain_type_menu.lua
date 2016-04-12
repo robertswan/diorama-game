@@ -8,10 +8,10 @@ local basicGenerator =
     {
         {
             type = "perlinNoise",
-            mode = "replace",
+            mode = "lessThan",
 
-            scale = 128,
-            octaves = 5,
+            scale = 64,
+            octaves = 4,
             perOctaveAmplitude = 0.5,
             perOctaveFrequency = 2.0,
         },
@@ -23,10 +23,10 @@ local basicGenerator =
     {
         {
             type = "addTrees",
-            chanceOfTree = 0.001,
-            sizeRange = 4,
-            sizeMin = 2,
-            trunkHeight = 3,
+            chanceOfTree = 0.03,
+            sizeRange = 3,
+            sizeMin = 3,
+            trunkHeight = 5,
         },
         {
             type = "addGrass",

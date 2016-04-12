@@ -38,7 +38,7 @@ return function ()
     addMenuButton (instance, "Floating Islands",  "floating_islands_terrain_type_menu")
     addMenuButton (instance, "Hollow Earth",      "hollow_earth_terrain_type_menu")
     addMenuButton (instance, "Parallel Facing",   "parallel_facing_terrain_type_menu")
-    addMenuButton (instance, "Parameterised",       "square_ring_terrain_type_menu")
+    -- addMenuButton (instance, "Square Ring",       "square_ring_terrain_type_menu")
 
     instance:addMenuItem (BreakMenuItem ())
 

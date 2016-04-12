@@ -7,11 +7,24 @@ local basicGenerator =
     weightPass =
     {
         {
-            type = "perlinNoise",
+            type = "cubeGradient",
             mode = "replace",
 
-            scale = 128,
-            octaves = 5,
+            x = -64,
+            y = -128,
+            z = -64,
+            w = 128,
+            h = 128,
+            d = 128,
+
+            rangeInVoxels = 48,                
+        },      
+        {
+            type = "perlinNoise",
+            mode = "lessThan",
+
+            scale = 16,
+            octaves = 2,
             perOctaveAmplitude = 0.5,
             perOctaveFrequency = 2.0,
         },
@@ -23,7 +36,7 @@ local basicGenerator =
     {
         {
             type = "addTrees",
-            chanceOfTree = 0.001,
+            chanceOfTree = 0.01,
             sizeRange = 4,
             sizeMin = 2,
             trunkHeight = 3,
