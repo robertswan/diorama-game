@@ -7,24 +7,24 @@ local basicGenerator =
     weightPass =
     {
         {
-            type = "cubeGradient",
+            type = "hollowCubeGradient",
             mode = "replace",
 
-            x = -16,
-            y = -32,
-            z = -16,
-            w = 32,
-            h = 32,
-            d = 32,
+            x = -32,
+            y = 0,
+            z = -32,
+            w = 64,
+            h = 64,
+            d = 64,
 
-            rangeInVoxels = -8,
+            rangeInVoxels = 64,
         },      
         {
             type = "perlinNoise",
             mode = "lessThan",
 
-            scale = 16,
-            octaves = 2,
+            scale = 32,
+            octaves = 3,
             perOctaveAmplitude = 0.5,
             perOctaveFrequency = 2.0,
         },
@@ -36,7 +36,7 @@ local basicGenerator =
     {
         {
             type = "addTrees",
-            chanceOfTree = 0.01,
+            chanceOfTree = 0.005,
             sizeRange = 4,
             sizeMin = 2,
             trunkHeight = 3,
