@@ -9,7 +9,7 @@ local c = {}
 --------------------------------------------------
 function c:onEnter (menus)
     assert (self.worldSettings ~= nil)
-    self.createNewLevelMenu = menus.create_new_level_menu
+    assert (not self.worldSettings.isNew or self.fromMenu ~= nil)
 end
 
 --------------------------------------------------
@@ -25,8 +25,8 @@ function c:onUpdate (menus)
         return "playing_game_menu"
 
     elseif isNew then
-        self.createNewLevelMenu:recordWorldAlreadyExistsError ()
-        return "create_new_level_menu"
+        self.fromMenu:recordWorldAlreadyExistsError ()
+        return self.fromMenu.menuKey 
 
     else
         return "load_level_menu"
@@ -41,9 +41,10 @@ function c:onAppShouldClose (parent_func)
 end
 
 --------------------------------------------------
-function c:recordWorldSettings (worldSettings, roomSettings)
+function c:recordWorldSettings (worldSettings, roomSettings, fromMenu)
     self.worldSettings = worldSettings
     self.roomSettings = roomSettings
+    self.fromMenu = fromMenu
 end
 
 --------------------------------------------------
