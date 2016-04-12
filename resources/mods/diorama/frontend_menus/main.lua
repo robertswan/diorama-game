@@ -129,6 +129,11 @@ local function main ()
 
     }
 
+    for k, v in pairs (individual_menus) do
+        v.menuKey = k
+    end
+
+
     individual_menus.text_file_menu:recordFilename ("readme.txt")
     menus = Menus (individual_menus, "text_file_menu")
 

@@ -37,7 +37,7 @@ local function onCreateLevelClicked (menuItem, menu)
             roomSettings [v.id] = menu [v.id]:getValueAsNumber ()
         end
 
-        menu.loadingLevelMenu:recordWorldSettings (worldSettings, roomSettings)
+        menu.loadingLevelMenu:recordWorldSettings (worldSettings, roomSettings, menu)
 
         menu.warningLabel.text = ""
         return "loading_level_menu"
@@ -88,14 +88,6 @@ end
 
 --------------------------------------------------
 return function (menuProperties)
-
-    -- local properties_copy =
-    -- {
-    --     description = "Create Floating Islands Level",
-    --     terrainId = "floatingIslands",
-    --     terrainVersion = properties.,
-    --     options = properties.options,
-    -- }
 
     local instance = MenuClass (menuProperties.description)
 
