@@ -74,7 +74,7 @@ local function onPlayerLoad (event)
     --     ypr = {x = 0, y = 0, z = 0}
     -- }
 
-    teleportPlayer (event.connectionId, "lobby_spawn")
+    teleportPlayer (event.connectionId, "lobbySpawn")
 
 end
 

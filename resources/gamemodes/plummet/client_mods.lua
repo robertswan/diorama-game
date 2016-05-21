@@ -20,12 +20,12 @@ local modsToLoad =
         folder = "diorama",
         modName = "diagnostics",
         versionRequired = {major = 1, minor = 0},
-    },    
-        -- {
-        --     folder = "plummet",
-        --     modName = "game_logic",
-        --     versionRequired = {major = 1, minor = 0},
-        -- },
+    },  
+    {
+        folder = "plummet",
+        modName = "game_logic",
+        versionRequired = {major = 1, minor = 0},
+    },
 }
 
 local mods = {}
