@@ -10,7 +10,7 @@ local locations =
 {
     lobbySpawn = 
     {
-        x = 7, y = 3, z = 7,
+        x = 7, y = 4, z = 7,
     },
 }
 
@@ -29,10 +29,6 @@ end
 --------------------------------------------------
 local function onChatReceived (author, text)
 
-    print ("onChatReceived")
-    print (author)
-    print (text)
-
     if author == "PLUMMET" then
 
         local words = {}
@@ -43,7 +39,6 @@ local function onChatReceived (author, text)
         local author = dio.world.getPlayerNames () [1]
         teleportTo (author, locations [words [1]])
 
-        --return true
     end
 end
 

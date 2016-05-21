@@ -30,8 +30,72 @@ local gameVars =
 {
     isPlaying = false,
     waitingOrPlaying = {},
+    waitingOrPlayingCount = 0,
     playersReadyCount = 0,
+    tickCount = 0,
+    gameOverScore = 5000,
 }
+
+--------------------------------------------------
+local function buildLobby (chunkId)
+
+    -- glass walls and air above it
+
+    local setBlock = dio.world.setBlock
+    for x = 2, 29 do
+        for y = 2, 10 do
+            for z = 2, 29 do
+                setBlock (0, chunkId, x, y, z, 15)
+            end
+        end 
+    end
+
+    for x = 3, 28 do
+        for y = 3, 9 do
+            for z = 3, 28 do
+                setBlock (0, chunkId, x, y, z, 0)
+            end
+        end
+    end
+end
+
+--------------------------------------------------
+local function openLobby (chunkId)
+
+    local setBlock = dio.world.setBlock
+    for x = 2, 29 do
+        for z = 2, 29 do
+            setBlock (0, chunkId, x, 2, z, 0)
+        end 
+    end
+end
+
+--------------------------------------------------
+local comparer = function (lhs, rhs)
+    return lhs.score > rhs.score
+end
+
+--------------------------------------------------
+local function updateScores ()
+
+    local scores = {}
+    for _, record in pairs (gameVars.waitingOrPlaying) do
+        table.insert (scores, record)
+    end
+
+    table.sort (scores, comparer)
+
+    local text = ""
+    for _, score in ipairs (scores) do
+        text = text .. score.playerName .. ":" .. math.floor (score.score) .. ":"
+    end
+
+    for _, connection in pairs (connections) do
+        dio.serverChat.send (connection.connectionId, "SCORE", text)
+    end
+
+    return scores [1]
+end
 
 --------------------------------------------------
 local function createNewLevel ()
@@ -43,11 +107,51 @@ local function createNewLevel ()
 end
 
 --------------------------------------------------
+local function startGame ()
+
+    local chunkId = {x = 0, y = 0, z = 0}
+    openLobby (chunkId)
+
+    gameVars.isPlaying = true
+    gameVars.tickCount = 0
+
+end   
+
+--------------------------------------------------
 local function teleportPlayer (connectionId, tpName)
 
     dio.serverChat.send (connectionId, "PLUMMET", tpName)
 end    
 
+--------------------------------------------------
+local function endGame ()
+
+    local winner = updateScores ()
+
+    if winner then
+        local text = "The winner is: " .. winner.playerName
+
+        for _, connection in pairs (connections) do
+            dio.serverChat.send (connection.connectionId, "RESULT", text)
+        end    
+    end
+
+    for _, connection in pairs (gameVars.waitingOrPlaying) do
+        teleportPlayer (connection.connectionId, "lobbySpawn")
+        connection.isReady = false
+        connection.groupId = "lobby"
+        connection.currentY = 2
+        connection.score = 0
+        gameVars.waitingOrPlaying [connection.connectionId] = nil
+        gameVars.waitingOrPlayingCount = gameVars.waitingOrPlayingCount - 1
+    end
+    
+    gameVars.playersReadyCount = 0
+    gameVars.isPlaying = false
+    gameVars.tickCount = 0
+    gameVars.isNewLevel = true
+
+end
 
 --------------------------------------------------
 local function onPlayerLoad (event)
@@ -60,20 +164,13 @@ local function onPlayerLoad (event)
     {
         connectionId = event.connectionId,
         playerName = event.playerName,
-        screenName = event.playerName,
         groupId = "lobby",
         gravityDir = "DOWN",
+        currentY = 2,
+        score = 0,
     }
 
     connections [event.connectionId] = connection
-
-    -- local lobby_spawn =
-    -- {
-    --     chunkId = {x = 0, y = 0, z = 0},
-    --     xyz = {x = 7, y = 2, z = 7},
-    --     ypr = {x = 0, y = 0, z = 0}
-    -- }
-
     teleportPlayer (event.connectionId, "lobbySpawn")
 
 end
@@ -84,20 +181,23 @@ local function onPlayerSave (event)
     local connection = connections [event.connectionId]
     local group = groups [connection.groupId]
 
-    if connections.groupId == "lobby" then
+    if connection.groupId == "lobby" then
         -- do nothing
 
-    elseif connections.groupId == "waiting" then
+    elseif connection.groupId == "waiting" then
 
         gameVars.waitingOrPlaying [event.connectionId] = nil
+        gameVars.waitingOrPlayingCount = gameVars.waitingOrPlayingCount - 1
         if connection.isReady then
             gameVars.playersReadyCount = gameVars.playersReadyCount - 1
         end
 
-    elseif connections.groupId == "playing" then
+    elseif connection.groupId == "playing" then
 
         gameVars.waitingOrPlaying [event.connectionId] = nil
-        if #gameVars.waitingOrPlaying < 2 then
+        gameVars.waitingOrPlayingCount = gameVars.waitingOrPlayingCount - 1
+
+        if gameVars.waitingOrPlayingCount < 2 then
             endGame ();
         end
     end
@@ -139,10 +239,11 @@ local function onChatReceived (event)
         if not gameVars.isPlaying and connection.groupId == "lobby" then
             connection.groupId = "waiting"
             gameVars.waitingOrPlaying [connectionId] = connection
+            gameVars.waitingOrPlayingCount = gameVars.waitingOrPlayingCount + 1
             -- TODO tp player to waiting area
-            event.text = colors.ok .. "JOINED NEXT GAME"
+            event.text = colors.ok .. "JOINED NEXT GAME: " .. gameVars.waitingOrPlayingCount .. ", " .. gameVars.playersReadyCount
         else
-            event.text = colors.bad .. ".join refused"
+            event.text = colors.bad .. ".join refused: " .. gameVars.waitingOrPlayingCount .. ", " .. gameVars.playersReadyCount
         end
 
     elseif words [1] == ".leave" then
@@ -152,32 +253,42 @@ local function onChatReceived (event)
             connection.groupId = "lobby"
             connection.isReady = false
             gameVars.waitingOrPlaying [connectionId] = nil
-            event.text = colors.ok .. "LEFT NEXT GAME"
+            gameVars.waitingOrPlayingCount = gameVars.waitingOrPlayingCount -1
+            event.text = colors.ok .. "LEFT NEXT GAME: " .. gameVars.waitingOrPlayingCount .. ", " .. gameVars.playersReadyCount
         else
-            event.text = colors.bad .. ".leave refused"
+            event.text = colors.bad .. ".leave refused: " .. gameVars.waitingOrPlayingCount .. ", " .. gameVars.playersReadyCount
             -- TODO tp player to lobby area
         end        
 
     elseif words [1] == ".ready" then
         event.targetConnectionId = event.authorConnectionId
+
         if not gameVars.isPlaying and connection.groupId == "waiting" and not connection.isReady then
+
             connection.isReady = true
             gameVars.playersReadyCount = gameVars.playersReadyCount + 1
-            event.text = colors.ok .. "READY"
-        else
-            event.text = colors.bad .. ".ready refused"
+            event.text = colors.ok .. "READY: " .. gameVars.waitingOrPlayingCount .. ", " .. gameVars.playersReadyCount
 
-            -- TODO check if game should start!
+            updateScores ()
+
+            if gameVars.waitingOrPlayingCount == gameVars.playersReadyCount then
+                startGame ()
+            end
+
+        else
+
+            event.text = colors.bad .. ".ready refused: " .. gameVars.waitingOrPlayingCount .. ", " .. gameVars.playersReadyCount
         end
+
 
     elseif words [1] == ".unready" then
         event.targetConnectionId = event.authorConnectionId
         if not gameVars.isPlaying and connection.groupId == "waiting" and connection.isReady then
             connection.isReady = false
             gameVars.playersReadyCount = gameVars.playersReadyCount - 1
-            event.text = colors.ok .. "UNREADY"
+            event.text = colors.ok .. "UNREADY: " .. gameVars.waitingOrPlayingCount .. ", " .. gameVars.playersReadyCount
         else
-            event.text = colors.bad .. ".unready refused"
+            event.text = colors.bad .. ".unready refused: " .. gameVars.waitingOrPlayingCount .. ", " .. gameVars.playersReadyCount
         end
     end
 end
@@ -190,25 +301,46 @@ local function onChunkGenerated (event)
             event.chunkId.y == 0 and
             event.chunkId.z == 0 then
 
-        for _, connection in pairs (connections) do
-            dio.serverChat.send (connection.connectionId, "DEBUG", "onChunkGenerated: " .. event.chunkId.x .. ", " .. event.chunkId.y .. ", " .. event.chunkId.z)
-        end
+        -- for _, connection in pairs (connections) do
+        --     dio.serverChat.send (connection.connectionId, "DEBUG", "onChunkGenerated: " .. event.chunkId.x .. ", " .. event.chunkId.y .. ", " .. event.chunkId.z)
+        -- end
 
-        for k, v in pairs (event) do
-            print (k .. " = " .. tostring (v))
-        end
+        -- for k, v in pairs (event) do
+        --     print (k .. " = " .. tostring (v))
+        -- end
 
-        local setBlock = dio.world.setBlock
-        for x = 1, 14 do
-            for z = 1, 14 do
-                setBlock (event.roomId, event.chunkId, x, 1, z, 15)
-                for y = 2, 10 do
-                    setBlock (event.roomId, event.chunkId, x, y, z, 0)
-                end
-            end 
-        end
+        
+        buildLobby (event.chunkId)
 
         gameVars.isNewLevel = false
+    end
+end
+
+-------------------------------------------------
+local function onTick ()
+
+    if gameVars.isPlaying then
+
+        for k, record in pairs (gameVars.waitingOrPlaying) do
+
+            local player = dio.world.getPlayerXyz (record.playerName)
+            local newY = player.chunkId.y * 32 + player.xyz.y
+            record.score = record.score - (newY - record.currentY)
+            record.currentY = newY
+
+        end
+
+        gameVars.tickCount = gameVars.tickCount + 1
+
+        if gameVars.tickCount > 20 then
+
+            gameVars.tickCount = 0
+
+            local winner = updateScores ()
+            if winner.score > gameVars.gameOverScore then
+                endGame ()
+            end
+        end
     end
 end
 
@@ -224,6 +356,7 @@ local function onLoadSuccessful ()
     dio.events.addListener (types.SERVER_ENTITY_DESTROYED, onEntityDestroyed)
     dio.events.addListener (types.SERVER_CHAT_RECEIVED, onChatReceived)
     dio.events.addListener (types.SERVER_CHUNK_GENERATED, onChunkGenerated)
+    dio.events.addListener (types.SERVER_TICK, onTick)
 
 end
 
