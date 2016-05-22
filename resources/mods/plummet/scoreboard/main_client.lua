@@ -42,7 +42,7 @@ local function onLateRender (self)
     if self.isVisible then
         local windowW, windowH = dio.drawing.getWindowSize ()
         local scale = Window.calcBestFitScale (self.w, self.h, windowW, windowH)
-        scale = (scale > 4) and 4 or scale
+        scale = (scale > 2) and 2 or scale
         local x = (windowW - self.w * scale) - 20
         local y = 20
         dio.drawing.drawTexture (self.renderToTexture, x, y, self.w * scale, self.h * scale, 0xffffffff)

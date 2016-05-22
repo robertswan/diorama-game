@@ -19,67 +19,82 @@ local groups =
 local colors = 
 {
     ok = "%8f8",
-    bad = "%f00",
+    bad = "%f88",
 }
 
 --------------------------------------------------
 local connections = {}
 
 --------------------------------------------------
-local gameVars = 
-{
-    isPlaying = false,
-    waitingOrPlaying = {},
-    waitingOrPlayingCount = 0,
-    playersReadyCount = 0,
-    tickCount = 0,
-    gameOverScore = 5000,
-}
-
---------------------------------------------------
-local function buildLobby (chunkId)
-
-    -- glass walls and air above it
+local function fillCube (roomId, chunkId, min, max, value)
 
     local setBlock = dio.world.setBlock
-    for x = 2, 29 do
-        for y = 2, 10 do
-            for z = 2, 29 do
-                setBlock (0, chunkId, x, y, z, 15)
+    for x = min [1], max [1] do
+        for y = min [2], max [2] do
+            for z = min [3], max [3] do
+                setBlock (roomId, chunkId, x, y, z, value)
             end
         end 
-    end
-
-    for x = 3, 28 do
-        for y = 3, 9 do
-            for z = 3, 28 do
-                setBlock (0, chunkId, x, y, z, 0)
-            end
-        end
-    end
+    end    
 end
 
 --------------------------------------------------
-local function openLobby (chunkId)
+local function buildLobby (roomId, chunkId)
+    fillCube (roomId, chunkId, {1, 1, 1}, {30, 4, 30}, 15)
+    fillCube (roomId, chunkId, {2, 2, 2}, {29, 6, 29}, 0)
+end
 
-    local setBlock = dio.world.setBlock
-    for x = 2, 29 do
-        for z = 2, 29 do
-            setBlock (0, chunkId, x, 2, z, 0)
-        end 
-    end
+--------------------------------------------------
+local function buildWaitingRoom (roomId, chunkId)
+    fillCube (roomId, chunkId, {1, 25, 1}, {30, 28, 30}, 15)
+    fillCube (roomId, chunkId, {2, 26, 2}, {29, 30, 29}, 0)
+end
+
+--------------------------------------------------
+local gameVars = 
+{
+    isPlaying = false,
+    playersWaitingCount = 0,
+    playersReadyCount = 0,
+    tickCount = 0,
+    gameOverScore = 100,
+    chunksToModify = 
+    {
+        lobby = 
+        {
+            chunkId = {x =0, y = 0, z = 0},
+            isBuilt = false,
+            buildFunction = buildLobby,
+        },
+        waitingRoom =
+        {
+            chunkId = {x =0, y = -1, z = 0},
+            isBuilt = false,
+            buildFunction = buildWaitingRoom,
+        }
+    }
+}
+
+--------------------------------------------------
+local calcComparerScore = function (player)
+    local boundary = gameVars.gameOverScore * 10
+    local score = (player.groupId == "ready") and boundary * 2 or 0
+    score = score + (player.groupId == "waiting") and boundary * 1 or 0
+    score = score + player.score
+    return score
 end
 
 --------------------------------------------------
 local comparer = function (lhs, rhs)
-    return lhs.score > rhs.score
+    
+    return v (lhs) > calcComparerScore (rhs)
 end
 
 --------------------------------------------------
 local function updateScores ()
 
     local scores = {}
-    for _, record in pairs (gameVars.waitingOrPlaying) do
+    for _, record in pairs (connections) do
         table.insert (scores, record)
     end
 
@@ -87,7 +102,13 @@ local function updateScores ()
 
     local text = ""
     for _, score in ipairs (scores) do
-        text = text .. score.playerName .. ":" .. math.floor (score.score) .. ":"
+        text = text .. 
+                score.playerName .. 
+                ((score.groupId == "waiting") and " (W)" or "") ..
+                ((not gameVars.isPlaying and score.groupId == "ready") and " (R)" or "") ..
+                ":" .. 
+                math.floor (score.score) .. 
+                ":"
     end
 
     for _, connection in pairs (connections) do
@@ -103,14 +124,15 @@ local function createNewLevel ()
 
     -- dio.levels.deleteAllChunks (false) -- delete all chunks, but keep the settings file
 
-    gameVars.isNewLevel = true;
+    for _, build in pairs (gameVars.chunksToModify) do
+        build.isBuilt = false
+    end
 end
 
 --------------------------------------------------
 local function startGame ()
 
-    local chunkId = {x = 0, y = 0, z = 0}
-    openLobby (chunkId)
+    fillCube (0, {x = 0, y = -1, z = 0}, {2, 25, 2}, {29, 25, 29}, 0)
 
     gameVars.isPlaying = true
     gameVars.tickCount = 0
@@ -118,9 +140,16 @@ local function startGame ()
 end   
 
 --------------------------------------------------
-local function teleportPlayer (connectionId, tpName)
+local coordinates =
+{
+    lobby = "15 4 15",
+    waitingRoom = "15 -3 15",
+}
 
-    dio.serverChat.send (connectionId, "PLUMMET", tpName)
+--------------------------------------------------
+local function teleportPlayer (connectionId, coordinatesId)
+
+    dio.serverChat.send (connectionId, "PLUMMET_TP", coordinates [coordinatesId])
 end    
 
 --------------------------------------------------
@@ -136,20 +165,19 @@ local function endGame ()
         end    
     end
 
-    for _, connection in pairs (gameVars.waitingOrPlaying) do
-        teleportPlayer (connection.connectionId, "lobbySpawn")
-        connection.isReady = false
-        connection.groupId = "lobby"
-        connection.currentY = 2
-        connection.score = 0
-        gameVars.waitingOrPlaying [connection.connectionId] = nil
-        gameVars.waitingOrPlayingCount = gameVars.waitingOrPlayingCount - 1
+    for _, connection in pairs (connections) do
+        if connection.groupId == "ready" then
+
+            teleportPlayer (connection.connectionId, "lobby")
+            connection.groupId = "lobby"
+            connection.currentY = 2
+            connection.score = 0
+        end
     end
     
     gameVars.playersReadyCount = 0
     gameVars.isPlaying = false
     gameVars.tickCount = 0
-    gameVars.isNewLevel = true
 
 end
 
@@ -164,14 +192,16 @@ local function onPlayerLoad (event)
     {
         connectionId = event.connectionId,
         playerName = event.playerName,
-        groupId = "lobby",
         gravityDir = "DOWN",
         currentY = 2,
         score = 0,
+        groupId = "lobby",
     }
 
     connections [event.connectionId] = connection
-    teleportPlayer (event.connectionId, "lobbySpawn")
+    teleportPlayer (connection.connectionId, "lobby")
+
+    updateScores ()
 
 end
 
@@ -186,23 +216,21 @@ local function onPlayerSave (event)
 
     elseif connection.groupId == "waiting" then
 
-        gameVars.waitingOrPlaying [event.connectionId] = nil
-        gameVars.waitingOrPlayingCount = gameVars.waitingOrPlayingCount - 1
-        if connection.isReady then
-            gameVars.playersReadyCount = gameVars.playersReadyCount - 1
-        end
+        gameVars.playersWaitingCount = gameVars.playersWaitingCount - 1
 
-    elseif connection.groupId == "playing" then
+    elseif connection.groupId == "ready" then
 
-        gameVars.waitingOrPlaying [event.connectionId] = nil
-        gameVars.waitingOrPlayingCount = gameVars.waitingOrPlayingCount - 1
+        gameVars.playersReadyCount = gameVars.playersReadyCount - 1
 
-        if gameVars.waitingOrPlayingCount < 2 then
-            endGame ();
-        end
+        -- if gameVars.waitingOrPlayingCount < 2 then
+        --     endGame ();
+        --     createNewGame ();
+        -- end
     end
 
     connections [event.connectionId] = nil
+
+    updateScores ()
 end
 
 --------------------------------------------------
@@ -236,59 +264,68 @@ local function onChatReceived (event)
     if words [1] == ".join" then
 
         event.targetConnectionId = event.authorConnectionId
+
         if not gameVars.isPlaying and connection.groupId == "lobby" then
             connection.groupId = "waiting"
-            gameVars.waitingOrPlaying [connectionId] = connection
-            gameVars.waitingOrPlayingCount = gameVars.waitingOrPlayingCount + 1
-            -- TODO tp player to waiting area
-            event.text = colors.ok .. "JOINED NEXT GAME: " .. gameVars.waitingOrPlayingCount .. ", " .. gameVars.playersReadyCount
+            gameVars.playersWaitingCount = gameVars.playersWaitingCount + 1
+            event.text = colors.ok .. "You have joined the next game. Type '.ready' to begin."
+            teleportPlayer (connectionId, "waitingRoom")
+            fillCube (0, {x = 0, y = -1, z = 0}, {2, 25, 2}, {29, 25, 29}, 15)
+            updateScores ()
+
         else
-            event.text = colors.bad .. ".join refused: " .. gameVars.waitingOrPlayingCount .. ", " .. gameVars.playersReadyCount
+            event.text = colors.bad .. "'.join' failed. You have already joined the next game. Type '.ready' to begin."
         end
 
     elseif words [1] == ".leave" then
 
         event.targetConnectionId = event.authorConnectionId
-        if not gameVars.isPlaying and connection.groupId == "waiting" then
+        if connection.groupId == "waiting" then
             connection.groupId = "lobby"
-            connection.isReady = false
-            gameVars.waitingOrPlaying [connectionId] = nil
-            gameVars.waitingOrPlayingCount = gameVars.waitingOrPlayingCount -1
-            event.text = colors.ok .. "LEFT NEXT GAME: " .. gameVars.waitingOrPlayingCount .. ", " .. gameVars.playersReadyCount
+            gameVars.playersWaitingCount = gameVars.playersWaitingCount -1
+            teleportPlayer (connection.connectionId, "lobby")
+            event.text = colors.ok .. "You have left the next game. Type '.join' to rejoin it."
+            updateScores ()
+
         else
-            event.text = colors.bad .. ".leave refused: " .. gameVars.waitingOrPlayingCount .. ", " .. gameVars.playersReadyCount
+            event.text = colors.bad .. "'.leave' failed."
             -- TODO tp player to lobby area
         end        
 
     elseif words [1] == ".ready" then
         event.targetConnectionId = event.authorConnectionId
 
-        if not gameVars.isPlaying and connection.groupId == "waiting" and not connection.isReady then
+        if not gameVars.isPlaying and connection.groupId == "waiting" then
 
-            connection.isReady = true
+            connection.groupId = "ready"
+            gameVars.playersWaitingCount = gameVars.playersWaitingCount - 1
             gameVars.playersReadyCount = gameVars.playersReadyCount + 1
-            event.text = colors.ok .. "READY: " .. gameVars.waitingOrPlayingCount .. ", " .. gameVars.playersReadyCount
+            event.text = colors.ok .. "You are now ready. Waiting for all players to be ready too."
 
             updateScores ()
 
-            if gameVars.waitingOrPlayingCount == gameVars.playersReadyCount then
+            if gameVars.playersWaitingCount == 0 and gameVars.playersReadyCount > 0 then
                 startGame ()
             end
 
         else
 
-            event.text = colors.bad .. ".ready refused: " .. gameVars.waitingOrPlayingCount .. ", " .. gameVars.playersReadyCount
+            event.text = colors.bad .. "'.ready' failed."
         end
 
 
     elseif words [1] == ".unready" then
         event.targetConnectionId = event.authorConnectionId
-        if not gameVars.isPlaying and connection.groupId == "waiting" and connection.isReady then
-            connection.isReady = false
+        if not gameVars.isPlaying and connection.groupId == "ready" then
+
+            connection.groupId = "waiting"
             gameVars.playersReadyCount = gameVars.playersReadyCount - 1
-            event.text = colors.ok .. "UNREADY: " .. gameVars.waitingOrPlayingCount .. ", " .. gameVars.playersReadyCount
+            gameVars.playersWaitingCount = gameVars.playersWaitingCount + 1
+            event.text = colors.ok .. "You are now unready. Type '.ready' to begin."
+            updateScores ()
+
         else
-            event.text = colors.bad .. ".unready refused: " .. gameVars.waitingOrPlayingCount .. ", " .. gameVars.playersReadyCount
+            event.text = colors.bad .. "'.unready' failed."
         end
     end
 end
@@ -296,23 +333,17 @@ end
 --------------------------------------------------
 local function onChunkGenerated (event)
 
-    if gameVars.isNewLevel and
-            event.chunkId.x == 0 and
-            event.chunkId.y == 0 and
-            event.chunkId.z == 0 then
+    for _, build in pairs (gameVars.chunksToModify) do
 
-        -- for _, connection in pairs (connections) do
-        --     dio.serverChat.send (connection.connectionId, "DEBUG", "onChunkGenerated: " .. event.chunkId.x .. ", " .. event.chunkId.y .. ", " .. event.chunkId.z)
-        -- end
+        if not build.isBuilt and
+                build.chunkId.x == event.chunkId.x and
+                build.chunkId.y == event.chunkId.y and
+                build.chunkId.z == event.chunkId.z then
 
-        -- for k, v in pairs (event) do
-        --     print (k .. " = " .. tostring (v))
-        -- end
+            build.buildFunction (event.roomId, event.chunkId)
+            build.isBuilt = true
 
-        
-        buildLobby (event.chunkId)
-
-        gameVars.isNewLevel = false
+        end
     end
 end
 
@@ -321,12 +352,14 @@ local function onTick ()
 
     if gameVars.isPlaying then
 
-        for k, record in pairs (gameVars.waitingOrPlaying) do
+        for k, record in pairs (connections) do
 
-            local player = dio.world.getPlayerXyz (record.playerName)
-            local newY = player.chunkId.y * 32 + player.xyz.y
-            record.score = record.score - (newY - record.currentY)
-            record.currentY = newY
+            if record.groupId == "ready" then
+                local player = dio.world.getPlayerXyz (record.playerName)
+                local newY = player.chunkId.y * 32 + player.xyz.y
+                record.score = record.score - (newY - record.currentY)
+                record.currentY = newY
+            end
 
         end
 

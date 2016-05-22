@@ -6,20 +6,11 @@ local colors =
 }
 
 --------------------------------------------------
-local locations =
-{
-    lobbySpawn = 
-    {
-        x = 7, y = 4, z = 7,
-    },
-}
-
---------------------------------------------------
-local function teleportTo (author, xyz)
+local function teleportTo (author, x, y, z)
     setting =
     {
         chunkId = {x = 0, y = 0, z = 0},
-        xyz = xyz,
+        xyz = {x = tonumber (x), y = tonumber (y), z = tonumber (z)},
         ypr = {x = 0, y = 0, z = 0}
     }
 
@@ -29,7 +20,7 @@ end
 --------------------------------------------------
 local function onChatReceived (author, text)
 
-    if author == "PLUMMET" then
+    if author == "PLUMMET_TP" then
 
         local words = {}
         for word in string.gmatch(text, "[^ ]+") do
@@ -37,7 +28,7 @@ local function onChatReceived (author, text)
         end        
 
         local author = dio.world.getPlayerNames () [1]
-        teleportTo (author, locations [words [1]])
+        teleportTo (author, words [1], words [2], words [3])
 
     end
 end
