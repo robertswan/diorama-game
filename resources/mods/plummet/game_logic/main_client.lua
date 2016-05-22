@@ -30,6 +30,8 @@ local function onChatReceived (author, text)
         local author = dio.world.getPlayerNames () [1]
         teleportTo (author, words [1], words [2], words [3])
 
+        return true
+
     end
 end
 

@@ -5,7 +5,7 @@ local instance = nil
 
 --------------------------------------------------
 local function renderBg (self)
-    dio.drawing.font.drawBox (0, 0, self.w, self.h, 0x0000080);
+    dio.drawing.font.drawBox (0, 0, self.w, self.h, 0x00000c0);
 end
 
 --------------------------------------------------

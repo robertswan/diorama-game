@@ -8,11 +8,6 @@ local modsToLoad =
     },
     {
         folder = "diorama",
-        modName = "player_list",
-        versionRequired = {major = 1, minor = 0},
-    },
-    {
-        folder = "diorama",
         modName = "diagnostics",
         versionRequired = {major = 1, minor = 0},
     },  

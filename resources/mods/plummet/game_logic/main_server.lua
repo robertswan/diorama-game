@@ -1,21 +1,4 @@
 --------------------------------------------------
-local groups =
-{
-    lobby = 
-    {
-        canDestroy = false,
-    },
-    waiting = 
-    {
-        canDestroy = false,
-    },
-    playing = 
-    {
-        canDestroy = true,
-    }
-}
-
---------------------------------------------------
 local colors = 
 {
     ok = "%8f8",
@@ -56,8 +39,9 @@ local gameVars =
     isPlaying = false,
     playersWaitingCount = 0,
     playersReadyCount = 0,
+    playersPlayingCount = 0,
     tickCount = 0,
-    gameOverScore = 100,
+    gameOverScore = 5000,
     chunksToModify = 
     {
         lobby = 
@@ -76,10 +60,20 @@ local gameVars =
 }
 
 --------------------------------------------------
+local playerColors =
+{
+    lobby =     "%ccc",
+    waiting =   "%f88",
+    ready =     "%8f8",
+    playing =   "%fff",
+}
+
+--------------------------------------------------
 local calcComparerScore = function (player)
     local boundary = gameVars.gameOverScore * 10
-    local score = (player.groupId == "ready") and boundary * 2 or 0
-    score = score + (player.groupId == "waiting") and boundary * 1 or 0
+    local score = ((player.groupId == "playing") and boundary * 4 or 0)
+    score = score + ((player.groupId == "ready") and boundary * 2 or 0)
+    score = score + ((player.groupId == "waiting") and boundary * 1 or 0)
     score = score + player.score
     return score
 end
@@ -87,7 +81,7 @@ end
 --------------------------------------------------
 local comparer = function (lhs, rhs)
     
-    return v (lhs) > calcComparerScore (rhs)
+    return calcComparerScore (lhs) > calcComparerScore (rhs)
 end
 
 --------------------------------------------------
@@ -102,14 +96,29 @@ local function updateScores ()
 
     local text = ""
     for _, score in ipairs (scores) do
+
+        local scoreAsText = " "
+        if score.score > 0 then
+            scoreAsText = tostring (math.floor (score.score))
+        end
+
         text = text .. 
+                playerColors [score.groupId] ..
                 score.playerName .. 
                 ((score.groupId == "waiting") and " (W)" or "") ..
                 ((not gameVars.isPlaying and score.groupId == "ready") and " (R)" or "") ..
                 ":" .. 
-                math.floor (score.score) .. 
+                scoreAsText .. 
                 ":"
     end
+
+    -- text = text ..
+    --         tostring (gameVars.playersWaitingCount) .. "," ..
+    --         tostring (gameVars.playersReadyCount) .. "," ..
+    --         tostring (gameVars.playersPlayingCount) ..
+    --         ":" ..
+    --         "Teazel" ..
+    --         ":"
 
     for _, connection in pairs (connections) do
         dio.serverChat.send (connection.connectionId, "SCORE", text)
@@ -136,6 +145,17 @@ local function startGame ()
 
     gameVars.isPlaying = true
     gameVars.tickCount = 0
+
+    for _, player in pairs (connections) do
+        if player.groupId == "ready" then
+            player.groupId = "playing"
+            player.currentY = 2
+        end
+        player.score = 0
+    end
+
+    gameVars.playersPlayingCount = gameVars.playersReadyCount
+    gameVars.playersReadyCount = 0
 
 end   
 
@@ -166,16 +186,14 @@ local function endGame ()
     end
 
     for _, connection in pairs (connections) do
-        if connection.groupId == "ready" then
+        if connection.groupId == "playing" then
 
             teleportPlayer (connection.connectionId, "lobby")
             connection.groupId = "lobby"
-            connection.currentY = 2
-            connection.score = 0
         end
     end
     
-    gameVars.playersReadyCount = 0
+    gameVars.playersPlayingCount = 0
     gameVars.isPlaying = false
     gameVars.tickCount = 0
 
@@ -209,7 +227,6 @@ end
 local function onPlayerSave (event)
 
     local connection = connections [event.connectionId]
-    local group = groups [connection.groupId]
 
     if connection.groupId == "lobby" then
         -- do nothing
@@ -217,16 +234,22 @@ local function onPlayerSave (event)
     elseif connection.groupId == "waiting" then
 
         gameVars.playersWaitingCount = gameVars.playersWaitingCount - 1
+        if gameVars.playersWaitingCount == 0 and gameVars.playersReadyCount > 1 then
+            startGame ()
+        end
 
     elseif connection.groupId == "ready" then
 
         gameVars.playersReadyCount = gameVars.playersReadyCount - 1
 
-        -- if gameVars.waitingOrPlayingCount < 2 then
-        --     endGame ();
-        --     createNewGame ();
-        -- end
-    end
+    elseif connection.groupId == "playing" then
+
+        gameVars.playersPlayingCount = gameVars.playersPlayingCount - 1
+
+        if gameVars.playersPlayingCount == 0 then
+            endGame ();
+        end
+    end    
 
     connections [event.connectionId] = nil
 
@@ -240,9 +263,10 @@ end
 
 --------------------------------------------------
 local function onEntityDestroyed (event)
-    local connection = connections [event.playerId]
-    local canDestroy = groups [connection.groupId].canDestroy
-    event.cancel = not canDestroy
+    event.cancel = true
+    -- local connection = connections [event.playerId]
+    -- local canDestroy = groups [connection.groupId].canDestroy
+    -- event.cancel = not canDestroy
 end
 
 --------------------------------------------------
@@ -260,21 +284,21 @@ local function onChatReceived (event)
     local connectionId = event.authorConnectionId
     local connection = connections [connectionId]
 
-
     if words [1] == ".join" then
 
         event.targetConnectionId = event.authorConnectionId
 
-        if not gameVars.isPlaying and connection.groupId == "lobby" then
+        if connection.groupId == "lobby" then
             connection.groupId = "waiting"
             gameVars.playersWaitingCount = gameVars.playersWaitingCount + 1
-            event.text = colors.ok .. "You have joined the next game. Type '.ready' to begin."
             teleportPlayer (connectionId, "waitingRoom")
             fillCube (0, {x = 0, y = -1, z = 0}, {2, 25, 2}, {29, 25, 29}, 15)
             updateScores ()
 
+            event.text = colors.ok .. "You have joined the next game. Type '.ready' to begin."
+
         else
-            event.text = colors.bad .. "'.join' failed. You have already joined the next game. Type '.ready' to begin."
+            event.text = colors.bad .. "'.join' failed."
         end
 
     elseif words [1] == ".leave" then
@@ -282,7 +306,7 @@ local function onChatReceived (event)
         event.targetConnectionId = event.authorConnectionId
         if connection.groupId == "waiting" then
             connection.groupId = "lobby"
-            gameVars.playersWaitingCount = gameVars.playersWaitingCount -1
+            gameVars.playersWaitingCount = gameVars.playersWaitingCount - 1
             teleportPlayer (connection.connectionId, "lobby")
             event.text = colors.ok .. "You have left the next game. Type '.join' to rejoin it."
             updateScores ()
@@ -302,11 +326,11 @@ local function onChatReceived (event)
             gameVars.playersReadyCount = gameVars.playersReadyCount + 1
             event.text = colors.ok .. "You are now ready. Waiting for all players to be ready too."
 
-            updateScores ()
-
             if gameVars.playersWaitingCount == 0 and gameVars.playersReadyCount > 0 then
                 startGame ()
             end
+
+            updateScores ()
 
         else
 
@@ -354,7 +378,7 @@ local function onTick ()
 
         for k, record in pairs (connections) do
 
-            if record.groupId == "ready" then
+            if record.groupId == "playing" then
                 local player = dio.world.getPlayerXyz (record.playerName)
                 local newY = player.chunkId.y * 32 + player.xyz.y
                 record.score = record.score - (newY - record.currentY)
@@ -370,7 +394,7 @@ local function onTick ()
             gameVars.tickCount = 0
 
             local winner = updateScores ()
-            if winner.score > gameVars.gameOverScore then
+            if not winner or winner.score > gameVars.gameOverScore then
                 endGame ()
             end
         end
