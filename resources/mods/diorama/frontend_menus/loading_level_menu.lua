@@ -8,28 +8,47 @@ local c = {}
 
 --------------------------------------------------
 function c:onEnter (menus)
-    assert (self.worldSettings ~= nil)
-    assert (not self.worldSettings.isNew or self.fromMenu ~= nil)
+    assert (self.isNew)
+    assert (self.dataFolder)
+    -- assert (self.worldSettings ~= nil)
+    -- assert (not self.worldSettings.isNew or self.fromMenu ~= nil)
 end
 
 --------------------------------------------------
 function c:onUpdate (menus)
 
-    local isNew = self.worldSettings.isNew
-    local isOk = dio.session.beginSp (self.worldSettings, self.roomSettings)
+    if self.isNew then
 
-    self.worldSettings = nil
-    self.roomSettings = nil
+        local isOk = dio.session.beginSp (self.dataFolder)
 
-    if isOk then
-        return "playing_game_menu"
+        self.dataFolder = nil
+        self.isNew = nil
 
-    elseif isNew then
-        self.fromMenu:recordWorldAlreadyExistsError ()
-        return self.fromMenu.menuKey 
+        if not isOk then
+            self.fromMenu:recordWorldAlreadyExistsError ()
+            return self.fromMenu.menuKey             
+        else
+            return "playing_game_menu"
+        end
 
     else
-        return "load_level_menu"
+
+        -- local isNew = self.worldSettings.isNew
+        -- local isOk = dio.session.beginSpOld (self.worldSettings, self.roomSettings)
+
+        -- self.worldSettings = nil
+        -- self.roomSettings = nil
+
+        -- if isOk then
+        --     return "playing_game_menu"
+
+        -- elseif isNew then
+        --     self.fromMenu:recordWorldAlreadyExistsError ()
+        --     return self.fromMenu.menuKey 
+
+        -- else
+        --     return "load_level_menu"
+        -- end
     end
 end
 
@@ -42,8 +61,16 @@ end
 
 --------------------------------------------------
 function c:recordWorldSettings (worldSettings, roomSettings, fromMenu)
+    self.isNew = nil
     self.worldSettings = worldSettings
     self.roomSettings = roomSettings
+    self.fromMenu = fromMenu
+end
+
+--------------------------------------------------
+function c:recordWorldSettingsNew (dataFolder, fromMenu)
+    self.isNew = true
+    self.dataFolder = dataFolder
     self.fromMenu = fromMenu
 end
 

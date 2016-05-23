@@ -14,33 +14,62 @@ local function onCreateLevelClicked (menuItem, menu)
             menu.filename.value == "" or 
             dio.file.isExistingWorldFolder (menu.filename) then
 
-        menu.warningLabel.text = "ERROR! Filename is not valid!"
+        menu.warningLabel.text = "ERROR: Filename is not valid"
 
     else
 
-        local worldSettings =
+        local worldSettings = 
         {
-            path =              menu.filename.value,
-            isNew =             true,
-            shouldSave =        true,
+            modFolder = "plummet",
+            dataFolder = menu.filename.value,
+            shouldSave = true,
         }
+
+        local isOk = dio.file.newWorld (worldSettings)
 
         local roomSettings =
         {
-            path =                              "default/",
-            terrainId =                         menu.menuProperties.terrainId,
-            randomSeedAsString =                menu.randomSeed.value,
-            generators =                        menu.menuProperties.generators,
+            path = "default",
+            randomSeedAsString = menu.randomSeed.value,
+            terrainId = menu.menuProperties.terrainId,
+            generators = menu.menuProperties.generators,
         }
 
-        for _, v in ipairs (menu.menuProperties.options) do
-            roomSettings [v.id] = menu [v.id]:getValueAsNumber ()
+        isOk = isOk and dio.file.newRoom (worldSettings.dataFolder, roomSettings)
+
+        if isOk then
+
+            menu.loadingLevelMenu:recordWorldSettingsNew (worldSettings.dataFolder, menu)
+
+            menu.warningLabel.text = ""
+            return "loading_level_menu"
+        
+        else
+            menu.warningLabel.text = "ERROR: Level creation failed"
+
         end
 
-        menu.loadingLevelMenu:recordWorldSettings (worldSettings, roomSettings, menu)
+        -- local worldSettings =
+        -- {
+        --     path =              menu.filename.value,
+        --     isNew =             true,
+        --     shouldSave =        true,
+        -- }
 
-        menu.warningLabel.text = ""
-        return "loading_level_menu"
+        -- local roomSettings =
+        -- {
+        --     path =                              "default/",
+        --     terrainId =                         menu.menuProperties.terrainId,
+        --     randomSeedAsString =                menu.randomSeed.value,
+        --     generators =                        menu.menuProperties.generators,
+        -- }
+
+        -- for _, v in ipairs (menu.menuProperties.options) do
+        --     roomSettings [v.id] = menu [v.id]:getValueAsNumber ()
+        -- end
+
+        -- menu.loadingLevelMenu:recordWorldSettings (worldSettings, roomSettings, menu)
+
     end
 end
 
