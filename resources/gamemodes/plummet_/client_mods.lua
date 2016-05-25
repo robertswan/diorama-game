@@ -3,37 +3,27 @@ local modsToLoad =
 {
     {
         folder = "diorama",
-        modName = "attract_mode",
-        versionRequired = {major = 1, minor = 0},
-    },
-    {
-        folder = "diorama",
         modName = "blocks",
         versionRequired = {major = 1, minor = 0},
     },
     {
         folder = "diorama",
-        modName = "player_list",
+        modName = "diagnostics",
         versionRequired = {major = 1, minor = 0},
-    },    
+    },  
     {
-        folder = "diorama",
-        modName = "inventory",
+        folder = "plummet",
+        modName = "game_logic",
+        versionRequired = {major = 1, minor = 0},
+    },
+    {
+        folder = "plummet",
+        modName = "scoreboard",
         versionRequired = {major = 1, minor = 0},
     },
     {
         folder = "diorama",
         modName = "chat",
-        versionRequired = {major = 1, minor = 0},
-    },
-    {
-        folder = "diorama",
-        modName = "spawn",
-        versionRequired = {major = 1, minor = 0},
-    },
-    {
-        folder = "diorama",
-        modName = "diagnostics",
         versionRequired = {major = 1, minor = 0},
     },
 }

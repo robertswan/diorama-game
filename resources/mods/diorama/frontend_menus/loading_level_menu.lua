@@ -26,7 +26,7 @@ function c:onUpdate (menus)
 
     elseif isNew then
         self.fromMenu:recordWorldAlreadyExistsError ()
-        return self.fromMenu.menuKey 
+        return self.fromMenu.menuKey
 
     else
         return "load_level_menu"
@@ -49,7 +49,7 @@ end
 
 --------------------------------------------------
 return function ()
-    local instance = MenuClass ("LOADING LEVEL MENU")
+    local instance = MenuClass ("Load World")
 
     Mixin.CopyToAndBackupParents (instance, c)
 

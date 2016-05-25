@@ -48,7 +48,7 @@ end
 --------------------------------------------------
 return function ()
 
-    local instance = MenuClass ("DELETE LEVEL CONFIRM MENU")
+    local instance = MenuClass ("Confirm Level Deletion")
 
     local properties =
     {

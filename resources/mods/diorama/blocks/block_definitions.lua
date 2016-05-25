@@ -7,7 +7,7 @@ local modes =
 }
 
 --------------------------------------------------
-local tiles = 
+local tiles =
 {
     {mode = modes.repeat1x1, uvs = {3, 0}},                         -- side of grass (1)
     {mode = modes.repeat2x2, uvs = {7, 12, 8, 12, 7, 13, 8, 13}},   -- grass (2)
@@ -39,7 +39,7 @@ local blocks =
     {name = "lit pumpkin",          uvs = {8, 7, 6, 7, 6, 7, 6, 7, 6, 6, 6, 6}},
     {name = "melon",                uvs = {8, 8, 9, 8, 9, 8}},
     {name = "crafting table",       uvs = {11, 2}},
-    
+
     -- 19
     {name = "gold",                 uvs = {7, 1}},
     {name = "slab",                 uvs = {5, 0, 6, 0, 6, 0}},
@@ -92,6 +92,10 @@ local blocks =
     {name = "gravity",              uvs = {10, 6}},
     {name = "all grass",            uvs = {0, 0}},
     {name = "water",                uvs = {15, 15},         isLiquid = true},
+
+    --changes
+    {name = "ice",                  uvs = {14, 1},           isTransparent = true},
+    {name = "coal block",           uvs = {15, 1}},
 }
 
 return {blocks = blocks, tiles = tiles}

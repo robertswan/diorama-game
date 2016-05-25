@@ -6,91 +6,95 @@ local blocks =
     -- needs to match the data in the blocks mod
 
     -- 1
-    "grass",            
-    "mud",                
-    "granite",            
-    "obsidian",            
-    "sand",                
-    "snowy grass",        
-    "brick",            
-    "tnt",                
-    "pumpkin",            
+    "grass",
+    "mud",
+    "granite",
+    "obsidian",
+    "sand",
+    "snowy grass",
+    "brick",
+    "tnt",
+    "pumpkin",
 
     -- 10
-    "jump pad",            
-    "cobble",            
-    "trunk",            
-    "wood",                
-    "leaf",                
-    "glass",            
-    "lit pumpkin",        
-    "melon",            
-    "table",    
+    "jump pad",
+    "cobble",
+    "trunk",
+    "wood",
+    "leaf",
+    "glass",
+    "lit pumpkin",
+    "melon",
+    "table",
 
     -- 19
-    "gold",                
-    "slab",                
-    "big slab",            
-    "gravel",            
-    "bedrock",            
-    "panel",        
-    "books",            
-    "mossy",        
-    "stone brick",        
+    "gold",
+    "slab",
+    "big slab",
+    "gravel",
+    "bedrock",
+    "panel",
+    "books",
+    "mossy",
+    "stone brick",
 
     -- 28
-    "sponge",            
-    "herringbone",        
-    "black",            
-    "dark",        
-    "light",        
-    "white",            
-    "dk cyan",        
-    "brown",            
-    "pink",            
+    "sponge",
+    "herringbone",
+    "black",
+    "dark",
+    "light",
+    "white",
+    "dk cyan",
+    "brown",
+    "pink",
 
     -- 37
-    "blue",        
-    "green",    
-    "yellow",            
-    "orange",            
-    "red",            
-    "violet",            
-    "purple",            
-    "dk blue",        
-    "dk green",    
+    "blue",
+    "green",
+    "yellow",
+    "orange",
+    "red",
+    "violet",
+    "purple",
+    "dk blue",
+    "dk green",
 
     --46
     "sign",
-    "grass",                
-    "rose",           
-    "daffy",        
-    "toadstool",             
-    "mushroom",           
-    "sprout",              
-    "cane",               
-    "wheat",                
+    "grass",
+    "rose",
+    "daffy",
+    "toadstool",
+    "mushroom",
+    "sprout",
+    "cane",
+    "wheat",
 
     -- 55
-    "bush",                 
-    "stem",                 
-    "cactus top",           
-    "cactus body", 
+    "bush",
+    "stem",
+    "cactus top",
+    "cactus body",
     "GRAVITY",
     "all grass",
     "water",
+
+    --changes
+    "ice",
+    "coal block",
 }
 
 local entities =
 {
-    sign = 
+    sign =
     {
-        type = "SIGN", 
+        type = "SIGN",
         text = "NOT_SET",
     }
 }
 
--- local entities = 
+-- local entities =
 -- {
 --     {name = "sign", type = "SIGN", text = "NOT_SET"},
 --     {name = "torch", type = "TORCH", radius = 6, rgb = 0xff00ff},
@@ -106,8 +110,8 @@ local function testIdBounds (self)
     if self.currentBlockId > self.highestBlockId then
         self.currentBlockId = self.highestBlockId
     end
-    
-    if self.currentBlockId < self.lowestBlockId then 
+
+    if self.currentBlockId < self.lowestBlockId then
         self.currentBlockId = self.lowestBlockId
     end
 end
@@ -127,7 +131,7 @@ local function renderText (self)
     for idx = 1, self.blocksPerPage do
         if blocks [idx + self.currentPage * self.blocksPerPage] ~= nil then
             local text = "[" .. tostring (idx) .. ":" .. blocks [idx + self.currentPage * self.blocksPerPage] .. "]"
-            local colour = idx + self.currentPage * self.blocksPerPage == self.currentBlockId and 0xffffffff or 0x000000ff 
+            local colour = idx + self.currentPage * self.blocksPerPage == self.currentBlockId and 0xffffffff or 0x000000ff
             font.drawString (x, y, text, colour)
             x = x + font.measureString (text);
         end
@@ -144,7 +148,7 @@ local function setInventoryItem (id)
     else
         dio.inputs.setPlayerBlockId (1, id)
     end
-    
+
 end
 
 --------------------------------------------------
@@ -161,26 +165,26 @@ local function onUpdate (self)
 
         if self.currentBlockId > self.blocksPerPage + self.currentPage * self.blocksPerPage or self.currentBlockId > self.highestBlockId then
             self.currentPage = self.currentPage + 1
-            
+
             if self.currentPage > self.pages then
                 self.currentPage = 0
             end
-            
+
             self.currentBlockId = 1 + self.currentPage * self.blocksPerPage
-            
+
         elseif self.currentBlockId < 1 + self.currentPage * self.blocksPerPage then
             self.currentPage = self.currentPage - 1
-            
+
             if self.currentPage < 0 then
                 self.currentPage = self.pages
             end
-            
+
             if self.blocksPerPage + self.currentPage * self.blocksPerPage > self.highestBlockId then
                 self.currentBlockId = self.highestBlockId
-            else 
+            else
                 self.currentBlockId = self.blocksPerPage + self.currentPage * self.blocksPerPage
             end
-            
+
         end
 
         setInventoryItem (self.currentBlockId)
@@ -190,7 +194,7 @@ local function onUpdate (self)
 end
 
 --------------------------------------------------
-local function onEarlyRender (self)    
+local function onEarlyRender (self)
     -- Not the most ideal way to call onUpdate
     onUpdate (self)
 
@@ -206,7 +210,7 @@ end
 
 --------------------------------------------------
 local function onLateRender (self)
-    
+
     local scale = Window.calcBestFitScale (self.w, self.h)
     local windowW = dio.drawing.getWindowSize ()
     local x = (windowW - (self.w * scale)) * 0.5
@@ -228,7 +232,7 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
             self.isDirty = true
             return true
         end
-        
+
     elseif keyCode >= keyCodes.F1 and keyCode <= keyCodes.F12 then
         if keyCode - keyCodes.F1 >= 0 and keyCode - keyCodes.F1    <= self.pages then
             local oldPage = self.currentPage
@@ -237,43 +241,43 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
             testIdBounds (self)
             self.isDirty = true
         end
-    
+
     elseif keyCode == keyCodes.RIGHT then
         self.currentPage = self.currentPage + 1
-        
+
         if self.currentPage > self.pages then
             self.currentPage = 0
             self.currentBlockId = self.currentBlockId - self.blocksPerPage * self.pages
             testIdBounds (self)
-            
+
         else
-            self.currentBlockId = self.currentBlockId + self.blocksPerPage    
+            self.currentBlockId = self.currentBlockId + self.blocksPerPage
             testIdBounds (self)
-            
+
         end
 
         setInventoryItem (self.currentBlockId)
         self.isDirty = true
         return true
-    
+
     elseif keyCode == keyCodes.LEFT then
         self.currentPage = self.currentPage - 1
-        
+
         if self.currentPage < 0 then
             self.currentPage = self.pages
             self.currentBlockId = self.currentBlockId + self.blocksPerPage * self.pages
             testIdBounds (self)
-            
-        else 
-            self.currentBlockId = self.currentBlockId - self.blocksPerPage        
+
+        else
+            self.currentBlockId = self.currentBlockId - self.blocksPerPage
             testIdBounds (self)
-            
+
         end
-        
+
         setInventoryItem (self.currentBlockId)
         self.isDirty = true
         return true
-    
+
     -- hijack inventory to add temporary gravity changing buttons
     elseif keyCode == keyCodes.INSERT then
         dio.inputs.setMyGravity (dio.inputs.gravityDirections.UP)
@@ -300,7 +304,7 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
         return true
 
     end
-    
+
     setInventoryItem (self.currentBlockId)
     return false
 end
@@ -314,7 +318,7 @@ local function onChatMessagePreSent (text)
     if compare == command then
         local message = text:sub (command:len() + 1)
         entities.sign.text = message
-        return true    
+        return true
     end
 
     return false
@@ -329,7 +333,7 @@ local function onLoadSuccessful ()
     end
     local widthSize = 5 + dio.drawing.font.measureString(stringToMeasure) + 5
 
-    instance = 
+    instance =
     {
         lowestBlockId = 1,
         highestBlockId = #blocks,
@@ -337,7 +341,7 @@ local function onLoadSuccessful ()
         currentPage = 0,
         blocksPerPage = 9,
         pages = 0, -- 0 indexed
-        isDirty = true,    
+        isDirty = true,
 
         x = 20,
         y = 0,
@@ -360,13 +364,13 @@ local function onLoadSuccessful ()
 end
 
 --------------------------------------------------
-local modSettings = 
+local modSettings =
 {
     name = "Inventory",
-    
+
     description = "Allows players to change the blocks they are placing",
 
-    permissionsRequired = 
+    permissionsRequired =
     {
         client = true,
         player = true,

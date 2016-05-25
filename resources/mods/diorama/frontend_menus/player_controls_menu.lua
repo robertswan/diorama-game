@@ -18,14 +18,14 @@ local function warnAgainstIdenticalKeyBindings (menu)
         local startMenuItem = menu.keyMenuItems [startIdx]
         for compareIdx = startIdx + 1, #menu.keyMenuItems do
             local compareMenuItem = menu.keyMenuItems [compareIdx]
-            if startMenuItem.keyCode == compareMenuItem.keyCode then 
+            if startMenuItem.keyCode == compareMenuItem.keyCode then
 
-                menu.multiKeySelectWarning.text = 
-                    "WARNING: " .. 
-                    startMenuItem.text .. 
-                    " and " .. 
+                menu.multiKeySelectWarning.text =
+                    "WARNING: " ..
+                    startMenuItem.text ..
+                    " and " ..
                     compareMenuItem.text ..
-                    " CLASH!"                    
+                    " CLASH!"
 
                 return
             end
@@ -88,7 +88,7 @@ local function onResetToDefaultsClicked (menuItem, menu)
     menu.fov.value = "90"
     menu.fov.value = "0.075"
 
-    menu.invertMouse.isChecked = false 
+    menu.invertMouse.isChecked = false
     menu.keyMenuItems [1].keyCode = keyCodeFromString ("W")
     menu.keyMenuItems [2].keyCode = keyCodeFromString ("A")
     menu.keyMenuItems [3].keyCode = keyCodeFromString ("S")
@@ -152,7 +152,7 @@ return function ()
             KeySelectMenuItem ("Right", onKeyUpdated, 0),
             KeySelectMenuItem ("Jump", onKeyUpdated, 0),
             KeySelectMenuItem ("Crouch", onKeyUpdated, 0),
-            KeySelectMenuItem ("Turbo", onKeyUpdated, 0),
+            KeySelectMenuItem ("Sprint", onKeyUpdated, 0),
         },
 
         multiKeySelectWarning = LabelMenuItem (""),
@@ -160,7 +160,7 @@ return function ()
 
     properties.multiKeySelectWarning.color = 0xff8000ff
 
-    local instance = MenuClass ("PLAYER CONTROLS MENU")
+    local instance = MenuClass ("Controls")
 
     Mixin.CopyTo (instance, properties)
     Mixin.CopyToAndBackupParents (instance, c)
@@ -177,9 +177,9 @@ return function ()
     instance:addMenuItem (properties.keyMenuItems [6])
     instance:addMenuItem (properties.keyMenuItems [7])
     instance:addMenuItem (BreakMenuItem ())
-    instance:addMenuItem (ButtonMenuItem ("Save", onSaveClicked))    
-    instance:addMenuItem (ButtonMenuItem ("Cancel", onCancelClicked))    
-    instance:addMenuItem (ButtonMenuItem ("Reset To Defaults", onResetToDefaultsClicked))    
+    instance:addMenuItem (ButtonMenuItem ("Save Changes", onSaveClicked))
+    instance:addMenuItem (ButtonMenuItem ("Cancel", onCancelClicked))
+    instance:addMenuItem (ButtonMenuItem ("Reset To Defaults", onResetToDefaultsClicked))
     instance:addMenuItem (properties.multiKeySelectWarning)
 
     return instance

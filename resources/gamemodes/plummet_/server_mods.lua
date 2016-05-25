@@ -3,22 +3,12 @@ local modsToLoad =
 {
     {
         folder = "diorama",
-        modName = "creative",
-        versionRequired = {major = 1, minor = 0},
-    },
-    {
-        folder = "diorama",
         modName = "blocks",
         versionRequired = {major = 1, minor = 0},
     },    
     {
-        folder = "diorama",
-        modName = "motd",
-        versionRequired = {major = 1, minor = 0},
-    },
-    {
-        folder = "diorama",
-        modName = "spawn",
+        folder = "plummet",
+        modName = "game_logic",
         versionRequired = {major = 1, minor = 0},
     },
 }

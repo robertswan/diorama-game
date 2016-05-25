@@ -23,7 +23,7 @@ local function onConnectClicked (menuItem, menu)
 
     end
 
-    local params = 
+    local params =
     {
         ipAddress =         menu.ipAddress.value,
         ipPort =            menu.ipPort:getValueAsNumber (),
@@ -59,19 +59,19 @@ return function ()
 
     math.randomseed (os.time())
 
-    local instance = MenuClass ("MULTIPLAYER MENU")
+    local instance = MenuClass ("Multiplayer")
 
     local scrollLines = {}
 
     local properties = nil
 
     local savedMultiplayerSettings = dio.file.loadLua ("multiplayer_settings.lua")
-    
+
     if savedMultiplayerSettings then
 
-        properties = 
+        properties =
         {
-            playerName =    TextEntryMenuItem ("Player Name", nil, nil, savedMultiplayerSettings.playerName, 15),
+            playerName =    TextEntryMenuItem ("Username", nil, nil, savedMultiplayerSettings.playerName, 15),
             password =      PasswordTextEntryMenuItem ("Password", nil, nil, savedMultiplayerSettings.playerPassword, 15),
             ipAddress =     TextEntryMenuItem ("IP Address", nil, nil, savedMultiplayerSettings.ipAddress, 16),
             ipPort =        NumberEntryMenuItem ("Port", nil, nil, savedMultiplayerSettings.ipPort, true),
@@ -80,9 +80,9 @@ return function ()
             warningLabel =  LabelMenuItem (""),
         }
     else
-        properties = 
+        properties =
         {
-            playerName =    TextEntryMenuItem ("Player Name", nil, nil, "", 15),
+            playerName =    TextEntryMenuItem ("Username", nil, nil, "", 15),
             password =      PasswordTextEntryMenuItem ("Password", nil, nil, "", 15),
             ipAddress =     TextEntryMenuItem ("IP Address", nil, nil, "84.92.48.10", 16),
             ipPort =        NumberEntryMenuItem ("Port", nil, nil, 25276, true),
@@ -95,7 +95,7 @@ return function ()
     Mixin.CopyTo (instance, properties)
     Mixin.CopyToAndBackupParents (instance, c)
 
-    instance:addMenuItem (LabelMenuItem ("Passwords are per server and stored in plain text.")) 
+    instance:addMenuItem (LabelMenuItem ("Passwords are per server and stored in plain text."))
     instance:addMenuItem (LabelMenuItem ("DO NOT REUSE important passwords."))
     instance:addMenuItem (LabelMenuItem ("Passwords are tied to a username when a user is promoted"))
     instance:addMenuItem (LabelMenuItem ("to a builder (type '.group' into chat to check)"))
@@ -106,7 +106,7 @@ return function ()
     instance:addMenuItem (properties.ipPort)
     instance:addMenuItem (properties.avatarTop)
     instance:addMenuItem (properties.avatarBottom)
-    instance:addMenuItem (ButtonMenuItem ("Connect To Server", onConnectClicked))
+    instance:addMenuItem (ButtonMenuItem ("Join Server", onConnectClicked))
     instance:addMenuItem (BreakMenuItem ())
     instance:addMenuItem (ButtonMenuItem ("Return To Main Menu", onMainMenuClicked))
     instance:addMenuItem (BreakMenuItem ())

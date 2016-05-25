@@ -11,7 +11,7 @@ function c:addMenuItem (menuItem)
     self.next_y = self.next_y + menuItem.height + menuItem.gapY
     table.insert (self.items, menuItem)
 
-    return menuItem    
+    return menuItem
 end
 
 --------------------------------------------------
@@ -43,7 +43,7 @@ function c:onUpdate (x, y, was_left_clicked)
                 if next_menu_2 then
                     next_menu = next_menu_2
                 end
-                
+
             end
         end
     end
@@ -56,7 +56,7 @@ function c:onRender ()
     local font = dio.drawing.font;
 
     dio.drawing.font.drawBox (0, 0, self.width, self.height, 0x000000b0);
-    
+
     if self.title then
         local width = font.measureString (self.title)
         font.drawString ((self.width - width) * 0.5, 0, self.title, 0xffffffff)
@@ -84,7 +84,7 @@ function c:onKeyClicked (keyCode, keyCharacter, keyModifiers)
                 return true
             end
         end
-    end    
+    end
 end
 
 --------------------------------------------------
@@ -112,8 +112,8 @@ end
 
 --------------------------------------------------
 return function (title)
-    
-    local instance = 
+
+    local instance =
     {
         title = title,
         items = {},

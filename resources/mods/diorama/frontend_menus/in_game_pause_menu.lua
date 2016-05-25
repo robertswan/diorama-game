@@ -62,7 +62,7 @@ end
 function c:onKeyClicked (keyCode, keyCharacter, keyModifiers, menus)
 
     local keyCodes = dio.inputs.keyCodes
-    
+
     if keyCode == keyCodes.ESCAPE then
         menus:changeMenu ("playing_game_menu")
     end
@@ -72,15 +72,15 @@ end
 
 --------------------------------------------------
 return function ()
-    local instance = MenuClass ("IN GAME PAUSE MENU")
+    local instance = MenuClass ("Paused")
 
     Mixin.CopyToAndBackupParents (instance, c)
 
     instance:addMenuItem (BreakMenuItem ())
     instance:addMenuItem (ButtonMenuItem ("Resume", onResumeClicked))
     instance:addMenuItem (BreakMenuItem ())
-    instance:addMenuItem (ButtonMenuItem ("Player Settings", onPlayerSettingsClicked))
-    instance:addMenuItem (ButtonMenuItem ("Return To Main Menu", onReturnToMainMenuClicked))    
+    instance:addMenuItem (ButtonMenuItem ("Options", onPlayerSettingsClicked))
+    instance:addMenuItem (ButtonMenuItem ("Save and Quit", onReturnToMainMenuClicked))
     instance:addMenuItem (BreakMenuItem ())
 
     return instance
