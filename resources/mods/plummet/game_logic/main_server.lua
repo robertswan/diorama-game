@@ -14,7 +14,7 @@ local generators =
         {
             
             {
-                chanceOfTree = 0.03, -- 0.03
+                chanceOfTree = 0.03,
                 sizeMin = 3,
                 sizeRange = 3,
                 trunkHeight = 5,
@@ -88,7 +88,7 @@ local gameVars =
     playersReadyCount = 0,
     playersPlayingCount = 0,
     tickCount = 0,
-    gameOverScore = 100,
+    gameOverScore = 5000,
     chunksToModify = 
     {
         lobby = 
