@@ -9,14 +9,7 @@ local Mixin = require ("resources/mods/diorama/frontend_menus/mixin")
 --------------------------------------------------
 local function onPlayLevelClicked (menu, levelName)
 
-    local worldSettings =
-    {
-        path =             levelName,
-        isNew =         false,
-        shouldSave =     true,
-    }
-
-    menu.loadingLevelMenu:recordWorldSettings (worldSettings)
+    menu.loadingLevelMenu:recordWorldSettingsNew (levelName, menu)
 end
 
 --------------------------------------------------

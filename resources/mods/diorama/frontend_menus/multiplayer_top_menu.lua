@@ -35,7 +35,7 @@ local function onConnectClicked (menuItem, menu)
 
     dio.file.saveLua ("multiplayer_settings.lua", params, "multiplayerSettings")
 
-    local isOk, errorString = dio.session.beginMp (params)
+    local isOk, errorString = dio.session.beginMpOld (params)
     if isOk then
         return "playing_game_menu"
     end
