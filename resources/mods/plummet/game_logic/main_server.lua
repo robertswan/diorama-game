@@ -6,6 +6,46 @@ local colors =
 }
 
 --------------------------------------------------
+local generators = 
+{
+    
+    {
+        voxelPass = 
+        {
+            
+            {
+                chanceOfTree = 0.03, -- 0.03
+                sizeMin = 3,
+                sizeRange = 3,
+                trunkHeight = 5,
+                type = "addTrees",
+            },
+            
+            {
+                mudHeight = 4,
+                type = "addGrass",
+            },
+        },
+        weightPass = 
+        {
+            {
+                mode = "replace",
+                type = "constantWeight",
+                constantWeight = 0.40,
+            },
+            {
+                mode = "lessThan",
+                octaves = 3,
+                perOctaveAmplitude = 0.5,
+                perOctaveFrequency = 2,
+                scale = 16,
+                type = "perlinNoise",
+            },
+        },
+    },
+}
+
+--------------------------------------------------
 local connections = {}
 
 --------------------------------------------------
@@ -34,6 +74,13 @@ local function buildWaitingRoom (roomId, chunkId)
 end
 
 --------------------------------------------------
+local roomFolders =
+{
+    "plummet1",
+    "plummet2",
+}
+
+--------------------------------------------------
 local gameVars = 
 {
     isPlaying = false,
@@ -41,7 +88,7 @@ local gameVars =
     playersReadyCount = 0,
     playersPlayingCount = 0,
     tickCount = 0,
-    gameOverScore = 5000,
+    gameOverScore = 100,
     chunksToModify = 
     {
         lobby = 
@@ -56,7 +103,8 @@ local gameVars =
             isBuilt = false,
             buildFunction = buildWaitingRoom,
         }
-    }
+    },
+    currentRoomIdx = 1
 }
 
 --------------------------------------------------
@@ -128,10 +176,64 @@ local function updateScores ()
 end
 
 --------------------------------------------------
-local function createNewLevel ()
-    -- create a box restricted area to join.. make a box out of glass!
+local coordinates =
+{
+    lobby = "15 4 15",
+    waitingRoom = "15 -3 15",
+}
 
-    -- dio.levels.deleteAllChunks (false) -- delete all chunks, but keep the settings file
+--------------------------------------------------
+local function teleportPlayer (connectionId, coordinatesId)
+
+    dio.serverChat.send (connectionId, "PLUMMET_TP", coordinates [coordinatesId])
+end    
+
+--------------------------------------------------
+local function createNewLevel (isFirstTime)
+
+    -- create alternate room
+
+    -- local currentRoomFolder = roomFolders [gameVars.currentRoomIdx]
+    -- gameVars.currentRoomIdx = #roomFolders - gameVars.currentRoomIdx + 1
+    local nextRoomFolder = roomFolders [gameVars.currentRoomIdx]
+
+    local roomSettings =
+    {
+        path = nextRoomFolder,
+        randomSeedAsString = nextRoomFolder,
+        terrainId = "paramaterized",
+        generators = generators,
+    }
+
+    -- -- teleport everyone!
+    -- for connectionId, connection in pairs (connections) do
+    --     dio.world.destroyPlayer (connection.entityId)
+    -- end    
+
+    -- dio.file.abortRoom (currentRoomFolder)
+    -- dio.file.deleteWorld (currentRoomFolder)
+    dio.file.deleteWorld (nextRoomFolder)
+    dio.file.newRoom (dio.session.getWorldFolder (), roomSettings)
+
+    -- -- teleport everyone!
+    -- for connectionId, connection in pairs (connections) do
+
+    --     -- dio.serverChat.send (connectionId, "Server", roomFolders [gameVars.currentRoomIdx])
+
+    --     local playerParams =
+    --     {
+    --         connectionId = connectionId,
+    --         playerName = connection.playerName,
+    --         gravityDir = "DOWN",
+    --         roomFolder = nextRoomFolder,
+    --         xyz = {}, -- currently unused
+    --     }
+
+    --     connection.entityId = dio.world.createPlayer (playerParams)        
+
+    --     -- hack - teleport players via client
+    --     teleportPlayer (connectionId, "lobby")
+    -- end
 
     for _, build in pairs (gameVars.chunksToModify) do
         build.isBuilt = false
@@ -158,19 +260,6 @@ local function startGame ()
     gameVars.playersReadyCount = 0
 
 end   
-
---------------------------------------------------
-local coordinates =
-{
-    lobby = "15 4 15",
-    waitingRoom = "15 -3 15",
-}
-
---------------------------------------------------
-local function teleportPlayer (connectionId, coordinatesId)
-
-    dio.serverChat.send (connectionId, "PLUMMET_TP", coordinates [coordinatesId])
-end    
 
 --------------------------------------------------
 local function endGame ()
@@ -200,11 +289,28 @@ local function endGame ()
 end
 
 --------------------------------------------------
-local function onPlayerLoad (event)
+local function onUserConnected (event)
 
-    if #connections == 0 then
-        createNewLevel ()
-    end
+    -- local usersCount = 0
+    -- for _, _ in pairs (connections) do
+    --     usersCount = usersCount + 1
+    -- end
+
+    -- -- is first player on server
+    -- if usersCount == 1 then
+    --     createNewLevel ()
+    -- end
+
+    createNewLevel ()
+
+    local playerParams =
+    {
+        connectionId = event.connectionId,
+        roomFolder = roomFolders [gameVars.currentRoomIdx],
+        -- should have xyz and gravity etc...
+    }
+
+    local entityId = dio.world.createPlayer (playerParams)
 
     local connection =
     {
@@ -214,9 +320,11 @@ local function onPlayerLoad (event)
         currentY = 2,
         score = 0,
         groupId = "lobby",
+        entityId = entityId,
     }
 
     connections [event.connectionId] = connection
+
     teleportPlayer (connection.connectionId, "lobby")
 
     updateScores ()
@@ -224,9 +332,11 @@ local function onPlayerLoad (event)
 end
 
 --------------------------------------------------
-local function onPlayerSave (event)
+local function onUserDisconnected (event)
 
     local connection = connections [event.connectionId]
+
+    dio.world.destroyPlayer (connection.entityId)
 
     if connection.groupId == "lobby" then
         -- do nothing
@@ -396,6 +506,7 @@ local function onTick ()
             local winner = updateScores ()
             if not winner or winner.score > gameVars.gameOverScore then
                 endGame ()
+                -- createNewLevel (false)
             end
         end
     end
@@ -407,8 +518,8 @@ local function onLoadSuccessful ()
     -- dio.players.setPlayerAction (player, actions.LEFT_CLICK, outcomes.DESTROY_BLOCK)
 
     local types = dio.events.types
-    dio.events.addListener (types.SERVER_PLAYER_LOAD, onPlayerLoad)
-    dio.events.addListener (types.SERVER_PLAYER_SAVE, onPlayerSave)
+    dio.events.addListener (types.SERVER_USER_CONNECTED, onUserConnected)
+    dio.events.addListener (types.SERVER_USER_DISCONNECTED, onUserDisconnected)
     dio.events.addListener (types.SERVER_ENTITY_PLACED, onEntityPlaced)
     dio.events.addListener (types.SERVER_ENTITY_DESTROYED, onEntityDestroyed)
     dio.events.addListener (types.SERVER_CHAT_RECEIVED, onChatReceived)
@@ -439,6 +550,8 @@ local modSettings =
         inputs = true,
         player = true,
         serverChat = true,
+        session = true,
+        world = true,
     },
 }
 

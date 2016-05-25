@@ -72,7 +72,7 @@ local function stripColourCodes (text)
 end
 
 --------------------------------------------------
-local function onPlayerLoad (event)
+local function onUserConnected (event)
 
     local filename = "player_" .. event.playerName .. ".lua"
     local settings = dio.file.loadLua (filename)
@@ -107,7 +107,7 @@ local function onPlayerLoad (event)
 end
 
 --------------------------------------------------
-local function onPlayerSave (event)
+local function onUserDisconnected (event)
 
     local connection = connections [event.connectionId]
     local group = groups [connection.groupId]
@@ -272,8 +272,8 @@ local function onLoadSuccessful ()
     -- dio.players.setPlayerAction (player, actions.LEFT_CLICK, outcomes.DESTROY_BLOCK)
 
     local types = dio.events.types
-    dio.events.addListener (types.SERVER_PLAYER_LOAD, onPlayerLoad)
-    dio.events.addListener (types.SERVER_PLAYER_SAVE, onPlayerSave)
+    dio.events.addListener (types.SERVER_USER_CONNECTED, onUserConnected)
+    dio.events.addListener (types.SERVER_PLAYER_SAVE, onUserDisconnected)
     dio.events.addListener (types.SERVER_ENTITY_PLACED, onEntityPlaced)
     dio.events.addListener (types.SERVER_ENTITY_DESTROYED, onEntityDestroyed)
     dio.events.addListener (types.SERVER_CHAT_RECEIVED, onChatReceived)
