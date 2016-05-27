@@ -83,6 +83,23 @@ local function onLateRender (self)
 end
 
 --------------------------------------------------
+local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
+	
+	local self = instance
+	local keyCodes = dio.inputs.keyCodes
+	
+	if keyCode == keyCodes.F3 then
+		
+		if self.isVisible then
+			self.isVisible = false
+		else
+			self.isVisible = true
+		end
+		
+	end
+end
+	
+--------------------------------------------------
 local function onLoadSuccessful ()
 
     instance = 
@@ -100,7 +117,9 @@ local function onLoadSuccessful ()
     instance.renderToTexture = dio.drawing.createRenderToTexture (instance.texture.w, instance.texture.h)
 
     dio.drawing.addRenderPassBefore (1.0, function () onEarlyRender (instance) end)
-    dio.drawing.addRenderPassAfter (1.0, function () onLateRender (instance) end)
+	dio.drawing.addRenderPassAfter (1.0, function () onLateRender (instance) end)
+	
+	dio.events.addListener (dio.events.types.CLIENT_KEY_CLICKED, onKeyClicked)
 end
 
 --------------------------------------------------
