@@ -19,13 +19,13 @@ function c:onUpdate (menu, x, y, was_left_clicked)
         if self.sliderPinX > (self.sliderEndX - self.sliderStartX) then
             self.sliderPinX = (self.sliderEndX - self.sliderStartX)
         elseif self.sliderPinX < 0 then
-            self.sliderPinX = 0        
+            self.sliderPinX = 0
         end
 
         self.value = math.floor((self.sliderMaxVal - self.sliderMinVal) * (self.sliderPinX / (self.sliderEndX - self.sliderStartX)) + self.sliderMinVal)
-        
+
         if was_left_clicked then
-                
+
             self.initial_value = nil
             self.isSelected = false
             self.isHighlighted = false
@@ -37,10 +37,10 @@ function c:onUpdate (menu, x, y, was_left_clicked)
         end
 
     else
-        self.isHighlighted = 
+        self.isHighlighted =
                     x >= 0 and
                     x <= menu.width and
-                    y >= self.y and 
+                    y >= self.y and
                     y < self.y + self.height
 
             if was_left_clicked and self.isHighlighted then
@@ -62,20 +62,20 @@ function c:onRender (font, menu)
     local x = 100
 
     local color = self.isHighlighted and 0xffffffff or 0x00ffffff
-    color = self.isSelected and 0xff0000ff or color
+    color = self.isSelected and 0xffffffff or color
 
     if self.isHighlighted or self.isSelected then
-        dio.drawing.font.drawBox (0, self.y, menu.width, self.height, 0x000000ff)
+        dio.drawing.font.drawBox (0, self.y, menu.width, self.height, 0x00CCCCCC)
     end
 
     font.drawString (x, self.y, self.text, color)
 
     local value = self.value
-    
+
     local numberWidth = font.measureString (value)
-    dio.drawing.font.drawBox (self.sliderStartX, self.y, self.sliderEndX - self.sliderStartX + self.sliderPinWidth, 10, 0xffff99ff)
-    dio.drawing.font.drawBox (self.sliderStartX + self.sliderPinX, self.y, self.sliderPinWidth, 10, 0xff00ffff)
-    font.drawString (self.sliderStartX + ((self.sliderEndX - self.sliderStartX - numberWidth)/2), self.y, value, 0x990000ff)
+    dio.drawing.font.drawBox (self.sliderStartX, self.y, self.sliderEndX - self.sliderStartX + self.sliderPinWidth, 10, 0x00FFFFFF)
+    dio.drawing.font.drawBox (self.sliderStartX + self.sliderPinX, self.y, self.sliderPinWidth, 10, 0x0066CCFF)
+    font.drawString (self.sliderStartX + ((self.sliderEndX - self.sliderStartX - numberWidth)/2), self.y, value, 0x000000FF)
 end
 
 --------------------------------------------------
@@ -84,7 +84,7 @@ function c:onKeyClicked (menu, keyCode)
     local keyCodes = dio.inputs.keyCodes
 
     if keyCode == keyCodes.ENTER or keyCode == keyCodes.KP_ENTER then
-            
+
         self.initial_value = nil
         self.isSelected = false
         self.isHighlighted = false
@@ -130,5 +130,3 @@ return function (text, onTextChanged, onTextChangeConfirmed, initialValue, isInt
 
     return instance
 end
-
-

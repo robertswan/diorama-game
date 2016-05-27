@@ -1,12 +1,12 @@
 --------------------------------------------------
 return function ()
-    local instance = 
+    local instance =
     {
         x = 0,
         y = 0,
-        width = 200,
+        width = 50,
         height = 10,
-        gapY = 4,
+        gapY = 1,
     }
     return instance
 end

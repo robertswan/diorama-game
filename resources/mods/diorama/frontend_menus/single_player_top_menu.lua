@@ -38,15 +38,15 @@ end
 --------------------------------------------------
 return function ()
 
-    local instance = MenuClass ("SINGLE PLAYER MENU")
+    local instance = MenuClass ("Single Player")
 
     Mixin.CopyToAndBackupParents (instance, c)
 
-    instance:addMenuItem (ButtonMenuItem ("New Level", onCreateNewLevelClicked))
-    instance:addMenuItem (ButtonMenuItem ("Load Level", onLoadLevelClicked))
-    instance:addMenuItem (ButtonMenuItem ("Delete Level", onDeleteLevelClicked))
+    instance:addMenuItem (ButtonMenuItem ("New World", onCreateNewLevelClicked))
+    instance:addMenuItem (ButtonMenuItem ("Load World", onLoadLevelClicked))
+    instance:addMenuItem (ButtonMenuItem ("Delete World", onDeleteLevelClicked))
     instance:addMenuItem (LabelMenuItem (""))
-    instance:addMenuItem (ButtonMenuItem ("Return To Main Menu", onReturnToMainMenuClicked))
+    instance:addMenuItem (ButtonMenuItem ("Back To Main Menu", onReturnToMainMenuClicked))
 
     return instance
 end

@@ -4,9 +4,9 @@ local Mixin = require ("resources/mods/diorama/frontend_menus/mixin")
 
 --------------------------------------------------
 return function ()
-    local instance = 
+    local instance =
     {
-        text = "------------------------",
+        text = "",
 
         onRender = function (self, font, menu)
             local width = font.measureString (self.text)

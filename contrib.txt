@@ -1,127 +1,146 @@
-Contributors
-============
+        ============
+        Contributors
+        ============
 
-FIRSTS:
+        ----------
+           1ST's
+        ----------
 
-multiplayer tester: 	waterlimon
-multiplayer server: 	Expatiator
-youtube video: 			whiteland92 (https://www.youtube.com/watch?v=gOr01kdu_KQ&feature=youtu.bes)
-custom level: 			AmazedStream
-menu mod:				AmazedStream (FOV slider!)
-client mod:				LazyKernel
-github mod:				QLcrisis
-reverse engineering:	XForceP
+        Multiplayer Tester: 	waterlimon
+        Multiplayer Server: 	Expatiator
+        Youtube Video: 			  whiteland92 (https://www.youtube.com/watch?v=gOr01kdu_KQ&feature=youtu.bes)
+        Custom Level: 			  AmazedStream
+        Menu Mod:				      AmazedStream (FOV slider!)
+        Client Mod:				    LazyKernel
+        Github Mod:				    QLcrisis
+        Reverse Engineering:	XForceP
 
+        --------
+        Cat Toys
+        --------
 
+        - whiteland92
 
-cat toys
---------
-whiteland92
+        =========================
+        Compatibility Demo v0.1.5
+        =========================
 
+        ----------
+           Mods
+        ----------
 
-
-compatibility demo v0.1.5
--------------------------
-
-Mods
-
-* LazyKernel
-* kxait
-* XForceP
-* QLcrisis
-
-
-compatibility demo v0.1.1
--------------------------
-
-Mods
-
-* AmazedStream
-* LazyKernel
-
-Bug fixers
-
-* Toeger
-* XForceP (raknet bugfix!)
-
-QA
-
-* AcarX
-* AmazedStream
-* Azenris
-* clstl
-* CritCrank
-* Expatiator
-* FGArray
-* Fleabum
-* HuniePop
-* IAyeCaptainKai
-* l_p_e
-* JFrap12
-* LazyKernel
-* linco95
-* Magnavode
-* Moopaloo
-* MrPancakeGuy___
-* NeutralNoise
-* Nidaegwyn
-* QeraiX
-* rave1000
-* Snellekenny
-* Swappik
-* tgrkzus
-* TheQuaX
-* TheRustyBrick
-* TinHammer
-* Walterman50
-* waterlimon
-* whiteland92
-* WizardNJ
+        - LazyKernel
+        - kxait
+        - XForceP
+        - QLcrisis
 
 
-compatibility demo v0.1.0
--------------------------
+        =========================
+        Compatibility Demo v0.1.1
+        =========================
 
-Bug fixers
+        ----------
+           Mods
+        ----------
 
-* RayMarch
+        - AmazedStream
+        - LazyKernel
 
+        ----------
+        Bug Fixers
+        ----------
 
-compatibility demo v0.0.2
--------------------------
+        - Toeger
+        - XForceP (raknet bugfix!)
 
-Bug fixers
+        ----------------------
+        Quality Assurance (QA)
+        ----------------------
 
-* Amazedstream
-* GhassanPL
-* QeralX
-* Roblon
-* TheRustyBrick
-* waterlimon
+        - AcarX
+        - AmazedStream
+        - Azenris
+        - clstl
+        - CritCrank
+        - Expatiator
+        - FGArray
+        - Fleabum
+        - HuniePop
+        - IAyeCaptainKai
+        - l_p_e
+        - JFrap12
+        - LazyKernel
+        - linco95
+        - Magnavode
+        - Moopaloo
+        - MrPancakeGuy___
+        - NeutralNoise
+        - Nidaegwyn
+        - QeraiX
+        - rave1000
+        - Snellekenny
+        - Swappik
+        - tgrkzus
+        - TheQuaX
+        - TheRustyBrick
+        - TinHammer
+        - Walterman50
+        - waterlimon
+        - whiteland92
+        - WizardNJ
 
-QA
+        =========================
+        Compatibility Demo v0.1.0
+        =========================
 
-* dgendreau
-* Funisdangerous
-* LazyKernel
-* LuaKT
-* McBrainiac
-* Moopaloo
-* Nidaegwyn
-* NeutralNoise
-* TheRustyBrick
-* RedSquirrelsNut (@theredsquirrely)
-* SSStormy
-* xCosminPlays
+        ----------
+        Bug fixers
+        ----------
 
+        - RayMarch
 
-compatibility demo v0.0.1
--------------------------
+        =========================
+        Compatibility Demo v0.0.2
+        =========================
 
-Bug fixers
+        ----------
+        Bug fixers
+        ----------
 
-* dgendreau
-* Pjuke
-* sp0nji
-* ticedev
-* waterlimon
+        - Amazedstream
+        - GhassanPL
+        - QeralX
+        - Roblon
+        - TheRustyBrick
+        - waterlimon
+
+        ----------------------
+        Quality Assurance (QA)
+        ----------------------
+
+        - dgendreau
+        - Funisdangerous
+        - LazyKernel
+        - LuaKT
+        - McBrainiac
+        - Moopaloo
+        - Nidaegwyn
+        - NeutralNoise
+        - TheRustyBrick
+        - RedSquirrelsNut (@theredsquirrely)
+        - SSStormy
+        - xCosminPlays
+
+        =========================
+        Compatibility Demo v0.0.1
+        =========================
+
+        ----------
+        Bug fixers
+        ----------
+
+        - dgendreau
+        - Pjuke
+        - sp0nji
+        - ticedev
+        - waterlimon
