@@ -90,11 +90,7 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 	
 	if keyCode == keyCodes.F3 then
 		
-		if self.isVisible then
-			self.isVisible = false
-		else
-			self.isVisible = true
-		end
+		self.isVisible = not self.isVisible
 		
 	end
 end
