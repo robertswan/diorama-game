@@ -31,7 +31,7 @@ end
 
 --------------------------------------------------
 function c:onEnter (menus)
-    
+
     self.deleteLevelConfirmMenu = menus.delete_level_confirm_menu
 
     local levels = dio.file.listExistingWorlds ()
@@ -63,7 +63,7 @@ end
 --------------------------------------------------
 return function ()
 
-    local instance = MenuClass ("DELETE LEVEL MENU")
+    local instance = MenuClass ("Delete World")
 
     local properties =
     {

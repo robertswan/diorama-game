@@ -9,11 +9,11 @@ local c = {}
 function c:onUpdate (menu, x, y, was_left_clicked)
 
     if not self.isSelected then
-        
-        self.isHighlighted = 
+
+        self.isHighlighted =
                 x >= 0 and
                 x <= menu.width and
-                y >= self.y and 
+                y >= self.y and
                 y < self.y + self.height
 
         if was_left_clicked and self.isHighlighted then
@@ -36,15 +36,15 @@ function c:onRender (font, menu)
     color = self.isSelected and 0xff0000ff or color
 
     if self.isHighlighted or self.isSelected then
-        dio.drawing.font.drawBox (0, self.y, menu.width, self.height, 0x000000ff)
+        dio.drawing.font.drawBox (0, self.y, menu.width, self.height, 0x00CCCCCC)
     end
 
     font.drawString (x, self.y, self.text, color)
 
     if self.isHighlighted then
-        local width = font.measureString (">>>>    ")
-        font.drawString (x - width, self.y, ">>>>    ", color)
-        font.drawString (x + itemWidth, self.y, "    <<<<", color)
+        local width = font.measureString ("")
+        font.drawString (x - width, self.y, "", color)
+        font.drawString (x + itemWidth, self.y, "", color)
     end
 
     local value = "????"
@@ -52,7 +52,7 @@ function c:onRender (font, menu)
          value = dio.inputs.keys.stringFromKeyCode (self.keyCode)
     end
 
-    local width = font.measureString (value)    
+    local width = font.measureString (value)
     font.drawString (itemWidth + x - width, self.y, value, color)
 end
 

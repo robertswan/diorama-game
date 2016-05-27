@@ -33,23 +33,11 @@ function c:onUpdate (menus)
 
     else
 
-        -- local isNew = self.worldSettings.isNew
-        -- local isOk = dio.session.beginSpOld (self.worldSettings, self.roomSettings)
+        self.fromMenu:recordWorldAlreadyExistsError ()
+        return self.fromMenu.menuKey
 
-        -- self.worldSettings = nil
-        -- self.roomSettings = nil
-
-        -- if isOk then
-        --     return "playing_game_menu"
-
-        -- elseif isNew then
-        --     self.fromMenu:recordWorldAlreadyExistsError ()
-        --     return self.fromMenu.menuKey 
-
-        -- else
-        --     return "load_level_menu"
-        -- end
     end
+
 end
 
 --------------------------------------------------
@@ -59,13 +47,13 @@ function c:onAppShouldClose (parent_func)
     return "quitting_menu", true
 end
 
---------------------------------------------------
-function c:recordWorldSettings (worldSettings, roomSettings, fromMenu)
-    self.isNew = nil
-    self.worldSettings = worldSettings
-    self.roomSettings = roomSettings
-    self.fromMenu = fromMenu
-end
+-- --------------------------------------------------
+-- function c:recordWorldSettings (worldSettings, roomSettings, fromMenu)
+--     self.isNew = nil
+--     self.worldSettings = worldSettings
+--     self.roomSettings = roomSettings
+--     self.fromMenu = fromMenu
+-- end
 
 --------------------------------------------------
 function c:recordWorldSettingsNew (dataFolder, fromMenu)
@@ -76,7 +64,7 @@ end
 
 --------------------------------------------------
 return function ()
-    local instance = MenuClass ("LOADING LEVEL MENU")
+    local instance = MenuClass ("Load World")
 
     Mixin.CopyToAndBackupParents (instance, c)
 

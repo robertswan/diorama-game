@@ -8,7 +8,7 @@ function m.addKeyEntry (menu, text, onClicked, initial_key)
         return text .. "           [" .. initial_key .. "]"
     end
 
-    local key_entry = 
+    local key_entry =
     {
         decorateText = decorateText,
         initial_key = initial_key,
@@ -20,7 +20,7 @@ function m.addKeyEntry (menu, text, onClicked, initial_key)
         y = menu.next_y,
         width = 200,
         height = 10,
-        onClicked = function (self) 
+        onClicked = function (self)
             if onClicked then
                 onClicked (self)
             end

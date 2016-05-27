@@ -7,10 +7,10 @@ local c = {}
 
 --------------------------------------------------
 function c:onUpdate (menu, x, y, was_left_clicked)
-    self.isHighlighted = 
+    self.isHighlighted =
             x >= 0 and
             x <= menu.width and
-            y >= self.y and 
+            y >= self.y and
             y < self.y + self.height
 
     if was_left_clicked and self.isHighlighted then
@@ -30,16 +30,16 @@ function c:onRender (font, menu)
     local color = self.isHighlighted and 0xffffffff or 0x00ffffff
 
     if self.isHighlighted then
-        dio.drawing.font.drawBox (0, self.y, menu.width, self.height, 0x000000ff)
+        dio.drawing.font.drawBox (0, self.y, menu.width, self.height, 0x00CCCCCC)
     end
 
     font.drawString (x, self.y, self.text, color)
 
     if self.isHighlighted then
-    
-        local width = font.measureString (">>>>    ")
-        font.drawString (x - width, self.y, ">>>>    ", color)
-        font.drawString (x + itemWidth, self.y, "    <<<<", color)
+
+        local width = font.measureString ("")
+        font.drawString (x - width, self.y, "", color)
+        font.drawString (x + itemWidth, self.y, "", color)
     end
 
     local width = font.measureString ("[   ]")

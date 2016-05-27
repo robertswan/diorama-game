@@ -72,7 +72,7 @@ end
 --------------------------------------------------
 return function ()
 
-    local instance = MenuClass ("MAIN MENU")
+    local instance = MenuClass ("Diorama")
 
     local properties = {}
 
@@ -81,18 +81,20 @@ return function ()
 
     instance:addMenuItem (ButtonMenuItem ("Single Player", onSinglePlayerClicked))
     instance:addMenuItem (ButtonMenuItem ("Multiplayer", onMultiplayerClicked))
+    instance:addMenuItem (ButtonMenuItem ("Options", onEditPlayerClicked))
+    instance:addMenuItem (ButtonMenuItem ("Quit Game", onQuitClicked))
+
     instance:addMenuItem (BreakMenuItem ())
-    instance:addMenuItem (ButtonMenuItem ("Edit Player", onEditPlayerClicked))
-    instance:addMenuItem (BreakMenuItem ())
-    instance:addMenuItem (ButtonMenuItem ("Read 'readme.txt'", function (menuItem, menu) return onTextFileClicked (menu, "readme.txt") end))
-    instance:addMenuItem (ButtonMenuItem ("Read 'contrib.txt'", function (menuItem, menu) return onTextFileClicked (menu, "contrib.txt") end))
+
+    instance:addMenuItem (ButtonMenuItem ("Read 'readme.txt'", function (menuItem, menu) return onTextFileClicked   (menu, "readme.txt"  ) end))
+    instance:addMenuItem (ButtonMenuItem ("Read 'contrib.txt'", function (menuItem, menu) return onTextFileClicked  (menu, "contrib.txt" ) end))
     instance:addMenuItem (ButtonMenuItem ("Read 'licenses.txt'", function (menuItem, menu) return onTextFileClicked (menu, "licenses.txt") end))
+
+    instance:addMenuItem (BreakMenuItem ())
+
     instance:addMenuItem (ButtonMenuItem ("Paint", onPaintClicked))
     instance:addMenuItem (ButtonMenuItem ("Play Block Falling Game", onPlayTetrisClicked))
 
-    instance:addMenuItem (BreakMenuItem ())
-    instance:addMenuItem (ButtonMenuItem ("Quit", onQuitClicked))
-    
     local versionInfo = dio.system.getVersion ()
 
     instance:addMenuItem (LabelMenuItem (""))

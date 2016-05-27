@@ -36,12 +36,12 @@ end
 --------------------------------------------------
 local function onEarlyRender ()
     menus:renderEarly ()
-end 
+end
 
 --------------------------------------------------
 local function onLateRender ()
     menus:renderLate ()
-end 
+end
 
 --------------------------------------------------
 local function onWindowFocusLost ()
@@ -54,12 +54,12 @@ local function onSessionStarted ()
 end
 
 --------------------------------------------------
-local reasonsStrings = 
+local reasonsStrings =
 {
     [dio.events.sessionShutdownBegun.reasons.NETWORK_CONNECTION_ATTEMPT_FAILED]    = "NETWORK_CONNECTION_ATTEMPT_FAILED",
-    [dio.events.sessionShutdownBegun.reasons.PLAYER_QUIT]                        = "PLAYER_QUIT",
-    [dio.events.sessionShutdownBegun.reasons.NETWORK_CONNECTION_LOST]            = "NETWORK_CONNECTION_LOST",
-    [dio.events.sessionShutdownBegun.reasons.KICKED_FROM_SERVER]                = "KICKED_FROM_SERVER",    
+    [dio.events.sessionShutdownBegun.reasons.PLAYER_QUIT]                          = "PLAYER_QUIT",
+    [dio.events.sessionShutdownBegun.reasons.NETWORK_CONNECTION_LOST]              = "NETWORK_CONNECTION_LOST",
+    [dio.events.sessionShutdownBegun.reasons.KICKED_FROM_SERVER]                   = "KICKED_FROM_SERVER",
 }
 
 local function onSessionShutdownBegun (reason)
@@ -89,11 +89,11 @@ local function main ()
 
     local types = dio.events.types
     dio.events.addListener (types.CLIENT_UPDATED,                         onUpdated)
-    dio.events.addListener (types.CLIENT_WINDOW_FOCUS_LOST,             onWindowFocusLost)
+    dio.events.addListener (types.CLIENT_WINDOW_FOCUS_LOST,               onWindowFocusLost)
     dio.events.addListener (types.CLIENT_SESSION_STARTED,                 onSessionStarted)
-    dio.events.addListener (types.CLIENT_SESSION_SHUTDOWN_BEGUN,         onSessionShutdownBegun)
-    dio.events.addListener (types.CLIENT_SESSION_SHUTDOWN_COMPLETED,     onSessionShutdownCompleted)
-    dio.events.addListener (types.CLIENT_APPLICATION_SHUTDOWN,             onApplicationShutdown)
+    dio.events.addListener (types.CLIENT_SESSION_SHUTDOWN_BEGUN,          onSessionShutdownBegun)
+    dio.events.addListener (types.CLIENT_SESSION_SHUTDOWN_COMPLETED,      onSessionShutdownCompleted)
+    dio.events.addListener (types.CLIENT_APPLICATION_SHUTDOWN,            onApplicationShutdown)
 
     local menu_path = "resources/mods/diorama/frontend_menus/"
     local terrain_path = menu_path .. "terrain_types/"
