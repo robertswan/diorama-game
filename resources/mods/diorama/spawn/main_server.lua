@@ -93,7 +93,7 @@ local function onLoadSuccessful ()
 
     local types = dio.events.types
     dio.events.addListener (types.SERVER_USER_CONNECTED, onUserConnected)
-    dio.events.addListener (types.SERVER_PLAYER_SAVE, onUserDisconnected)
+    dio.events.addListener (types.SERVER_USER_DISCONNECTED, onUserDisconnected)
     dio.events.addListener (types.SERVER_CHAT_RECEIVED, onChatReceived)
 end
 

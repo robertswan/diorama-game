@@ -203,6 +203,11 @@ local function createNewLevel (isFirstTime)
         randomSeedAsString = nextRoomFolder,
         terrainId = "paramaterized",
         generators = generators,
+        roomShape = 
+        {
+            x = {min = -1, max = 1},
+            z = {min = -1, max = 1},
+        }
     }
 
     -- -- teleport everyone!

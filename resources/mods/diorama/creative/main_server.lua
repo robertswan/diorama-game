@@ -82,6 +82,15 @@ local function onUserConnected (event)
         isPasswordCorrect = (settings.password == event.password)
     end
 
+    local playerParams =
+    {
+        connectionId = event.connectionId,
+        roomFolder = "default",
+        -- should have xyz and gravity etc...
+    }
+
+    local entityId = dio.world.createPlayer (playerParams)
+
     local connection =
     {
         connectionId = event.connectionId,
@@ -92,6 +101,7 @@ local function onUserConnected (event)
         isPasswordCorrect = isPasswordCorrect,
         needsSaving = event.isSinglePlayer,
         gravityDir = settings and settings.gravityDir or "DOWN",
+        entityId = entityId,
     }
 
     if settings and isPasswordCorrect then
@@ -132,6 +142,8 @@ local function onUserDisconnected (event)
             print (error)
         end
     end
+
+    dio.world.destroyPlayer (connection.entityId)    
 
     connections [event.connectionId] = nil
 end
@@ -273,7 +285,7 @@ local function onLoadSuccessful ()
 
     local types = dio.events.types
     dio.events.addListener (types.SERVER_USER_CONNECTED, onUserConnected)
-    dio.events.addListener (types.SERVER_PLAYER_SAVE, onUserDisconnected)
+    dio.events.addListener (types.SERVER_USER_DISCONNECTED, onUserDisconnected)
     dio.events.addListener (types.SERVER_ENTITY_PLACED, onEntityPlaced)
     dio.events.addListener (types.SERVER_ENTITY_DESTROYED, onEntityDestroyed)
     dio.events.addListener (types.SERVER_CHAT_RECEIVED, onChatReceived)
