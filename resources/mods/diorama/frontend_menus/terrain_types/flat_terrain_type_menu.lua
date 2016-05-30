@@ -11,8 +11,8 @@ local basicGenerator =
             mode = "replace",
 
             --axis = "y",
-            baseVoxel = -256,
-            heightInVoxels = 256,
+            baseVoxel = -512,
+            heightInVoxels = 512,
         },        
         {
             type = "perlinNoise",
