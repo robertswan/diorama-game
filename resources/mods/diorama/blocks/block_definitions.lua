@@ -89,13 +89,26 @@ local blocks =
     {name = "stem",                 uvs = {15, 6},          shape = "cross",    isSolid = false},
     {name = "cactus top",           uvs = {6, 4, 5, 4, 7, 4}},
     {name = "cactus body",          uvs = {6, 4, 7, 4, 7, 4}},
-    {name = "gravity",              uvs = {10, 6}},
+    {name = "gravity",              uvs = {12, 6, 10, 6, 13, 6}},
     {name = "all grass",            uvs = {0, 0}},
     {name = "water",                uvs = {15, 15},         isLiquid = true},
+    {name = "ice",                  uvs = {3, 4}},
+    {name = "coal block",           uvs = {1, 15}},
 
-    --changes
-    {name = "ice",                  uvs = {14, 1},           isTransparent = true},
-    {name = "coal block",           uvs = {15, 1}},
+    -- 63
+    {name = "gold ore",             uvs = {0, 2}},
+    {name = "iron ore",             uvs = {1, 2}},
+    {name = "coal ore",             uvs = {2, 2}},
+    {name = "diamond ore",          uvs = {2, 3}},
+    {name = "red ore",              uvs = {3, 3}},
+    {name = "lapis ore",            uvs = {0, 10}},
+    {name = "smooth sandstone",     uvs = {0, 11}},
+    {name = "sandstone brick",      uvs = {0, 12}},
+    {name = "hellrock",             uvs = {7, 6}},
+
+    -- 72
+    {name = "hellsand",             uvs = {8, 6}},
+    {name = "spawner",              uvs = {1, 4},           isTransparent = true},
 }
 
 return {blocks = blocks, tiles = tiles}

@@ -53,11 +53,13 @@
         - HuniePop
         - IAyeCaptainKai
         - JFrap12
+        - kingdragon2713
         - l_p_e
         - LazyKernel
         - linco95
         - LuaKT
         - Magnavode
+        - N3rdFall
         - oliz001 the Explorer
         - McBrainiac
         - Moopaloo
