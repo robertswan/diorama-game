@@ -29,6 +29,7 @@
         =================
 
         - AmazedStream
+        - Azenris
         - kxait
         - LazyKernel
         - QLcrisis
@@ -41,7 +42,9 @@
 
         - AcarX
         - AmazedStream
+        - AutomateAllTheThings
         - Azenris
+        - Carter9510
         - clstl
         - CritCrank
         - dgendreau
@@ -71,17 +74,21 @@
         - QeralX
         - rave1000
         - RedSquirrelsNut (@theredsquirrely)
+        - Riyyi
         - Roblon
+        - SAFxHarter
         - Snellekenny
         - sp0nji
         - SSStormy
         - Swappik
+        - TallAndHappy
         - tgrkzus
         - TheQuaX
         - TheRustyBrick
         - ticedev
         - TinHammer
         - Toeger
+        - treamous
         - Walterman50
         - waterlimon
         - whiteland92
