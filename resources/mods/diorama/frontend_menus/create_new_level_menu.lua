@@ -6,7 +6,7 @@ local MenuClass = require ("resources/mods/diorama/frontend_menus/menu_class")
 local Mixin = require ("resources/mods/diorama/frontend_menus/mixin")
 
 --------------------------------------------------
-local function addMenuButton (menu, text, to_menu) 
+local function addMenuButton (menu, text, to_menu)
     local button = ButtonMenuItem (text,      function () return to_menu end)
     menu:addMenuItem (button)
 end
@@ -33,12 +33,12 @@ return function ()
     Mixin.CopyToAndBackupParents (instance, c)
 
     addMenuButton (instance, "Back To Back",      "back_to_back_terrain_type_menu")
-    addMenuButton (instance, "Cubic",             "cubic_terrain_type_menu")
-    addMenuButton (instance, "Flat",              "flat_terrain_type_menu")
+    addMenuButton (instance, "Cubic World",             "cubic_terrain_type_menu")
+    addMenuButton (instance, "Normal",              "flat_terrain_type_menu")
     addMenuButton (instance, "Floating Islands",  "floating_islands_terrain_type_menu")
     addMenuButton (instance, "Hollow Earth",      "hollow_earth_terrain_type_menu")
-    addMenuButton (instance, "Parallel Facing",   "parallel_facing_terrain_type_menu")
-    addMenuButton (instance, "Square Ring",       "square_ring_terrain_type_menu")
+    addMenuButton (instance, "Parallel World",   "parallel_facing_terrain_type_menu")
+    addMenuButton (instance, "Square World",       "square_ring_terrain_type_menu")
 
     instance:addMenuItem (BreakMenuItem ())
 
