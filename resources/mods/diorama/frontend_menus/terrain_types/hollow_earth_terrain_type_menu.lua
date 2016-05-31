@@ -2,7 +2,7 @@
 local BaseTerrainTypeMenu = require ("resources/mods/diorama/frontend_menus/terrain_types/base_terrain_type_menu")
 
 --------------------------------------------------
-local basicGenerator = 
+local basicGenerator =
 {
     weightPass =
     {
@@ -18,7 +18,7 @@ local basicGenerator =
             d = 64,
 
             rangeInVoxels = 64,
-        },      
+        },
         {
             type = "perlinNoise",
             mode = "lessThan",
@@ -58,7 +58,7 @@ return function ()
 
     local properties =
     {
-        description =       "Create Hollow Cubic Level",
+        description =       "Create a Hollow Level",
         terrainId =         "paramaterized",
         terrainVersion =    1,
         options =           options,

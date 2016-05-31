@@ -10,15 +10,15 @@ local TextEntryMenuItem = require ("resources/mods/diorama/frontend_menus/menu_i
 
 --------------------------------------------------
 local function onCreateLevelClicked (menuItem, menu)
-    if menu.filename.value == nil or 
-            menu.filename.value == "" or 
+    if menu.filename.value == nil or
+            menu.filename.value == "" or
             dio.file.isExistingWorldFolder (menu.filename) then
 
         menu.warningLabel.text = "ERROR: Filename is not valid"
 
     else
 
-        local worldSettings = 
+        local worldSettings =
         {
             modFolder = "plummet",
             dataFolder = menu.filename.value,
@@ -43,7 +43,7 @@ local function onCreateLevelClicked (menuItem, menu)
 
             menu.warningLabel.text = ""
             return "loading_level_menu"
-        
+
         else
             menu.warningLabel.text = "ERROR: Level creation failed"
 
@@ -123,8 +123,8 @@ return function (menuProperties)
     local properties =
     {
         loadingLevelMenu = nil,
-        filename =                          TextEntryMenuItem ("Filename", nil, nil, "MyWorld", 16),
-        randomSeed =                        TextEntryMenuItem ("Random Seed", nil, nil, "Wauteurz", 16),
+        filename =                          TextEntryMenuItem ("Filename", nil, nil, "New Level", 16),
+        randomSeed =                        TextEntryMenuItem ("Random Seed", nil, nil, "RobTheSwan", 16),
         createLevel =                       ButtonMenuItem ("Create Level", onCreateLevelClicked),
         warningLabel =                      LabelMenuItem (""),
 
@@ -144,13 +144,13 @@ return function (menuProperties)
 
     instance:addMenuItem (properties.filename)
     instance:addMenuItem (properties.randomSeed)
-    
+
     for _, v in ipairs (menuProperties.options) do
-        instance:addMenuItem (properties [v.id])            
+        instance:addMenuItem (properties [v.id])
     end
 
     instance:addMenuItem (BreakMenuItem ())
-    
+
     instance:addMenuItem (properties.createLevel)
 
     instance:addMenuItem (BreakMenuItem ())

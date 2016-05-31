@@ -2,7 +2,7 @@
 local BaseTerrainTypeMenu = require ("resources/mods/diorama/frontend_menus/terrain_types/base_terrain_type_menu")
 
 --------------------------------------------------
-local basicGenerator = 
+local basicGenerator =
 {
     weightPass =
     {
@@ -13,7 +13,7 @@ local basicGenerator =
             --axis = "y",
             baseVoxel = -64,
             heightInVoxels = 128,
-        },        
+        },
         {
             type = "gradient",
             mode = "min",
@@ -21,7 +21,7 @@ local basicGenerator =
             --axis = "y",
             baseVoxel = 64,
             heightInVoxels = -128,
-        },        
+        },
         {
             type = "perlinNoise",
             mode = "lessThan",
@@ -61,7 +61,7 @@ return function ()
 
     local properties =
     {
-        description =       "Create Two Plane Opposite Level",
+        description =       "Create a Back to Back Level",
         terrainId =         "paramaterized",
         terrainVersion =    1,
         options =           options,
