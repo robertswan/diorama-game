@@ -26,7 +26,7 @@ local modsToLoad =
         modName = "chat",
         versionRequired = {major = 1, minor = 0},
     },
-	{
+    {
         folder = "plummet",
         modName = "chat_shortcuts",
         versionRequired = {major = 1, minor = 0},
