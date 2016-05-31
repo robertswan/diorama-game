@@ -2,23 +2,20 @@
 local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 
     local keyCodes = dio.inputs.keyCodes
-    local self = instance
 
-        if keyCode == keyCodes.J then
-            dio.clientChat.send (".join")
-            return true
-        end
-    
-        if keyCode == keyCodes.R then
-            dio.clientChat.send (".ready")
-            return true
-        end
-    
-        if keyCode == keyCodes.G then
-            dio.clientChat.send (".join")
-            dio.clientChat.send (".ready")
-            return true
-        end      
+    if keyCode == keyCodes.J then
+        dio.clientChat.send (".join")
+        return true
+
+    elseif keyCode == keyCodes.R then
+        dio.clientChat.send (".ready")
+        return true
+     
+    elseif keyCode == keyCodes.G then
+        dio.clientChat.send (".join")
+        dio.clientChat.send (".ready")
+        return true
+    end      
 
     return false
 end
@@ -44,7 +41,6 @@ local modSettings =
         player = true,
         input = true,
     },
-     
 }
 
 --------------------------------------------------
