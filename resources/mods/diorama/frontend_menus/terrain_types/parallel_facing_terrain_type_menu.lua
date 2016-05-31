@@ -2,7 +2,7 @@
 local BaseTerrainTypeMenu = require ("resources/mods/diorama/frontend_menus/terrain_types/base_terrain_type_menu")
 
 --------------------------------------------------
-local basicGenerator = 
+local basicGenerator =
 {
     weightPass =
     {
@@ -13,7 +13,7 @@ local basicGenerator =
             --axis = "y",
             baseVoxel = 0,
             heightInVoxels = 80,
-        },        
+        },
         {
             type = "gradient",
             mode = "max",
@@ -21,7 +21,7 @@ local basicGenerator =
             --axis = "y",
             baseVoxel = 128,
             heightInVoxels = -80,
-        },        
+        },
         {
             type = "perlinNoise",
             mode = "lessThan",
@@ -61,7 +61,7 @@ return function ()
 
     local properties =
     {
-        description =       "Create Two Plane Facing Level",
+        description =       "Create a Parallel World",
         terrainId =         "paramaterized",
         terrainVersion =    1,
         options =           options,

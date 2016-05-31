@@ -2,7 +2,7 @@
 local BaseTerrainTypeMenu = require ("resources/mods/diorama/frontend_menus/terrain_types/base_terrain_type_menu")
 
 --------------------------------------------------
-local basicGenerator = 
+local basicGenerator =
 {
     weightPass =
     {
@@ -18,7 +18,7 @@ local basicGenerator =
             d = 160,
 
             rangeInVoxels = 32,
-        }, 
+        },
         {
             type = "hollowCubeGradient",
             mode = "min",
@@ -31,7 +31,7 @@ local basicGenerator =
             d = 64,
 
             rangeInVoxels = 32,
-        },   
+        },
         {
             type = "perlinNoise",
             mode = "lessThan",
@@ -71,7 +71,7 @@ return function ()
 
     local properties =
     {
-        description =       "Create Square Ring Level",
+        description =       "Create a Square Ring Level",
         terrainId =         "paramaterized",
         terrainVersion =    1,
         options =           options,
