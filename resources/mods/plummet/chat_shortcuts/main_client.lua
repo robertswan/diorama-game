@@ -3,9 +3,37 @@ local Window = require ("resources/_scripts/utils/window")
 --------------------------------------------------
 local instance = nil
 
+local colors = 
+{
+    ok = "%8f8",
+    bad = "%f88",
+}
+
+local texts =
+{
+    noJoin = colors.bad .. "'.join' failed.",
+    okJoin = colors.ok .. "You have joined the next game. Type '.ready' to begin.",
+    noReady = colors.bad .. "'.ready' failed.",
+    okReady = colors.ok .. "You are now ready. Waiting for all players to be ready too.",
+}
+
 --------------------------------------------------
 local function renderBg (self)
     dio.drawing.font.drawBox (0, 0, self.w, self.h, 0x00000c0);
+end
+
+--------------------------------------------------
+local function renderMessage (self)
+
+    local drawString = dio.drawing.font.drawString
+    local text = " Press J for .JOIN or R for .READY"
+    
+    if isJoined then
+        text = " Press R for .READY"
+    end 
+    
+    drawString (0, 0, text, 0xffffffff)
+    
 end
 
 --------------------------------------------------
@@ -13,11 +41,9 @@ local function onEarlyRender (self)
 
     if self.isDirty then
 
-        local drawString = dio.drawing.font.drawString
-      
         dio.drawing.setRenderToTexture (self.renderToTexture)
         renderBg (self)
-        drawString (0, 0, " Press J for .JOIN, R for .READY or G for BOTH", 0xffffffff)
+        renderMessage (self)
         dio.drawing.setRenderToTexture (nil)
         self.isDirty = false
     end
@@ -38,13 +64,39 @@ end
 
 --------------------------------------------------
 local function onChatReceived (author, text)
-   
+
+    local self = instance
+    
     if author == "RESULT" then
         isJoined = false;
-        isReady = false; 
-
-        return true
+        isReady = false;
+        self.isVisible = true
+        self.isDirty = true
     end
+        
+    if text == texts.noJoin and not isJoined then
+        isJoined = false
+        self.isDirty = true
+        return true
+        
+    elseif text == texts.noReady and not isReady then
+        isReady = false
+        self.isDirty = true
+        return true
+        
+    elseif text == texts.okJoin then
+        isJoined = true
+        self.isDirty = true
+        return true
+        
+    elseif text == texts.okReady then
+        isReady = true
+        self.isVisible = false
+        return true
+        
+    end
+    
+    return false
 end
 
 --------------------------------------------------
@@ -54,39 +106,14 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
     local keyCodes = dio.inputs.keyCodes
 
         if keyCode == keyCodes.J then
-            isJoined = true
             dio.clientChat.send (".join")
             return true
-        end
-    
-        if keyCode == keyCodes.R then
-            isReady = true
+        elseif keyCode == keyCodes.R then
             dio.clientChat.send (".ready")
             return true
-        end
-    
-        if keyCode == keyCodes.G then
-            isJoined = true
-            isReady = true
-            dio.clientChat.send (".join")
-            dio.clientChat.send (".ready")
-            return true
-        end          
+        end      
 
     return false
-end
-
---------------------------------------------------
-local function onClientUpdated ()
-
-    local self = instance
-    
-    if isJoined and isReady then
-        self.isVisible = false
-    else
-        self.isVisible = true
-    end
-    
 end
 
 --------------------------------------------------
@@ -111,7 +138,6 @@ local function onLoadSuccessful ()
     local types = dio.events.types
     dio.events.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatReceived)
     dio.events.addListener (types.CLIENT_KEY_CLICKED, onKeyClicked)
-    dio.events.addListener (types.CLIENT_UPDATED, onClientUpdated)
 end
 
 --------------------------------------------------
