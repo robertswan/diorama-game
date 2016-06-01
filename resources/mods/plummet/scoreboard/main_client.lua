@@ -16,21 +16,20 @@ local function renderPlayerList (self)
 
     local drawString = dio.drawing.font.drawString
 
-    local y = self.heightPerLine * 2
+    local y = self.heightPerLine
     local yScore = 0
     drawString (2, 2, "SCORE", 0xffffffff)
     
     local score = nil
 
-    for idx = 1, #self.scores, 2 do
-        y = y + self.heightPerLine
-        
+    for idx = 1, #self.scores, 2 do       
         score = tonumber(self.scores [idx + 1])
-        if score then
+        if self.isPlaying and score then
             yScore = 220 - (score / 5000 * 100)        
             drawString (8, yScore, self.scores [idx], 0x00ffffff)
             drawString (100, yScore, self.scores [idx + 1], 0x00ffffff)
         else
+            y = y + self.heightPerLine
             drawString (8, y, self.scores [idx], 0x00ffffff)
             drawString (100, y, self.scores [idx + 1], 0x00ffffff)
         end
@@ -92,6 +91,10 @@ local function onChatReceived (author, text)
     -- table.insert (self.scores, "yo")
     -- table.insert (self.scores, "momma")
     -- self.isDirty = true
+    
+    if author == "START" then
+       self.isPlaying = true 
+    end
 
     if author == "SCORE" then
 
@@ -104,6 +107,10 @@ local function onChatReceived (author, text)
         self.isDirty = true
 
         return true
+    end
+    
+    if author == "RESULT" then
+        self.isPlaying = false
     end
 end
 
@@ -118,6 +125,7 @@ local function onLoadSuccessful ()
         scores = {},
         isDirty = true,
         isVisible = true,
+        isPlaying = false,
     }
 
     instance.renderToTexture = dio.drawing.createRenderToTexture (instance.w, instance.h)

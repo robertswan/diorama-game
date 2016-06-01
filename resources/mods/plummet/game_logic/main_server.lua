@@ -259,6 +259,7 @@ local function startGame ()
             player.currentY = 2
         end
         player.score = 0
+        dio.serverChat.send (player.connectionId, "START", "Let the game begin!")
     end
 
     gameVars.playersPlayingCount = gameVars.playersReadyCount
