@@ -2,7 +2,7 @@
 local BaseTerrainTypeMenu = require ("resources/mods/diorama/frontend_menus/terrain_types/base_terrain_type_menu")
 
 --------------------------------------------------
-local basicGenerator = 
+local basicGenerator =
 {
     weightPass =
     {
@@ -53,7 +53,7 @@ return function ()
 
     local properties =
     {
-        description =       "Create Flat Level",
+        description =       "Create a 'Normal' World",
         terrainId =         "paramaterized",
         terrainVersion =    1,
         options =           options,

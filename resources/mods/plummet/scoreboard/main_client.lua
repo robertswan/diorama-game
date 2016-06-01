@@ -5,7 +5,10 @@ local instance = nil
 
 --------------------------------------------------
 local function renderBg (self)
-    dio.drawing.font.drawBox (0, 0, self.w, self.h, 0x00000c0);
+    dio.drawing.font.drawBox (0, 0, self.w, self.h, 0x000000c0)
+    dio.drawing.font.drawBox (110, 126, 4, 100, 0xffaa66e1)
+    dio.drawing.font.drawString(110, 228, '0', 0x00ffffff)    
+    dio.drawing.font.drawString(100, 116, '5000', 0x00ffffff)
 end
 
 --------------------------------------------------
@@ -13,13 +16,23 @@ local function renderPlayerList (self)
 
     local drawString = dio.drawing.font.drawString
 
-    local y = self.heightPerLine * 2
-    drawString (0, 0, "SCORE", 0xffffffff)
+    local y = self.heightPerLine
+    local yScore = 0
+    drawString (2, 2, "SCORE", 0xffffffff)
+    
+    local score = nil
 
-    for idx = 1, #self.scores, 2 do
-        y = y + self.heightPerLine
-        drawString (0, y, self.scores [idx], 0x00ffffff)
-        drawString (100, y, self.scores [idx + 1], 0x00ffffff)
+    for idx = 1, #self.scores, 2 do       
+        score = tonumber(self.scores [idx + 1])
+        if self.isPlaying and score then
+            yScore = 220 - (score / 5000 * 100)        
+            drawString (8, yScore, self.scores [idx], 0x00ffffff)
+            drawString (100, yScore, self.scores [idx + 1], 0x00ffffff)
+        else
+            y = y + self.heightPerLine
+            drawString (8, y, self.scores [idx], 0x00ffffff)
+            drawString (100, y, self.scores [idx + 1], 0x00ffffff)
+        end
     end
 end
 
@@ -78,6 +91,10 @@ local function onChatReceived (author, text)
     -- table.insert (self.scores, "yo")
     -- table.insert (self.scores, "momma")
     -- self.isDirty = true
+    
+    if author == "START" then
+       self.isPlaying = true 
+    end
 
     if author == "SCORE" then
 
@@ -90,6 +107,10 @@ local function onChatReceived (author, text)
         self.isDirty = true
 
         return true
+    end
+    
+    if author == "RESULT" then
+        self.isPlaying = false
     end
 end
 
@@ -104,6 +125,7 @@ local function onLoadSuccessful ()
         scores = {},
         isDirty = true,
         isVisible = true,
+        isPlaying = false,
     }
 
     instance.renderToTexture = dio.drawing.createRenderToTexture (instance.w, instance.h)

@@ -13,10 +13,10 @@ function c:onUpdate (menu, x, y, was_left_clicked)
         self.flashCount = self.flashCount < 16 and self.flashCount + 1 or 0
 
     else
-        self.isHighlighted = 
+        self.isHighlighted =
                 x >= 0 and
                 x <= menu.width and
-                y >= self.y and 
+                y >= self.y and
                 y < self.y + self.height
 
         if was_left_clicked and self.isHighlighted then
@@ -39,22 +39,22 @@ function c:onRender (font, menu)
     local x = 100
 
     local color = self.isHighlighted and 0xffffffff or 0x00ffffff
-    color = self.isSelected and 0xff0000ff or color
+    color = self.isSelected and 0xffffffff or color
 
     if self.isHighlighted or self.isSelected then
-        dio.drawing.font.drawBox (0, self.y, menu.width, self.height, 0x000000ff)
+        dio.drawing.font.drawBox (0, self.y, menu.width, self.height, 0x00CCCCCC)
     end
 
     font.drawString (x, self.y, self.text, color)
 
     if self.isHighlighted then
-        local width = font.measureString (">>>>    ")
-        font.drawString (x - width, self.y, ">>>>    ", color)
-        font.drawString (x + itemWidth, self.y, "    <<<<", color)
+        local width = font.measureString ("")
+        font.drawString (x - width, self.y, "", color)
+        font.drawString (x + itemWidth, self.y, "", color)
     end
 
     local value = self.value
-    local width = font.measureString (value)    
+    local width = font.measureString (value)
     if self.isSelected then
         width = width + font.measureString ("_")
         if self.flashCount < 8 then
@@ -80,7 +80,7 @@ function c:onKeyClicked (menu, keyCode, keyCharacter, keyModifiers)
             end
         end
 
-        return true        
+        return true
 
     elseif keyCode == keyCodes.ESCAPE then
 
@@ -93,7 +93,7 @@ function c:onKeyClicked (menu, keyCode, keyCharacter, keyModifiers)
         end
 
     elseif keyCode == keyCodes.ENTER or keyCode == keyCodes.KP_ENTER then
-            
+
         self.initial_value = nil
         self.isSelected = false
         menu:setUpdateOnlySelectedMenuItems (false)

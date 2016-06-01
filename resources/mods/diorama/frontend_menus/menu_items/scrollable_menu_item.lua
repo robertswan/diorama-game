@@ -30,7 +30,7 @@ return function (lines, linesVisibleCount)
 
     local instance = MenuItemBase ()
 
-    local properties = 
+    local properties =
     {
         lines = lines,
         firstLine = 1,
