@@ -26,6 +26,7 @@ local function main ()
         file = true,
         player = true,
         serverChat = true,
+        session = true,
     }
 
     for _, modData in ipairs (modsToLoad) do

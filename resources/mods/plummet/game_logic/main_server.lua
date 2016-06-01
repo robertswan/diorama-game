@@ -553,7 +553,6 @@ local modSettings =
     permissionsRequired = 
     {
         file = true,
-        inputs = true,
         player = true,
         serverChat = true,
         session = true,
