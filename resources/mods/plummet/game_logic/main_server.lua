@@ -248,7 +248,7 @@ end
 --------------------------------------------------
 local function startGame ()
 
-    fillCube (0, {x = 0, y = -1, z = 0}, {2, 25, 2}, {29, 25, 29}, 0)
+    fillCube (gameVars.mostRecentRoom.id, {x = 0, y = -1, z = 0}, {2, 25, 2}, {29, 25, 29}, 0)
 
     gameVars.isPlaying = true
     gameVars.tickCount = 0
@@ -373,6 +373,16 @@ local function onUserDisconnected (event)
 end
 
 --------------------------------------------------
+local function onRoomCreated (event)
+
+    gameVars.mostRecentRoom = 
+    {
+        folder = event.roomFolder,
+        id = event.roomId,
+    }
+end
+
+--------------------------------------------------
 local function onEntityPlaced (event)
     event.cancel = true
 end
@@ -408,7 +418,7 @@ local function onChatReceived (event)
             connection.groupId = "waiting"
             gameVars.playersWaitingCount = gameVars.playersWaitingCount + 1
             teleportPlayer (connectionId, "waitingRoom")
-            fillCube (0, {x = 0, y = -1, z = 0}, {2, 25, 2}, {29, 25, 29}, 15)
+            fillCube (gameVars.mostRecentRoom.id, {x = 0, y = -1, z = 0}, {2, 25, 2}, {29, 25, 29}, 15)
             updateScores ()
 
             event.text = colors.ok .. "You have joined the next game. Type '.ready' to begin."
@@ -473,16 +483,19 @@ end
 --------------------------------------------------
 local function onChunkGenerated (event)
 
-    for _, build in pairs (gameVars.chunksToModify) do
+    if event.roomId == gameVars.mostRecentRoom.id then
 
-        if not build.isBuilt and
-                build.chunkId.x == event.chunkId.x and
-                build.chunkId.y == event.chunkId.y and
-                build.chunkId.z == event.chunkId.z then
+        for _, build in pairs (gameVars.chunksToModify) do
 
-            build.buildFunction (event.roomId, event.chunkId)
-            build.isBuilt = true
+            if not build.isBuilt and
+                    build.chunkId.x == event.chunkId.x and
+                    build.chunkId.y == event.chunkId.y and
+                    build.chunkId.z == event.chunkId.z then
 
+                build.buildFunction (event.roomId, event.chunkId)
+                build.isBuilt = true
+
+            end
         end
     end
 end
@@ -526,6 +539,7 @@ local function onLoadSuccessful ()
     local types = dio.events.types
     dio.events.addListener (types.SERVER_USER_CONNECTED, onUserConnected)
     dio.events.addListener (types.SERVER_USER_DISCONNECTED, onUserDisconnected)
+    dio.events.addListener (types.SERVER_ROOM_CREATED, onRoomCreated)
     dio.events.addListener (types.SERVER_ENTITY_PLACED, onEntityPlaced)
     dio.events.addListener (types.SERVER_ENTITY_DESTROYED, onEntityDestroyed)
     dio.events.addListener (types.SERVER_CHAT_RECEIVED, onChatReceived)
