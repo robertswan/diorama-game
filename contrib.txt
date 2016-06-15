@@ -46,12 +46,14 @@
         - Azenris
         - Carter9510
         - clstl
+        - CozyDino
         - CritCrank
         - dgendreau
         - Expatiator
         - FGArray
         - Fleabum
         - Funisdangerous
+        - GamesAteMyCereal
         - GhassanPL
         - HuniePop
         - IAyeCaptainKai
@@ -81,6 +83,7 @@
         - sp0nji
         - SSStormy
         - Swappik
+        - SyrantOfficial
         - TallAndHappy
         - tgrkzus
         - TheQuaX
