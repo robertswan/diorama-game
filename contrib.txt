@@ -44,6 +44,7 @@
         - AmazedStream
         - AutomateAllTheThings
         - Azenris
+        - bvdscheMe (http://bravadogaming.com/staff)
         - Carter9510
         - clstl
         - CozyDino
@@ -58,6 +59,7 @@
         - HuniePop
         - IAyeCaptainKai
         - JFrap12
+        - Kanamoto_
         - kingdragon2713
         - l_p_e
         - LazyKernel
@@ -73,7 +75,6 @@
         - Nidaegwyn
         - Pjuke
         - QeraiX
-        - QeralX
         - rave1000
         - RedSquirrelsNut (@theredsquirrely)
         - Riyyi
