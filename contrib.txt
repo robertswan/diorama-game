@@ -58,12 +58,15 @@
         - GhassanPL
         - HuniePop
         - IAyeCaptainKai
+        - Iwoshima
         - JFrap12
+        - JustGuy
         - Kanamoto_
         - kingdragon2713
         - l_p_e
         - LazyKernel
         - linco95
+        - loqicxDev
         - LuaKT
         - Magnavode
         - N3rdFall
@@ -87,6 +90,7 @@
         - SyrantOfficial
         - TallAndHappy
         - Tedtheking
+        - TheHamloer
         - tgrkzus
         - TheQuaX
         - TheRustyBrick
@@ -94,6 +98,7 @@
         - TinHammer
         - Toeger
         - treamous
+        - unpause_it
         - Walterman50
         - waterlimon
         - whiteland92
