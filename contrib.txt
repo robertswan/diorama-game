@@ -49,7 +49,9 @@
         - clstl
         - CozyDino
         - CritCrank
+        - Defusselkid
         - dgendreau
+        - doublenibble
         - Expatiator
         - FGArray
         - Fleabum
@@ -63,6 +65,7 @@
         - JustGuy
         - Kanamoto_
         - kingdragon2713
+        - Knight_LT
         - l_p_e
         - LazyKernel
         - linco95
@@ -71,11 +74,13 @@
         - Magnavode
         - N3rdFall
         - oliz001 the Explorer
+        - madkiwi
         - McBrainiac
         - Moopaloo
         - MrPancakeGuy___
         - NeutralNoise
         - Nidaegwyn
+        - OrangeGames3
         - Pjuke
         - QeraiX
         - rave1000
@@ -89,6 +94,7 @@
         - Swappik
         - SyrantOfficial
         - TallAndHappy
+        - tdbunting
         - Tedtheking
         - TheHamloer
         - tgrkzus

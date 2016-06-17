@@ -88,7 +88,7 @@ local gameVars =
     playersReadyCount = 0,
     playersPlayingCount = 0,
     tickCount = 0,
-    gameOverScore = 5000,
+    gameOverScore = 100,
     chunksToModify = 
     {
         lobby = 
