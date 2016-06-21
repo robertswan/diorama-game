@@ -76,14 +76,6 @@ function c:onWindowFocusLost ()
 end
 
 --------------------------------------------------
-function c:onSessionStarted ()
-    if self.current_menu and self.current_menu.onSessionStarted then
-        local nextMenuName = self.current_menu:onSessionStarted ()
-        self:changeMenu (nextMenuName)
-    end
-end
-
---------------------------------------------------
 function c:onSessionShutdownBegun (reason)
     if self.current_menu and self.current_menu.onSessionShutdownBegun then
         local nextMenuName = self.current_menu:onSessionShutdownBegun (reason)
