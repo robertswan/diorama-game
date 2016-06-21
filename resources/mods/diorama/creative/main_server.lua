@@ -40,11 +40,11 @@ local gravityDirNames =
 {
     -- TODO should be using io.inputs.gravityDirs but inputs is not for the server
     [0] =  "NORTH",
-    [1] =   "EAST",
-    [2] =  "SOUTH",
-    [3] =   "WEST",
-    [4] =     "UP",
-    [5] =   "DOWN",
+    [1] =  "SOUTH",
+    [2] =  "EAST",
+    [3] =  "WEST",
+    [4] =  "UP",
+    [5] =  "DOWN",
 }
 
 --------------------------------------------------
@@ -52,8 +52,8 @@ local gravityDirIndices =
 {
     -- TODO should be using io.inputs.gravityDirs but inputs is not for the server
     NORTH =  0,
-    EAST =   1,
-    SOUTH =  2,
+    SOUTH =  1,
+    EAST =   2,
     WEST =   3,
     UP =     4,
     DOWN =   5,
