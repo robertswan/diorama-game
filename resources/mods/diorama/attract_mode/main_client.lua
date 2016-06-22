@@ -83,7 +83,7 @@ local function onClientUpdated ()
         if xyz then
             xyz.ypr.y = xyz.ypr.y + 0.005
             dio.world.setPlayerXyz (author, xyz)
-        end
+        end                    
     end
 end
 

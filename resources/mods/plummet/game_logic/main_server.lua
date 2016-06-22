@@ -509,11 +509,12 @@ local function onTick ()
 
             if record.groupId == "playing" then
                 local player = dio.world.getPlayerXyz (record.playerName)
-                local newY = player.chunkId.y * 32 + player.xyz.y
-                record.score = record.score - (newY - record.currentY)
-                record.currentY = newY
+                if player then
+                    local newY = player.chunkId.y * 32 + player.xyz.y
+                    record.score = record.score - (newY - record.currentY)
+                    record.currentY = newY
+                end
             end
-
         end
 
         gameVars.tickCount = gameVars.tickCount + 1
