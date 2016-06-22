@@ -16,11 +16,11 @@ local function renderPlayerList (self)
     drawString (0, 0, "Clients Connected", 0xffffffff)
 
     local y = self.heightPerLine * 2
-    drawString (0, y, "YOU", 0xffff00ff)
+    -- drawString (0, y, "YOU", 0xffff00ff)
 
     for idx, client in ipairs (self.clients) do
-        y = y + self.heightPerLine
         drawString (0, y, client.accountId, 0x00ffffff)
+        y = y + self.heightPerLine
     end
 end
 
@@ -63,17 +63,17 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 end
 
 --------------------------------------------------
-local function onOtherClientConnected (clientId)
+local function onClientConnected (event)
     local self = instance
-    table.insert (self.clients, {accountId = clientId})
+    table.insert (self.clients, {accountId = event.accountId})
     self.isDirty = true
 end
 
 --------------------------------------------------
-local function onOtherClientDisconnected (clientId)
+local function onClientDisconnected (event)
     local self = instance
     for idx, client in ipairs (self.clients) do
-        if client.accountId == clientId then
+        if client.accountId == event.accountId then
             table.remove (self.clients, idx)
             self.isDirty = true
             return
@@ -107,8 +107,8 @@ local function onLoadSuccessful ()
     dio.drawing.addRenderPassAfter (1.0, function () onLateRender (instance) end)
 
     local types = dio.events.types
-    dio.events.addListener (types.CLIENT_OTHER_CLIENT_CONNECTED, onOtherClientConnected)
-    dio.events.addListener (types.CLIENT_OTHER_CLIENT_DISCONNECTED, onOtherClientDisconnected)
+    dio.events.addListener (types.CLIENT_CLIENT_CONNECTED, onClientConnected)
+    dio.events.addListener (types.CLIENT_CLIENT_DISCONNECTED, onClientDisconnected)
     dio.events.addListener (types.CLIENT_WINDOW_FOCUS_LOST, onClientWindowFocusLost)
     dio.events.addListener (types.CLIENT_KEY_CLICKED, onKeyClicked)
 end

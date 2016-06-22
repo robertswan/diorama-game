@@ -51,6 +51,7 @@
         - CritCrank
         - Defusselkid
         - dgendreau
+        - Diode369
         - doublenibble
         - Expatiator
         - FGArray
@@ -64,6 +65,7 @@
         - JFrap12
         - JustGuy
         - Kanamoto_
+        - Kazunekit
         - kingdragon2713
         - Knight_LT
         - l_p_e
@@ -76,6 +78,7 @@
         - oliz001 the Explorer
         - madkiwi
         - McBrainiac
+        - MHHN
         - Moopaloo
         - MrPancakeGuy___
         - NeutralNoise
