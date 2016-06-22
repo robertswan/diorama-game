@@ -15,11 +15,9 @@ local function onEarlyRender (self)
         dio.drawing.setRenderToTexture (self.renderToTexture)
         renderBg (self)
 
-        local playerNames = dio.world.getPlayerNames ()
+        if self.accountId then
 
-        if #playerNames > 0 then
-    		local author = dio.world.getPlayerNames () [1]
-    		local xyz, error = dio.world.getPlayerXyz (author)
+    		local xyz, error = dio.world.getPlayerXyz (self.accountId)
     		local text = nil
 
     		if xyz then
@@ -94,7 +92,23 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 		
 	end
 end
-	
+
+--------------------------------------------------
+local function onClientConnected (event)
+    local self = instance
+    if event.isMe then
+        self.accountId = event.accountId
+    end
+end
+
+--------------------------------------------------
+local function onClientDisconnected (event)
+    local self = instance
+    if event.isMe then
+        self.accountId = nil
+    end
+end
+
 --------------------------------------------------
 local function onLoadSuccessful ()
 
@@ -108,6 +122,7 @@ local function onLoadSuccessful ()
 		isVisible = true,
         isDirty = true,
         averageFps = 0.0,
+        accountId = nil,
     }
 
     instance.renderToTexture = dio.drawing.createRenderToTexture (instance.texture.w, instance.texture.h)
@@ -115,7 +130,11 @@ local function onLoadSuccessful ()
     dio.drawing.addRenderPassBefore (1.0, function () onEarlyRender (instance) end)
 	dio.drawing.addRenderPassAfter (1.0, function () onLateRender (instance) end)
 	
-	dio.events.addListener (dio.events.types.CLIENT_KEY_CLICKED, onKeyClicked)
+    local types = dio.events.types
+	dio.events.addListener (types.CLIENT_KEY_CLICKED, onKeyClicked)
+    dio.events.addListener (types.CLIENT_CLIENT_CONNECTED, onClientConnected)
+    dio.events.addListener (types.CLIENT_CLIENT_DISCONNECTED, onClientDisconnected)
+
 end
 
 --------------------------------------------------

@@ -20,7 +20,7 @@ local function onCreateLevelClicked (menuItem, menu)
 
         local worldSettings =
         {
-            modFolder = "plummet",
+            modFolder = "creative",
             dataFolder = menu.filename.value,
             shouldSave = true,
         }
@@ -123,7 +123,7 @@ return function (menuProperties)
     local properties =
     {
         loadingLevelMenu = nil,
-        filename =                          TextEntryMenuItem ("Filename", nil, nil, "New Level", 16),
+        filename =                          TextEntryMenuItem ("Filename", nil, nil, "MyWorld", 16),
         randomSeed =                        TextEntryMenuItem ("Random Seed", nil, nil, "RobTheSwan", 16),
         createLevel =                       ButtonMenuItem ("Create Level", onCreateLevelClicked),
         warningLabel =                      LabelMenuItem (""),

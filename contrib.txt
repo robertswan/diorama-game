@@ -29,6 +29,7 @@
         =================
 
         - AmazedStream
+        - Azenris
         - kxait
         - LazyKernel
         - QLcrisis
@@ -41,45 +42,72 @@
 
         - AcarX
         - AmazedStream
+        - AutomateAllTheThings
         - Azenris
+        - bvdscheMe (http://bravadogaming.com/staff)
+        - Carter9510
         - clstl
+        - CozyDino
         - CritCrank
+        - Defusselkid
         - dgendreau
+        - Diode369
+        - doublenibble
         - Expatiator
         - FGArray
         - Fleabum
         - Funisdangerous
+        - GamesAteMyCereal
         - GhassanPL
         - HuniePop
         - IAyeCaptainKai
+        - Iwoshima
         - JFrap12
+        - JustGuy
+        - Kanamoto_
+        - Kazunekit
+        - kingdragon2713
+        - Knight_LT
         - l_p_e
         - LazyKernel
         - linco95
+        - loqicxDev
         - LuaKT
         - Magnavode
+        - N3rdFall
         - oliz001 the Explorer
+        - madkiwi
         - McBrainiac
+        - MHHN
         - Moopaloo
         - MrPancakeGuy___
         - NeutralNoise
         - Nidaegwyn
+        - OrangeGames3
         - Pjuke
         - QeraiX
-        - QeralX
         - rave1000
         - RedSquirrelsNut (@theredsquirrely)
+        - Riyyi
         - Roblon
+        - SAFxHarter
         - Snellekenny
         - sp0nji
         - SSStormy
         - Swappik
+        - SyrantOfficial
+        - TallAndHappy
+        - tdbunting
+        - Tedtheking
+        - TheHamloer
         - tgrkzus
         - TheQuaX
         - TheRustyBrick
         - ticedev
         - TinHammer
         - Toeger
+        - treamous
+        - unpause_it
         - Walterman50
         - waterlimon
         - whiteland92

@@ -76,13 +76,26 @@ local blocks =
     "stem",
     "cactus top",
     "cactus body",
-    "GRAVITY",
+    "gravity",
     "all grass",
     "water",
-
-    --changes
     "ice",
     "coal block",
+
+    -- 64
+    "gold ore",
+    "iron ore",
+    "coal ore",
+    "diamond ore",
+    "red ore",
+    "lapis ore",
+    "smooth sandstone",
+    "sandstone brick",
+    "hellrock",
+
+    -- 73
+    "hellsand",
+    "spawner"    
 }
 
 local entities =
@@ -90,7 +103,7 @@ local entities =
     sign =
     {
         type = "SIGN",
-        text = "NOT_SET",
+        text = "Placeholder Text",
     }
 }
 

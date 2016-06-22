@@ -49,11 +49,6 @@ local function onWindowFocusLost ()
 end
 
 --------------------------------------------------
-local function onSessionStarted ()
-    menus:onSessionStarted ()
-end
-
---------------------------------------------------
 local reasonsStrings =
 {
     [dio.events.sessionShutdownBegun.reasons.NETWORK_CONNECTION_ATTEMPT_FAILED]    = "NETWORK_CONNECTION_ATTEMPT_FAILED",
@@ -90,7 +85,6 @@ local function main ()
     local types = dio.events.types
     dio.events.addListener (types.CLIENT_UPDATED,                         onUpdated)
     dio.events.addListener (types.CLIENT_WINDOW_FOCUS_LOST,               onWindowFocusLost)
-    dio.events.addListener (types.CLIENT_SESSION_STARTED,                 onSessionStarted)
     dio.events.addListener (types.CLIENT_SESSION_SHUTDOWN_BEGUN,          onSessionShutdownBegun)
     dio.events.addListener (types.CLIENT_SESSION_SHUTDOWN_COMPLETED,      onSessionShutdownCompleted)
     dio.events.addListener (types.CLIENT_APPLICATION_SHUTDOWN,            onApplicationShutdown)

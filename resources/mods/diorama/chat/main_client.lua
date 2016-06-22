@@ -310,13 +310,13 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 end
 
 --------------------------------------------------
-local function onOtherClientConnected (playerId)
-    onChatMessageReceived ("SERVER", playerId .. " connected.")
+local function onClientConnected (event)
+    onChatMessageReceived ("SERVER", event.accountId .. " connected.")
 end
 
 --------------------------------------------------
-local function onOtherClientDisconnected (playerId)
-    onChatMessageReceived ("SERVER", playerId .. " disconnected.")
+local function onClientDisconnected (event)
+    onChatMessageReceived ("SERVER", event.accountId .. " disconnected.")
 end
 
 --------------------------------------------------
@@ -358,8 +358,8 @@ local function onLoadSuccessful ()
     local types = dio.events.types
     dio.events.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatMessageReceived)
     dio.events.addListener (types.CLIENT_KEY_CLICKED, onKeyClicked)
-    dio.events.addListener (types.CLIENT_OTHER_CLIENT_CONNECTED, onOtherClientConnected)
-    dio.events.addListener (types.CLIENT_OTHER_CLIENT_DISCONNECTED, onOtherClientDisconnected)
+    dio.events.addListener (types.CLIENT_CLIENT_CONNECTED, onClientConnected)
+    dio.events.addListener (types.CLIENT_CLIENT_DISCONNECTED, onClientDisconnected)
     -- dio.events.addListener (types.CLIENT_KEY_BINDINGS_MENU_OPENED, onThing)
 
 end
