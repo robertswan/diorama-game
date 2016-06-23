@@ -84,11 +84,11 @@ end
 local function onClientUpdated ()
 
     local self = instance
-    if self.isVisible then
+    if self.isVisible and self.myAccountId then
         local xyz, error = dio.world.getPlayerXyz (self.myAccountId)
         if xyz then
             xyz.ypr.y = xyz.ypr.y + 0.005
-            dio.world.setPlayerXyz (author, xyz)
+            dio.world.setPlayerXyz (self.myAccountId, xyz)
         end                    
     end
 end
