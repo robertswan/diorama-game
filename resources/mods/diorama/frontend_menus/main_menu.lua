@@ -82,7 +82,6 @@ return function ()
     instance:addMenuItem (ButtonMenuItem ("Single Player", onSinglePlayerClicked))
     instance:addMenuItem (ButtonMenuItem ("Multiplayer", onMultiplayerClicked))
     instance:addMenuItem (ButtonMenuItem ("Options", onEditPlayerClicked))
-    instance:addMenuItem (ButtonMenuItem ("Quit Game", onQuitClicked))
 
     instance:addMenuItem (BreakMenuItem ())
 
@@ -94,6 +93,10 @@ return function ()
 
     instance:addMenuItem (ButtonMenuItem ("Paint", onPaintClicked))
     instance:addMenuItem (ButtonMenuItem ("Play Block Falling Game", onPlayTetrisClicked))
+
+    instance:addMenuItem (BreakMenuItem ())
+    
+    instance:addMenuItem (ButtonMenuItem ("Quit Game", onQuitClicked))
 
     local versionInfo = dio.system.getVersion ()
 

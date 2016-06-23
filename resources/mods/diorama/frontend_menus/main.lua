@@ -129,7 +129,7 @@ local function main ()
 
 
     individual_menus.text_file_menu:recordFilename ("readme.txt")
-    menus = Menus (individual_menus, "text_file_menu")
+    menus = Menus (individual_menus, "main_menu")
 
     individual_menus.playing_game_menu =         require (menu_path .. "playing_game_menu") (menus)
 end

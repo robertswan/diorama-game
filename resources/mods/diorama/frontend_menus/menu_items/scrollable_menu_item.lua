@@ -21,8 +21,8 @@ end
 --------------------------------------------------
 function c:scroll (scrollBy)
     self.firstLine = self.firstLine + scrollBy
-    self.firstLine = math.max (self.firstLine, 1)
     self.firstLine = math.min (self.firstLine, #self.lines - self.linesVisibleCount)
+    self.firstLine = math.max (self.firstLine, 1)
 end
 
 --------------------------------------------------

@@ -1,4 +1,7 @@
 --------------------------------------------------
+local instance = nil
+
+--------------------------------------------------
 local colors = 
 {
     ok = "%8f8",
@@ -6,7 +9,7 @@ local colors =
 }
 
 --------------------------------------------------
-local function teleportTo (author, x, y, z)
+local function teleportTo (x, y, z)
     setting =
     {
         chunkId = {x = 0, y = 0, z = 0},
@@ -14,7 +17,7 @@ local function teleportTo (author, x, y, z)
         ypr = {x = 0, y = 0, z = 0}
     }
 
-    dio.world.setPlayerXyz (author, setting)
+    dio.world.setPlayerXyz (instance.myAccountId, setting)
 end
 
 --------------------------------------------------
@@ -27,8 +30,7 @@ local function onChatReceived (author, text)
             table.insert (words, word)
         end        
 
-        local author = dio.world.getPlayerNames () [1]
-        teleportTo (author, words [1], words [2], words [3])
+        teleportTo (words [1], words [2], words [3])
 
         return true
 
@@ -36,9 +38,24 @@ local function onChatReceived (author, text)
 end
 
 --------------------------------------------------
+local function onClientConnected (event)
+    local self = instance
+    if event.isMe then
+        self.myAccountId = event.accountId
+    end
+end
+
+--------------------------------------------------
 local function onLoadSuccessful ()
 
+    instance = 
+    {
+        myAccountId = nil,
+    }
+    
     local types = dio.events.types
+    dio.events.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatReceived)
+    dio.events.addListener (types.CLIENT_CLIENT_CONNECTED, onClientConnected)
     dio.events.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatReceived)
 
 end
