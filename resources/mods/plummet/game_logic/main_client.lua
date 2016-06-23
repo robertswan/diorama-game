@@ -56,7 +56,6 @@ local function onLoadSuccessful ()
     local types = dio.events.types
     dio.events.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatReceived)
     dio.events.addListener (types.CLIENT_CLIENT_CONNECTED, onClientConnected)
-    dio.events.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatReceived)
 
 end
 

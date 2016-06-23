@@ -331,7 +331,14 @@ local function onUserConnected (event)
 
     connections [event.connectionId] = connection
 
-    teleportPlayer (connection.connectionId, "lobby")
+    setting =
+    {
+        chunkId = {x = 0, y = 0, z = 0},
+        xyz = {x = 15, y = 4, z = 15},
+        ypr = {x = 0, y = 0, z = 0}
+    }
+
+    dio.world.setPlayerXyz (event.playerName, setting)
 
     updateScores ()
 
@@ -371,6 +378,11 @@ local function onUserDisconnected (event)
 
     updateScores ()
 end
+
+-- --------------------------------------------------
+-- local function onPlayerReady (event)
+--     teleportPlayer (event.connectionId, "lobby")
+-- end
 
 --------------------------------------------------
 local function onRoomCreated (event)
@@ -540,6 +552,7 @@ local function onLoadSuccessful ()
     local types = dio.events.types
     dio.events.addListener (types.SERVER_USER_CONNECTED, onUserConnected)
     dio.events.addListener (types.SERVER_USER_DISCONNECTED, onUserDisconnected)
+    -- dio.events.addListener (types.SERVER_PLAYER_READY, onPlayerReady)
     dio.events.addListener (types.SERVER_ROOM_CREATED, onRoomCreated)
     dio.events.addListener (types.SERVER_ENTITY_PLACED, onEntityPlaced)
     dio.events.addListener (types.SERVER_ENTITY_DESTROYED, onEntityDestroyed)

@@ -15,9 +15,9 @@ local function onEarlyRender (self)
         dio.drawing.setRenderToTexture (self.renderToTexture)
         renderBg (self)
 
-        if self.accountId then
+        if self.myAccountId then
 
-    		local xyz, error = dio.world.getPlayerXyz (self.accountId)
+    		local xyz, error = dio.world.getPlayerXyz (self.myAccountId)
     		local text = nil
 
     		if xyz then
@@ -95,9 +95,8 @@ end
 
 --------------------------------------------------
 local function onClientConnected (event)
-    local self = instance
     if event.isMe then
-        self.accountId = event.accountId
+        instance.myAccountId = event.accountId
     end
 end
 
@@ -105,7 +104,7 @@ end
 local function onClientDisconnected (event)
     local self = instance
     if event.isMe then
-        self.accountId = nil
+        self.myAccountId = nil
     end
 end
 
