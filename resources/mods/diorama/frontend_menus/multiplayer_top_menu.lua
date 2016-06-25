@@ -13,11 +13,11 @@ local TextEntryMenuItem = require ("resources/mods/diorama/frontend_menus/menu_i
 --------------------------------------------------
 local function onConnectClicked (menuItem, menu)
 
-    if menu.playerName.value == "" then
+    if menu.accountId.value == "" then
         menu.warningLabel.text = "ERROR! Player Name must not be empty"
         return
 
-    elseif menu.password.value == "" then
+    elseif menu.accountPassword.value == "" then
         menu.warningLabel.text = "ERROR! Player Password must not be empty"
         return
 
@@ -27,8 +27,8 @@ local function onConnectClicked (menuItem, menu)
     {
         ipAddress =         menu.ipAddress.value,
         ipPort =            menu.ipPort:getValueAsNumber (),
-        playerName =        menu.playerName.value,
-        playerPassword =    menu.password.value,
+        accountId =         menu.accountId.value,
+        accountPassword =   menu.accountPassword.value,
         avatarTop =         menu.avatarTop.value,
         avatarBottom =      menu.avatarBottom.value,
     }
@@ -71,24 +71,24 @@ return function ()
 
         properties =
         {
-            playerName =    TextEntryMenuItem ("Username", nil, nil, savedMultiplayerSettings.playerName, 15),
-            password =      PasswordTextEntryMenuItem ("Password", nil, nil, savedMultiplayerSettings.playerPassword, 15),
-            ipAddress =     TextEntryMenuItem ("IP Address", nil, nil, savedMultiplayerSettings.ipAddress, 16),
-            ipPort =        NumberEntryMenuItem ("Port", nil, nil, savedMultiplayerSettings.ipPort, true),
-            avatarTop =     NumberEntryMenuItem ("Avatar Top Block", nil, nil, savedMultiplayerSettings.avatarTop, true),
-            avatarBottom =  NumberEntryMenuItem ("Avatar Bottom Block", nil, nil, savedMultiplayerSettings.avatarBottom, true),
-            warningLabel =  LabelMenuItem (""),
+            accountId =         TextEntryMenuItem ("Username", nil, nil, savedMultiplayerSettings.accountId, 15),
+            accountPassword =   PasswordTextEntryMenuItem ("Password", nil, nil, savedMultiplayerSettings.accountPassword, 15),
+            ipAddress =         TextEntryMenuItem ("IP Address", nil, nil, savedMultiplayerSettings.ipAddress, 16),
+            ipPort =            NumberEntryMenuItem ("Port", nil, nil, savedMultiplayerSettings.ipPort, true),
+            avatarTop =         NumberEntryMenuItem ("Avatar Top Block", nil, nil, savedMultiplayerSettings.avatarTop, true),
+            avatarBottom =      NumberEntryMenuItem ("Avatar Bottom Block", nil, nil, savedMultiplayerSettings.avatarBottom, true),
+            warningLabel =      LabelMenuItem (""),
         }
     else
         properties =
         {
-            playerName =    TextEntryMenuItem ("Username", nil, nil, "", 15),
-            password =      PasswordTextEntryMenuItem ("Password", nil, nil, "", 15),
-            ipAddress =     TextEntryMenuItem ("IP Address", nil, nil, "84.92.48.10", 16),
-            ipPort =        NumberEntryMenuItem ("Port", nil, nil, 25276, true),
-            avatarTop =     NumberEntryMenuItem ("Avatar Top Block", nil, nil, 9, true),
-            avatarBottom =  NumberEntryMenuItem ("Avatar Bottom Block", nil, nil, 8, true),
-            warningLabel =  LabelMenuItem (""),
+            accountId =         TextEntryMenuItem ("Username", nil, nil, "", 15),
+            accountPassword =   PasswordTextEntryMenuItem ("Password", nil, nil, "", 15),
+            ipAddress =         TextEntryMenuItem ("IP Address", nil, nil, "84.92.48.10", 16),
+            ipPort =            NumberEntryMenuItem ("Port", nil, nil, 25276, true),
+            avatarTop =         NumberEntryMenuItem ("Avatar Top Block", nil, nil, 9, true),
+            avatarBottom =      NumberEntryMenuItem ("Avatar Bottom Block", nil, nil, 8, true),
+            warningLabel =      LabelMenuItem (""),
         }
     end
 
@@ -100,8 +100,8 @@ return function ()
     instance:addMenuItem (LabelMenuItem ("Passwords are tied to a username when a user is promoted"))
     instance:addMenuItem (LabelMenuItem ("to a builder (type '.group' into chat to check)"))
     instance:addMenuItem (BreakMenuItem ())
-    instance:addMenuItem (properties.playerName)
-    instance:addMenuItem (properties.password)
+    instance:addMenuItem (properties.accountId)
+    instance:addMenuItem (properties.accountPassword)
     instance:addMenuItem (properties.ipAddress)
     instance:addMenuItem (properties.ipPort)
     instance:addMenuItem (properties.avatarTop)

@@ -72,14 +72,14 @@ local function stripColourCodes (text)
 end
 
 --------------------------------------------------
-local function onUserConnected (event)
+local function onClientConnected (event)
 
-    local filename = "player_" .. event.playerName .. ".lua"
+    local filename = "player_" .. event.accountId .. ".lua"
     local settings = dio.file.loadLua (filename)
 
     local isPasswordCorrect = true
     if settings then
-        isPasswordCorrect = (settings.password == event.password)
+        isPasswordCorrect = (settings.accountPassword == event.accountPassword)
     end
 
     local playerParams =
@@ -94,9 +94,9 @@ local function onUserConnected (event)
     local connection =
     {
         connectionId = event.connectionId,
-        playerName = event.playerName,
-        screenName = event.playerName,
-        password = event.password,
+        accountId = event.accountId,
+        screenName = event.accountId,
+        accountPassword = event.accountPassword,
         groupId = event.isSinglePlayer and "builder" or "tourist",
         isPasswordCorrect = isPasswordCorrect,
         needsSaving = event.isSinglePlayer,
@@ -107,8 +107,8 @@ local function onUserConnected (event)
     if settings and isPasswordCorrect then
         connection.groupId = settings.permissionLevel
         connection.needsSaving = true
-        dio.world.setPlayerXyz (event.playerName, settings.xyz)
-        dio.world.setPlayerGravity (event.playerName, gravityDirIndices [settings.gravityDir])
+        dio.world.setPlayerXyz (event.accountId, settings.xyz)
+        dio.world.setPlayerGravity (event.accountId, gravityDirIndices [settings.gravityDir])
     end
 
     connection.screenName = connection.screenName .. " [" .. connection.groupId .. "]"
@@ -117,23 +117,23 @@ local function onUserConnected (event)
 end
 
 --------------------------------------------------
-local function onUserDisconnected (event)
+local function onClientDisconnected (event)
 
     local connection = connections [event.connectionId]
     local group = groups [connection.groupId]
 
     if connection.needsSaving then
 
-        local xyz, error = dio.world.getPlayerXyz (event.playerName)
+        local xyz, error = dio.world.getPlayerXyz (event.accountId)
         if xyz then
 
-            local filename = "player_" .. event.playerName .. ".lua"
+            local filename = "player_" .. event.accountId .. ".lua"
             local settings =
             {
                 xyz = xyz,
-                password = connection.password,
+                accountPassword = connection.accountPassword,
                 permissionLevel = connection.groupId,
-                gravityDir = gravityDirNames [dio.world.getPlayerGravity (event.playerName)],
+                gravityDir = gravityDirNames [dio.world.getPlayerGravity (event.accountId)],
             }
 
             dio.file.saveLua (filename, settings, "settings")
@@ -195,9 +195,9 @@ local function onChatReceived (event)
 
         event.targetConnectionId = event.authorConnectionId
         if connection.isPasswordCorrect then
-            event.text = "Your password (validated) = " .. connection.password
+            event.text = "Your password (validated) = " .. connection.accountPassword
         else
-            event.text = "Your password (UNVALIDATED) = " .. connection.password
+            event.text = "Your password (UNVALIDATED) = " .. connection.accountPassword
         end
 
     elseif event.text == ".group" then
@@ -224,7 +224,7 @@ local function onChatReceived (event)
                         event.text = group.color .. event.text .. "[" .. groupId .. "] = "
                         isNewAdd = false
                     end
-                    event.text = event.text .. connection.playerName .. ", "
+                    event.text = event.text .. connection.accountId .. ", "
                 end
             end
         end
@@ -246,7 +246,7 @@ local function onChatReceived (event)
                 end
 
                 event.targetConnectionId = event.authorConnectionId
-                event.text = "FAILED: .setGroup [playerName] [permissionLevel]";
+                event.text = "FAILED: .setGroup [accountId] [permissionLevel]";
 
                 if #words >= 3 then
 
@@ -257,7 +257,7 @@ local function onChatReceived (event)
 
                         local hasPromoted = false
                         for _, promoteConnection in pairs (connections) do
-                            if promoteConnection.playerName == playerToPromote and promoteConnection.isPasswordCorrect then
+                            if promoteConnection.accountId == playerToPromote and promoteConnection.isPasswordCorrect then
 
                                 local isPlayerLowerLevel = canPromoteTo [promoteConnection.groupId]
                                 if isPlayerLowerLevel then
@@ -284,8 +284,8 @@ local function onLoadSuccessful ()
     -- dio.players.setPlayerAction (player, actions.LEFT_CLICK, outcomes.DESTROY_BLOCK)
 
     local types = dio.events.types
-    dio.events.addListener (types.SERVER_USER_CONNECTED, onUserConnected)
-    dio.events.addListener (types.SERVER_USER_DISCONNECTED, onUserDisconnected)
+    dio.events.addListener (types.SERVER_CLIENT_CONNECTED, onClientConnected)
+    dio.events.addListener (types.SERVER_CLIENT_DISCONNECTED, onClientDisconnected)
     dio.events.addListener (types.SERVER_ENTITY_PLACED, onEntityPlaced)
     dio.events.addListener (types.SERVER_ENTITY_DESTROYED, onEntityDestroyed)
     dio.events.addListener (types.SERVER_CHAT_RECEIVED, onChatReceived)

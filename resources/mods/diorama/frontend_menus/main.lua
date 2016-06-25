@@ -49,12 +49,13 @@ local function onWindowFocusLost ()
 end
 
 --------------------------------------------------
+local reasons = dio.events.sessionShutdownBegun.reasons
 local reasonsStrings =
 {
-    [dio.events.sessionShutdownBegun.reasons.NETWORK_CONNECTION_ATTEMPT_FAILED]    = "NETWORK_CONNECTION_ATTEMPT_FAILED",
-    [dio.events.sessionShutdownBegun.reasons.PLAYER_QUIT]                          = "PLAYER_QUIT",
-    [dio.events.sessionShutdownBegun.reasons.NETWORK_CONNECTION_LOST]              = "NETWORK_CONNECTION_LOST",
-    [dio.events.sessionShutdownBegun.reasons.KICKED_FROM_SERVER]                   = "KICKED_FROM_SERVER",
+    [reasons.NETWORK_CONNECTION_ATTEMPT_FAILED]    = "NETWORK_CONNECTION_ATTEMPT_FAILED",
+    [reasons.PLAYER_QUIT]                          = "PLAYER_QUIT",
+    [reasons.NETWORK_CONNECTION_LOST]              = "NETWORK_CONNECTION_LOST",
+    [reasons.KICKED_FROM_SERVER]                   = "KICKED_FROM_SERVER",
 }
 
 local function onSessionShutdownBegun (reason)

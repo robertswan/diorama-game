@@ -152,7 +152,7 @@ local function updateScores ()
 
         text = text .. 
                 playerColors [score.groupId] ..
-                score.playerName .. 
+                score.accountId .. 
                 ((score.groupId == "waiting") and " (W)" or "") ..
                 ((not gameVars.isPlaying and score.groupId == "ready") and " (R)" or "") ..
                 ":" .. 
@@ -228,7 +228,7 @@ local function createNewLevel (isFirstTime)
     --     local playerParams =
     --     {
     --         connectionId = connectionId,
-    --         playerName = connection.playerName,
+    --         accountId = connection.accountId,
     --         gravityDir = "DOWN",
     --         roomFolder = nextRoomFolder,
     --         xyz = {}, -- currently unused
@@ -273,7 +273,7 @@ local function endGame ()
     local winner = updateScores ()
 
     if winner then
-        local text = "The winner is: " .. winner.playerName
+        local text = "The winner is: " .. winner.accountId
 
         for _, connection in pairs (connections) do
             dio.serverChat.send (connection.connectionId, "RESULT", text)
@@ -295,7 +295,7 @@ local function endGame ()
 end
 
 --------------------------------------------------
-local function onUserConnected (event)
+local function onClientConnected (event)
 
     -- local usersCount = 0
     -- for _, _ in pairs (connections) do
@@ -313,7 +313,12 @@ local function onUserConnected (event)
     {
         connectionId = event.connectionId,
         roomFolder = roomFolders [gameVars.currentRoomIdx],
-        -- should have xyz and gravity etc...
+        avatar =
+        {
+            chunkId = {x = 0, y = 0, z = 0},
+            xyz = {x = 15, y = 4, z = 15},
+            ypr = {x = 0, y = 0, z = 0}
+        },        
     }
 
     local entityId = dio.world.createPlayer (playerParams)
@@ -321,8 +326,8 @@ local function onUserConnected (event)
     local connection =
     {
         connectionId = event.connectionId,
-        playerName = event.playerName,
-        gravityDir = "DOWN",
+        accountId = event.accountId,
+        -- gravityDir = "DOWN",
         currentY = 2,
         score = 0,
         groupId = "lobby",
@@ -331,21 +336,12 @@ local function onUserConnected (event)
 
     connections [event.connectionId] = connection
 
-    setting =
-    {
-        chunkId = {x = 0, y = 0, z = 0},
-        xyz = {x = 15, y = 4, z = 15},
-        ypr = {x = 0, y = 0, z = 0}
-    }
-
-    dio.world.setPlayerXyz (event.playerName, setting)
-
     updateScores ()
 
 end
 
 --------------------------------------------------
-local function onUserDisconnected (event)
+local function onClientDisconnected (event)
 
     local connection = connections [event.connectionId]
 
@@ -520,7 +516,7 @@ local function onTick ()
         for k, record in pairs (connections) do
 
             if record.groupId == "playing" then
-                local player = dio.world.getPlayerXyz (record.playerName)
+                local player = dio.world.getPlayerXyz (record.accountId)
                 if player then
                     local newY = player.chunkId.y * 32 + player.xyz.y
                     record.score = record.score - (newY - record.currentY)
@@ -550,8 +546,8 @@ local function onLoadSuccessful ()
     -- dio.players.setPlayerAction (player, actions.LEFT_CLICK, outcomes.DESTROY_BLOCK)
 
     local types = dio.events.types
-    dio.events.addListener (types.SERVER_USER_CONNECTED, onUserConnected)
-    dio.events.addListener (types.SERVER_USER_DISCONNECTED, onUserDisconnected)
+    dio.events.addListener (types.SERVER_CLIENT_CONNECTED, onClientConnected)
+    dio.events.addListener (types.SERVER_CLIENT_DISCONNECTED, onClientDisconnected)
     -- dio.events.addListener (types.SERVER_PLAYER_READY, onPlayerReady)
     dio.events.addListener (types.SERVER_ROOM_CREATED, onRoomCreated)
     dio.events.addListener (types.SERVER_ENTITY_PLACED, onEntityPlaced)
