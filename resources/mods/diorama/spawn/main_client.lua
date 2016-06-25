@@ -50,16 +50,16 @@ local function onChatMessagePreSent (text)
     elseif string.sub(text,1,string.len(".coords"))==".coords" then
 
         local nameCount = 0
-        for playerName in string.gmatch (text, "[%S]+") do
+        for accountId in string.gmatch (text, "[%S]+") do
 
             nameCount = nameCount + 1
             if nameCount > 1 then
-                local xyz, error = dio.world.getPlayerXyz (playerName)
+                local xyz, error = dio.world.getPlayerXyz (accountId)
                 if xyz then
                     local x = math.floor (xyz.chunkId.x * 32 + xyz.xyz.x)
                     local y = math.floor (xyz.chunkId.y * 32 + xyz.xyz.y)
                     local z = math.floor (xyz.chunkId.z * 32 + xyz.xyz.z)
-                    dio.clientChat.send ("Coords for " .. playerName .. " = (" .. x .. ", " .. y .. ", " .. z .. ")")
+                    dio.clientChat.send ("Coords for " .. accountId .. " = (" .. x .. ", " .. y .. ", " .. z .. ")")
                 end
             end
         end

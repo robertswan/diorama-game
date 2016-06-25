@@ -2,14 +2,14 @@
 local connections = {}
 
 --------------------------------------------------
-local function onUserConnected (event)
+local function onClientConnected (event)
 
-    local filename = "player_" .. event.playerName .. ".lua"
+    local filename = "player_" .. event.accountId .. ".lua"
     local settings = dio.file.loadLua (filename)
 
     local isPasswordCorrect = true
     if settings then
-        isPasswordCorrect = (settings.password == event.password)
+        isPasswordCorrect = (settings.accountPassword == event.accountPassword)
     end
 
     local connection =
@@ -28,13 +28,13 @@ local function onUserConnected (event)
 end
 
 --------------------------------------------------
-local function onUserDisconnected (event)
+local function onClientDisconnected (event)
 
     local connection = connections [event.connectionId]
 
     if connection.needsSaving and connection.homeLocation then
 
-        local filename = "player_" .. event.playerName .. ".lua"
+        local filename = "player_" .. event.accountId .. ".lua"
         local settings = dio.file.loadLua (filename)
         if settings then
             settings.homeLocation = connection.homeLocation
@@ -92,8 +92,8 @@ end
 local function onLoadSuccessful ()
 
     local types = dio.events.types
-    dio.events.addListener (types.SERVER_USER_CONNECTED, onUserConnected)
-    dio.events.addListener (types.SERVER_USER_DISCONNECTED, onUserDisconnected)
+    dio.events.addListener (types.SERVER_CLIENT_CONNECTED, onClientConnected)
+    dio.events.addListener (types.SERVER_CLIENT_DISCONNECTED, onClientDisconnected)
     dio.events.addListener (types.SERVER_CHAT_RECEIVED, onChatReceived)
 end
 

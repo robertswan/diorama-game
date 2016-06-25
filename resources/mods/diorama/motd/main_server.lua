@@ -6,7 +6,7 @@ local motd = "(http://twitch.tv/RobTheSwan) Press T to chat. Type '.help' in cha
 local connections = {}
 
 --------------------------------------------------
-local function onUserConnected (event)
+local function onClientConnected (event)
 
     dio.serverChat.send (event.connectionId, motdAuthor, motd)
 
@@ -32,7 +32,7 @@ end
 local function onLoadSuccessful ()
 
     local types = dio.events.types
-    dio.events.addListener (types.SERVER_USER_CONNECTED, onUserConnected)
+    dio.events.addListener (types.SERVER_CLIENT_CONNECTED, onClientConnected)
     dio.events.addListener (types.SERVER_CHAT_RECEIVED, onChatReceived)
 
 end
