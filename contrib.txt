@@ -53,6 +53,7 @@
         - dgendreau
         - Diode369
         - doublenibble
+        - Eksitus
         - Expatiator
         - FGArray
         - Fleabum
@@ -113,3 +114,4 @@
         - whiteland92
         - WizardNJ
         - xCosminPlays
+        - zeiSt

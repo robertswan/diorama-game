@@ -12,7 +12,7 @@ local TextEntryMenuItem = require ("resources/mods/diorama/frontend_menus/menu_i
 local function onCreateLevelClicked (menuItem, menu)
     if menu.filename.value == nil or
             menu.filename.value == "" or
-            dio.file.isExistingWorldFolder (menu.filename) then
+            dio.file.isExistingWorldFolder (menu.filename.value) then
 
         menu.warningLabel.text = "ERROR: Filename is not valid"
 
@@ -27,24 +27,29 @@ local function onCreateLevelClicked (menuItem, menu)
 
         local isOk = dio.file.newWorld (worldSettings)
 
-        local roomSettings =
-        {
-            path = "default",
-            randomSeedAsString = menu.randomSeed.value,
-            terrainId = menu.menuProperties.terrainId,
-            generators = menu.menuProperties.generators,
-        }
-
-        isOk = isOk and dio.file.newRoom (worldSettings.dataFolder, roomSettings)
-
         if isOk then
 
-            menu.loadingLevelMenu:recordWorldSettingsNew (worldSettings.dataFolder, menu)
+            local roomSettings =
+            {
+                path = "default",
+                randomSeedAsString = menu.randomSeed.value,
+                terrainId = menu.menuProperties.terrainId,
+                generators = menu.menuProperties.generators,
+            }
 
-            menu.warningLabel.text = ""
-            return "loading_level_menu"
+            isOk = dio.file.newRoom (worldSettings.dataFolder, roomSettings)
 
-        else
+            if isOk then
+
+                menu.loadingLevelMenu:recordWorldSettingsNew (worldSettings.dataFolder, menu)
+
+                menu.warningLabel.text = ""
+                return "loading_level_menu"
+
+            end
+        end
+
+        if not isOk then
             menu.warningLabel.text = "ERROR: Level creation failed"
 
         end
