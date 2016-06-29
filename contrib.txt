@@ -75,6 +75,7 @@
         - loqicxDev
         - LuaKT
         - Magnavode
+        - Meursault
         - N3rdFall
         - oliz001 the Explorer
         - madkiwi
