@@ -48,7 +48,7 @@ end
 function c:renderEarly ()
     if self.isVisible and self.current_menu then
         dio.drawing.setRenderToTexture (self.renderToTexture)
-        self.current_menu:onRender ();
+        self.current_menu:onRender ()
         dio.drawing.setRenderToTexture (nil)
     end
 end
@@ -56,6 +56,11 @@ end
 --------------------------------------------------
 function c:renderLate ()
     if self.isVisible and self.current_menu then 
+
+        if self.current_menu.onRenderLate then
+            self.current_menu:onRenderLate ()
+        end
+
         dio.drawing.drawTexture (self.renderToTexture, self.x, self.y, self.w * self.scale, self.h * self.scale, 0xffffffff)
     end
 end
