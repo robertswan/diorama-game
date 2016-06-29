@@ -73,10 +73,10 @@ function c:onRender ()
 end
 
 --------------------------------------------------
-function c:onRenderLate ()
-    dio.drawing.drawTexture2 (self.texture1, 256, 16)
-    dio.drawing.drawTexture2 (self.texture2, 1024, 256)
-end
+-- function c:onRenderLate ()
+--     dio.drawing.drawTexture2 (self.texture1, 256, 16)
+--     dio.drawing.drawTexture2 (self.texture2, 1024, 256)
+-- end
 
 --------------------------------------------------
 return function ()
@@ -85,8 +85,8 @@ return function ()
 
     local properties = 
     {
-        texture1 = dio.drawing.loadTexture ("resources/textures/diorama_terrain_harter_00.png"),
-        texture2 = dio.drawing.loadTexture ("resources/textures/diorama_terrain_robtheswan_00.png"),
+        -- texture1 = dio.drawing.loadTexture ("resources/textures/diorama_terrain_harter_00.png"),
+        -- texture2 = dio.drawing.loadTexture ("resources/textures/diorama_terrain_robtheswan_00.png"),
     }
 
     Mixin.CopyTo (instance, properties)

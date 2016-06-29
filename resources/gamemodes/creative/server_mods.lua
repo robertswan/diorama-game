@@ -32,7 +32,7 @@ local function main ()
     local regularPermissions = 
     {
         blocks = true,
-        client = true,
+        drawing = true,
         file = true,
         player = true,
         serverChat = true,

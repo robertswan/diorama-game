@@ -37,7 +37,7 @@ local modSettings =
 
     permissionsRequired = 
     {
-        client = true,
+        drawing = true,
         player = true,
         input = true,
     },
