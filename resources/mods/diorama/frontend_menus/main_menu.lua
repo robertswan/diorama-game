@@ -66,15 +66,28 @@ end
 
 --------------------------------------------------
 function c:onRender ()
-    return self.parent.onRender (self)
+    -- dio.drawing.drawTexture2 (self.texture1, 0, 48)
+    -- dio.drawing.drawTexture2 (self.texture2, 32, 0)
+    local result = self.parent.onRender (self)
+    return result
 end
+
+--------------------------------------------------
+-- function c:onRenderLate ()
+--     dio.drawing.drawTexture2 (self.texture1, 256, 16)
+--     dio.drawing.drawTexture2 (self.texture2, 1024, 256)
+-- end
 
 --------------------------------------------------
 return function ()
 
     local instance = MenuClass ("Diorama")
 
-    local properties = {}
+    local properties = 
+    {
+        -- texture1 = dio.drawing.loadTexture ("resources/textures/diorama_terrain_harter_00.png"),
+        -- texture2 = dio.drawing.loadTexture ("resources/textures/diorama_terrain_robtheswan_00.png"),
+    }
 
     Mixin.CopyTo (instance, properties)
     Mixin.CopyToAndBackupParents (instance, c)

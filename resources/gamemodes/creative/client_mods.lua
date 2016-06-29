@@ -46,7 +46,7 @@ local function main ()
     local permissions = 
     {
         blocks = true,
-        client = true,
+        drawing = true,
         diagnostics = true,
         file = true,
         player = true,

@@ -225,10 +225,20 @@ end
 local function onLateRender (self)
 
     local scale = Window.calcBestFitScale (self.w, self.h)
-    local windowW = dio.drawing.getWindowSize ()
+    local windowW, windowH = dio.drawing.getWindowSize ()
     local x = (windowW - (self.w * scale)) * 0.5
     local y = self.y
     dio.drawing.drawTexture (self.renderToTexture, x, y, self.w * scale, self.h * scale, 0xffffffff)
+
+    local params = dio.drawing.getTextureParams (self.crosshairTexture)
+    params.width = params.width * 3
+    params.height = params.height * 3
+    dio.drawing.drawTexture2 (
+            self.crosshairTexture, 
+            (windowW - params.width) * 0.5, 
+            (windowH - params.height) * 0.5,
+            params.width,
+            params.height)
 end
 
 --------------------------------------------------
@@ -360,6 +370,8 @@ local function onLoadSuccessful ()
         y = 0,
         w = widthSize,
         h = 12,
+
+        crosshairTexture = dio.drawing.loadTexture ("resources/textures/crosshair.png"),
     }
 
     instance.renderToTexture = dio.drawing.createRenderToTexture (instance.w, instance.h)
@@ -385,7 +397,7 @@ local modSettings =
 
     permissionsRequired =
     {
-        client = true,
+        drawing = true,
         player = true,
         input = true,
     },

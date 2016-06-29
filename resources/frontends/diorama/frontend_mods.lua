@@ -19,7 +19,7 @@ require ("resources/mods/diorama/frontend_menus/main")
 --     local permissions = 
 --     {
 --         blocks = true,
---         client = true,
+--         drawing = true,
 --         file = true,
 --         player = true,
 --     }

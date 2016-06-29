@@ -145,7 +145,7 @@ local modSettings =
 
     permissionsRequired = 
     {
-        client = true,
+        drawing = true,
         diagnostics = true,
         player = true,
         input = true,
