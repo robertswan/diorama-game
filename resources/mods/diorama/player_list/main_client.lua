@@ -13,14 +13,14 @@ local function renderPlayerList (self)
 
     local drawString = dio.drawing.font.drawString
 
-    drawString (0, 0, "Clients Connected", 0xffffffff)
+    local y = self.h - self.heightPerLine
 
-    local y = self.heightPerLine * 2
-    -- drawString (0, y, "YOU", 0xffff00ff)
+    drawString (1, y, "Clients Connected", 0xffffffff)
+    y = y - self.heightPerLine
 
     for idx, client in ipairs (self.clients) do
-        drawString (0, y, client.accountId, 0x00ffffff)
-        y = y + self.heightPerLine
+        y = y - self.heightPerLine
+        drawString (1, y, client.accountId, 0x00ffffff)
     end
 end
 

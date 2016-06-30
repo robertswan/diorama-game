@@ -5,35 +5,61 @@ local instance = nil
 
 --------------------------------------------------
 local function renderBg (self)
+
     dio.drawing.font.drawBox (0, 0, self.w, self.h, 0x000000c0)
-    dio.drawing.font.drawBox (110, 126, 4, 100, 0xffaa66e1)
-    dio.drawing.font.drawString(110, 228, '0', 0x00ffffff)    
-    dio.drawing.font.drawString(100, 116, '5000', 0x00ffffff)
+
+    if self.isPlaying then
+
+        dio.drawing.font.drawString(self.barX - 9, self.barY + self.barHeight + 4, 'GOAL', 0xffff00ff)    
+        -- dio.drawing.font.drawString(100, 116, '4000', 0x00ffffff)
+
+        dio.drawing.font.drawBox (self.barX, self.barY, self.barWidth, self.barHeight, 0xffaa66e1)
+    end
 end
 
 --------------------------------------------------
 local function renderPlayerList (self)
 
+    local drawBox = dio.drawing.font.drawBox
     local drawString = dio.drawing.font.drawString
 
-    local y = self.heightPerLine
-    local yScore = 0
-    drawString (2, 2, "SCORE", 0xffffffff)
-    
-    local score = nil
+    if self.isPlaying then
 
-    for idx = 1, #self.scores, 2 do       
-        score = tonumber(self.scores [idx + 1])
-        if self.isPlaying and score then
-            yScore = 220 - (score / 5000 * 100)        
-            drawString (8, yScore, self.scores [idx], 0x00ffffff)
-            drawString (100, yScore, self.scores [idx + 1], 0x00ffffff)
-        else
-            y = y + self.heightPerLine
-            drawString (8, y, self.scores [idx], 0x00ffffff)
-            drawString (100, y, self.scores [idx + 1], 0x00ffffff)
+        local yScore = self.barHeight -- top of the bar
+        local textOffsetY = 3
+
+        for idx = 1, #self.scores, 2 do       
+            local score = tonumber(self.scores [idx + 1])
+
+            if score then
+                local y = (score / self.dropDistance * self.barHeight)        
+
+                drawBox (self.barX - 1, y + self.barY - 1, self.barWidth + 2, self.barWidth + 2, 0xffffffff)
+
+                if y > yScore then
+                    y = yScore
+                else
+                    yScore = y
+                end
+                yScore = yScore - self.heightPerLine + 5
+
+                drawString (8, y + self.barY - textOffsetY, self.scores [idx], 0x00ffffff)
+                drawString (100, y + self.barY - textOffsetY, self.scores [idx + 1], 0x00ffffff)
+
+            end
+        end
+    else
+
+        local notPlayingY = self.h - self.heightPerLine * 2
+
+        for idx = 1, #self.scores, 2 do       
+
+            drawString (8, notPlayingY, self.scores [idx], 0x00ffffff)
+            drawString (100, notPlayingY, self.scores [idx + 1], 0x00ffffff)
+            notPlayingY = notPlayingY - self.heightPerLine
         end
     end
+
 end
 
 --------------------------------------------------
@@ -111,6 +137,7 @@ local function onChatReceived (author, text)
     
     if author == "RESULT" then
         self.isPlaying = false
+        self.isDirty = true
     end
 end
 
@@ -120,8 +147,13 @@ local function onLoadSuccessful ()
     instance = 
     {
         w = 128, 
-        h = 256,
+        h = 356,
         heightPerLine = 14,
+        barX = 94,
+        barY = 80,
+        barHeight = 250,
+        barWidth = 4,
+        dropDistance = 4000,
         scores = {},
         isDirty = true,
         isVisible = true,
@@ -133,8 +165,6 @@ local function onLoadSuccessful ()
     dio.drawing.addRenderPassAfter (1.0, function () onLateRender (instance) end)
 
     local types = dio.events.types
-    -- dio.events.addListener (types.CLIENT_CLIENT_CONNECTED, onClientConnected)
-    -- dio.events.addListener (types.CLIENT_CLIENT_DISCONNECTED, onClientDisconnected)
     dio.events.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatReceived)
 end
 

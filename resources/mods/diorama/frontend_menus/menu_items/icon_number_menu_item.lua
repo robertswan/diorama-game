@@ -66,7 +66,7 @@ function c:onRender (font, menu)
 
     local uvs = self.iconsFromNumbers [tonumber (value)]
     if uvs then
-         dio.drawing.drawTextureRegion (self.texture, x + itemWidth + 10, menu.height - self.y - 13, uvs [1] * 16, uvs [2] * 16, 16, 16)
+         dio.drawing.drawTextureRegion (self.texture, x + itemWidth + 10, self.y - 3, uvs [1] * 16, uvs [2] * 16, 16, 16)
     end
 end
 

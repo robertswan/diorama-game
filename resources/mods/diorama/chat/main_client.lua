@@ -16,7 +16,7 @@ end
 local function renderChat (self)
 
     local lineIdx = self.firstLineToDraw + self.chatLinesToDraw
-    local y = (self.chatLinesToDraw - 1) * self.heightPerLine
+    local y = self.heightPerLine * 2
     if lineIdx > #self.lines then
         lineIdx = #self.lines
     end
@@ -25,12 +25,12 @@ local function renderChat (self)
 
     while y >= 0 and lineIdx > 0 do
         local line = self.lines [lineIdx]
-        drawString (0, y + 2, line.author, 0x000000ff, true)
-        drawString (0, y, line.author, 0xffff00ff, true)
-        drawString (self.textOffset, y + 2, line.text, 0x000000ff, true)
-        drawString (self.textOffset, y, line.text, 0xffffffff)
+        drawString (0, y, line.author, 0x000000ff, true)
+        drawString (0, y + 2, line.author, 0xffff00ff, true)
+        drawString (self.textOffset, y, line.text, 0x000000ff, true)
+        drawString (self.textOffset, y + 2, line.text, 0xffffffff)
 
-        y = y - self.heightPerLine
+        y = y + self.heightPerLine
         lineIdx = lineIdx - 1
     end
 end
@@ -40,7 +40,7 @@ local function renderTextEntry (self)
 
     local heightPerLine = self.heightPerLine
     local x = 0
-    local y = self.chatLinesToDraw * heightPerLine
+    local y = 0
 
     if self.text ~= "" then
         local textLength = dio.drawing.font.measureString (self.text .. "_")
@@ -51,10 +51,11 @@ local function renderTextEntry (self)
      end
 
     local drawString = dio.drawing.font.drawString
-    drawString (0, y, string.rep ("-", 40), 0xffffffff)
-    drawString (x, y + heightPerLine, self.text, 0xffffffff, true, true)
+    drawString (0, y + heightPerLine, string.rep ("-", 40), 0xffffffff)
+    drawString (x, y, self.text, 0xffffffff, true, true)
+
     local width = dio.drawing.font.measureString (self.text)
-    drawString (x + width, y + heightPerLine, "_", 0xff0000ff)
+    drawString (x + width, y, "_", 0xff0000ff)
 
 end
 
@@ -87,11 +88,6 @@ local function addNewTickerLine (self, author, text)
     local newTickerLine = TickerLine (author, text, self.size.w, self.heightPerLine, self.textOffset)
     table.insert (ticker.lines, newTickerLine)
 end
-
--- TODO
--- --------------------------------------------------
--- local function onUpdate (self)
--- end
 
 --------------------------------------------------
 local function onEarlyRender (self)
@@ -360,15 +356,8 @@ local function onLoadSuccessful ()
     dio.events.addListener (types.CLIENT_KEY_CLICKED, onKeyClicked)
     dio.events.addListener (types.CLIENT_CLIENT_CONNECTED, onClientConnected)
     dio.events.addListener (types.CLIENT_CLIENT_DISCONNECTED, onClientDisconnected)
-    -- dio.events.addListener (types.CLIENT_KEY_BINDINGS_MENU_OPENED, onThing)
 
 end
-
--- --------------------------------------------------
--- local function onThing (menu)
--- {
---     menu.addBindingOption ("CHAT", function (keyCode) instance.chatAppearKeyCode = keyCode end)
--- }
 
 --------------------------------------------------
 local modSettings =
@@ -383,11 +372,6 @@ local modSettings =
         player = true,
         input = true
     },
-
-    -- keyBindingsAvailable = 
-    -- {
-    --     {name = "Chat", default = dio.inputs.keyCodes.T}
-    -- }
 }
 
 --------------------------------------------------

@@ -8,7 +8,7 @@ local c = {}
 function c:addMenuItem (menuItem)
     menuItem.x = 0
     menuItem.y = self.next_y
-    self.next_y = self.next_y + menuItem.height + menuItem.gapY
+    self.next_y = self.next_y - (menuItem.height + menuItem.gapY)
     table.insert (self.items, menuItem)
 
     return menuItem
@@ -17,7 +17,7 @@ end
 --------------------------------------------------
 function c:clearAllMenuItems ()
     self.items = {}
-    self.next_y = 40
+    self.next_y = self.initialY
 end
 
 --------------------------------------------------
@@ -59,7 +59,7 @@ function c:onRender ()
 
     if self.title then
         local width = font.measureString (self.title)
-        font.drawString ((self.width - width) * 0.5, 0, self.title, 0xffffffff)
+        font.drawString ((self.width - width) * 0.5, self.height - 12, self.title, 0xffffffff)
     end
 
     local highlighted_item = nil
@@ -117,7 +117,8 @@ return function (title)
     {
         title = title,
         items = {},
-        next_y = 30,
+        initialY = 256 - 40,
+        next_y = 256 - 40,
         events = {},
         width = 512,
         height = 256,

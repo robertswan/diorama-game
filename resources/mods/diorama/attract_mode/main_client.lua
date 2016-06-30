@@ -14,13 +14,13 @@ local function renderMessage (self)
     local drawString = dio.drawing.font.drawString
 
     local w = dio.drawing.font.measureString ("Diorama")
-    drawString ((self.w - w) / 2, 1, "Diorama", 0x000000ff)
-    drawString ((self.w - w) / 2, 0, "Diorama", 0xffffffff)
+    local y = 9
+    drawString ((self.w - w) / 2, y, "Diorama", 0x000000ff)
+    drawString ((self.w - w) / 2, y + 1, "Diorama", 0xffffffff)
 
     w = dio.drawing.font.measureString (self.message)
-    local y = 10
-    drawString ((self.w - w) / 2, y + 1, self.message, 0x000000ff)
-    drawString ((self.w - w) / 2, y, self.message, 0xffff00ff)
+    drawString ((self.w - w) / 2, -1, self.message, 0x000000ff)
+    drawString ((self.w - w) / 2, 0, self.message, 0xffff00ff)
 end
 
 --------------------------------------------------
