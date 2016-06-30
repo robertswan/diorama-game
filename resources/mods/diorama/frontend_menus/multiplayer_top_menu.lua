@@ -1,6 +1,7 @@
 --------------------------------------------------
 local BreakMenuItem = require ("resources/mods/diorama/frontend_menus/menu_items/break_menu_item")
 local ButtonMenuItem = require ("resources/mods/diorama/frontend_menus/menu_items/button_menu_item")
+local IconNumberEntryMenuItem = require ("resources/mods/diorama/frontend_menus/menu_items/icon_number_menu_item")
 local LabelMenuItem = require ("resources/mods/diorama/frontend_menus/menu_items/label_menu_item")
 local Menus = require ("resources/mods/diorama/frontend_menus/menu_construction")
 local MenuClass = require ("resources/mods/diorama/frontend_menus/menu_class")
@@ -9,6 +10,8 @@ local NumberEntryMenuItem = require ("resources/mods/diorama/frontend_menus/menu
 local PasswordTextEntryMenuItem = require ("resources/mods/diorama/frontend_menus/menu_items/password_text_entry_menu_item")
 local ScrollableMenuItem = require ("resources/mods/diorama/frontend_menus/menu_items/scrollable_menu_item")
 local TextEntryMenuItem = require ("resources/mods/diorama/frontend_menus/menu_items/text_entry_menu_item")
+
+local BlockDefinitions = require ("resources/mods/diorama/blocks/block_definitions")
 
 --------------------------------------------------
 local function onConnectClicked (menuItem, menu)
@@ -47,6 +50,23 @@ local function onMainMenuClicked ()
 end
 
 --------------------------------------------------
+local function generateIconsFromNumbers ()
+    local map = {}
+
+    for idx, block in ipairs (BlockDefinitions.blocks) do
+        local uvs = block.uvs
+        if not uvs then
+            local tiles = BlockDefinitions.tiles [block.tiles [1]]
+            uvs = tiles.uvs 
+        end
+        map [idx] = {uvs [1], uvs [2]}
+        -- map [idx] = {1, 1}
+    end
+
+    return map
+end
+
+--------------------------------------------------
 local c = {}
 
 --------------------------------------------------
@@ -67,6 +87,9 @@ return function ()
 
     local savedMultiplayerSettings = dio.file.loadLua ("multiplayer_settings.lua")
 
+    local iconsFromNumbers = generateIconsFromNumbers ()
+    local iconTexture = dio.drawing.loadTexture ("resources/textures/diorama_terrain_harter_00.png")
+
     if savedMultiplayerSettings then
 
         properties =
@@ -75,19 +98,27 @@ return function ()
             accountPassword =   PasswordTextEntryMenuItem ("Password", nil, nil, savedMultiplayerSettings.accountPassword, 15),
             ipAddress =         TextEntryMenuItem ("IP Address", nil, nil, savedMultiplayerSettings.ipAddress, 16),
             ipPort =            NumberEntryMenuItem ("Port", nil, nil, savedMultiplayerSettings.ipPort, true),
-            avatarTop =         NumberEntryMenuItem ("Avatar Top Block", nil, nil, savedMultiplayerSettings.avatarTop, true),
-            avatarBottom =      NumberEntryMenuItem ("Avatar Bottom Block", nil, nil, savedMultiplayerSettings.avatarBottom, true),
+
+            -- avatarTop =         NumberEntryMenuItem ("Avatar Top Block", nil, nil, savedMultiplayerSettings.avatarTop, true),
+            -- avatarBottom =      NumberEntryMenuItem ("Avatar Bottom Block", nil, nil, savedMultiplayerSettings.avatarBottom, true),
+
+            avatarTop =         IconNumberEntryMenuItem ("Avatar Top Block", nil, nil, savedMultiplayerSettings.avatarTop, iconsFromNumbers, iconTexture),
+            avatarBottom =      IconNumberEntryMenuItem ("Avatar Bottom Block", nil, nil, savedMultiplayerSettings.avatarBottom, iconsFromNumbers, iconTexture),
+
             warningLabel =      LabelMenuItem (""),
         }
     else
+
         properties =
         {
             accountId =         TextEntryMenuItem ("Username", nil, nil, "", 15),
             accountPassword =   PasswordTextEntryMenuItem ("Password", nil, nil, "", 15),
             ipAddress =         TextEntryMenuItem ("IP Address", nil, nil, "84.92.48.10", 16),
             ipPort =            NumberEntryMenuItem ("Port", nil, nil, 25276, true),
-            avatarTop =         NumberEntryMenuItem ("Avatar Top Block", nil, nil, 9, true),
-            avatarBottom =      NumberEntryMenuItem ("Avatar Bottom Block", nil, nil, 8, true),
+            -- avatarTop =         NumberEntryMenuItem ("Avatar Top Block", nil, nil, 10, true),
+            -- avatarBottom =      NumberEntryMenuItem ("Avatar Bottom Block", nil, nil, 11, true),
+            avatarTop =         NumberEntryMenuItem ("Avatar Top Block", nil, nil, 9, iconsFromNumbers, iconTexture),
+            avatarBottom =      NumberEntryMenuItem ("Avatar Bottom Block", nil, nil, 8, iconsFromNumbers, iconTexture),
             warningLabel =      LabelMenuItem (""),
         }
     end
@@ -105,6 +136,7 @@ return function ()
     instance:addMenuItem (properties.ipAddress)
     instance:addMenuItem (properties.ipPort)
     instance:addMenuItem (properties.avatarTop)
+    instance:addMenuItem (BreakMenuItem ())
     instance:addMenuItem (properties.avatarBottom)
     instance:addMenuItem (ButtonMenuItem ("Join Server", onConnectClicked))
     instance:addMenuItem (BreakMenuItem ())
