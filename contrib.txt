@@ -49,6 +49,7 @@
         - clstl
         - CozyDino
         - CritCrank
+        - SarcasticDante
         - Defusselkid
         - dgendreau
         - Diode369
@@ -109,6 +110,7 @@
         - TinHammer
         - Toeger
         - treamous
+        - Treborginho
         - unpause_it
         - Walterman50
         - waterlimon
