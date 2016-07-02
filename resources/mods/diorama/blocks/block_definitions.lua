@@ -54,32 +54,32 @@ local blocks =
     -- 28
     {name = "sponge",               uvs = {8, 4}},
     {name = "herringbone",          uvs = {10, 4}},
-    {name = "black W",              uvs = {1, 7}},
-    {name = "dark grey W",          uvs = {2, 7}},
-    {name = "light grey W",         uvs = {1, 14}},
-    {name = "white W",              uvs = {0, 4}},
-    {name = "dark cyan W",          uvs = {1, 13}},
-    {name = "brown W",              uvs = {1, 10}},
-    {name = "pink W",               uvs = {2, 8}},
+    {name = "black wool",           uvs = {1, 7}},
+    {name = "dark grey wool",       uvs = {2, 7}},
+    {name = "light grey wool",      uvs = {1, 14}},
+    {name = "white wool",           uvs = {0, 4}},
+    {name = "dark cyan wool",       uvs = {1, 13}},
+    {name = "brown wool",           uvs = {1, 10}},
+    {name = "pink wool",            uvs = {2, 8}},
 
     -- 37
-    {name = "light blue W",         uvs = {2, 11}},
-    {name = "light green W",        uvs = {2, 9}},
-    {name = "yellow W",             uvs = {2, 10}},
-    {name = "orange W",             uvs = {2, 13}},
-    {name = "red W",                uvs = {1, 8}},
-    {name = "violet W",             uvs = {2, 12}},
-    {name = "purple W",             uvs = {1, 12}},
-    {name = "dark blue W",          uvs = {1, 11}},
-    {name = "dark green W",         uvs = {1, 9}},
+    {name = "light blue wool",      uvs = {2, 11}},
+    {name = "light green wool",     uvs = {2, 9}},
+    {name = "yellow wool",          uvs = {2, 10}},
+    {name = "orange wool",          uvs = {2, 13}},
+    {name = "red wool",             uvs = {1, 8}},
+    {name = "violet wool",          uvs = {2, 12}},
+    {name = "purple wool",          uvs = {1, 12}},
+    {name = "dark blue wool",       uvs = {1, 11}},
+    {name = "dark green wool",      uvs = {1, 9}},
 
     -- 46
-    {name = "SIGN",                 uvs = {0, 0}},
+    {name = "floating sign",        uvs = {0, 15}},
     {name = "grass",                uvs = {7, 2},           shape = "cross",    isSolid = false},
-    {name = "flower red",           uvs = {12, 0},          shape = "cross",    isSolid = false},
-    {name = "flower yellow",        uvs = {13, 0},          shape = "cross",    isSolid = false},
-    {name = "mush red",             uvs = {12, 1},          shape = "cross",    isSolid = false},
-    {name = "mush brown",           uvs = {13, 1},          shape = "cross",    isSolid = false},
+    {name = "red flower",           uvs = {12, 0},          shape = "cross",    isSolid = false},
+    {name = "yellow flower",        uvs = {13, 0},          shape = "cross",    isSolid = false},
+    {name = "red mushroom",         uvs = {12, 1},          shape = "cross",    isSolid = false},
+    {name = "brown mushroom",       uvs = {13, 1},          shape = "cross",    isSolid = false},
     {name = "sapling",              uvs = {15, 0},          shape = "cross",    isSolid = false},
     {name = "bamboo",               uvs = {9, 4},           shape = "cross",    isSolid = false},
     {name = "wheat",                uvs = {15, 5},          shape = "cross",    isSolid = false},
@@ -89,13 +89,13 @@ local blocks =
     {name = "stem",                 uvs = {15, 6},          shape = "cross",    isSolid = false},
     {name = "cactus top",           uvs = {6, 4, 5, 4, 7, 4}},
     {name = "cactus body",          uvs = {6, 4, 7, 4, 7, 4}},
-    {name = "gravity",              uvs = {12, 6, 10, 6, 13, 6}},
+    {name = "gravity block",        uvs = {12, 6, 10, 6, 13, 6}},
     {name = "all grass",            uvs = {0, 0}},
     {name = "water",                uvs = {15, 15},         isLiquid = true},
     {name = "ice",                  uvs = {3, 4}},
     {name = "coal block",           uvs = {1, 15}},
 
-    -- 63
+    -- 64
     {name = "gold ore",             uvs = {0, 2}},
     {name = "iron ore",             uvs = {1, 2}},
     {name = "coal ore",             uvs = {2, 2}},
@@ -106,7 +106,7 @@ local blocks =
     {name = "sandstone brick",      uvs = {0, 12}},
     {name = "hellrock",             uvs = {7, 6}},
 
-    -- 72
+    -- 73
     {name = "hellsand",             uvs = {8, 6}},
     {name = "spawner",              uvs = {1, 4},           isTransparent = true},
 }
