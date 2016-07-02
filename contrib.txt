@@ -40,11 +40,15 @@
         Playtesters
         ===========
 
+        - aBabyPenguin
         - AcarX
+        - Adrian213
         - AmazedStream
         - AutomateAllTheThings
         - Azenris
+        - braffolk
         - bvdscheMe (http://bravadogaming.com/staff)
+        - camboo
         - Carter9510
         - clstl
         - CozyDino
@@ -52,6 +56,7 @@
         - SarcasticDante
         - Defusselkid
         - dgendreau
+        - DiggingDJ_
         - Diode369
         - doublenibble
         - Eksitus
@@ -61,6 +66,7 @@
         - Funisdangerous
         - GamesAteMyCereal
         - GhassanPL
+        - Hairymangoz
         - HuniePop
         - IAyeCaptainKai
         - Iwoshima
@@ -77,23 +83,26 @@
         - LuaKT
         - Magnavode
         - Meursault
-        - N3rdFall
-        - oliz001 the Explorer
         - madkiwi
         - McBrainiac
         - MHHN
+        - Niceguy_3210
         - Moopaloo
         - MrPancakeGuy___
+        - N3rdFall
         - NeutralNoise
         - Nidaegwyn
+        - oliz001 the Explorer
         - OrangeGames3
         - Pjuke
         - QeraiX
+        - RadstaR
         - rave1000
         - RedSquirrelsNut (@theredsquirrely)
         - Riyyi
         - Roblon
         - SAFxHarter
+        - Scott
         - Snellekenny
         - sp0nji
         - SSStormy
@@ -118,3 +127,4 @@
         - WizardNJ
         - xCosminPlays
         - zeiSt
+        - zlazeray
