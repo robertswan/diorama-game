@@ -31,22 +31,22 @@ end
 
 --------------------------------------------------
 local function renderBg (self)
-    dio.drawing.font.drawBox (0, 0, self.w, self.iconHeight, 0x000000b0)
+    dio.drawing.font.drawBox (0, 0, self.w, self.rowHeight, 0x000000b0)
 end
 
 --------------------------------------------------
 local function renderSelectedBlock (self, idx, x, y)
 
-    dio.drawing.font.drawBox (x - 1, y - 1, 18, 18, 0xffffffff)
+    dio.drawing.font.drawBox (x - 1, y - 1, self.iconScale * 16 + 2, self.iconScale * 16 + 2, 0xffffffff)
     
     local block = blocks [self.currentBlockId]
     local width = dio.drawing.font.measureString (block.name)
-    x = (idx * 17 - 7) - (width * 0.5)
+    x = (idx * (16 * self.iconScale + 1) - (8 * self.iconScale)) - (width * 0.5)
     x = x < 1 and 1 or x
     x = x + width >= self.w and self.w - width or x
 
-    dio.drawing.font.drawBox (x - 1, self.iconHeight, width + 1, self.h - self.iconHeight, 0x000000b0)
-    dio.drawing.font.drawString (x, self.iconHeight, block.name, 0xffffffff)
+    dio.drawing.font.drawBox (x - 1, self.rowHeight, width + 1, self.h - self.rowHeight, 0x000000b0)
+    dio.drawing.font.drawString (x, self.rowHeight, block.name, 0xffffffff)
 end
 
 --------------------------------------------------
@@ -86,11 +86,11 @@ local function renderBlocks (self)
                     renderSelectedBlock (self, idx, x, y)
                 end
                 
-                dio.drawing.drawTextureRegion (self.blockTexture, x, y, u * 16, v * 16, 16, 16)
+                dio.drawing.drawTextureRegion2 (self.blockTexture, x, y, 16 * self.iconScale, 16 * self.iconScale, u * 16, v * 16, 16, 16)
                 
             end
             
-            x = x + 17;
+            x = x + self.iconScale * 16 + 1;
         end
     end
 end
@@ -168,8 +168,8 @@ end
 --------------------------------------------------
 local function onLateRender (self)
 
-    -- fake double width to prevent the inventory being all up in yo face (magnavode)
     local scale = Window.calcBestFitScale (self.w * 2, self.h)
+    scale = scale >= 3 and 3 or scale
     local windowW, windowH = dio.drawing.getWindowSize ()
     local x = (windowW - (self.w * scale)) * 0.5
     local y = self.y
@@ -294,26 +294,30 @@ end
 
 --------------------------------------------------
 local function onLoadSuccessful ()
+
+    local iconScale = 2
+    local blocksPerPage = 9
+    local rowHeight = iconScale * 16 + 2
+
     instance =
     {
         lowestBlockId = 1,
         highestBlockId = #blocks,
         currentBlockId = 7,
         currentPage = 0,
-        blocksPerPage = 9,
+        blocksPerPage = blocksPerPage,
         pages = 0, -- 0 indexed
         isDirty = true,
 
-        x = 20,
         y = 0,
-        h = 18 + 10,
-        iconHeight = 18,
+        w = ((iconScale * 16) + 1) * blocksPerPage + 1,
+        h = rowHeight + 10,
+        rowHeight = rowHeight,
+        iconScale = iconScale,
 
         crosshairTexture = dio.drawing.loadTexture ("resources/textures/crosshair.png"),
         blockTexture = dio.drawing.loadTexture ("resources/textures/diorama_terrain_harter_00.png"),
     }
-    
-    instance.w = 17 * instance.blocksPerPage + 1
 
     instance.renderToTexture = dio.drawing.createRenderToTexture (instance.w, instance.h)
     instance.pages = math.ceil (instance.highestBlockId / instance.blocksPerPage) - 1
