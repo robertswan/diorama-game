@@ -15,6 +15,11 @@ local tiles =
 }
 
 --------------------------------------------------
+local entities = 
+{
+    sign = {type = "SIGN", text = "Placeholder Text"}
+}
+--------------------------------------------------
 local blocks =
 {
     -- 0 = air
@@ -74,7 +79,7 @@ local blocks =
     {name = "dark green wool",      uvs = {1, 9}},
 
     -- 46
-    {name = "floating sign",        uvs = {0, 15}},
+    {name = "floating sign",        uvs = {0, 15},          entity = "sign"},
     {name = "grass",                uvs = {7, 2},           shape = "cross",    isSolid = false},
     {name = "red flower",           uvs = {12, 0},          shape = "cross",    isSolid = false},
     {name = "yellow flower",        uvs = {13, 0},          shape = "cross",    isSolid = false},
@@ -111,4 +116,4 @@ local blocks =
     {name = "spawner",              uvs = {1, 4},           isTransparent = true},
 }
 
-return {blocks = blocks, tiles = tiles}
+return {blocks = blocks, tiles = tiles, entities = entities}
