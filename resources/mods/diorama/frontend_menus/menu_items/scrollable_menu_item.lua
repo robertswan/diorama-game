@@ -13,7 +13,7 @@ function c:onRender (font, menus)
          local lineIdx = idx + self.firstLine
          if lineIdx < #self.lines + 1 then
              font.drawString (self.x, y, self.lines [lineIdx], 0x808080ff)
-             y = y + 10
+             y = y - 10
          end
     end
 end
