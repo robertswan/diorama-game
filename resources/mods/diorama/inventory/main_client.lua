@@ -1,119 +1,19 @@
+local BlockDefinitions = require ("resources/mods/diorama/blocks/block_definitions")
 local Window = require ("resources/_scripts/utils/window")
 
 --------------------------------------------------
-local blocks =
-{
-    -- needs to match the data in the blocks mod
+local blocks = BlockDefinitions.blocks
+local tiles = BlockDefinitions.tiles
 
-    -- 1
-    "grass",
-    "mud",
-    "granite",
-    "obsidian",
-    "sand",
-    "snowy grass",
-    "brick",
-    "tnt",
-    "pumpkin",
-
-    -- 10
-    "jump pad",
-    "cobble",
-    "trunk",
-    "wood",
-    "leaf",
-    "glass",
-    "lit pumpkin",
-    "melon",
-    "table",
-
-    -- 19
-    "gold",
-    "slab",
-    "big slab",
-    "gravel",
-    "bedrock",
-    "panel",
-    "books",
-    "mossy",
-    "stone brick",
-
-    -- 28
-    "sponge",
-    "herringbone",
-    "black",
-    "dark",
-    "light",
-    "white",
-    "dk cyan",
-    "brown",
-    "pink",
-
-    -- 37
-    "blue",
-    "green",
-    "yellow",
-    "orange",
-    "red",
-    "violet",
-    "purple",
-    "dk blue",
-    "dk green",
-
-    --46
-    "sign",
-    "grass",
-    "rose",
-    "daffy",
-    "toadstool",
-    "mushroom",
-    "sprout",
-    "cane",
-    "wheat",
-
-    -- 55
-    "bush",
-    "stem",
-    "cactus top",
-    "cactus body",
-    "gravity",
-    "all grass",
-    "water",
-    "ice",
-    "coal block",
-
-    -- 64
-    "gold ore",
-    "iron ore",
-    "coal ore",
-    "diamond ore",
-    "red ore",
-    "lapis ore",
-    "smooth sandstone",
-    "sandstone brick",
-    "hellrock",
-
-    -- 73
-    "hellsand",
-    "spawner"    
-}
-
+--------------------------------------------------
 local entities =
 {
-    sign =
+    SIGN =
     {
         type = "SIGN",
         text = "Placeholder Text",
     }
 }
-
--- local entities =
--- {
---     {name = "sign", type = "SIGN", text = "NOT_SET"},
---     {name = "torch", type = "TORCH", radius = 6, rgb = 0xff00ff},
---     {name = "chest (locked)", type = "CHEST", locked = true},
---     {name = "chest (unlocked)", type = "CHEST", locked = false},
--- }
 
 --------------------------------------------------
 local instance = nil
@@ -131,29 +31,73 @@ end
 
 --------------------------------------------------
 local function renderBg (self)
-    dio.drawing.font.drawBox (0, 0, self.w, self.h, 0x000000b0);
+    dio.drawing.font.drawBox (0, 0, self.w, self.rowHeight, 0x000000b0)
 end
 
 --------------------------------------------------
-local function renderText (self)
+local function renderSelectedBlock (self, idx, x, y)
 
-    local font = dio.drawing.font
+    dio.drawing.font.drawBox (x - 1, y - 1, self.iconScale * 16 + 2, self.iconScale * 16 + 2, 0xffffffff)
+    
+    local block = blocks [self.currentBlockId]
+    local width = dio.drawing.font.measureString (block.name)
+    x = (idx * (16 * self.iconScale + 1) - (8 * self.iconScale)) - (width * 0.5)
+    x = x < 1 and 1 or x
+    x = x + width >= self.w and self.w - width or x
 
-    local x = 5
+    dio.drawing.font.drawBox (x - 1, self.rowHeight, width + 1, self.h - self.rowHeight, 0x000000b0)
+    dio.drawing.font.drawString (x, self.rowHeight, block.name, 0xffffffff)
+end
+
+--------------------------------------------------
+local function getBlockUV (block_id)
+    local block = blocks [block_id]
+    
+    if block ~= nil then
+        if block.uvs ~= nil then
+          return block.uvs [1], block.uvs [2]
+          
+        elseif block.tiles ~= nil then
+            local tile = tiles [block.tiles [1]]
+            
+            if tile ~= nil then
+                return tile.uvs [1], tile.uvs [2]
+            end
+        
+        end
+    end
+    
+    return nil, nil
+end
+
+--------------------------------------------------
+local function renderBlocks (self)
+
+    local x = 1
     local y = 1
     for idx = 1, self.blocksPerPage do
-        if blocks [idx + self.currentPage * self.blocksPerPage] ~= nil then
-            local text = "[" .. tostring (idx) .. ":" .. blocks [idx + self.currentPage * self.blocksPerPage] .. "]"
-            local colour = idx + self.currentPage * self.blocksPerPage == self.currentBlockId and 0xffffffff or 0x000000ff
-            font.drawString (x, y, text, colour)
-            x = x + font.measureString (text);
+        local block_id = idx + self.currentPage * self.blocksPerPage
+        
+        if blocks [block_id] ~= nil then
+            local u, v = getBlockUV (block_id)
+            
+            if u ~= nil then                
+                if block_id == self.currentBlockId then
+                    renderSelectedBlock (self, idx, x, y)
+                end
+                
+                dio.drawing.drawTextureRegion2 (self.blockTexture, x, y, 16 * self.iconScale, 16 * self.iconScale, u * 16, v * 16, 16, 16)
+                
+            end
+            
+            x = x + self.iconScale * 16 + 1;
         end
     end
 end
 
 --------------------------------------------------
 local function setInventoryItem (id)
-    local blockName = blocks [id]
+    local blockName = blocks [id].name
 
     local entity = entities [blockName]
     if entity then
@@ -214,7 +158,7 @@ local function onEarlyRender (self)
     if self.isDirty then
         dio.drawing.setRenderToTexture (self.renderToTexture)
         renderBg (self)
-        renderText (self)
+        renderBlocks (self)
         dio.drawing.setRenderToTexture (nil)
         self.isDirty = false
     end
@@ -224,7 +168,8 @@ end
 --------------------------------------------------
 local function onLateRender (self)
 
-    local scale = Window.calcBestFitScale (self.w, self.h)
+    local scale = Window.calcBestFitScale (self.w * 2, self.h)
+    scale = scale >= 3 and 3 or scale
     local windowW, windowH = dio.drawing.getWindowSize ()
     local x = (windowW - (self.w * scale)) * 0.5
     local y = self.y
@@ -249,7 +194,7 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
     local self = instance
 
     if keyCode >= keyCodes ["1"] and keyCode <= keyCodes ["9"] then
-        if blocks [(keyCode - keyCodes ["1"] + 1) + self.currentPage * self.blocksPerPage] ~= nil then
+        if blocks [ (keyCode - keyCodes ["1"] + 1) + self.currentPage * self.blocksPerPage] ~= nil then
             self.currentBlockId = (keyCode - keyCodes ["1"] + 1) + self.currentPage * self.blocksPerPage
             setInventoryItem (self.currentBlockId)
             self.isDirty = true
@@ -336,10 +281,10 @@ end
 local function onChatMessagePreSent (text)
 
     local command = ".setSign "
-    local compare = text:sub (1, command:len())
+    local compare = text:sub (1, command:len ())
 
     if compare == command then
-        local message = text:sub (command:len() + 1)
+        local message = text:sub (command:len () + 1)
         entities.sign.text = message
         return true
     end
@@ -350,11 +295,9 @@ end
 --------------------------------------------------
 local function onLoadSuccessful ()
 
-    local stringToMeasure = ""
-    for i = 1, 9 do
-        stringToMeasure = "[" .. tostring(i) .. ":" .. stringToMeasure .. blocks[i] .. "]"
-    end
-    local widthSize = 5 + dio.drawing.font.measureString(stringToMeasure) + 5
+    local iconScale = 2
+    local blocksPerPage = 9
+    local rowHeight = iconScale * 16 + 2
 
     instance =
     {
@@ -362,16 +305,18 @@ local function onLoadSuccessful ()
         highestBlockId = #blocks,
         currentBlockId = 7,
         currentPage = 0,
-        blocksPerPage = 9,
+        blocksPerPage = blocksPerPage,
         pages = 0, -- 0 indexed
         isDirty = true,
 
-        x = 20,
         y = 0,
-        w = widthSize,
-        h = 12,
+        w = ((iconScale * 16) + 1) * blocksPerPage + 1,
+        h = rowHeight + 10,
+        rowHeight = rowHeight,
+        iconScale = iconScale,
 
         crosshairTexture = dio.drawing.loadTexture ("resources/textures/crosshair.png"),
+        blockTexture = dio.drawing.loadTexture ("resources/textures/diorama_terrain_harter_00.png"),
     }
 
     instance.renderToTexture = dio.drawing.createRenderToTexture (instance.w, instance.h)
