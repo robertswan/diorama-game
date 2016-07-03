@@ -4,16 +4,7 @@ local Window = require ("resources/_scripts/utils/window")
 --------------------------------------------------
 local blocks = BlockDefinitions.blocks
 local tiles = BlockDefinitions.tiles
-
---------------------------------------------------
-local entities =
-{
-    ["floating sign"] =
-    {
-        type = "SIGN",
-        text = "Placeholder Text",
-    }
-}
+local entities = BlockDefinitions.entities
 
 --------------------------------------------------
 local instance = nil
@@ -97,9 +88,9 @@ end
 
 --------------------------------------------------
 local function setInventoryItem (id)
-    local blockName = blocks [id].name
+    local block = blocks [id]
+    local entity = entities [block.entity]
 
-    local entity = entities [blockName]
     if entity then
         dio.inputs.setPlayerEntityId (1, id, entity.text)
     else
