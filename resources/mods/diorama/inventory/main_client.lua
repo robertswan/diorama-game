@@ -8,7 +8,7 @@ local tiles = BlockDefinitions.tiles
 --------------------------------------------------
 local entities =
 {
-    SIGN =
+    ["floating sign"] =
     {
         type = "SIGN",
         text = "Placeholder Text",
