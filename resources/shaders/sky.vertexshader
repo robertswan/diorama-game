@@ -5,14 +5,14 @@ layout (location = 1) in vec2 vertex_uv;
 layout (location = 2) in vec4 vertex_rgba;
 
 uniform mat4 mvp_matrix;
+uniform float time_float;
 
 out vec2 final_uv;
-out vec4 final_rgba;
 
 void main()
 {
     gl_Position = mvp_matrix * vec4 (vertex_position, 1.0f);
 
-    final_uv = vertex_uv;
-    final_rgba = vertex_rgba;
+    final_uv.x = time_float;
+    final_uv.y = vertex_uv.y;
 }
