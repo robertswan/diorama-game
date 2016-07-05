@@ -5,6 +5,7 @@ layout (location = 1) in vec2 vertex_uv;
 layout (location = 2) in vec4 vertex_normal;
 
 uniform mat4 mvp_matrix;
+uniform float time_float;
 
 uniform vec4 light_direction;
 uniform vec4 directional_color;
@@ -12,6 +13,7 @@ uniform vec4 ambient_color;
 
 out vec2 final_uv;
 out vec4 final_rgba;
+out vec2 ambient_uv;
 
 void main()
 {
@@ -27,4 +29,7 @@ void main()
     // ambient
     final_rgba = final_rgba + ambient_color;
     final_rgba.a = 1.0f;
+
+    ambient_uv.x = time_float;
+    ambient_uv.y = 0.5f;
 }
