@@ -36,7 +36,7 @@ local function onConnectClicked (menuItem, menu)
         avatarBottom =      menu.avatarBottom.value,
     }
 
-    dio.file.saveLua ("multiplayer_settings.lua", params, "multiplayerSettings")
+    dio.file.saveLua (dio.file.locations.SETTINGS, "multiplayer_settings.lua", params, "multiplayerSettings")
 
     local isOk, errorString = dio.session.beginMp (params)
     if isOk then
@@ -85,7 +85,7 @@ return function ()
 
     local properties = nil
 
-    local savedMultiplayerSettings = dio.file.loadLua ("multiplayer_settings.lua")
+    local savedMultiplayerSettings = dio.file.loadLua (dio.file.locations.SETTINGS, "multiplayer_settings.lua")
 
     local iconsFromNumbers = generateIconsFromNumbers ()
     local iconTexture = dio.drawing.loadTexture ("resources/textures/diorama_terrain_harter_00.png")

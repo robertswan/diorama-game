@@ -75,7 +75,7 @@ end
 local function onClientConnected (event)
 
     local filename = "player_" .. event.accountId .. ".lua"
-    local settings = dio.file.loadLua (filename)
+    local settings = dio.file.loadLua (dio.file.locations.WORLD_PLAYER, filename)
 
     local isPasswordCorrect = true
     if settings then
@@ -136,7 +136,7 @@ local function onClientDisconnected (event)
                 gravityDir = gravityDirNames [dio.world.getPlayerGravity (event.accountId)],
             }
 
-            dio.file.saveLua (filename, settings, "settings")
+            dio.file.saveLua (dio.file.locations.WORLD_PLAYER, filename, settings, "settings")
 
         else
             print (error)

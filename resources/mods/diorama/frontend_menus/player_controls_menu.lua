@@ -71,7 +71,7 @@ local function onSaveClicked (self, menu)
         turbo =                 menu.keyMenuItems [7].keyCode
     }
 
-    dio.file.saveLua ("player_settings.lua", playerSettings, "playerSettings")
+    dio.file.saveLua (dio.file.locations.SETTINGS, "player_settings.lua", playerSettings, "playerSettings")
 
     return "main_menu"
 end
