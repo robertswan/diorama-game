@@ -6,7 +6,7 @@ local menus = nil
 --------------------------------------------------
 local function loadPlayerControls ()
 
-    local playerSettings = dio.file.loadLua ("player_settings.lua")
+    local playerSettings = dio.file.loadLua (dio.file.locations.SETTINGS, "player_settings.lua")
 
     if playerSettings then
 

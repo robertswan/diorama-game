@@ -5,7 +5,7 @@ local connections = {}
 local function onClientConnected (event)
 
     local filename = "player_" .. event.accountId .. ".lua"
-    local settings = dio.file.loadLua (filename)
+    local settings = dio.file.loadLua (dio.file.locations.WORLD_PLAYER, filename)
 
     local isPasswordCorrect = true
     if settings then
@@ -35,10 +35,10 @@ local function onClientDisconnected (event)
     if connection.needsSaving and connection.homeLocation then
 
         local filename = "player_" .. event.accountId .. ".lua"
-        local settings = dio.file.loadLua (filename)
+        local settings = dio.file.loadLua (dio.file.locations.WORLD_PLAYER, filename)
         if settings then
             settings.homeLocation = connection.homeLocation
-            dio.file.saveLua (filename, settings, "settings")
+            dio.file.saveLua (dio.file.locations.WORLD_PLAYER, filename, settings, "settings")
         end
     end
 

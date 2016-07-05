@@ -60,6 +60,7 @@
         - Diode369
         - doublenibble
         - Eksitus
+        - emytofast
         - Expatiator
         - FGArray
         - Fleabum
@@ -85,6 +86,7 @@
         - Meursault
         - madkiwi
         - McBrainiac
+        - Meowcat2851
         - MHHN
         - Niceguy_3210
         - Moopaloo
@@ -102,6 +104,7 @@
         - Riyyi
         - Roblon
         - SAFxHarter
+        - Scellow
         - Scott
         - Snellekenny
         - sp0nji
