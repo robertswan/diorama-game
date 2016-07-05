@@ -12,10 +12,10 @@ out vec4 color;
 void main()
 {
     color = texture (diffuse_map, final_uv).rgba;
-    //if (color.a < 1.0f)
-    //{
-        //discard;
-    //}
+    if (color.a < 1.0f)
+    {
+        discard;
+    }
 
     color = color * final_rgba;
 
