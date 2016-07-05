@@ -1,11 +1,13 @@
 #version 330
 
+uniform sampler2D diffuse_map;
+
 in vec2 final_uv;
-in vec4 final_rgba;
 
 out vec4 color;
 
 void main()
 {
-    color = final_rgba;
+    color.rgb = texture (diffuse_map, final_uv).rgb;
+    color.a = 1.0;
 }
