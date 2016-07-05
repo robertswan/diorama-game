@@ -1,6 +1,7 @@
 #version 330
 
 uniform sampler2D diffuse_map;
+uniform vec3 fog_color;
 
 in vec2 final_uv;
 in vec4 final_rgba;
@@ -17,7 +18,7 @@ void main()
 
     color = color * final_rgba;
 
-    vec3 fog_color = vec3 (47.0f / 255.0f, 188.0f / 255.0f, 235.0f / 255.0f);
+    //vec3 fog_color = vec3 (47.0f / 255.0f, 188.0f / 255.0f, 235.0f / 255.0f);
     float fog_coeff = gl_FragCoord.z;
     fog_coeff *= fog_coeff;
     fog_coeff *= fog_coeff;
