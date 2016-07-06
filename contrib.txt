@@ -94,6 +94,7 @@
         - N3rdFall
         - NeutralNoise
         - Nidaegwyn
+        - OfficialEvilWalrus
         - oliz001 the Explorer
         - OrangeGames3
         - Pjuke
