@@ -82,12 +82,31 @@ local function onClientConnected (event)
         isPasswordCorrect = (settings.accountPassword == event.accountPassword)
     end
 
-    local playerParams =
-    {
-        connectionId = event.connectionId,
-        roomFolder = "default",
-        -- should have xyz and gravity etc...
-    }
+    local playerParams = nil
+
+    if settings and isPasswordCorrect then
+        playerParams =
+        {
+            connectionId = event.connectionId,
+            avatar = settings.xyz,
+            gravityDir = gravityDirIndices [settings.gravityDir],
+        }
+
+    else
+        playerParams =
+        {
+            connectionId = event.connectionId,
+            avatar = 
+            {
+                roomFolder = "default/",
+                chunkId = {0, 0, 0},
+                xyz = {0, 0, 0},
+                ypr = {0, 0, 0},
+            },
+            gravityDir = gravityDirIndices.DOWN,
+        }
+
+    end
 
     local entityId = dio.world.createPlayer (playerParams)
 
@@ -100,15 +119,12 @@ local function onClientConnected (event)
         groupId = event.isSinglePlayer and "builder" or "tourist",
         isPasswordCorrect = isPasswordCorrect,
         needsSaving = event.isSinglePlayer,
-        gravityDir = settings and settings.gravityDir or "DOWN",
         entityId = entityId,
     }
 
     if settings and isPasswordCorrect then
         connection.groupId = settings.permissionLevel
         connection.needsSaving = true
-        dio.world.setPlayerXyz (event.accountId, settings.xyz)
-        dio.world.setPlayerGravity (event.accountId, gravityDirIndices [settings.gravityDir])
     end
 
     connection.screenName = connection.screenName .. " [" .. connection.groupId .. "]"
@@ -143,7 +159,7 @@ local function onClientDisconnected (event)
         end
     end
 
-    dio.world.destroyPlayer (connection.entityId)    
+    dio.world.destroyPlayer (connection.entityId)
 
     connections [event.connectionId] = nil
 end
@@ -179,7 +195,30 @@ local function onChatReceived (event)
         return
     end
 
-    if event.text == ".help" then
+    if event.text == ".swap" then
+
+        -- find the player (assume in "default")
+        -- delete the player
+        -- create the player in the new room ("room_small")
+
+        dio.world.destroyPlayer (connection.entityId)
+
+        local settings =
+        {
+            connectionId = event.authorConnectionId,
+            avatar = 
+            {
+                roomFolder = "room_small/",
+                chunkId = {0, 0, 0},
+                xyz = {0, 0, 0},
+                ypr = {0, 0, 0},
+            },
+            gravityDir = gravityDirIndices.DOWN,
+        }
+
+        connection.entityId = dio.world.createPlayer (settings)
+
+    elseif event.text == ".help" then
 
         event.targetConnectionId = event.authorConnectionId
         event.text = ".help, .motd, .spawn, .tp <X> <Y> <Z>, .tp <player>, .coords, .coords <player>, .group, .showPassword, .listPlayerGroups, .listGroups, .setHome, .home"
