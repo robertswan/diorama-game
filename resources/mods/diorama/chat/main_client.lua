@@ -1,4 +1,5 @@
 local TickerLine = require ("resources/mods/diorama/chat/ticker_line")
+local EmoteDefinitions = require ("resources/mods/diorama/chat/emote_definitions")
 
 --------------------------------------------------
 local instance = nil
@@ -6,10 +7,50 @@ local instance = nil
 --------------------------------------------------
 local chatHistory = {}
 local currentElement = 0
+local emoteSpecs = EmoteDefinitions.emoteSpecs
+local emotes = EmoteDefinitions.emotes
 
 --------------------------------------------------
 local function renderBg (self)
     dio.drawing.font.drawBox (0, 0, self.size.w, self.size.h, 0x000000b0);
+end
+
+--------------------------------------------------
+local function renderChatLine (self, line, y)
+    
+    local drawString = dio.drawing.font.drawString
+
+    -- Draw the author part (with shadow)
+    drawString (0, y, line.author, 0x000000ff, true)
+    drawString (0, y + 2, line.author, 0xffff00ff, true)
+
+    local x = self.textOffset
+
+    for _, word in ipairs (line.textList) do
+
+        if word then
+
+            local emote = emotes [word]
+
+            if emote then
+                -- draw the emote
+                local u, v = emote.uvs [1], emote.uvs [2]
+
+                dio.drawing.drawTextureRegion2 (self.emoteTexture,      x, y, 
+                                                emoteSpecs.renderWidth, emoteSpecs.renderHeight, 
+                                                u * emoteSpecs.width,   v * emoteSpecs.height, 
+                                                emoteSpecs.width,       emoteSpecs.height)
+
+                x = x + emoteSpecs.renderWidth
+
+            else
+                -- draw the string (with shadow)
+                drawString (x, y, word, 0x000000ff, true)
+                drawString (x, y+2, word, 0xffffffff, true)
+                x = x + dio.drawing.font.measureString (word)
+            end 
+        end
+    end
 end
 
 --------------------------------------------------
@@ -21,15 +62,9 @@ local function renderChat (self)
         lineIdx = #self.lines
     end
 
-    local drawString = dio.drawing.font.drawString
-
     while y >= 0 and lineIdx > 0 do
         local line = self.lines [lineIdx]
-        drawString (0, y, line.author, 0x000000ff, true)
-        drawString (0, y + 2, line.author, 0xffff00ff, true)
-        drawString (self.textOffset, y, line.text, 0x000000ff, true)
-        drawString (self.textOffset, y + 2, line.text, 0xffffffff)
-
+        renderChatLine (self, line, y)
         y = y + self.heightPerLine
         lineIdx = lineIdx - 1
     end
@@ -74,7 +109,7 @@ local function hide (self)
 end
 
 --------------------------------------------------
-local function addNewTickerLine (self, author, text)
+local function addNewTickerLine (self, line)
 
     local ticker = self.ticker
 
@@ -85,7 +120,8 @@ local function addNewTickerLine (self, author, text)
         table.remove (ticker.lines)
     end
 
-    local newTickerLine = TickerLine (author, text, self.size.w, self.heightPerLine, self.textOffset)
+    local newTickerLine = TickerLine (line, self.size.w, self.heightPerLine, 
+                                      self.textOffset, self.emoteTexture)
     table.insert (ticker.lines, newTickerLine)
 end
 
@@ -150,30 +186,54 @@ local function onChatMessageReceived (author, text)
 
     local spaceLeft = self.size.w - self.textOffset
     local spaceWidth = dio.drawing.font.measureString (" ") -- this should probably be in instance properties
-    local currentLine = ""
+    local currentString = ""
+    -- list of strings
+    local currentLine = {}
+    -- keep track of the lines to create ticker lines from
     local linesAdded = {}
-
-    local author2 = author
 
     for word in string.gmatch (text, "%S+") do
         local wordLength = dio.drawing.font.measureString (word)
+        local isEmote = false
+
+        -- Check if word is an emote
+        if emotes [word] then
+            wordLength = emoteSpecs.renderWidth
+            isEmote = true
+        end
 
         if wordLength + spaceWidth > spaceLeft then
-            table.insert (self.lines, { author = author2, text = currentLine })
-            table.insert (linesAdded, currentLine)
-            currentLine = word .. " "
+            -- Line has exceed maximum line length, split rest into another line
+            table.insert (currentLine, currentString)
+            table.insert (self.lines, { author = author, textList = currentLine })
+            table.insert (linesAdded, { author = author, textList = currentLine })
+            currentLine = {}
+
+            if isEmote then
+                table.insert (currentLine, word)
+                currentString = " "
+            else 
+                currentString = word .. " "
+            end
+            
             spaceLeft = self.size.w - self.textOffset - wordLength
-            author2 = ""
         else
+            -- Else add the word/emote onto the current line
+            if isEmote then
+                table.insert (currentLine, currentString)
+                table.insert (currentLine, word)
+                currentString = " "
+            else
+                currentString = currentString .. word .. " "
+            end
+            
             spaceLeft = spaceLeft - (wordLength + spaceWidth)
-            currentLine = currentLine .. word .. " "
         end
     end
 
-    if currentLine ~= "" then
-        table.insert (self.lines, { author = author2, text = currentLine })
-        table.insert (linesAdded, currentLine)
-    end
+    table.insert (currentLine, currentString)
+    table.insert (self.lines, { author = author, textList = currentLine })
+    table.insert (linesAdded, { author = author, textList = currentLine })
 
     if self.autoScroll then
         self.firstLineToDraw = #self.lines - self.chatLinesToDraw + 1
@@ -182,22 +242,19 @@ local function onChatMessageReceived (author, text)
         end
     end
 
-    if #linesAdded == 0 then
-        addNewTickerLine (self, author, text)
-    else
-        author2 = author
-        for idx = 1, #linesAdded do 
-            addNewTickerLine (self, author2, linesAdded [idx])
-            author2 = ""
-        end
+    -- create the ticker lines
+    local i = 1
+    while linesAdded[i] ~= nil do
+        addNewTickerLine (self, linesAdded[i])
+        i = i + 1
     end
     
     self.isDirty = true
-
 end
 
 --------------------------------------------------
 local function addToChatHistory (text)
+
     local tmpArray = {}
     for idx = 1, #chatHistory do
         tmpArray [idx] = chatHistory [idx]
@@ -339,6 +396,7 @@ local function onLoadSuccessful ()
         isVisible = false,
         chatAppearKeyCode = dio.inputs.keyCodes.T,
         text = "",
+        emoteTexture = dio.drawing.loadTexture ("resources/textures/emotes.png"),
 
         ticker =
         {

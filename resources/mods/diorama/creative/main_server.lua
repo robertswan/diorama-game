@@ -313,6 +313,7 @@ local modSettings =
 {
     description =
     {
+        id = "creative",
         name = "Creative",
         description = "This is required to play the game!",
         help =
