@@ -87,7 +87,7 @@ local function onClientUpdated ()
     if self.isVisible and self.myAccountId then
         local xyz, error = dio.world.getPlayerXyz (self.myAccountId)
         if xyz then
-            xyz.ypr.y = xyz.ypr.y + 0.005
+            xyz.ypr [2] = xyz.ypr [2] + 0.005
             dio.world.setPlayerXyz (self.myAccountId, xyz)
         end                    
     end

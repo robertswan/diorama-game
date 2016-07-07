@@ -22,17 +22,19 @@ local function onEarlyRender (self)
 
     		if xyz then
     			
-                local xCoord = math.floor (xyz.chunkId.x * 32 + xyz.xyz.x)
-    			local yCoord = math.floor (xyz.chunkId.y * 32 + xyz.xyz.y)
-    			local zCoord = math.floor (xyz.chunkId.z * 32 + xyz.xyz.z)
+                local xCoord = math.floor (xyz.chunkId [1] * 32 + xyz.xyz [1])
+    			local yCoord = math.floor (xyz.chunkId [2] * 32 + xyz.xyz [2])
+    			local zCoord = math.floor (xyz.chunkId [3] * 32 + xyz.xyz [3])
 
                 local x = self.border
                 local y = self.border
 
                 local text = "x: " .. xCoord ..  " y: " .. yCoord .. " z: " .. zCoord
+                text = text .. " @ " .. xyz.roomFolder
                 local drawString = dio.drawing.font.drawString
                 drawString (x, y, text, 0xffAA66ff)
-                self.size.w = dio.drawing.font.measureString(text)                
+
+                self.size.w = dio.drawing.font.measureString (text)                
                 y = y + 10
 
                 local times = dio.diagnostics.getTimes ()
@@ -42,26 +44,6 @@ local function onEarlyRender (self)
                 text = string.format ("FPS = % 3d", math.floor (self.averageFps + 0.5))
                 drawString (x, y, text, 0xffAA66ff)
                 y = y + 10
-
-                -- text = string.format ("U = %.4f", times.update * 1000.0)
-                -- drawString (x, y, text, 0xffAA66ff)
-                -- y = y + 10
-
-                -- text = string.format ("RE (ms) = %.4f", times.renderEarly * 1000.0)
-                -- drawString (x, y, text, 0xffAA66ff)
-                -- y = y + 10
-
-                -- text = string.format ("R = %.4f", times.render * 1000.0)
-                -- drawString (x, y, text, 0xffAA66ff)
-                -- y = y + 10
-
-                -- text = string.format ("RL = %.4f", times.renderLate * 1000.0)
-                -- drawString (x, y, text, 0xffAA66ff)
-                -- y = y + 10
-
-                -- text = string.format ("OGL = %.4f", times.openGl * 1000.0)
-                -- drawString (x, y, text, 0xffAA66ff)
-                -- y = y + 10
 
                 self.size.w = self.size.w + (self.border * 2)               
 

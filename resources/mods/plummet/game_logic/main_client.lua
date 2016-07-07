@@ -27,12 +27,12 @@ end
 
 --------------------------------------------------
 local function teleportTo (x, y, z)
-    setting =
-    {
-        chunkId = {x = 0, y = 0, z = 0},
-        xyz = {x = tonumber (x), y = tonumber (y), z = tonumber (z)},
-        ypr = {x = 0, y = 0, z = 0}
-    }
+
+    local setting = dio.world.getPlayerXyz (instance.myAccountId)
+
+    setting.chunkId = {0, 0, 0}
+    setting.xyz = {tonumber (x), tonumber (y), tonumber (z)}
+    setting.ypr = {0, 0, 0}
 
     dio.world.setPlayerXyz (instance.myAccountId, setting)
 end

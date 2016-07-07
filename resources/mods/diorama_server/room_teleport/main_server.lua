@@ -23,6 +23,7 @@ local groups =
         canChat = true,
         canColourText = true,    
         canPromoteTo = {tourist = true, builder = true},
+        canPlaceTeleporters = true,
     },
     admin = 
     {
@@ -32,6 +33,7 @@ local groups =
         canChat = true,
         canColourText = true,    
         canPromoteTo = {tourist = true, builder = true, mod = true},
+        canPlaceTeleporters = true,
     }
 }
 
@@ -57,6 +59,22 @@ local gravityDirIndices =
     WEST =   3,
     UP =     4,
     DOWN =   5,
+}
+
+--------------------------------------------------
+local roomFolders =
+{
+    "default/",
+    "room_small/",
+    "plummet1/",
+}
+
+--------------------------------------------------
+local roomIndices =
+{
+    ["default/"] = 1,
+    ["room_small/"] = 2,
+    ["plummet1/"] = 3,
 }
 
 --------------------------------------------------
@@ -98,7 +116,7 @@ local function onClientConnected (event)
             connectionId = event.connectionId,
             avatar = 
             {
-                roomFolder = "default/",
+                roomFolder = roomFolders [1],
                 chunkId = {0, 0, 0},
                 xyz = {0, 0, 0},
                 ypr = {0, 0, 0},
@@ -108,7 +126,7 @@ local function onClientConnected (event)
 
     end
 
-    local entityId = dio.world.createPlayer (playerParams)
+    local playerEntityId = dio.world.createPlayer (playerParams)
 
     local connection =
     {
@@ -119,7 +137,9 @@ local function onClientConnected (event)
         groupId = event.isSinglePlayer and "builder" or "tourist",
         isPasswordCorrect = isPasswordCorrect,
         needsSaving = event.isSinglePlayer,
-        entityId = entityId,
+        roomFolderIdx = roomIndices [playerParams.avatar.roomFolder],
+        playerEntityId = playerEntityId,
+        isInPlaceTeleporterMode = false,
     }
 
     if settings and isPasswordCorrect then
@@ -159,23 +179,73 @@ local function onClientDisconnected (event)
         end
     end
 
-    dio.world.destroyPlayer (connection.entityId)
+    dio.world.destroyPlayer (connection.playerEntityId)
 
     connections [event.connectionId] = nil
 end
 
 --------------------------------------------------
+local function teleportPlayerToRoom (connection)
+
+    dio.world.destroyPlayer (connection.playerEntityId)
+
+    connection.roomFolderIdx = (connection.roomFolderIdx % #roomFolders) + 1
+
+    local settings =
+    {
+        connectionId = connection.connectionId,
+        avatar = 
+        {
+            roomFolder = roomFolders [connection.roomFolderIdx],
+            chunkId = {0, 0, 0},
+            xyz = {0, 0, 0},
+            ypr = {0, 0, 0},
+        },
+        gravityDir = gravityDirIndices.DOWN,
+    }
+
+    connection.playerEntityId = dio.world.createPlayer (settings)    
+end
+
+--------------------------------------------------
 local function onEntityPlaced (event)
+
     local connection = connections [event.connectionId]
-    local canBuild = groups [connection.groupId].canBuild
-    event.cancel = not canBuild
+    local group = groups [connection.groupId]
+
+    local isPlacingSpongeBlock = (event.sourceBlockId == 28)
+    if isPlacingSpongeBlock then
+        event.cancel = not (group.canPlaceTeleporters and connection.isInPlaceTeleporterMode)
+    else
+        local isClickingOnSpongeBlock = (event.destinationBlockId == 28)
+        if isClickingOnSpongeBlock then
+            teleportPlayerToRoom (connection)
+            event.cancel = true
+        else
+            event.cancel = not group.canBuild
+        end
+    end
 end
 
 --------------------------------------------------
 local function onEntityDestroyed (event)
+
     local connection = connections [event.connectionId]
-    local canDestroy = groups [connection.groupId].canDestroy
-    event.cancel = not canDestroy
+    local group = groups [connection.groupId]
+
+    local isSpongeBlock = (event.destinationBlockId == 28) -- true
+    if isSpongeBlock then
+
+        if group.canPlaceTeleporters and connection.isInPlaceTeleporterMode then
+        else
+            teleportPlayerToRoom (connection)
+            event.cancel = true
+        end
+
+    else
+        event.cancel = not group.canDestroy
+    end
+
 end
 
 --------------------------------------------------
@@ -195,7 +265,16 @@ local function onChatReceived (event)
         return
     end
 
-    if event.text == ".help" then
+    if event.text == ".togglePlaceTp" then
+
+        -- TODO dont consume this command if group doesnt allow tp placement
+
+        local connection = connections [event.authorConnectionId]
+        connection.isInPlaceTeleporterMode = not connection.isInPlaceTeleporterMode
+        event.targetConnectionId = event.authorConnectionId        
+        event.text = "Room Teleporters: " .. (connection.isInPlaceTeleporterMode and "PLACE MODE" or "TELEPORT MODE")
+
+    elseif event.text == ".help" then
 
         event.targetConnectionId = event.authorConnectionId
         event.text = ".help, .motd, .spawn, .tp <X> <Y> <Z>, .tp <player>, .coords, .coords <player>, .group, .showPassword, .listPlayerGroups, .listGroups, .setHome, .home"
