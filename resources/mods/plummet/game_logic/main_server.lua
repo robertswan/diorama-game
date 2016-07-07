@@ -49,35 +49,35 @@ local generators =
 local connections = {}
 
 --------------------------------------------------
-local function fillCube (roomId, chunkId, min, max, value)
+local function fillCube (roomEntityId, chunkId, min, max, value)
 
     local setBlock = dio.world.setBlock
     for x = min [1], max [1] do
         for y = min [2], max [2] do
             for z = min [3], max [3] do
-                setBlock (roomId, chunkId, x, y, z, value)
+                setBlock (roomEntityId, chunkId, x, y, z, value)
             end
         end 
     end    
 end
 
 --------------------------------------------------
-local function buildLobby (roomId, chunkId)
-    fillCube (roomId, chunkId, {1, 1, 1}, {30, 4, 30}, 15)
-    fillCube (roomId, chunkId, {2, 2, 2}, {29, 6, 29}, 0)
+local function buildLobby (roomEntityId, chunkId)
+    fillCube (roomEntityId, chunkId, {1, 1, 1}, {30, 4, 30}, 15)
+    fillCube (roomEntityId, chunkId, {2, 2, 2}, {29, 6, 29}, 0)
 end
 
 --------------------------------------------------
-local function buildWaitingRoom (roomId, chunkId)
-    fillCube (roomId, chunkId, {1, 25, 1}, {30, 28, 30}, 15)
-    fillCube (roomId, chunkId, {2, 26, 2}, {29, 30, 29}, 0)
+local function buildWaitingRoom (roomEntityId, chunkId)
+    fillCube (roomEntityId, chunkId, {1, 25, 1}, {30, 28, 30}, 15)
+    fillCube (roomEntityId, chunkId, {2, 26, 2}, {29, 30, 29}, 0)
 end
 
 --------------------------------------------------
 local roomFolders =
 {
-    "plummet1",
-    "plummet2",
+    "plummet1/",
+    "plummet2/",
 }
 
 --------------------------------------------------
@@ -93,13 +93,13 @@ local gameVars =
     {
         lobby = 
         {
-            chunkId = {x =0, y = 0, z = 0},
+            chunkId = {0, 0, 0},
             isBuilt = false,
             buildFunction = buildLobby,
         },
         waitingRoom =
         {
-            chunkId = {x =0, y = -1, z = 0},
+            chunkId = {0, -1, 0},
             isBuilt = false,
             buildFunction = buildWaitingRoom,
         }
@@ -248,7 +248,7 @@ end
 --------------------------------------------------
 local function startGame ()
 
-    fillCube (gameVars.mostRecentRoom.id, {x = 0, y = -1, z = 0}, {2, 25, 2}, {29, 25, 29}, 0)
+    fillCube (gameVars.mostRecentRoom.entityId, {0, -1, 0}, {2, 25, 2}, {29, 25, 29}, 0)
 
     gameVars.isPlaying = true
     gameVars.tickCount = 0
@@ -387,7 +387,7 @@ local function onRoomCreated (event)
     gameVars.mostRecentRoom = 
     {
         folder = event.roomFolder,
-        id = event.roomId,
+        entityId = event.roomEntityId,
     }
 end
 
@@ -427,7 +427,7 @@ local function onChatReceived (event)
             connection.groupId = "waiting"
             gameVars.playersWaitingCount = gameVars.playersWaitingCount + 1
             teleportPlayer (connectionId, "waitingRoom")
-            fillCube (gameVars.mostRecentRoom.id, {x = 0, y = -1, z = 0}, {2, 25, 2}, {29, 25, 29}, 15)
+            fillCube (gameVars.mostRecentRoom.entityId, {0, -1, 0}, {2, 25, 2}, {29, 25, 29}, 15)
             updateScores ()
 
             event.text = colors.ok .. "You have joined the next game. Type '.ready' to begin."
@@ -492,16 +492,16 @@ end
 --------------------------------------------------
 local function onChunkGenerated (event)
 
-    if event.roomId == gameVars.mostRecentRoom.id then
+    if event.roomEntityId == gameVars.mostRecentRoom.entityId then
 
         for _, build in pairs (gameVars.chunksToModify) do
 
             if not build.isBuilt and
-                    build.chunkId.x == event.chunkId.x and
-                    build.chunkId.y == event.chunkId.y and
-                    build.chunkId.z == event.chunkId.z then
+                    build.chunkId [1] == event.chunkId [1] and
+                    build.chunkId [2] == event.chunkId [2] and
+                    build.chunkId [3] == event.chunkId [3] then
 
-                build.buildFunction (event.roomId, event.chunkId)
+                build.buildFunction (event.roomEntityId, event.chunkId)
                 build.isBuilt = true
 
             end
@@ -519,7 +519,7 @@ local function onTick ()
             if record.groupId == "playing" then
                 local player = dio.world.getPlayerXyz (record.accountId)
                 if player then
-                    local newY = player.chunkId.y * 32 + player.xyz.y
+                    local newY = player.chunkId [1] * 32 + player.xyz [1]
                     record.score = record.score - (newY - record.currentY)
                     record.currentY = newY
                 end

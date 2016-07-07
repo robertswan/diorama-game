@@ -139,7 +139,7 @@ local function onClientConnected (event)
         needsSaving = event.isSinglePlayer,
         roomFolderIdx = roomIndices [playerParams.avatar.roomFolder],
         playerEntityId = playerEntityId,
-        isInPlaceTeleporterMode = true,
+        isInPlaceTeleporterMode = false,
     }
 
     if settings and isPasswordCorrect then
