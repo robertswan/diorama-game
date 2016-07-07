@@ -30,29 +30,6 @@ end
 
 --------------------------------------------------
 -- DUPE CODE
-local function getEmoteID (text)
-    -- Returns the emote ID or -1 if unsucessful
-    local emoteID = -1
-
-    if string.sub (text, 1, 1) == emoteSpecs.emoteStartChar then
-        local newString = string.sub (text, 2, string.len(text))
-
-        local i = 1
-        while emotes[i] ~= nil do
-            local emoteName = emotes[i].name
-            if newString == emoteName then
-                emoteID = i
-            end
-            i = i + 1
-        end
-
-    end
-
-    return emoteID
-end
-
---------------------------------------------------
--- DUPE CODE
 local function renderChatLine (self, line, y)
     
     local drawString = dio.drawing.font.drawString
@@ -60,29 +37,32 @@ local function renderChatLine (self, line, y)
     drawString (0, y, line.author, 0x000000ff, true)
     drawString (0, y + 2, line.author, 0xffff00ff, true)
 
-    local i = 1;
     local x = self.textOffset
 
-    while line.textList[i] ~= nil do
-        local curText = line.textList[i]
-        local emoteID = getEmoteID(curText)
+    for _, word in ipairs (line.textList) do
 
-        if emoteID > 0 then
-            -- draw the emote
-            local u, v = emotes[emoteID].uvs[1], emotes[emoteID].uvs[2]
-            dio.drawing.drawTextureRegion2 (self.emoteTexture,      x, y, 
-                                            emoteSpecs.renderWidth, emoteSpecs.renderHeight, 
-                                            u * emoteSpecs.width,   v * emoteSpecs.height, 
-                                            emoteSpecs.width,       emoteSpecs.height)
-            x = x + emoteSpecs.renderWidth
-        else
-            -- draw the string (with shadow)
-            drawString (x, y, curText, 0x000000ff, true)
-            drawString (x, y+2, curText, 0xffffffff, true)
-            x = x + dio.drawing.font.measureString (line.textList[i])
-        end 
+        if word then
 
-        i = i + 1
+            local emote = emotes [word]   
+
+            if emote then
+                -- draw the emote
+                local u, v = emote.uvs [1], emote.uvs [2]
+
+                dio.drawing.drawTextureRegion2 (self.emoteTexture,      x, y, 
+                                                emoteSpecs.renderWidth, emoteSpecs.renderHeight, 
+                                                u * emoteSpecs.width,   v * emoteSpecs.height, 
+                                                emoteSpecs.width,       emoteSpecs.height)
+
+                x = x + emoteSpecs.renderWidth
+
+            else
+                -- draw the string (with shadow)
+                drawString (x, y, word, 0x000000ff, true)
+                drawString (x, y+2, word, 0xffffffff, true)
+                x = x + dio.drawing.font.measureString (word)
+            end 
+        end
     end
 end
 
