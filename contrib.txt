@@ -52,6 +52,7 @@
         - camboo
         - Carter9510
         - clstl
+        - cod1ngJamm3r
         - CozyDino
         - CritCrank
         - SarcasticDante
@@ -99,6 +100,7 @@
         - NeutralNoise
         - Nidaegwyn
         - OfficialEvilWalrus
+        - Old_Man_Gibbon
         - oliz001 the Explorer
         - OrangeGames3
         - Pjuke
