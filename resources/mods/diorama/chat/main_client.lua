@@ -397,9 +397,6 @@ local function onLoadSuccessful ()
         chatAppearKeyCode = dio.inputs.keyCodes.T,
         text = "",
         emoteTexture = dio.drawing.loadTexture ("resources/textures/emotes.png"),
-        emoteWidth = 32,
-        emoteHeight = 32,
-        emoteStartChar = "<",
 
         ticker =
         {
