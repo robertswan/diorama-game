@@ -46,6 +46,7 @@
         - AmazedStream
         - AutomateAllTheThings
         - Azenris
+        - BartonLeo
         - braffolk
         - bvdscheMe (http://bravadogaming.com/staff)
         - camboo
@@ -82,6 +83,7 @@
         - linco95
         - loqicxDev
         - LuaKT
+        - Leviathancy
         - Magnavode
         - Meursault
         - madkiwi
@@ -89,6 +91,7 @@
         - Meowcat2851
         - MHHN
         - Niceguy_3210
+        - nomadd917
         - Moopaloo
         - MrPancakeGuy___
         - N3rdFall
@@ -124,6 +127,8 @@
         - Toeger
         - treamous
         - Treborginho
+        - Typpi_77
+        - Unh0ly_Tigg
         - unpause_it
         - Walterman50
         - waterlimon
@@ -131,4 +136,5 @@
         - WizardNJ
         - xCosminPlays
         - zeiSt
+        - Zekronz
         - zlazeray

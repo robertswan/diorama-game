@@ -312,13 +312,14 @@ local function onClientConnected (event)
     local playerParams =
     {
         connectionId = event.connectionId,
-        roomFolder = roomFolders [gameVars.currentRoomIdx],
         avatar =
         {
-            chunkId = {x = 0, y = 0, z = 0},
-            xyz = {x = 15, y = 4, z = 15},
-            ypr = {x = 0, y = 0, z = 0}
-        },        
+            roomFolder = roomFolders [gameVars.currentRoomIdx],
+            chunkId = {0, 0, 0},
+            xyz = {15, 4, 15},
+            ypr = {0, 0, 0}
+        },    
+        gravityDir = 5,    
     }
 
     local entityId = dio.world.createPlayer (playerParams)
