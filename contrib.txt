@@ -85,20 +85,20 @@
         - loqicxDev
         - LuaKT
         - Leviathancy
-        - Magnavode
-        - Meursault
         - madkiwi
         - McBrainiac
         - Meowcat2851
+        - Meursault
         - MHHN
-        - Niceguy_3210
-        - nomadd917
+        - Magnavode
         - Mistapnut
         - Moopaloo
         - MrPancakeGuy___
         - N3rdFall
         - NeutralNoise
+        - Niceguy_3210
         - Nidaegwyn
+        - nomadd917
         - OfficialEvilWalrus
         - Old_Man_Gibbon
         - oliz001 the Explorer
