@@ -61,6 +61,11 @@ local function onPlayerPrimaryAction (event)
                 -- dio.blocks.destroySphere (event.entity.getXyz (), 10)
             end
         },
+
+        [components.MESH_PLACEHOLDER] =
+        {
+            modelId = "ROCKET",
+        }
     }
 
     local rocketEntity = dio.entities.create (settings)

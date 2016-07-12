@@ -2,13 +2,6 @@
 local instance = nil
 
 --------------------------------------------------
-local colors = 
-{
-    ok = "%8f8",
-    bad = "%f00",
-}
-
---------------------------------------------------
 local function onLateRender (self)
 
     local windowW, windowH = dio.drawing.getWindowSize ()
@@ -24,58 +17,20 @@ local function onLateRender (self)
             params.height)
 end
 
-
---------------------------------------------------
-local function teleportTo (x, y, z)
-
-    local setting = dio.world.getPlayerXyz (instance.myAccountId)
-
-    setting.chunkId = {0, 0, 0}
-    setting.xyz = {tonumber (x), tonumber (y), tonumber (z)}
-    setting.ypr = {0, 0, 0}
-
-    dio.world.setPlayerXyz (instance.myAccountId, setting)
-end
-
---------------------------------------------------
-local function onChatReceived (author, text)
-
-    if author == "PLUMMET_TP" then
-
-        local words = {}
-        for word in string.gmatch(text, "[^ ]+") do
-            table.insert (words, word)
-        end        
-
-        teleportTo (words [1], words [2], words [3])
-
-        return true
-
-    end
-end
-
---------------------------------------------------
-local function onClientConnected (event)
-    local self = instance
-    if event.isMe then
-        self.myAccountId = event.accountId
-    end
-end
-
 --------------------------------------------------
 local function onLoadSuccessful ()
 
     instance = 
     {
-        myAccountId = nil,
         crosshairTexture = dio.drawing.loadTexture ("resources/textures/crosshair.png"),
     }
 
     dio.drawing.addRenderPassAfter (1, function () onLateRender (instance) end)
     
-    local types = dio.events.types
-    dio.events.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatReceived)
-    dio.events.addListener (types.CLIENT_CLIENT_CONNECTED, onClientConnected)
+    -- local types = dio.events.types
+    -- dio.events.addListener (types.CLIENT_CLIENT_CONNECTED, onClientConnected)
+
+    -- dio.meshes.loadMesh ("ROCKET", "resources/meshes/rocket_mesh_00.dm")
 
 end
 
@@ -84,7 +39,7 @@ local modSettings =
 {
     description =
     {
-        name = "Plummet",
+        name = "Voxel Arena",
         description = "This is required to play the plummet game!",
         help =
         {
