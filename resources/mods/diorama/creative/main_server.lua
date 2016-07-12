@@ -329,7 +329,7 @@ local modSettings =
     {
         file = true,
         inputs = true,
-        player = true,
+        world = true,
     },
 }
 

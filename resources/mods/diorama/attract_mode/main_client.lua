@@ -127,7 +127,7 @@ local modSettings =
     permissionsRequired = 
     {
         drawing = true,
-        player = true,
+        world = true,
     },
 }
 

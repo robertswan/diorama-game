@@ -41,31 +41,54 @@ end
 --------------------------------------------------
 local function onPlayerPrimaryAction (event)
 
+    local connection = connections [event.connectionId]
+    local avatar = dio.world.getPlayerXyz (connection.accountId)
+
     local components = dio.entities.components
     local settings = 
     {
-        [components.TRANSFORM] =
+        [components.AABB_COLLIDER] = 
         {
-            chunk_id = {0, 0, 0},
-            xyz = {0.0, 0.0, 0.0},
+            min = {-0.1, -0.1, -0.1},
+            size = {0.2, 0.2, 0.2},
         },
 
-        [components.RIGID_BODY] = 
+        [components.COLLISION_LISTENER] = 
         {
-            min = {-0.25, -0.25, -0.25},
-            max = {0.25, 0.25, 0.25},
-            velocity = {1.0, 0.0, 0.0},
-
             onCollision = function (event) 
                 dio.entities.destroy (event.entity) 
                 -- dio.blocks.destroySphere (event.entity.getXyz (), 10)
-            end
+            end            
         },
 
         [components.MESH_PLACEHOLDER] =
         {
-            modelId = "ROCKET",
-        }
+            blueprintId = "ROCKET",
+        },
+
+        [components.NETWORK_SYNC] = 
+        {
+            -- with this line out, we use the regular chooser
+            --shouldSync = function (event) return true end,
+        },
+
+        [components.PARENT] = 
+        {
+            parentEntityId = event.roomEntityId,
+        },        
+
+        [components.RIGID_BODY] = 
+        {
+            velocity = {0.0, 0.0, 0.0},
+            acceleration = {0.0, -9.806 * 1.0, 0.0},
+        },
+
+        [components.TRANSFORM] =
+        {
+            chunkId = avatar.chunkId,
+            xyz = avatar.xyz,
+            ypr = avatar.ypr,
+        },
     }
 
     local rocketEntity = dio.entities.create (settings)
@@ -102,7 +125,8 @@ local modSettings =
     {
         entities = true,
         events = true,
-        player = true,
+        world = true,
+        world = true,
     },
 }
 

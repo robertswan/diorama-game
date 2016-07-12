@@ -24,7 +24,7 @@ local function main ()
         blocks = true,
         drawing = true,
         file = true,
-        player = true,
+        world = true,
         serverChat = true,
         session = true,
     }

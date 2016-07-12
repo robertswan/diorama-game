@@ -25,7 +25,7 @@ local function main ()
         drawing = true,
         entities = true,
         file = true,
-        player = true,
+        world = true,
         serverChat = true,
         session = true,
     }

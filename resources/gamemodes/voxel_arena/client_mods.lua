@@ -35,7 +35,7 @@ local function main ()
         diagnostics = true,
         drawing = true,
         file = true,
-        player = true,
+        world = true,
         input = true,
     }
 

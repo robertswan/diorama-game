@@ -49,7 +49,7 @@ local function main ()
         drawing = true,
         diagnostics = true,
         file = true,
-        player = true,
+        world = true,
         input = true,
     }
 

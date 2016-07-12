@@ -129,7 +129,7 @@ local modSettings =
     {
         drawing = true,
         diagnostics = true,
-        player = true,
+        world = true,
         input = true,
     },
 }
