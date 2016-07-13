@@ -41,16 +41,19 @@ end
 --------------------------------------------------
 local function onPlayerPrimaryAction (event)
 
-    local connection = connections [event.connectionId]
-    local avatar = dio.world.getPlayerXyz (connection.accountId)
-
     local components = dio.entities.components
-    local settings = 
+    local rocketEntitySettings = 
     {
         [components.AABB_COLLIDER] = 
         {
             min = {-0.1, -0.1, -0.1},
             size = {0.2, 0.2, 0.2},
+        },
+
+        [components.BASE_NETWORK] =
+        {
+            -- with this line out, we use the regular chooser
+            --shouldSync = function (event) return true end,
         },
 
         [components.COLLISION_LISTENER] = 
@@ -66,15 +69,8 @@ local function onPlayerPrimaryAction (event)
             blueprintId = "ROCKET",
         },
 
-        [components.NETWORK_SYNC] = 
-        {
-            -- with this line out, we use the regular chooser
-            --shouldSync = function (event) return true end,
-        },
-
         [components.PARENT] = 
         {
-            parentEntityId = event.roomEntityId,
         },        
 
         [components.RIGID_BODY] = 
@@ -85,13 +81,29 @@ local function onPlayerPrimaryAction (event)
 
         [components.TRANSFORM] =
         {
-            chunkId = avatar.chunkId,
-            xyz = avatar.xyz,
-            ypr = avatar.ypr,
         },
     }
 
-    local rocketEntity = dio.entities.create (settings)
+
+
+
+
+    -- pretend nice code on how to create a new rocket entity!
+
+    local connection = connections [event.connectionId]
+    local avatar = dio.world.getPlayerXyz (connection.accountId)
+
+    local parent = rocketEntitySettings [components.PARENT]
+    parent.parentEntityId = event.roomEntityId
+
+    local transform = rocketEntitySettings [components.TRANSFORM]
+    transform.chunkId = avatar.chunkId
+    transform.xyz = avatar.xyz
+    transform.ypr = avatar.ypr
+
+    transform.xyz [2] = transform.xyz [2] + 20
+
+    local rocketEntity = dio.entities.create (rocketEntitySettings)
 
     event.cancel = true
 end
