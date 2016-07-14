@@ -210,19 +210,22 @@ end
 --------------------------------------------------
 local function onEntityPlaced (event)
 
-    local connection = connections [event.connectionId]
-    local group = groups [connection.groupId]
+    if event.isBlockValid then
 
-    local isPlacingSpongeBlock = (event.sourceBlockId == 28)
-    if isPlacingSpongeBlock then
-        event.cancel = not (group.canPlaceTeleporters and connection.isInPlaceTeleporterMode)
-    else
-        local isClickingOnSpongeBlock = (event.destinationBlockId == 28)
-        if isClickingOnSpongeBlock then
-            teleportPlayerToRoom (connection)
-            event.cancel = true
+        local connection = connections [event.connectionId]
+        local group = groups [connection.groupId]
+
+        local isPlacingSpongeBlock = (event.sourceBlockId == 28)
+        if isPlacingSpongeBlock then
+            event.cancel = not (group.canPlaceTeleporters and connection.isInPlaceTeleporterMode)
         else
-            event.cancel = not group.canBuild
+            local isClickingOnSpongeBlock = (event.destinationBlockId == 28)
+            if isClickingOnSpongeBlock then
+                teleportPlayerToRoom (connection)
+                event.cancel = true
+            else
+                event.cancel = not group.canBuild
+            end
         end
     end
 end
@@ -230,22 +233,24 @@ end
 --------------------------------------------------
 local function onEntityDestroyed (event)
 
-    local connection = connections [event.connectionId]
-    local group = groups [connection.groupId]
+    if event.isBlockValid then
 
-    local isSpongeBlock = (event.destinationBlockId == 28) -- true
-    if isSpongeBlock then
+        local connection = connections [event.connectionId]
+        local group = groups [connection.groupId]
 
-        if group.canPlaceTeleporters and connection.isInPlaceTeleporterMode then
+        local isSpongeBlock = (event.destinationBlockId == 28) -- true
+        if isSpongeBlock then
+
+            if group.canPlaceTeleporters and connection.isInPlaceTeleporterMode then
+            else
+                teleportPlayerToRoom (connection)
+                event.cancel = true
+            end
+
         else
-            teleportPlayerToRoom (connection)
-            event.cancel = true
+            event.cancel = not group.canDestroy
         end
-
-    else
-        event.cancel = not group.canDestroy
     end
-
 end
 
 --------------------------------------------------
