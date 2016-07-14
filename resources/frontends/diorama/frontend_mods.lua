@@ -21,7 +21,7 @@ require ("resources/mods/diorama/frontend_menus/main")
 --         blocks = true,
 --         drawing = true,
 --         file = true,
---         player = true,
+--         world = true,
 --     }
 
 --     for _, modData in ipairs (modsToLoad) do

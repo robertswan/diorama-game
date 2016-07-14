@@ -108,7 +108,7 @@ local modSettings =
 
     permissionsRequired = 
     {
-        player = true,
+        world = true,
         file = true,
     },
 }

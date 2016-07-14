@@ -7,7 +7,7 @@ local modsToLoad =
         versionRequired = {major = 1, minor = 0},
     },    
     {
-        folder = "plummet",
+        folder = "voxel_arena",
         modName = "game_logic",
         versionRequired = {major = 1, minor = 0},
     },
@@ -23,6 +23,7 @@ local function main ()
     {
         blocks = true,
         drawing = true,
+        entities = true,
         file = true,
         world = true,
         serverChat = true,
