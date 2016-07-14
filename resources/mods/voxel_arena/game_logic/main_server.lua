@@ -69,13 +69,20 @@ local function onPlayerPrimaryAction (event)
             blueprintId = "ROCKET",
         },
 
+        [components.NAME] =
+        {
+            name = "ROCKET",
+            debug = true,
+        },
+
         [components.PARENT] = 
         {
         },        
 
         [components.RIGID_BODY] = 
         {
-            velocity = {0.0, 0.0, 0.0},
+            --velocity = {0.0, 0.0, 0.0},
+            --acceleration = {0.0, 0.0, 0.0}
             acceleration = {0.0, -9.806 * 1.0, 0.0},
         },
 
@@ -100,10 +107,12 @@ local function onPlayerPrimaryAction (event)
     transform.chunkId = avatar.chunkId
     transform.xyz = avatar.xyz
     transform.ypr = avatar.ypr
+    transform.xyz [2] = transform.xyz [2] + 1.0
 
-    transform.xyz [2] = transform.xyz [2] + 20
+    local rigidBody = rocketEntitySettings [components.RIGID_BODY]
+    rigidBody.forwardSpeed = 30.0
 
-    local rocketEntity = dio.entities.create (rocketEntitySettings)
+    dio.entities.create (rocketEntitySettings)
 
     event.cancel = true
 end
