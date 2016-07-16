@@ -44,6 +44,7 @@
         - AcarX
         - Adrian213
         - AmazedStream
+        - Ash_NL
         - AutomateAllTheThings
         - Azenris
         - BartonLeo
@@ -51,7 +52,9 @@
         - bvdscheMe (http://bravadogaming.com/staff)
         - camboo
         - Carter9510
+        - caviar
         - clstl
+        - Cheeseball_Lord
         - cod1ngJamm3r
         - CozyDino
         - CritCrank
@@ -61,6 +64,7 @@
         - DiggingDJ_
         - Diode369
         - doublenibble
+        - DrunkDevs
         - Eksitus
         - emytofast
         - Expatiator
@@ -134,6 +138,7 @@
         - Typpi_77
         - Unh0ly_Tigg
         - unpause_it
+        - Waise Milliams
         - Walterman50
         - waterlimon
         - whiteland92

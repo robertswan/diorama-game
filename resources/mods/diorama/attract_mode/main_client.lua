@@ -81,13 +81,13 @@ local function onClientConnected (event)
 end
 
 --------------------------------------------------
-local function onClientUpdated ()
+local function onClientUpdated (event)
 
     local self = instance
     if self.isVisible and self.myAccountId then
         local xyz, error = dio.world.getPlayerXyz (self.myAccountId)
         if xyz then
-            xyz.ypr [2] = xyz.ypr [2] + 0.005
+            xyz.ypr [2] = xyz.ypr [2] + event.timeDelta * 0.3
             dio.world.setPlayerXyz (self.myAccountId, xyz)
         end                    
     end
