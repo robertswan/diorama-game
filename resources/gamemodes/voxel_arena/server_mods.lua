@@ -25,9 +25,9 @@ local function main ()
         drawing = true,
         entities = true,
         file = true,
-        world = true,
-        serverChat = true,
+        network = true,
         session = true,
+        world = true,
     }
 
     for _, modData in ipairs (modsToLoad) do

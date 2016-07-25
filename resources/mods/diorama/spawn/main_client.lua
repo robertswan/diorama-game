@@ -82,11 +82,12 @@ local function onChatMessagePreSent (text)
 end
 
 --------------------------------------------------
-local function onChatMessageReceived (author, text)
-    if author == ".home" then
+local function onServerMessageReceived (event)
+
+    if event.author == "HOME" then
 
         local words = {}
-        for word in string.gmatch(text, "[^ ]+") do
+        for word in string.gmatch (event.text, "[^ ]+") do
             table.insert (words, word)
         end
 
@@ -94,8 +95,9 @@ local function onChatMessageReceived (author, text)
         local y = tonumber (words [2])
         local z = tonumber (words [3])
 
-        local playerId = dio.world.getPlayerNames () [1]
         teleportTo (x, y, z)
+
+        event.cancel = true
     end
 end
 
@@ -114,10 +116,10 @@ local function onLoadSuccessful ()
         myAccountId = nil,
     }
 
-    local types = dio.events.types
-    dio.events.addListener (types.CLIENT_CHAT_MESSAGE_PRE_SENT, onChatMessagePreSent)
-    dio.events.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatMessageReceived)
-    dio.events.addListener (types.CLIENT_CLIENT_CONNECTED, onClientConnected)
+    local types = dio.events.clientTypes
+    dio.events.addListener (types.CHAT_MESSAGE_PRE_SENT, onChatMessagePreSent)
+    dio.events.addListener (types.SERVER_EVENT_RECEIVED, onServerMessageReceived)
+    dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
 end
 
 --------------------------------------------------

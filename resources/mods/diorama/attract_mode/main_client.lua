@@ -97,8 +97,8 @@ end
 --------------------------------------------------
 local function onLoadSuccessful ()
 
-    local types = dio.events.types
-    dio.events.addListener (types.CLIENT_CHAT_MESSAGE_PRE_SENT, onChatMessagePreSent)
+    local types = dio.events.clientTypes
+    dio.events.addListener (types.CHAT_MESSAGE_PRE_SENT, onChatMessagePreSent)
 
     instance = 
     {
@@ -113,8 +113,8 @@ local function onLoadSuccessful ()
     dio.drawing.addRenderPassBefore (1.0, function () onEarlyRender (instance) end)
     dio.drawing.addRenderPassAfter (1.0, function () onLateRender (instance) end)
 
-    dio.events.addListener (types.CLIENT_CLIENT_CONNECTED, onClientConnected)
-    dio.events.addListener (types.CLIENT_UPDATED, onClientUpdated)
+    dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
+    dio.events.addListener (types.UPDATED, onClientUpdated)
 end
 
 --------------------------------------------------

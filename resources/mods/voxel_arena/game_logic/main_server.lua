@@ -125,11 +125,11 @@ end
 --------------------------------------------------
 local function onLoadSuccessful ()
 
-    local types = dio.events.types
-    dio.events.addListener (types.SERVER_CLIENT_CONNECTED, onClientConnected)
-    dio.events.addListener (types.SERVER_CLIENT_DISCONNECTED, onClientDisconnected)
-    dio.events.addListener (types.SERVER_ENTITY_PLACED, onPlayerPrimaryAction)
-    dio.events.addListener (types.SERVER_ENTITY_DESTROYED, onPlayerSecondaryAction)
+    local types = dio.events.serverTypes
+    dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
+    dio.events.addListener (types.CLIENT_DISCONNECTED, onClientDisconnected)
+    dio.events.addListener (types.ENTITY_PLACED, onPlayerPrimaryAction)
+    dio.events.addListener (types.ENTITY_DESTROYED, onPlayerSecondaryAction)
 
 end
 

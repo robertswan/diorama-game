@@ -383,12 +383,12 @@ local function onLoadSuccessful ()
 
     -- dio.players.setPlayerAction (player, actions.LEFT_CLICK, outcomes.DESTROY_BLOCK)
 
-    local types = dio.events.types
-    dio.events.addListener (types.SERVER_CLIENT_CONNECTED, onClientConnected)
-    dio.events.addListener (types.SERVER_CLIENT_DISCONNECTED, onClientDisconnected)
-    dio.events.addListener (types.SERVER_ENTITY_PLACED, onEntityPlaced)
-    dio.events.addListener (types.SERVER_ENTITY_DESTROYED, onEntityDestroyed)
-    dio.events.addListener (types.SERVER_CHAT_RECEIVED, onChatReceived)
+    local types = dio.events.serverTypes
+    dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
+    dio.events.addListener (types.CLIENT_DISCONNECTED, onClientDisconnected)
+    dio.events.addListener (types.ENTITY_PLACED, onEntityPlaced)
+    dio.events.addListener (types.ENTITY_DESTROYED, onEntityDestroyed)
+    dio.events.addListener (types.CHAT_RECEIVED, onChatReceived)
 
 end
 

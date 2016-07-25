@@ -169,7 +169,7 @@ local function updateScores ()
     --         ":"
 
     for _, connection in pairs (connections) do
-        dio.serverChat.send (connection.connectionId, "SCORE", text)
+        dio.network.sendEvent (connection.connectionId, "SCORE", text)
     end
 
     return scores [1]
@@ -185,7 +185,7 @@ local coordinates =
 --------------------------------------------------
 local function teleportPlayer (connectionId, coordinatesId)
 
-    dio.serverChat.send (connectionId, "PLUMMET_TP", coordinates [coordinatesId])
+    dio.network.sendEvent (connectionId, "PLUMMET_TP", coordinates [coordinatesId])
 end    
 
 --------------------------------------------------
@@ -259,7 +259,8 @@ local function startGame ()
             player.currentY = 2
         end
         player.score = 0
-        dio.serverChat.send (player.connectionId, "START", "Let the game begin!")
+        dio.network.sendEvent (player.connectionId, "START")
+        dio.network.sendChat (player.connectionId, "START", "Let the game begin!")
     end
 
     gameVars.playersPlayingCount = gameVars.playersReadyCount
@@ -276,7 +277,8 @@ local function endGame ()
         local text = "The winner is: " .. winner.accountId
 
         for _, connection in pairs (connections) do
-            dio.serverChat.send (connection.connectionId, "RESULT", text)
+            dio.network.sendNetwork (connection.connectionId, "RESULT")
+            dio.network.sendChat (connection.connectionId, "RESULT", text)
         end    
     end
 
@@ -546,16 +548,16 @@ local function onLoadSuccessful ()
 
     -- dio.players.setPlayerAction (player, actions.LEFT_CLICK, outcomes.DESTROY_BLOCK)
 
-    local types = dio.events.types
-    dio.events.addListener (types.SERVER_CLIENT_CONNECTED, onClientConnected)
-    dio.events.addListener (types.SERVER_CLIENT_DISCONNECTED, onClientDisconnected)
-    -- dio.events.addListener (types.SERVER_PLAYER_READY, onPlayerReady)
-    dio.events.addListener (types.SERVER_ROOM_CREATED, onRoomCreated)
-    dio.events.addListener (types.SERVER_ENTITY_PLACED, onEntityPlaced)
-    dio.events.addListener (types.SERVER_ENTITY_DESTROYED, onEntityDestroyed)
-    dio.events.addListener (types.SERVER_CHAT_RECEIVED, onChatReceived)
-    dio.events.addListener (types.SERVER_CHUNK_GENERATED, onChunkGenerated)
-    dio.events.addListener (types.SERVER_TICK, onTick)
+    local types = dio.events.serverTypes
+    dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
+    dio.events.addListener (types.CLIENT_DISCONNECTED, onClientDisconnected)
+    -- dio.events.addListener (types.PLAYER_READY, onPlayerReady)
+    dio.events.addListener (types.ROOM_CREATED, onRoomCreated)
+    dio.events.addListener (types.ENTITY_PLACED, onEntityPlaced)
+    dio.events.addListener (types.ENTITY_DESTROYED, onEntityDestroyed)
+    dio.events.addListener (types.CHAT_RECEIVED, onChatReceived)
+    dio.events.addListener (types.CHUNK_GENERATED, onChunkGenerated)
+    dio.events.addListener (types.TICK, onTick)
 
 end
 
@@ -579,7 +581,7 @@ local modSettings =
     {
         file = true,
         world = true,
-        serverChat = true,
+        network = true,
         session = true,
         world = true,
     },

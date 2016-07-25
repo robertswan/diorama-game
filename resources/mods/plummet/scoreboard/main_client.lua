@@ -109,7 +109,7 @@ end
 -- end
 
 --------------------------------------------------
-local function onChatReceived (author, text)
+local function onServerEventReceived (author, text)
 
     local self = instance
 
@@ -164,8 +164,8 @@ local function onLoadSuccessful ()
     dio.drawing.addRenderPassBefore (1.0, function () onEarlyRender (instance) end)
     dio.drawing.addRenderPassAfter (1.0, function () onLateRender (instance) end)
 
-    local types = dio.events.types
-    dio.events.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatReceived)
+    local types = dio.events.clientTypes
+    dio.events.addListener (types.SERVER_EVENT_RECEIVED, onServerEventReceived)
 end
 
 --------------------------------------------------
