@@ -316,9 +316,9 @@ local function onLoadSuccessful ()
     dio.drawing.addRenderPassBefore (1, function () onEarlyRender (instance) end)
     dio.drawing.addRenderPassAfter (1, function () onLateRender (instance) end)
 
-    local types = dio.events.types
-    dio.events.addListener (types.CLIENT_KEY_CLICKED, onKeyClicked)
-    dio.events.addListener (types.CLIENT_CHAT_MESSAGE_PRE_SENT, onChatMessagePreSent)
+    local types = dio.events.clientTypes
+    dio.events.addListener (types.KEY_CLICKED, onKeyClicked)
+    dio.events.addListener (types.CHAT_MESSAGE_PRE_SENT, onChatMessagePreSent)
 
     setInventoryItem (instance.currentBlockId)
 

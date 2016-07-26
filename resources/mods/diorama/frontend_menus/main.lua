@@ -83,12 +83,12 @@ local function main ()
     dio.drawing.addRenderPassBefore (10.0, onEarlyRender)
     dio.drawing.addRenderPassAfter (10.0, onLateRender)
 
-    local types = dio.events.types
-    dio.events.addListener (types.CLIENT_UPDATED,                         onUpdated)
-    dio.events.addListener (types.CLIENT_WINDOW_FOCUS_LOST,               onWindowFocusLost)
-    dio.events.addListener (types.CLIENT_SESSION_SHUTDOWN_BEGUN,          onSessionShutdownBegun)
-    dio.events.addListener (types.CLIENT_SESSION_SHUTDOWN_COMPLETED,      onSessionShutdownCompleted)
-    dio.events.addListener (types.CLIENT_APPLICATION_SHUTDOWN,            onApplicationShutdown)
+    local types = dio.events.clientTypes
+    dio.events.addListener (types.UPDATED,                         onUpdated)
+    dio.events.addListener (types.WINDOW_FOCUS_LOST,               onWindowFocusLost)
+    dio.events.addListener (types.SESSION_SHUTDOWN_BEGUN,          onSessionShutdownBegun)
+    dio.events.addListener (types.SESSION_SHUTDOWN_COMPLETED,      onSessionShutdownCompleted)
+    dio.events.addListener (types.APPLICATION_SHUTDOWN,            onApplicationShutdown)
 
     local menu_path = "resources/mods/diorama/frontend_menus/"
     local terrain_path = menu_path .. "terrain_types/"

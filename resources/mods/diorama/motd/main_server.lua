@@ -8,7 +8,7 @@ local connections = {}
 --------------------------------------------------
 local function onClientConnected (event)
 
-    dio.serverChat.send (event.connectionId, motdAuthor, motd)
+    dio.network.sendChat (event.connectionId, motdAuthor, motd)
 
 end
 
@@ -31,9 +31,9 @@ end
 --------------------------------------------------
 local function onLoadSuccessful ()
 
-    local types = dio.events.types
-    dio.events.addListener (types.SERVER_CLIENT_CONNECTED, onClientConnected)
-    dio.events.addListener (types.SERVER_CHAT_RECEIVED, onChatReceived)
+    local types = dio.events.serverTypes
+    dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
+    dio.events.addListener (types.CHAT_RECEIVED, onChatReceived)
 
 end
 
@@ -52,7 +52,7 @@ local modSettings =
 
     permissionsRequired = 
     {
-        serverChat = true,
+        network = true,
     },
 }
 

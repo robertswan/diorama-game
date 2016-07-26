@@ -10,11 +10,11 @@ function c:changeMenu (newMenuName)
 
     if newMenuName then
 
-        if self.current_menu then
-            print ("changing to menu " .. newMenuName .. " from " .. self.current_menu_name)
-        else
-            print ("changing to menu " .. newMenuName)
-        end
+        -- if self.current_menu then
+        --     print ("changing to menu " .. newMenuName .. " from " .. self.current_menu_name)
+        -- else
+        --     print ("changing to menu " .. newMenuName)
+        -- end
 
         if self.current_menu then
             self.current_menu:onExit (self.menus)
@@ -126,8 +126,8 @@ return function (all_menus, initial_menu_name)
 
     instance.renderToTexture = dio.drawing.createRenderToTexture (instance.w, instance.h)
 
-    local types = dio.events.types
-    dio.events.addListener (types.CLIENT_KEY_CLICKED, function (keyCode, keyCharacter, keyModifier) return instance:onKeyClicked (keyCode, keyCharacter, keyModifier) end)
+    local types = dio.events.clientTypes
+    dio.events.addListener (types.KEY_CLICKED, function (keyCode, keyCharacter, keyModifier) return instance:onKeyClicked (keyCode, keyCharacter, keyModifier) end)
 
     Mixin.CopyTo (instance, c)
 

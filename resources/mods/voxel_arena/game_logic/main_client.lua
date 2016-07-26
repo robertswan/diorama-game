@@ -27,8 +27,8 @@ local function onLoadSuccessful ()
 
     dio.drawing.addRenderPassAfter (1, function () onLateRender (instance) end)
     
-    -- local types = dio.events.types
-    -- dio.events.addListener (types.CLIENT_CLIENT_CONNECTED, onClientConnected)
+    -- local types = dio.events.clientTypes
+    -- dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
 
     -- dio.meshes.loadMesh ("ROCKET", "resources/meshes/rocket_mesh_00.dm")
 

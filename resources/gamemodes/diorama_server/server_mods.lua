@@ -34,8 +34,8 @@ local function main ()
         blocks = true,
         drawing = true,
         file = true,
+        network = true,
         world = true,
-        serverChat = true,
     }
 
     for _, modData in ipairs (modsToLoad) do

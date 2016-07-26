@@ -180,7 +180,7 @@ local function onLateRender (self)
 end
 
 --------------------------------------------------
-local function onChatMessageReceived (author, text)
+local function onChatMessageReceived (event)
 
     local self = instance
 
@@ -192,7 +192,7 @@ local function onChatMessageReceived (author, text)
     -- keep track of the lines to create ticker lines from
     local linesAdded = {}
 
-    for word in string.gmatch (text, "%S+") do
+    for word in string.gmatch (event.text, "%S+") do
         local wordLength = dio.drawing.font.measureString (word)
         local isEmote = false
 
@@ -205,8 +205,8 @@ local function onChatMessageReceived (author, text)
         if wordLength + spaceWidth > spaceLeft then
             -- Line has exceed maximum line length, split rest into another line
             table.insert (currentLine, currentString)
-            table.insert (self.lines, { author = author, textList = currentLine })
-            table.insert (linesAdded, { author = author, textList = currentLine })
+            table.insert (self.lines, { author = event.author, textList = currentLine })
+            table.insert (linesAdded, { author = event.author, textList = currentLine })
             currentLine = {}
 
             if isEmote then
@@ -232,8 +232,8 @@ local function onChatMessageReceived (author, text)
     end
 
     table.insert (currentLine, currentString)
-    table.insert (self.lines, { author = author, textList = currentLine })
-    table.insert (linesAdded, { author = author, textList = currentLine })
+    table.insert (self.lines, { author = event.author, textList = currentLine })
+    table.insert (linesAdded, { author = event.author, textList = currentLine })
 
     if self.autoScroll then
         self.firstLineToDraw = #self.lines - self.chatLinesToDraw + 1
@@ -297,7 +297,7 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
                 
                 local isOk, errorStr = dio.clientChat.send (trimmedText)
                 if not isOk then
-                    onChatMessageReceived ("Self", "Last message did not send! (" .. errorStr .. ")")
+                    onChatMessageReceived ({author = "Self", text = "Last message did not send! (" .. errorStr .. ")"})
                 end
             end
 			
@@ -364,12 +364,12 @@ end
 
 --------------------------------------------------
 local function onClientConnected (event)
-    onChatMessageReceived ("SERVER", event.accountId .. " connected.")
+    onChatMessageReceived ({author = "SERVER", text = event.accountId .. " connected."})
 end
 
 --------------------------------------------------
 local function onClientDisconnected (event)
-    onChatMessageReceived ("SERVER", event.accountId .. " disconnected.")
+    onChatMessageReceived ({author = "SERVER", text = event.accountId .. " disconnected."})
 end
 
 --------------------------------------------------
@@ -409,11 +409,11 @@ local function onLoadSuccessful ()
     dio.drawing.addRenderPassBefore (1.0, function () onEarlyRender (instance) end)
     dio.drawing.addRenderPassAfter (1.0, function () onLateRender (instance) end)
 
-    local types = dio.events.types
-    dio.events.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatMessageReceived)
-    dio.events.addListener (types.CLIENT_KEY_CLICKED, onKeyClicked)
-    dio.events.addListener (types.CLIENT_CLIENT_CONNECTED, onClientConnected)
-    dio.events.addListener (types.CLIENT_CLIENT_DISCONNECTED, onClientDisconnected)
+    local types = dio.events.clientTypes
+    dio.events.addListener (types.CHAT_RECEIVED, onChatMessageReceived)
+    dio.events.addListener (types.KEY_CLICKED, onKeyClicked)
+    dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
+    dio.events.addListener (types.CLIENT_DISCONNECTED, onClientDisconnected)
 
 end
 

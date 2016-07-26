@@ -48,6 +48,7 @@
         - AutomateAllTheThings
         - Azenris
         - BartonLeo
+        - bowbow
         - braffolk
         - bvdscheMe (http://bravadogaming.com/staff)
         - camboo
@@ -55,6 +56,7 @@
         - caviar
         - clstl
         - Cheeseball_Lord
+        - ChrisWard9000
         - cod1ngJamm3r
         - CozyDino
         - CritCrank
@@ -63,6 +65,7 @@
         - dgendreau
         - DiggingDJ_
         - Diode369
+        - dKrisis
         - doublenibble
         - DrunkDevs
         - Eksitus
@@ -108,6 +111,7 @@
         - Old_Man_Gibbon
         - oliz001 the Explorer
         - OrangeGames3
+        - Phestek
         - Pjuke
         - QeraiX
         - RadstaR
@@ -133,6 +137,7 @@
         - ticedev
         - TinHammer
         - Toeger
+        - totalrandomstuff
         - treamous
         - Treborginho
         - Typpi_77

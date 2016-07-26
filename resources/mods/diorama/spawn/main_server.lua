@@ -58,12 +58,16 @@ local function onChatReceived (event)
 
         if connection.homeLocation then
             local t = connection.homeLocation
-            event.author = ".home"
-            event.text = 
+            local text = 
                 tostring (t.chunkId [1] * 32 + t.xyz [1]) .. " " .. 
                 tostring (t.chunkId [2] * 32 + t.xyz [2]) .. " " .. 
                 tostring (t.chunkId [3] * 32 + t.xyz [3])
+
+            dio.network.sendEvent (event.authorConnectionId, "spawn.HOME", text)
+            event.cancel = true
+
         else
+            
             event.author = "SERVER"
             event.text = "No home position set."
         end
@@ -91,10 +95,10 @@ end
 --------------------------------------------------
 local function onLoadSuccessful ()
 
-    local types = dio.events.types
-    dio.events.addListener (types.SERVER_CLIENT_CONNECTED, onClientConnected)
-    dio.events.addListener (types.SERVER_CLIENT_DISCONNECTED, onClientDisconnected)
-    dio.events.addListener (types.SERVER_CHAT_RECEIVED, onChatReceived)
+    local types = dio.events.serverTypes
+    dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
+    dio.events.addListener (types.CLIENT_DISCONNECTED, onClientDisconnected)
+    dio.events.addListener (types.CHAT_RECEIVED, onChatReceived)
 end
 
 --------------------------------------------------
@@ -108,8 +112,9 @@ local modSettings =
 
     permissionsRequired = 
     {
-        world = true,
         file = true,
+        network = true,
+        world = true,
     },
 }
 

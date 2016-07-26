@@ -63,36 +63,40 @@ local function onLateRender (self)
 end
 
 --------------------------------------------------
-local function onChatReceived (author, text)
+local function onServerEventReceived (event)
 
-    local self = instance
-    
-    if author == "RESULT" then
+    if event.id == "plummet.RESULT" then
+        
         isJoined = false;
         isReady = false;
         self.isVisible = true
         self.isDirty = true
+
+        event.cancel = true
     end
-        
-    if text == texts.noJoin and not isJoined then
+
+end
+
+--------------------------------------------------
+local function onChatReceived (event)
+
+    local self = instance
+      
+    if event.text == texts.noJoin and not isJoined then
         isJoined = false
         self.isDirty = true
-        return true
         
     elseif text == texts.noReady and not isReady then
         isReady = false
         self.isDirty = true
-        return true
         
     elseif text == texts.okJoin then
         isJoined = true
         self.isDirty = true
-        return true
         
     elseif text == texts.okReady then
         isReady = true
         self.isVisible = false
-        return true
         
     end
     
@@ -135,9 +139,10 @@ local function onLoadSuccessful ()
     dio.drawing.addRenderPassBefore (1.0, function () onEarlyRender (instance) end)
     dio.drawing.addRenderPassAfter (1.0, function () onLateRender (instance) end)    
     
-    local types = dio.events.types
-    dio.events.addListener (types.CLIENT_CHAT_MESSAGE_RECEIVED, onChatReceived)
-    dio.events.addListener (types.CLIENT_KEY_CLICKED, onKeyClicked)
+    local types = dio.events.clientTypes
+    dio.events.addListener (types.SERVER_EVENT_RECEIVED, onServerEventReceived)
+    dio.events.addListener (types.CHAT_RECEIVED, onChatReceived)
+    dio.events.addListener (types.KEY_CLICKED, onKeyClicked)
 end
 
 --------------------------------------------------
