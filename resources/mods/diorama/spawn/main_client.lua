@@ -82,12 +82,12 @@ local function onChatMessagePreSent (text)
 end
 
 --------------------------------------------------
-local function onServerMessageReceived (event)
+local function onServerEventReceived (event)
 
-    if event.author == "HOME" then
+    if event.id == "spawn.HOME" then
 
         local words = {}
-        for word in string.gmatch (event.text, "[^ ]+") do
+        for word in string.gmatch (event.payload, "[^ ]+") do
             table.insert (words, word)
         end
 
@@ -118,7 +118,7 @@ local function onLoadSuccessful ()
 
     local types = dio.events.clientTypes
     dio.events.addListener (types.CHAT_MESSAGE_PRE_SENT, onChatMessagePreSent)
-    dio.events.addListener (types.SERVER_EVENT_RECEIVED, onServerMessageReceived)
+    dio.events.addListener (types.SERVER_EVENT_RECEIVED, onServerEventReceived)
     dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
 end
 

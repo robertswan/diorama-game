@@ -109,7 +109,7 @@ end
 -- end
 
 --------------------------------------------------
-local function onServerEventReceived (author, text)
+local function onServerEventReceived (event)
 
     local self = instance
 
@@ -117,27 +117,30 @@ local function onServerEventReceived (author, text)
     -- table.insert (self.scores, "yo")
     -- table.insert (self.scores, "momma")
     -- self.isDirty = true
-    
-    if author == "START" then
-       self.isPlaying = true 
-    end
 
-    if author == "SCORE" then
+    event.cancel = true
+    
+    if event.id == "plummet.START" then
+       self.isPlaying = true 
+
+    elseif event.id == "plummet.SCORE" then
 
         self.scores = {}
 
-        for word in string.gmatch(text, "[^:]+") do
+        for word in string.gmatch (event.payload, "[^:]+") do
             table.insert (self.scores, word)
         end      
 
         self.isDirty = true
-
-        return true
-    end
     
-    if author == "RESULT" then
+    elseif event.id == "plummet.RESULT" then
+
         self.isPlaying = false
         self.isDirty = true
+
+    else
+
+        event.cancel = false
     end
 end
 

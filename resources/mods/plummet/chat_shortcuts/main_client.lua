@@ -63,17 +63,25 @@ local function onLateRender (self)
 end
 
 --------------------------------------------------
-local function onChatReceived (event)
+local function onServerEventReceived (event)
 
-    local self = instance
-    
-    if event.author == "RESULT" then
+    if event.id == "plummet.RESULT" then
+        
         isJoined = false;
         isReady = false;
         self.isVisible = true
         self.isDirty = true
+
+        event.cancel = true
     end
-        
+
+end
+
+--------------------------------------------------
+local function onChatReceived (event)
+
+    local self = instance
+      
     if event.text == texts.noJoin and not isJoined then
         isJoined = false
         self.isDirty = true
@@ -132,6 +140,7 @@ local function onLoadSuccessful ()
     dio.drawing.addRenderPassAfter (1.0, function () onLateRender (instance) end)    
     
     local types = dio.events.clientTypes
+    dio.events.addListener (types.SERVER_EVENT_RECEIVED, onServerEventReceived)
     dio.events.addListener (types.CHAT_RECEIVED, onChatReceived)
     dio.events.addListener (types.KEY_CLICKED, onKeyClicked)
 end

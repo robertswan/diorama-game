@@ -160,16 +160,8 @@ local function updateScores ()
                 ":"
     end
 
-    -- text = text ..
-    --         tostring (gameVars.playersWaitingCount) .. "," ..
-    --         tostring (gameVars.playersReadyCount) .. "," ..
-    --         tostring (gameVars.playersPlayingCount) ..
-    --         ":" ..
-    --         "Teazel" ..
-    --         ":"
-
     for _, connection in pairs (connections) do
-        dio.network.sendEvent (connection.connectionId, "SCORE", text)
+        dio.network.sendEvent (connection.connectionId, "plummet.SCORE", text)
     end
 
     return scores [1]
@@ -185,7 +177,7 @@ local coordinates =
 --------------------------------------------------
 local function teleportPlayer (connectionId, coordinatesId)
 
-    dio.network.sendEvent (connectionId, "PLUMMET_TP", coordinates [coordinatesId])
+    dio.network.sendEvent (connectionId, "plummet.TP", coordinates [coordinatesId])
 end    
 
 --------------------------------------------------
@@ -259,7 +251,7 @@ local function startGame ()
             player.currentY = 2
         end
         player.score = 0
-        dio.network.sendEvent (player.connectionId, "START")
+        dio.network.sendEvent (player.connectionId, "plummet.START")
         dio.network.sendChat (player.connectionId, "START", "Let the game begin!")
     end
 
@@ -277,7 +269,8 @@ local function endGame ()
         local text = "The winner is: " .. winner.accountId
 
         for _, connection in pairs (connections) do
-            dio.network.sendNetwork (connection.connectionId, "RESULT")
+            -- must send chat as well, until inter mod comms is completed
+            dio.network.sendEvent (connection.connectionId, "plummet.RESULT")
             dio.network.sendChat (connection.connectionId, "RESULT", text)
         end    
     end

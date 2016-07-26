@@ -38,18 +38,18 @@ local function teleportTo (x, y, z)
 end
 
 --------------------------------------------------
-local function onServerMessageReceived (author, text)
+local function onServerEventReceived (event)
 
-    if author == "PLUMMET_TP" then
+    if event.id == "plummet.TP" then
 
         local words = {}
-        for word in string.gmatch(text, "[^ ]+") do
+        for word in string.gmatch (event.payload, "[^ ]+") do
             table.insert (words, word)
         end        
 
         teleportTo (words [1], words [2], words [3])
 
-        return true
+        event.cancel = true
 
     end
 end
@@ -74,7 +74,7 @@ local function onLoadSuccessful ()
     dio.drawing.addRenderPassAfter (1, function () onLateRender (instance) end)
     
     local types = dio.events.clientTypes
-    dio.events.addListener (types.SERVER_EVENT_RECEIVED, onServerMessageReceived)
+    dio.events.addListener (types.SERVER_EVENT_RECEIVED, onServerEventReceived)
     dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
 
 end

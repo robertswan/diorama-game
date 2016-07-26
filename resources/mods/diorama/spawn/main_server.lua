@@ -63,7 +63,7 @@ local function onChatReceived (event)
                 tostring (t.chunkId [2] * 32 + t.xyz [2]) .. " " .. 
                 tostring (t.chunkId [3] * 32 + t.xyz [3])
 
-            dio.network.sendEvent (event.authorConnectionId, "HOME", text)
+            dio.network.sendEvent (event.authorConnectionId, "spawn.HOME", text)
             event.cancel = true
 
         else
