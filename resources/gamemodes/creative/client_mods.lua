@@ -1,5 +1,5 @@
 --------------------------------------------------
-local modsToLoad = 
+local modsToLoad =
 {
     {
         folder = "diorama",
@@ -15,7 +15,7 @@ local modsToLoad =
         folder = "diorama",
         modName = "player_list",
         versionRequired = {major = 1, minor = 0},
-    },    
+    },
     {
         folder = "diorama",
         modName = "inventory",
@@ -43,7 +43,7 @@ local mods = {}
 --------------------------------------------------
 local function main ()
 
-    local permissions = 
+    local permissions =
     {
         blocks = true,
         drawing = true,

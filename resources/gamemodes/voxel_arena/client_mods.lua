@@ -1,5 +1,5 @@
 --------------------------------------------------
-local modsToLoad = 
+local modsToLoad =
 {
     {
         folder = "diorama",
@@ -10,7 +10,7 @@ local modsToLoad =
         folder = "diorama",
         modName = "diagnostics",
         versionRequired = {major = 1, minor = 0},
-    },  
+    },
     {
         folder = "voxel_arena",
         modName = "game_logic",
@@ -28,12 +28,11 @@ local mods = {}
 --------------------------------------------------
 local function main ()
 
-    local permissions = 
+    local permissions =
     {
         blocks = true,
         drawing = true,
         diagnostics = true,
-        drawing = true,
         file = true,
         world = true,
         input = true,

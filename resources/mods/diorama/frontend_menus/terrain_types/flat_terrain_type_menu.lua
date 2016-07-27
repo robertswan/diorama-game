@@ -13,7 +13,7 @@ local basicGenerator =
             --axis = "y",
             baseVoxel = -512,
             heightInVoxels = 512,
-        },        
+        },
         {
             type = "perlinNoise",
             mode = "lessThan",

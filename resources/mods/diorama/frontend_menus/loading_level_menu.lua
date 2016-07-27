@@ -26,7 +26,7 @@ function c:onUpdate (menus)
 
         if not isOk then
             self.fromMenu:recordWorldAlreadyExistsError ()
-            return self.fromMenu.menuKey             
+            return self.fromMenu.menuKey
         else
             return "playing_game_menu"
         end

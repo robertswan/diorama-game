@@ -1,7 +1,7 @@
 local clientSettings =
 {
     video =
-    {   
+    {
         monitorIdx = 0,
         swapInterval = 1,
         window = {x = 100, y = 100, w = 1600, h = 800},

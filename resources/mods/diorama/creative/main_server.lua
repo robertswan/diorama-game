@@ -1,13 +1,13 @@
 --------------------------------------------------
 local groups =
 {
-    tourist = 
+    tourist =
     {
         color = "%aaa",
         canChat = true,
         canColourText = false,
     },
-    builder = 
+    builder =
     {
         color = "%fff",
         canBuild = true,
@@ -15,22 +15,22 @@ local groups =
         canChat = true,
         canColourText = true,
     },
-    mod = 
+    mod =
     {
         color = "%f44",
         canBuild = true,
         canDestroy = true,
         canChat = true,
-        canColourText = true,    
+        canColourText = true,
         canPromoteTo = {tourist = true, builder = true},
     },
-    admin = 
+    admin =
     {
         color = "%ff4",
         canBuild = true,
         canDestroy = true,
         canChat = true,
-        canColourText = true,    
+        canColourText = true,
         canPromoteTo = {tourist = true, builder = true, mod = true},
     }
 }
@@ -96,7 +96,7 @@ local function onClientConnected (event)
         playerParams =
         {
             connectionId = event.connectionId,
-            avatar = 
+            avatar =
             {
                 roomFolder = "default/",
                 chunkId = {0, 0, 0},
@@ -183,7 +183,7 @@ local function onChatReceived (event)
 
     local connection = connections [event.authorConnectionId]
     local group = groups [connection.groupId]
-    local canColourText = group.canColourText    
+    local canColourText = group.canColourText
 
     if not canColourText then
         print ("INCOMING CHAT " .. event.text)
@@ -285,7 +285,7 @@ local function onChatReceived (event)
                         end
 
                         if hasPromoted then
-                            event.text = "SUCCESS: .setGroup " .. playerToPromote .. " -> " .. groupToSet;                        
+                            event.text = "SUCCESS: .setGroup " .. playerToPromote .. " -> " .. groupToSet;
                         end
                     end
                 end
@@ -309,7 +309,7 @@ local function onLoadSuccessful ()
 end
 
 --------------------------------------------------
-local modSettings = 
+local modSettings =
 {
     description =
     {
@@ -325,7 +325,7 @@ local modSettings =
         },
     },
 
-    permissionsRequired = 
+    permissionsRequired =
     {
         file = true,
         inputs = true,

@@ -83,7 +83,7 @@ return function ()
 
     local instance = MenuClass ("Diorama")
 
-    local properties = 
+    local properties =
     {
         -- texture1 = dio.drawing.loadTexture ("resources/textures/diorama_terrain_harter_00.png"),
         -- texture2 = dio.drawing.loadTexture ("resources/textures/diorama_terrain_robtheswan_00.png"),
@@ -108,7 +108,7 @@ return function ()
     instance:addMenuItem (ButtonMenuItem ("Play Block Falling Game", onPlayTetrisClicked))
 
     instance:addMenuItem (BreakMenuItem ())
-    
+
     instance:addMenuItem (ButtonMenuItem ("Quit Game", onQuitClicked))
 
     local versionInfo = dio.system.getVersion ()

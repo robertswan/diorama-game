@@ -10,7 +10,7 @@ local function renderBg (self)
 
     if self.isPlaying then
 
-        dio.drawing.font.drawString(self.barX - 9, self.barY + self.barHeight + 4, 'GOAL', 0xffff00ff)    
+        dio.drawing.font.drawString(self.barX - 9, self.barY + self.barHeight + 4, 'GOAL', 0xffff00ff)
         -- dio.drawing.font.drawString(100, 116, '4000', 0x00ffffff)
 
         dio.drawing.font.drawBox (self.barX, self.barY, self.barWidth, self.barHeight, 0xffaa66e1)
@@ -28,11 +28,11 @@ local function renderPlayerList (self)
         local yScore = self.barHeight -- top of the bar
         local textOffsetY = 3
 
-        for idx = 1, #self.scores, 2 do       
+        for idx = 1, #self.scores, 2 do
             local score = tonumber(self.scores [idx + 1])
 
             if score then
-                local y = (score / self.dropDistance * self.barHeight)        
+                local y = (score / self.dropDistance * self.barHeight)
 
                 drawBox (self.barX - 1, y + self.barY - 1, self.barWidth + 2, self.barWidth + 2, 0xffffffff)
 
@@ -52,7 +52,7 @@ local function renderPlayerList (self)
 
         local notPlayingY = self.h - self.heightPerLine * 2
 
-        for idx = 1, #self.scores, 2 do       
+        for idx = 1, #self.scores, 2 do
 
             drawString (8, notPlayingY, self.scores [idx], 0x00ffffff)
             drawString (100, notPlayingY, self.scores [idx + 1], 0x00ffffff)
@@ -119,9 +119,9 @@ local function onServerEventReceived (event)
     -- self.isDirty = true
 
     event.cancel = true
-    
+
     if event.id == "plummet.START" then
-       self.isPlaying = true 
+       self.isPlaying = true
 
     elseif event.id == "plummet.SCORE" then
 
@@ -129,10 +129,10 @@ local function onServerEventReceived (event)
 
         for word in string.gmatch (event.payload, "[^:]+") do
             table.insert (self.scores, word)
-        end      
+        end
 
         self.isDirty = true
-    
+
     elseif event.id == "plummet.RESULT" then
 
         self.isPlaying = false
@@ -147,9 +147,9 @@ end
 --------------------------------------------------
 local function onLoadSuccessful ()
 
-    instance = 
+    instance =
     {
-        w = 128, 
+        w = 128,
         h = 356,
         heightPerLine = 14,
         barX = 94,
@@ -172,13 +172,13 @@ local function onLoadSuccessful ()
 end
 
 --------------------------------------------------
-local modSettings = 
+local modSettings =
 {
     name = "Plummet scoreboard",
 
     description = "Shows all players scores from the current or previous game",
 
-    permissionsRequired = 
+    permissionsRequired =
     {
         drawing = true,
         world = true,

@@ -57,7 +57,7 @@ local function generateIconsFromNumbers ()
         local uvs = block.uvs
         if not uvs then
             local tiles = BlockDefinitions.tiles [block.tiles [1]]
-            uvs = tiles.uvs 
+            uvs = tiles.uvs
         end
         map [idx] = {uvs [1], uvs [2]}
         -- map [idx] = {1, 1}

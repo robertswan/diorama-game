@@ -1,18 +1,18 @@
 --------------------------------------------------
-local colors = 
+local colors =
 {
     ok = "%8f8",
     bad = "%f88",
 }
 
 --------------------------------------------------
-local generators = 
+local generators =
 {
-    
+
     {
-        voxelPass = 
+        voxelPass =
         {
-            
+
             {
                 chanceOfTree = 0.03,
                 sizeMin = 3,
@@ -20,13 +20,13 @@ local generators =
                 trunkHeight = 5,
                 type = "addTrees",
             },
-            
+
             {
                 mudHeight = 4,
                 type = "addGrass",
             },
         },
-        weightPass = 
+        weightPass =
         {
             {
                 mode = "replace",
@@ -57,8 +57,8 @@ local function fillCube (roomEntityId, chunkId, min, max, value)
             for z = min [3], max [3] do
                 setBlock (roomEntityId, chunkId, x, y, z, value)
             end
-        end 
-    end    
+        end
+    end
 end
 
 --------------------------------------------------
@@ -81,7 +81,7 @@ local roomFolders =
 }
 
 --------------------------------------------------
-local gameVars = 
+local gameVars =
 {
     isPlaying = false,
     playersWaitingCount = 0,
@@ -89,9 +89,9 @@ local gameVars =
     playersPlayingCount = 0,
     tickCount = 0,
     gameOverScore = 4000,
-    chunksToModify = 
+    chunksToModify =
     {
-        lobby = 
+        lobby =
         {
             chunkId = {0, 0, 0},
             isBuilt = false,
@@ -128,7 +128,7 @@ end
 
 --------------------------------------------------
 local comparer = function (lhs, rhs)
-    
+
     return calcComparerScore (lhs) > calcComparerScore (rhs)
 end
 
@@ -150,13 +150,13 @@ local function updateScores ()
             scoreAsText = tostring (math.floor (score.score))
         end
 
-        text = text .. 
+        text = text ..
                 playerColors [score.groupId] ..
-                score.accountId .. 
+                score.accountId ..
                 ((score.groupId == "waiting") and " (W)" or "") ..
                 ((not gameVars.isPlaying and score.groupId == "ready") and " (R)" or "") ..
-                ":" .. 
-                scoreAsText .. 
+                ":" ..
+                scoreAsText ..
                 ":"
     end
 
@@ -178,7 +178,7 @@ local coordinates =
 local function teleportPlayer (connectionId, coordinatesId)
 
     dio.network.sendEvent (connectionId, "plummet.TP", coordinates [coordinatesId])
-end    
+end
 
 --------------------------------------------------
 local function createNewLevel (isFirstTime)
@@ -195,7 +195,7 @@ local function createNewLevel (isFirstTime)
         randomSeedAsString = nextRoomFolder,
         terrainId = "paramaterized",
         generators = generators,
-        roomShape = 
+        roomShape =
         {
             x = {min = -1, max = 1},
             z = {min = -1, max = 1},
@@ -205,7 +205,7 @@ local function createNewLevel (isFirstTime)
     -- -- teleport everyone!
     -- for connectionId, connection in pairs (connections) do
     --     dio.world.destroyPlayer (connection.entityId)
-    -- end    
+    -- end
 
     -- dio.file.abortRoom (currentRoomFolder)
     -- dio.file.deleteWorld (currentRoomFolder)
@@ -226,7 +226,7 @@ local function createNewLevel (isFirstTime)
     --         xyz = {}, -- currently unused
     --     }
 
-    --     connection.entityId = dio.world.createPlayer (playerParams)        
+    --     connection.entityId = dio.world.createPlayer (playerParams)
 
     --     -- hack - teleport players via client
     --     teleportPlayer (connectionId, "lobby")
@@ -258,7 +258,7 @@ local function startGame ()
     gameVars.playersPlayingCount = gameVars.playersReadyCount
     gameVars.playersReadyCount = 0
 
-end   
+end
 
 --------------------------------------------------
 local function endGame ()
@@ -272,7 +272,7 @@ local function endGame ()
             -- must send chat as well, until inter mod comms is completed
             dio.network.sendEvent (connection.connectionId, "plummet.RESULT")
             dio.network.sendChat (connection.connectionId, "RESULT", text)
-        end    
+        end
     end
 
     for _, connection in pairs (connections) do
@@ -282,7 +282,7 @@ local function endGame ()
             connection.groupId = "lobby"
         end
     end
-    
+
     gameVars.playersPlayingCount = 0
     gameVars.isPlaying = false
     gameVars.tickCount = 0
@@ -313,8 +313,8 @@ local function onClientConnected (event)
             chunkId = {0, 0, 0},
             xyz = {15, 4, 15},
             ypr = {0, 0, 0}
-        },    
-        gravityDir = 5,    
+        },
+        gravityDir = 5,
     }
 
     local entityId = dio.world.createPlayer (playerParams)
@@ -364,7 +364,7 @@ local function onClientDisconnected (event)
         if gameVars.playersPlayingCount == 0 then
             endGame ();
         end
-    end    
+    end
 
     connections [event.connectionId] = nil
 
@@ -379,7 +379,7 @@ end
 --------------------------------------------------
 local function onRoomCreated (event)
 
-    gameVars.mostRecentRoom = 
+    gameVars.mostRecentRoom =
     {
         folder = event.roomFolder,
         entityId = event.roomEntityId,
@@ -404,7 +404,7 @@ local function onChatReceived (event)
 
     if event.text:sub (1, 1) ~= "." then
         return
-    end   
+    end
 
     local words = {}
     for word in string.gmatch(event.text, "[^ ]+") do
@@ -444,7 +444,7 @@ local function onChatReceived (event)
         else
             event.text = colors.bad .. "'.leave' failed."
             -- TODO tp player to lobby area
-        end        
+        end
 
     elseif words [1] == ".ready" then
         event.targetConnectionId = event.authorConnectionId
@@ -555,7 +555,7 @@ local function onLoadSuccessful ()
 end
 
 --------------------------------------------------
-local modSettings = 
+local modSettings =
 {
     description =
     {
@@ -570,7 +570,7 @@ local modSettings =
         },
     },
 
-    permissionsRequired = 
+    permissionsRequired =
     {
         file = true,
         world = true,

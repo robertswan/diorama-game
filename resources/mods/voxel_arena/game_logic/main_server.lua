@@ -13,8 +13,8 @@ local function onClientConnected (event)
             chunkId = {0, 0, 0},
             xyz = {15, 4, 15},
             ypr = {0, 0, 0}
-        },    
-        gravityDir = 5,    
+        },
+        gravityDir = 5,
     }
 
     local entityId = dio.world.createPlayer (playerSettings)
@@ -42,9 +42,9 @@ end
 local function onPlayerPrimaryAction (event)
 
     local components = dio.entities.components
-    local rocketEntitySettings = 
+    local rocketEntitySettings =
     {
-        [components.AABB_COLLIDER] = 
+        [components.AABB_COLLIDER] =
         {
             min = {-0.1, -0.1, -0.1},
             size = {0.2, 0.2, 0.2},
@@ -56,12 +56,12 @@ local function onPlayerPrimaryAction (event)
             --shouldSync = function (event) return true end,
         },
 
-        [components.COLLISION_LISTENER] = 
+        [components.COLLISION_LISTENER] =
         {
-            onCollision = function (event) 
-                dio.entities.destroy (event.entity) 
+            onCollision = function (event)
+                dio.entities.destroy (event.entity)
                 -- dio.blocks.destroySphere (event.entity.getXyz (), 10)
-            end            
+            end
         },
 
         [components.MESH_PLACEHOLDER] =
@@ -75,11 +75,11 @@ local function onPlayerPrimaryAction (event)
             debug = true,
         },
 
-        [components.PARENT] = 
+        [components.PARENT] =
         {
-        },        
+        },
 
-        [components.RIGID_BODY] = 
+        [components.RIGID_BODY] =
         {
             --velocity = {0.0, 0.0, 0.0},
             --acceleration = {0.0, 0.0, 0.0}
@@ -134,7 +134,7 @@ local function onLoadSuccessful ()
 end
 
 --------------------------------------------------
-local modSettings = 
+local modSettings =
 {
     description =
     {
@@ -142,7 +142,7 @@ local modSettings =
         description = "This is required to play the plummet game!",
     },
 
-    permissionsRequired = 
+    permissionsRequired =
     {
         entities = true,
         events = true,

@@ -2,7 +2,7 @@ require ("resources/mods/diorama/frontend_menus/main")
 
 
 -- --------------------------------------------------
--- local modsToLoad = 
+-- local modsToLoad =
 -- {
 --     {
 --         folder = "diorama",
@@ -16,7 +16,7 @@ require ("resources/mods/diorama/frontend_menus/main")
 -- --------------------------------------------------
 -- local function main ()
 
---     local permissions = 
+--     local permissions =
 --     {
 --         blocks = true,
 --         drawing = true,
