@@ -96,7 +96,7 @@ local blocks =
     {name = "cactus body",          uvs = {6, 4, 7, 4, 7, 4}},
     {name = "gravity block",        uvs = {12, 6, 10, 6, 13, 6}},
     {name = "all grass",            uvs = {0, 0}},
-    {name = "water",                uvs = {15, 15},         isLiquid = true},
+    {name = "water",                uvs = {14, 0},         isLiquid = true},
     {name = "ice",                  uvs = {3, 4}},
     {name = "coal block",           uvs = {1, 15}},
 
