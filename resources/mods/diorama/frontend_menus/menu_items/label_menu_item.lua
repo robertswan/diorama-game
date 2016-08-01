@@ -4,7 +4,7 @@ local Mixin = require ("resources/mods/diorama/frontend_menus/mixin")
 
 --------------------------------------------------
 return function (text)
-    local instance = 
+    local instance =
     {
         text = text,
 

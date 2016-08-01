@@ -1,10 +1,10 @@
 -- repeatedly generated file. not safe to hand edit
 local roomSettings =
 {
-	generators = 
+	generators =
 	{
 		{
-			voxelPass = 
+			voxelPass =
 			{
 				{
 					chanceOfTree = 0.03,
@@ -13,15 +13,15 @@ local roomSettings =
 					trunkHeight = 5,
 					type = "addTrees",
 				},
-				
+
 				{
 					mudHeight = 4,
 					type = "addGrass",
 				},
 			},
-			weightPass = 
+			weightPass =
 			{
-				
+
 				{
 					mode = "lessThan",
 					octaves = 4,

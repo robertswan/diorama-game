@@ -31,7 +31,7 @@ end
 --------------------------------------------------
 -- DUPE CODE
 local function renderChatLine (self, line, y)
-    
+
     local drawString = dio.drawing.font.drawString
 
     drawString (0, y, line.author, 0x000000ff, true)
@@ -43,15 +43,15 @@ local function renderChatLine (self, line, y)
 
         if word then
 
-            local emote = emotes [word]   
+            local emote = emotes [word]
 
             if emote then
                 -- draw the emote
                 local u, v = emote.uvs [1], emote.uvs [2]
 
-                dio.drawing.drawTextureRegion2 (self.emoteTexture,      x, y, 
-                                                emoteSpecs.renderWidth, emoteSpecs.renderHeight, 
-                                                u * emoteSpecs.width,   v * emoteSpecs.height, 
+                dio.drawing.drawTextureRegion2 (self.emoteTexture,      x, y,
+                                                emoteSpecs.renderWidth, emoteSpecs.renderHeight,
+                                                u * emoteSpecs.width,   v * emoteSpecs.height,
                                                 emoteSpecs.width,       emoteSpecs.height)
 
                 x = x + emoteSpecs.renderWidth
@@ -61,7 +61,7 @@ local function renderChatLine (self, line, y)
                 drawString (x, y, word, 0x000000ff, true)
                 drawString (x, y+2, word, 0xffffffff, true)
                 x = x + dio.drawing.font.measureString (word)
-            end 
+            end
         end
     end
 end
@@ -81,7 +81,7 @@ end
 
 --------------------------------------------------
 function c:lateRender (x, y)
-    
+
     local rgba = 0xffffff00 + (self.alpha * 255)
 
     dio.drawing.drawTexture (self.renderToTexture, x, y, self.w * self.scale, self.h * self.scale, rgba)
@@ -89,8 +89,8 @@ end
 
 --------------------------------------------------
 return function (line, w, h, textOffset, emoteTexture)
-    
-    local instance = 
+
+    local instance =
     {
         line = line,
         textOffset = textOffset,
@@ -100,7 +100,7 @@ return function (line, w, h, textOffset, emoteTexture)
         alpha = 1,
         tickCount = 0,
         renderToTexture = dio.drawing.createRenderToTexture (w, h),
-        emoteTexture = emoteTexture, 
+        emoteTexture = emoteTexture,
         isDirty = true,
     }
 

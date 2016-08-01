@@ -13,10 +13,10 @@ function c:onUpdate (menu, x, y, was_left_clicked)
         self.flashCount = self.flashCount < 16 and self.flashCount + 1 or 0
 
     else
-        self.isHighlighted = 
+        self.isHighlighted =
                 x >= 0 and
                 x <= menu.width and
-                y >= self.y and 
+                y >= self.y and
                 y < self.y + self.height
 
         if was_left_clicked and self.isHighlighted then
@@ -54,7 +54,7 @@ function c:onRender (font, menu)
     end
 
     local value = string.rep ("*", #self.value)
-    local width = font.measureString (value)    
+    local width = font.measureString (value)
     if self.isSelected then
         width = width + font.measureString ("_")
         if self.flashCount < 8 then
@@ -80,7 +80,7 @@ function c:onKeyClicked (menu, keyCode, keyCharacter, keyModifiers)
             end
         end
 
-        return true        
+        return true
 
     elseif keyCode == keyCodes.ESCAPE then
 
@@ -93,7 +93,7 @@ function c:onKeyClicked (menu, keyCode, keyCharacter, keyModifiers)
         end
 
     elseif keyCode == keyCodes.ENTER or keyCode == keyCodes.KP_ENTER then
-            
+
         self.initial_value = nil
         self.isSelected = false
         menu:setUpdateOnlySelectedMenuItems (false)

@@ -1,5 +1,5 @@
 --------------------------------------------------
-local modsToLoad = 
+local modsToLoad =
 {
     {
         id = "creative2",
@@ -9,7 +9,7 @@ local modsToLoad =
     {
         folder = "diorama",
         modName = "blocks",
-    },    
+    },
     {
         folder = "diorama",
         modName = "motd",
@@ -26,7 +26,7 @@ local mods = {}
 --------------------------------------------------
 local function main ()
 
-    local regularPermissions = 
+    local regularPermissions =
     {
         blocks = true,
         drawing = true,
@@ -42,7 +42,7 @@ local function main ()
         else
             print (error)
         end
-    end    
+    end
 end
 
 --------------------------------------------------

@@ -46,7 +46,7 @@ end
 function c:onKeyClicked (keyCode, keyCharacter, keyModifiers)
 
     local keyCodes = dio.inputs.keyCodes
-    
+
     if keyCode == keyCodes.ESCAPE then
         dio.inputs.mouse.setExclusive (false)
         self:onWindowFocusLost ()
@@ -65,7 +65,7 @@ end
 --------------------------------------------------
 return function (menus)
 
-    local properties = 
+    local properties =
     {
         menus = menus
     }

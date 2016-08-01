@@ -89,7 +89,7 @@ local function onClientUpdated (event)
         if xyz then
             xyz.ypr [2] = xyz.ypr [2] + event.timeDelta * 0.3
             dio.world.setPlayerXyz (self.myAccountId, xyz)
-        end                    
+        end
     end
 end
 
@@ -100,9 +100,9 @@ local function onLoadSuccessful ()
     local types = dio.events.clientTypes
     dio.events.addListener (types.CHAT_MESSAGE_PRE_SENT, onChatMessagePreSent)
 
-    instance = 
+    instance =
     {
-        w = 128, 
+        w = 128,
         h = 20,
         isDirty = false,
         isVisible = false,
@@ -118,13 +118,13 @@ local function onLoadSuccessful ()
 end
 
 --------------------------------------------------
-local modSettings = 
+local modSettings =
 {
     name = "Attract Mode",
 
     description = "silly attract mode stuff",
 
-    permissionsRequired = 
+    permissionsRequired =
     {
         drawing = true,
         world = true,

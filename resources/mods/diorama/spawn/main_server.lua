@@ -58,16 +58,16 @@ local function onChatReceived (event)
 
         if connection.homeLocation then
             local t = connection.homeLocation
-            local text = 
-                tostring (t.chunkId [1] * 32 + t.xyz [1]) .. " " .. 
-                tostring (t.chunkId [2] * 32 + t.xyz [2]) .. " " .. 
+            local text =
+                tostring (t.chunkId [1] * 32 + t.xyz [1]) .. " " ..
+                tostring (t.chunkId [2] * 32 + t.xyz [2]) .. " " ..
                 tostring (t.chunkId [3] * 32 + t.xyz [3])
 
             dio.network.sendEvent (event.authorConnectionId, "spawn.HOME", text)
             event.cancel = true
 
         else
-            
+
             event.author = "SERVER"
             event.text = "No home position set."
         end
@@ -80,7 +80,7 @@ local function onChatReceived (event)
         if homeLocation then
             local connection = connections [event.authorConnectionId]
             connection.homeLocation = homeLocation
-    
+
             event.text = "Home successfully set."
 
         else
@@ -102,7 +102,7 @@ local function onLoadSuccessful ()
 end
 
 --------------------------------------------------
-local modSettings = 
+local modSettings =
 {
     description =
     {
@@ -110,7 +110,7 @@ local modSettings =
         description = "Coordinate related shenanigans",
     },
 
-    permissionsRequired = 
+    permissionsRequired =
     {
         file = true,
         network = true,

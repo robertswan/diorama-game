@@ -17,9 +17,9 @@ end
 local function onChatMessagePreSent (text)
 
     if text == ".spawn" then
-        
+
         teleportTo (0, 128, 0)
-        
+
     elseif string.sub (text, 1, string.len(".tp "))==".tp " then
 
         local words = {}
@@ -46,7 +46,7 @@ local function onChatMessagePreSent (text)
             teleportTo (math.floor(words [2]), math.floor(words [3]), math.floor(words [4]))
 
         end
-        
+
     elseif string.sub(text,1,string.len(".coords"))==".coords" then
 
         local nameCount = 0
@@ -73,7 +73,7 @@ local function onChatMessagePreSent (text)
                 dio.clientChat.send ("Coords for " .. instance.myAccountId .. " = (" .. x .. ", " .. y .. ", " .. z .. ")")
             end
         end
-    
+
     else
         return false
     end
@@ -129,7 +129,7 @@ local modSettings =
 
     description = "Coordinate related shenanigans",
     author = "AmazedStream",
-    help = 
+    help =
     {
         [".spawn"] =    {usage = ".spawn",         description = "teleports you to the safe spawn"},
         [".tp"] =       {usage = ".tp x y z",     description = "teleports you coordinates (x, y, z)"},

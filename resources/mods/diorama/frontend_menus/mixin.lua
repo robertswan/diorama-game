@@ -14,7 +14,7 @@ function m.CopyToAndBackupParents (dst, src)
     for key, value in pairs (src) do
         dst.parent [key] = dst [key]
         dst [key] = value
-    end    
+    end
 end
 
 --------------------------------------------------

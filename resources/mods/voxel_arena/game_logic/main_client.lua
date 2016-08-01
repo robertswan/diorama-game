@@ -10,8 +10,8 @@ local function onLateRender (self)
     params.height = params.height * 3
 
     dio.drawing.drawTexture2 (
-            self.crosshairTexture, 
-            (windowW - params.width) * 0.5, 
+            self.crosshairTexture,
+            (windowW - params.width) * 0.5,
             (windowH - params.height) * 0.5,
             params.width,
             params.height)
@@ -20,13 +20,13 @@ end
 --------------------------------------------------
 local function onLoadSuccessful ()
 
-    instance = 
+    instance =
     {
         crosshairTexture = dio.drawing.loadTexture ("resources/textures/crosshair.png"),
     }
 
     dio.drawing.addRenderPassAfter (1, function () onLateRender (instance) end)
-    
+
     -- local types = dio.events.clientTypes
     -- dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
 
@@ -35,7 +35,7 @@ local function onLoadSuccessful ()
 end
 
 --------------------------------------------------
-local modSettings = 
+local modSettings =
 {
     description =
     {
@@ -46,7 +46,7 @@ local modSettings =
         },
     },
 
-    permissionsRequired = 
+    permissionsRequired =
     {
         drawing = true,
         world = true,
