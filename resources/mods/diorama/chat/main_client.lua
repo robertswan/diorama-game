@@ -17,7 +17,7 @@ end
 
 --------------------------------------------------
 local function renderChatLine (self, line, y)
-    
+
     local drawString = dio.drawing.font.drawString
 
     -- Draw the author part (with shadow)
@@ -36,9 +36,9 @@ local function renderChatLine (self, line, y)
                 -- draw the emote
                 local u, v = emote.uvs [1], emote.uvs [2]
 
-                dio.drawing.drawTextureRegion2 (self.emoteTexture,      x, y, 
-                                                emoteSpecs.renderWidth, emoteSpecs.renderHeight, 
-                                                u * emoteSpecs.width,   v * emoteSpecs.height, 
+                dio.drawing.drawTextureRegion2 (self.emoteTexture,      x, y,
+                                                emoteSpecs.renderWidth, emoteSpecs.renderHeight,
+                                                u * emoteSpecs.width,   v * emoteSpecs.height,
                                                 emoteSpecs.width,       emoteSpecs.height)
 
                 x = x + emoteSpecs.renderWidth
@@ -48,7 +48,7 @@ local function renderChatLine (self, line, y)
                 drawString (x, y, word, 0x000000ff, true)
                 drawString (x, y+2, word, 0xffffffff, true)
                 x = x + dio.drawing.font.measureString (word)
-            end 
+            end
         end
     end
 end
@@ -120,7 +120,7 @@ local function addNewTickerLine (self, line)
         table.remove (ticker.lines)
     end
 
-    local newTickerLine = TickerLine (line, self.size.w, self.heightPerLine, 
+    local newTickerLine = TickerLine (line, self.size.w, self.heightPerLine,
                                       self.textOffset, self.emoteTexture)
     table.insert (ticker.lines, newTickerLine)
 end
@@ -212,10 +212,10 @@ local function onChatMessageReceived (event)
             if isEmote then
                 table.insert (currentLine, word)
                 currentString = " "
-            else 
+            else
                 currentString = word .. " "
             end
-            
+
             spaceLeft = self.size.w - self.textOffset - wordLength
         else
             -- Else add the word/emote onto the current line
@@ -226,7 +226,7 @@ local function onChatMessageReceived (event)
             else
                 currentString = currentString .. word .. " "
             end
-            
+
             spaceLeft = spaceLeft - (wordLength + spaceWidth)
         end
     end
@@ -248,7 +248,7 @@ local function onChatMessageReceived (event)
         addNewTickerLine (self, linesAdded[i])
         i = i + 1
     end
-    
+
     self.isDirty = true
 end
 
@@ -294,13 +294,13 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
             if (trimmedText ~= "") then
                 currentElement = 0
                 addToChatHistory (trimmedText)
-                
+
                 local isOk, errorStr = dio.clientChat.send (trimmedText)
                 if not isOk then
                     onChatMessageReceived ({author = "Self", text = "Last message did not send! (" .. errorStr .. ")"})
                 end
             end
-			
+
             resetTextEntry (self)
             hide (self)
 

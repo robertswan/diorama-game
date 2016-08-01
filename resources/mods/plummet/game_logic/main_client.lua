@@ -2,7 +2,7 @@
 local instance = nil
 
 --------------------------------------------------
-local colors = 
+local colors =
 {
     ok = "%8f8",
     bad = "%f00",
@@ -17,8 +17,8 @@ local function onLateRender (self)
     params.height = params.height * 3
 
     dio.drawing.drawTexture2 (
-            self.crosshairTexture, 
-            (windowW - params.width) * 0.5, 
+            self.crosshairTexture,
+            (windowW - params.width) * 0.5,
             (windowH - params.height) * 0.5,
             params.width,
             params.height)
@@ -45,7 +45,7 @@ local function onServerEventReceived (event)
         local words = {}
         for word in string.gmatch (event.payload, "[^ ]+") do
             table.insert (words, word)
-        end        
+        end
 
         teleportTo (words [1], words [2], words [3])
 
@@ -65,14 +65,14 @@ end
 --------------------------------------------------
 local function onLoadSuccessful ()
 
-    instance = 
+    instance =
     {
         myAccountId = nil,
         crosshairTexture = dio.drawing.loadTexture ("resources/textures/crosshair.png"),
     }
 
     dio.drawing.addRenderPassAfter (1, function () onLateRender (instance) end)
-    
+
     local types = dio.events.clientTypes
     dio.events.addListener (types.SERVER_EVENT_RECEIVED, onServerEventReceived)
     dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
@@ -80,7 +80,7 @@ local function onLoadSuccessful ()
 end
 
 --------------------------------------------------
-local modSettings = 
+local modSettings =
 {
     description =
     {
@@ -91,7 +91,7 @@ local modSettings =
         },
     },
 
-    permissionsRequired = 
+    permissionsRequired =
     {
         drawing = true,
         world = true,

@@ -1,5 +1,5 @@
 --------------------------------------------------
-local modsToLoad = 
+local modsToLoad =
 {
     {
         folder = "diorama_server",
@@ -10,7 +10,7 @@ local modsToLoad =
         folder = "diorama",
         modName = "blocks",
         versionRequired = {major = 1, minor = 0},
-    },    
+    },
     {
         folder = "diorama",
         modName = "motd",
@@ -29,7 +29,7 @@ local mods = {}
 --------------------------------------------------
 local function main ()
 
-    local regularPermissions = 
+    local regularPermissions =
     {
         blocks = true,
         drawing = true,
@@ -45,7 +45,7 @@ local function main ()
         else
             print (error)
         end
-    end    
+    end
 end
 
 --------------------------------------------------

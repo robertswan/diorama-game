@@ -3,7 +3,7 @@ local Window = require ("resources/_scripts/utils/window")
 --------------------------------------------------
 local instance = nil
 
-local colors = 
+local colors =
 {
     ok = "%8f8",
     bad = "%f88",
@@ -27,13 +27,13 @@ local function renderMessage (self)
 
     local drawString = dio.drawing.font.drawString
     local text = " Press J for .JOIN or R for .READY"
-    
+
     if isJoined then
         text = " Press R for .READY"
-    end 
-    
+    end
+
     drawString (0, 0, text, 0xffffffff)
-    
+
 end
 
 --------------------------------------------------
@@ -58,7 +58,7 @@ local function onLateRender (self)
         scale = (scale > 2) and 2 or scale
         local x = (windowW - self.w * scale) - 20
         local y = (windowH - self.h * scale) - 20
-        dio.drawing.drawTexture (self.renderToTexture, x, y, self.w * scale, self.h * scale, 0xffffffff)    
+        dio.drawing.drawTexture (self.renderToTexture, x, y, self.w * scale, self.h * scale, 0xffffffff)
     end
 end
 
@@ -66,7 +66,7 @@ end
 local function onServerEventReceived (event)
 
     if event.id == "plummet.RESULT" then
-        
+
         isJoined = false;
         isReady = false;
         self.isVisible = true
@@ -81,25 +81,25 @@ end
 local function onChatReceived (event)
 
     local self = instance
-      
+
     if event.text == texts.noJoin and not isJoined then
         isJoined = false
         self.isDirty = true
-        
+
     elseif text == texts.noReady and not isReady then
         isReady = false
         self.isDirty = true
-        
+
     elseif text == texts.okJoin then
         isJoined = true
         self.isDirty = true
-        
+
     elseif text == texts.okReady then
         isReady = true
         self.isVisible = false
-        
+
     end
-    
+
     return false
 end
 
@@ -115,7 +115,7 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
         elseif keyCode == keyCodes.R then
             dio.clientChat.send (".ready")
             return true
-        end      
+        end
 
     return false
 end
@@ -123,22 +123,22 @@ end
 --------------------------------------------------
 local function onLoadSuccessful ()
 
-    instance = 
+    instance =
     {
-        w = 223, 
+        w = 223,
         h = 9,
 
         isJoined = false;
         isReady = false;
-          
+
         isDirty = true,
         isVisible = true,
     }
-    
+
     instance.renderToTexture = dio.drawing.createRenderToTexture (instance.w, instance.h)
     dio.drawing.addRenderPassBefore (1.0, function () onEarlyRender (instance) end)
-    dio.drawing.addRenderPassAfter (1.0, function () onLateRender (instance) end)    
-    
+    dio.drawing.addRenderPassAfter (1.0, function () onLateRender (instance) end)
+
     local types = dio.events.clientTypes
     dio.events.addListener (types.SERVER_EVENT_RECEIVED, onServerEventReceived)
     dio.events.addListener (types.CHAT_RECEIVED, onChatReceived)
@@ -146,19 +146,19 @@ local function onLoadSuccessful ()
 end
 
 --------------------------------------------------
-local modSettings = 
+local modSettings =
 {
     name = "Plummet shortcuts for commands",
     description = "Keyboard shortcuts for commands .ready and .join",
     author = "RadstaR",
 
-    permissionsRequired = 
+    permissionsRequired =
     {
         drawing = true,
         world = true,
         input = true,
     },
-     
+
 }
 
 --------------------------------------------------

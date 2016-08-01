@@ -1,11 +1,11 @@
 --------------------------------------------------
-local modsToLoad = 
+local modsToLoad =
 {
     {
         folder = "diorama",
         modName = "blocks",
         versionRequired = {major = 1, minor = 0},
-    },    
+    },
     {
         folder = "voxel_arena",
         modName = "game_logic",
@@ -19,7 +19,7 @@ local mods = {}
 --------------------------------------------------
 local function main ()
 
-    local regularPermissions = 
+    local regularPermissions =
     {
         blocks = true,
         drawing = true,
@@ -37,7 +37,7 @@ local function main ()
         else
             print (error)
         end
-    end    
+    end
 end
 
 --------------------------------------------------

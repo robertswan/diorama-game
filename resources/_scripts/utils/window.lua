@@ -7,7 +7,7 @@ function m.calcBestFitScale (w, h, maxW, maxH)
     if maxW == nil or maxH == nil then
         maxW, maxH = dio.drawing.getWindowSize ()
     end
-    
+
     assert (w > 0)
     assert (h > 0)
     assert (maxW >= 0)

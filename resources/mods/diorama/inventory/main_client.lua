@@ -29,7 +29,7 @@ end
 local function renderSelectedBlock (self, idx, x, y)
 
     dio.drawing.font.drawBox (x - 1, y - 1, self.iconScale * 16 + 2, self.iconScale * 16 + 2, 0xffffffff)
-    
+
     local block = blocks [self.currentBlockId]
     local width = dio.drawing.font.measureString (block.name)
     x = (idx * (16 * self.iconScale + 1) - (8 * self.iconScale)) - (width * 0.5)
@@ -43,21 +43,21 @@ end
 --------------------------------------------------
 local function getBlockUV (block_id)
     local block = blocks [block_id]
-    
+
     if block ~= nil then
         if block.uvs ~= nil then
           return block.uvs [1], block.uvs [2]
-          
+
         elseif block.tiles ~= nil then
             local tile = tiles [block.tiles [1]]
-            
+
             if tile ~= nil then
                 return tile.uvs [1], tile.uvs [2]
             end
-        
+
         end
     end
-    
+
     return nil, nil
 end
 
@@ -68,19 +68,19 @@ local function renderBlocks (self)
     local y = 1
     for idx = 1, self.blocksPerPage do
         local block_id = idx + self.currentPage * self.blocksPerPage
-        
+
         if blocks [block_id] ~= nil then
             local u, v = getBlockUV (block_id)
-            
-            if u ~= nil then                
+
+            if u ~= nil then
                 if block_id == self.currentBlockId then
                     renderSelectedBlock (self, idx, x, y)
                 end
-                
+
                 dio.drawing.drawTextureRegion2 (self.blockTexture, x, y, 16 * self.iconScale, 16 * self.iconScale, u * 16, v * 16, 16, 16)
-                
+
             end
-            
+
             x = x + self.iconScale * 16 + 1;
         end
     end
@@ -170,8 +170,8 @@ local function onLateRender (self)
     params.width = params.width * 3
     params.height = params.height * 3
     dio.drawing.drawTexture2 (
-            self.crosshairTexture, 
-            (windowW - params.width) * 0.5, 
+            self.crosshairTexture,
+            (windowW - params.width) * 0.5,
             (windowH - params.height) * 0.5,
             params.width,
             params.height)

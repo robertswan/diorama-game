@@ -1,13 +1,13 @@
 --------------------------------------------------
 local groups =
 {
-    tourist = 
+    tourist =
     {
         color = "%aaa",
         canChat = true,
         canColourText = false,
     },
-    builder = 
+    builder =
     {
         color = "%fff",
         canBuild = true,
@@ -15,23 +15,23 @@ local groups =
         canChat = true,
         canColourText = true,
     },
-    mod = 
+    mod =
     {
         color = "%f44",
         canBuild = true,
         canDestroy = true,
         canChat = true,
-        canColourText = true,    
+        canColourText = true,
         canPromoteTo = {tourist = true, builder = true},
         canPlaceTeleporters = true,
     },
-    admin = 
+    admin =
     {
         color = "%ff4",
         canBuild = true,
         canDestroy = true,
         canChat = true,
-        canColourText = true,    
+        canColourText = true,
         canPromoteTo = {tourist = true, builder = true, mod = true},
         canPlaceTeleporters = true,
     }
@@ -114,7 +114,7 @@ local function onClientConnected (event)
         playerParams =
         {
             connectionId = event.connectionId,
-            avatar = 
+            avatar =
             {
                 roomFolder = roomFolders [1],
                 chunkId = {0, 0, 0},
@@ -194,7 +194,7 @@ local function teleportPlayerToRoom (connection)
     local settings =
     {
         connectionId = connection.connectionId,
-        avatar = 
+        avatar =
         {
             roomFolder = roomFolders [connection.roomFolderIdx],
             chunkId = {0, 0, 0},
@@ -204,7 +204,7 @@ local function teleportPlayerToRoom (connection)
         gravityDir = gravityDirIndices.DOWN,
     }
 
-    connection.playerEntityId = dio.world.createPlayer (settings)    
+    connection.playerEntityId = dio.world.createPlayer (settings)
 end
 
 --------------------------------------------------
@@ -258,7 +258,7 @@ local function onChatReceived (event)
 
     local connection = connections [event.authorConnectionId]
     local group = groups [connection.groupId]
-    local canColourText = group.canColourText    
+    local canColourText = group.canColourText
 
     if not canColourText then
         print ("INCOMING CHAT " .. event.text)
@@ -276,7 +276,7 @@ local function onChatReceived (event)
 
         local connection = connections [event.authorConnectionId]
         connection.isInPlaceTeleporterMode = not connection.isInPlaceTeleporterMode
-        event.targetConnectionId = event.authorConnectionId        
+        event.targetConnectionId = event.authorConnectionId
         event.text = "Room Teleporters: " .. (connection.isInPlaceTeleporterMode and "PLACE MODE" or "TELEPORT MODE")
 
     elseif event.text == ".help" then
@@ -369,7 +369,7 @@ local function onChatReceived (event)
                         end
 
                         if hasPromoted then
-                            event.text = "SUCCESS: .setGroup " .. playerToPromote .. " -> " .. groupToSet;                        
+                            event.text = "SUCCESS: .setGroup " .. playerToPromote .. " -> " .. groupToSet;
                         end
                     end
                 end
@@ -393,7 +393,7 @@ local function onLoadSuccessful ()
 end
 
 --------------------------------------------------
-local modSettings = 
+local modSettings =
 {
     description =
     {
@@ -408,7 +408,7 @@ local modSettings =
         },
     },
 
-    permissionsRequired = 
+    permissionsRequired =
     {
         file = true,
         inputs = true,

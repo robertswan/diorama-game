@@ -21,10 +21,10 @@ function c:changeMenu (newMenuName)
         end
         self.current_menu = self.menus [newMenuName]
         self.current_menu_name = newMenuName
-        
+
         if self.current_menu then
             self.current_menu:onEnter (self.menus)
-        end    
+        end
     end
 end
 
@@ -55,7 +55,7 @@ end
 
 --------------------------------------------------
 function c:renderLate ()
-    if self.isVisible and self.current_menu then 
+    if self.isVisible and self.current_menu then
 
         if self.current_menu.onRenderLate then
             self.current_menu:onRenderLate ()
@@ -113,8 +113,8 @@ end
 
 --------------------------------------------------
 return function (all_menus, initial_menu_name)
-    
-    local instance = 
+
+    local instance =
     {
         menus = all_menus,
         current_menu = nil,

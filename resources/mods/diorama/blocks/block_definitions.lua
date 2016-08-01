@@ -15,7 +15,7 @@ local tiles =
 }
 
 --------------------------------------------------
-local entities = 
+local entities =
 {
     sign = {type = "SIGN", text = "Placeholder Text"}
 }

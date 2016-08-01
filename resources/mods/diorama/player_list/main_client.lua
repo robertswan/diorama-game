@@ -91,9 +91,9 @@ end
 --------------------------------------------------
 local function onLoadSuccessful ()
 
-    instance = 
+    instance =
     {
-        w = 128, 
+        w = 128,
         h = 256,
         heightPerLine = 14,
         clients = {},
@@ -114,13 +114,13 @@ local function onLoadSuccessful ()
 end
 
 --------------------------------------------------
-local modSettings = 
+local modSettings =
 {
     name = "PLayer List",
 
     description = "Shows all connected players",
 
-    permissionsRequired = 
+    permissionsRequired =
     {
         drawing = true,
         world = true,

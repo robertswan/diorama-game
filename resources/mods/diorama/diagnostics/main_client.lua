@@ -11,7 +11,7 @@ local function onEarlyRender (self)
 	if self.isVisible then
 		local windowW, windowH = dio.drawing.getWindowSize ()
 		self.position.y = windowH - (self.size.h + 50)
-		
+
         dio.drawing.setRenderToTexture (self.renderToTexture)
         renderBg (self)
 
@@ -21,7 +21,7 @@ local function onEarlyRender (self)
     		local text = nil
 
     		if xyz then
-    			
+
                 local xCoord = math.floor (xyz.chunkId [1] * 32 + xyz.xyz [1])
     			local yCoord = math.floor (xyz.chunkId [2] * 32 + xyz.xyz [2])
     			local zCoord = math.floor (xyz.chunkId [3] * 32 + xyz.xyz [3])
@@ -34,7 +34,7 @@ local function onEarlyRender (self)
                 local drawString = dio.drawing.font.drawString
                 drawString (x, y, text, 0xffAA66ff)
 
-                self.size.w = dio.drawing.font.measureString (text)                
+                self.size.w = dio.drawing.font.measureString (text)
                 y = y + 10
 
                 local times = dio.diagnostics.getTimes ()
@@ -45,7 +45,7 @@ local function onEarlyRender (self)
                 drawString (x, y, text, 0xffAA66ff)
                 y = y + 10
 
-                self.size.w = self.size.w + (self.border * 2)               
+                self.size.w = self.size.w + (self.border * 2)
 
     		end
 
@@ -64,14 +64,14 @@ end
 
 --------------------------------------------------
 local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
-	
+
 	local self = instance
 	local keyCodes = dio.inputs.keyCodes
-	
+
 	if keyCode == keyCodes.F3 then
-		
+
 		self.isVisible = not self.isVisible
-		
+
 	end
 end
 
@@ -93,7 +93,7 @@ end
 --------------------------------------------------
 local function onLoadSuccessful ()
 
-    instance = 
+    instance =
     {
 		position = {x = 20, y = 50},
 		size = {w = 100, h = 28},
@@ -110,7 +110,7 @@ local function onLoadSuccessful ()
 
     dio.drawing.addRenderPassBefore (1.0, function () onEarlyRender (instance) end)
 	dio.drawing.addRenderPassAfter (1.0, function () onLateRender (instance) end)
-	
+
     local types = dio.events.clientTypes
 	dio.events.addListener (types.KEY_CLICKED, onKeyClicked)
     dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
@@ -119,13 +119,13 @@ local function onLoadSuccessful ()
 end
 
 --------------------------------------------------
-local modSettings = 
+local modSettings =
 {
     name = "diagnostics",
 
     description = "debug information - fps, chunks, coords etc",
 
-    permissionsRequired = 
+    permissionsRequired =
     {
         drawing = true,
         diagnostics = true,

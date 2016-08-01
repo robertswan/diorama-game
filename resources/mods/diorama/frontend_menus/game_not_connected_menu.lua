@@ -6,9 +6,9 @@ local MenuClass = require ("resources/mods/diorama/frontend_menus/menu_class")
 local Mixin = require ("resources/mods/diorama/frontend_menus/mixin")
 
 local reasons = dio.events.sessionShutdownBegun.reasons
-local reasonStrings = 
+local reasonStrings =
 {
-    [reasons.NETWORK_CONNECTION_ATTEMPT_FAILED]    = 
+    [reasons.NETWORK_CONNECTION_ATTEMPT_FAILED]    =
     {
         "SERVER COULD NOT BE REACHED",
         "The server may not be running",
@@ -16,8 +16,8 @@ local reasonStrings =
         "OR Your internet connection might be naff",
         "OR Your firewall settings might be naff",
     },
-    
-    [reasons.NETWORK_CONNECTION_LOST] = 
+
+    [reasons.NETWORK_CONNECTION_LOST] =
     {
         "THE NETWORK CONNECTION ENDED",
         "The server may have quit",
@@ -25,8 +25,8 @@ local reasonStrings =
         "",
         ""
     },
-    
-    [reasons.KICKED_FROM_SERVER] =            
+
+    [reasons.KICKED_FROM_SERVER] =
     {
         "SERVER TERMINATED CONNECTION",
         "You probably need to update your client...",
@@ -88,14 +88,14 @@ return function ()
     Mixin.CopyToAndBackupParents (instance, c)
 
 
-    instance:addMenuItem (properties.reasonWarning1)    
-    instance:addMenuItem (LabelMenuItem (""))    
-    instance:addMenuItem (properties.reasonWarning2)    
-    instance:addMenuItem (properties.reasonWarning3)    
-    instance:addMenuItem (properties.reasonWarning4)    
-    instance:addMenuItem (properties.reasonWarning5)    
+    instance:addMenuItem (properties.reasonWarning1)
+    instance:addMenuItem (LabelMenuItem (""))
+    instance:addMenuItem (properties.reasonWarning2)
+    instance:addMenuItem (properties.reasonWarning3)
+    instance:addMenuItem (properties.reasonWarning4)
+    instance:addMenuItem (properties.reasonWarning5)
     instance:addMenuItem (BreakMenuItem ())
-    instance:addMenuItem (properties.returnButton)    
+    instance:addMenuItem (properties.returnButton)
 
     return instance
 end
