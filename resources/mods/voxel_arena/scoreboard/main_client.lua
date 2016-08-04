@@ -29,7 +29,7 @@ local function renderPlayerList (instance)
 
         drawString (8, y, instance.scores [idx], 0x00ffffff)
         drawString (100, y, "K:" .. instance.scores [idx + 1], 0x00ffffff)
-        drawString (140, y, "D:" .. instance.scores [idx + 2], 0x00ffffff)
+        drawString (130, y, "D:" .. instance.scores [idx + 2], 0x00ffffff)
         y = y - instance.heightPerLine
     end
 

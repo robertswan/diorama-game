@@ -74,14 +74,25 @@ end
 --------------------------------------------------
 local function createNewPlayerEntity (connectionId)
 
+    local chunkId = {0, 0, 0}
+    local xyz = {0.5, 0, 0.5}
+
+    math.randomseed(os.time())
+
+    if instance.isPlaying then
+        local chunkRadius = 2
+        chunkId = {math.random (-chunkRadius, chunkRadius), 0, math.random (-chunkRadius, chunkRadius)}
+        xyz = {math.random (0, 31) + 0.5, 29, math.random (0, 31) + 0.5}
+    end
+
     local playerSettings =
     {
         connectionId = connectionId,
         avatar =
         {
             roomFolder = getCurrentRoomFolder (),
-            chunkId = {0, 0, 0},
-            xyz = {0.5, 0, 0.5},
+            chunkId = chunkId,
+            xyz = xyz,
             ypr = {0, 0, 0}
         },
         gravityDir = 5,
