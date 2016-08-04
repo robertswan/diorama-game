@@ -210,7 +210,7 @@ local function onClientConnected (event)
         dio.network.sendEvent (connection.connectionId, "voxel_arena.JOIN_WAITING_ROOM")
     end
 
-    broadcastScore (connection.connectionId)
+    broadcastScore ()
 end
 
 --------------------------------------------------
@@ -230,6 +230,8 @@ local function onClientDisconnected (event)
     if instance.connectionsCount == 0 then
         instance.isPlaying = false
     end
+
+    broadcastScore ()
 
     checkForRoundStart (event.connectionId)
 end

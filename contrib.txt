@@ -73,6 +73,7 @@
         - Expatiator
         - FGArray
         - Fleabum
+        - FlopCoat2
         - Funisdangerous
         - GamesAteMyCereal
         - GhassanPL
@@ -113,6 +114,7 @@
         - OrangeGames3
         - Phestek
         - Pjuke
+        - Pthrem
         - QeraiX
         - RadstaR
         - rave1000
@@ -145,6 +147,7 @@
         - Typpi_77
         - Unh0ly_Tigg
         - unpause_it
+        - vincent
         - Waise Milliams
         - Walterman50
         - waterlimon
