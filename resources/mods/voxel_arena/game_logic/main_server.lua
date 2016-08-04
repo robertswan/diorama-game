@@ -7,7 +7,7 @@ local instance =
     readyCount = 0,
     roomEntityIds = {},
     roundTimeLeft = 0,
-    timePerRound = 10,
+    timePerRound = 60,
 }
 
 --------------------------------------------------
