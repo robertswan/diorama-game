@@ -77,8 +77,6 @@ local function createNewPlayerEntity (connectionId)
     local chunkId = {0, 0, 0}
     local xyz = {0.5, 0, 0.5}
 
-    math.randomseed(os.time())
-
     if instance.isPlaying then
         local chunkRadius = 2
         chunkId = {math.random (-chunkRadius, chunkRadius), 0, math.random (-chunkRadius, chunkRadius)}
@@ -321,6 +319,8 @@ local function onLoadSuccessful ()
     dio.events.addListener (types.ENTITY_DESTROYED, onPlayerSecondaryAction)
     dio.events.addListener (types.ROOM_CREATED, onRoomCreated)
     dio.events.addListener (types.TICK, onServerTick)
+
+    math.randomseed (os.time ())
 
 end
 
