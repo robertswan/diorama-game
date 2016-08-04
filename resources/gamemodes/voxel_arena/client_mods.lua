@@ -21,6 +21,16 @@ local modsToLoad =
         modName = "chat",
         versionRequired = {major = 1, minor = 0},
     },
+    {
+        folder = "voxel_arena",
+        modName = "scoreboard",
+        versionRequired = {major = 1, minor = 0},
+    },  
+    {
+        folder = "voxel_arena",
+        modName = "clock",
+        versionRequired = {major = 1, minor = 0},
+    },  
 }
 
 local mods = {}
