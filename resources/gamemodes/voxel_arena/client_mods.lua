@@ -43,6 +43,7 @@ local function main ()
         blocks = true,
         drawing = true,
         diagnostics = true,
+        entities = true,
         file = true,
         world = true,
         input = true,

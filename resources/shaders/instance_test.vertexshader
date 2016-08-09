@@ -1,0 +1,23 @@
+#version 330
+
+layout (location = 0) in vec3 vertex_position;
+layout (location = 1) in vec3 vertex_rgb;
+layout (location = 2) in vec3 vertex_normal;
+
+layout (location = 3) in vec3 instance_offset;
+layout (location = 4) in vec3 instance_colors;
+
+uniform mat4 mvp_matrix;
+
+uniform vec4 light_direction;
+uniform vec4 directional_color;
+uniform vec4 ambient_color;
+
+out vec4 final_rgba;
+
+void main()
+{
+    gl_Position = mvp_matrix * vec4 (vertex_position + instance_offset, 1.0f);
+    final_rgba.rgb = vertex_rgb * instance_colors;
+    final_rgba.a = 1.0f;
+}

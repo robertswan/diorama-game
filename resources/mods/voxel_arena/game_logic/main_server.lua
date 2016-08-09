@@ -31,7 +31,25 @@ local function getRocketEntitySettings ()
         [components.COLLISION_LISTENER] =
         {
             onCollision = function (event)
-                dio.entities.destroy (event.entity)
+
+                -- dio.entities.destroy (event.entity)
+
+                local payload = 
+                        tostring (event.roomEntityId) .. ":" ..
+                        tostring (event.chunkId [1]) .. ":" ..
+                        tostring (event.chunkId [2]) .. ":" ..
+                        tostring (event.chunkId [3]) .. ":" ..
+                        tostring (event.xyz [1]) .. ":" ..
+                        tostring (event.xyz [2]) .. ":" ..
+                        tostring (event.xyz [3])
+
+                for _, connection in pairs (instance.connections) do
+
+                    dio.network.sendEvent (
+                            connection.connectionId, 
+                            "voxel_arena.EXPLOSION", 
+                            payload);
+                end
                 -- dio.blocks.destroySphere (event.entity.getXyz (), 10)
             end
         },
