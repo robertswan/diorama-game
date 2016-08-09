@@ -4,10 +4,11 @@ local Window = require ("resources/_scripts/utils/window")
 local instance = 
 {
     w = 100,
-    h = 14,
+    h = 25,
     isDirty = true,
     isVisible = false,
     roundTimeLeft = 0,
+    livesLeft = 0,
     lastTimeAsInteger = 0,
 }
 
@@ -21,6 +22,7 @@ local function renderClock (instance)
 
     local drawString = dio.drawing.font.drawString
     drawString (4, 2, "Time left: " .. tostring (instance.lastTimeAsInteger), 0x00ffffff)
+    drawString (4, 12, "Health: " .. tostring (instance.livesLeft), 0xff0000ff)
 end
 
 --------------------------------------------------
@@ -52,7 +54,11 @@ end
 --------------------------------------------------
 local function onServerEventReceived (event)
 
-    if event.id == "voxel_arena.JOIN_WAITING_ROOM" then
+    if event.id == "voxel_arena.HEALTH_UPDATE" then
+        instance.isDirty = true
+        instance.livesLeft = tonumber (event.payload)
+
+    elseif event.id == "voxel_arena.JOIN_WAITING_ROOM" then
         instance.isDirty = true
 
     elseif event.id == "voxel_arena.JOIN_GAME" then
