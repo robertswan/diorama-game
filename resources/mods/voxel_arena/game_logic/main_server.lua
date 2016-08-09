@@ -7,115 +7,10 @@ local instance =
     readyCount = 0,
     roomEntityIds = {},
     roundTimeLeft = 0,
-    timePerRound = 60,
+    timePerRound = 60 * 3,
+    livesPerPlayer = 5,
+    rocketEntityIds = {},
 }
-
---------------------------------------------------
-local function getRocketEntitySettings ()
-
-    local components = dio.entities.components
-    local rocketEntitySettings =
-    {
-        [components.AABB_COLLIDER] =
-        {
-            min = {-0.1, -0.1, -0.1},
-            size = {0.2, 0.2, 0.2},
-        },
-
-        [components.BASE_NETWORK] =
-        {
-            -- with this line out, we use the regular chooser
-            --shouldSync = function (event) return true end,
-        },
-
-        [components.COLLISION_LISTENER] =
-        {
-            onCollision = function (event)
-
-                -- dio.entities.destroy (event.entity)
-
-                local payload = 
-                        tostring (event.roomEntityId) .. ":" ..
-                        tostring (event.chunkId [1]) .. ":" ..
-                        tostring (event.chunkId [2]) .. ":" ..
-                        tostring (event.chunkId [3]) .. ":" ..
-                        tostring (event.xyz [1]) .. ":" ..
-                        tostring (event.xyz [2]) .. ":" ..
-                        tostring (event.xyz [3])
-
-                for _, connection in pairs (instance.connections) do
-
-                    dio.network.sendEvent (
-                            connection.connectionId, 
-                            "voxel_arena.EXPLOSION", 
-                            payload);
-                end
-                -- dio.blocks.destroySphere (event.entity.getXyz (), 10)
-            end
-        },
-
-        [components.MESH_PLACEHOLDER] =
-        {
-            blueprintId = "ROCKET",
-        },
-
-        [components.NAME] =
-        {
-            name = "ROCKET",
-            debug = true,
-        },
-
-        [components.PARENT] =
-        {
-        },
-
-        [components.RIGID_BODY] =
-        {
-            --velocity = {0.0, 0.0, 0.0},
-            --acceleration = {0.0, 0.0, 0.0}
-            acceleration = {0.0, -9.806 * 1.0, 0.0},
-        },
-
-        [components.TRANSFORM] =
-        {
-        },
-    }
-
-    return rocketEntitySettings
-end
-
---------------------------------------------------
-local function getCurrentRoomFolder ()
-    return instance.isPlaying and "default/" or "waiting_room/"
-end
-
---------------------------------------------------
-local function createNewPlayerEntity (connectionId)
-
-    local chunkId = {0, 0, 0}
-    local xyz = {0.5, 0, 0.5}
-
-    if instance.isPlaying then
-        local chunkRadius = 2
-        chunkId = {math.random (-chunkRadius, chunkRadius), 0, math.random (-chunkRadius, chunkRadius)}
-        xyz = {math.random (0, 31) + 0.5, 29, math.random (0, 31) + 0.5}
-    end
-
-    local playerSettings =
-    {
-        connectionId = connectionId,
-        avatar =
-        {
-            roomFolder = getCurrentRoomFolder (),
-            chunkId = chunkId,
-            xyz = xyz,
-            ypr = {0, 0, 0}
-        },
-        gravityDir = 5,
-    }
-
-    return dio.world.createPlayer (playerSettings)
-end
 
 --------------------------------------------------
 local function calcComparerScore (connection)
@@ -162,6 +57,174 @@ local function broadcastScore (connectionId)
 end
 
 --------------------------------------------------
+local function getCurrentRoomFolder ()
+    return instance.isPlaying and "default/" or "waiting_room/"
+end
+
+--------------------------------------------------
+local function createNewPlayerEntity (connectionId)
+
+    local chunkId = {0, 0, 0}
+    local xyz = {0.5, 0, 0.5}
+
+    if instance.isPlaying then
+        local chunkRadius = 2
+        chunkId = {math.random (-chunkRadius, chunkRadius), 0, math.random (-chunkRadius, chunkRadius)}
+        xyz = {math.random (0, 31) + 0.5, 29, math.random (0, 31) + 0.5}
+    end
+
+    local playerSettings =
+    {
+        connectionId = connectionId,
+        avatar =
+        {
+            roomFolder = getCurrentRoomFolder (),
+            chunkId = chunkId,
+            xyz = xyz,
+            ypr = {0, 0, 0}
+        },
+        gravityDir = 5,
+    }
+
+    return dio.world.createPlayer (playerSettings)
+end
+
+--------------------------------------------------
+local function calcDistanceSqr (chunkIdA, xyzA, chunkIdB, xyzB)
+    local chunkSize = 32
+    local x = (chunkIdA [1] * chunkSize + xyzA [1]) - (chunkIdB [1] * 32 + xyzB [1])
+    local y = (chunkIdA [2] * chunkSize + xyzA [2]) - (chunkIdB [2] * 32 + xyzB [2])
+    local z = (chunkIdA [3] * chunkSize + xyzA [3]) - (chunkIdB [3] * 32 + xyzB [3])
+    return x * x + y * y + z * z
+end
+
+--------------------------------------------------
+local function onRocketAndSceneryCollision (event)
+
+    -- dio.entities.destroy (event.entity)
+
+    local payload = 
+            tostring (event.roomEntityId) .. ":" ..
+            tostring (event.chunkId [1]) .. ":" ..
+            tostring (event.chunkId [2]) .. ":" ..
+            tostring (event.chunkId [3]) .. ":" ..
+            tostring (event.xyz [1]) .. ":" ..
+            tostring (event.xyz [2]) .. ":" ..
+            tostring (event.xyz [3])
+
+    for _, connection in pairs (instance.connections) do
+
+        dio.network.sendEvent (
+                connection.connectionId, 
+                "voxel_arena.EXPLOSION", 
+                payload);
+    end
+
+    local wasScoreUpdated = false
+    local rocketFiredBy = instance.rocketEntityIds [event.entityId]
+
+    if rocketFiredBy then
+
+        for _, connection in pairs (instance.connections) do
+            local player = dio.world.getPlayerXyz (connection.accountId)
+            local distanceSqr = calcDistanceSqr (event.chunkId, event.xyz, player.chunkId, player.xyz)
+
+            if distanceSqr < (3 * 3) then
+
+                connection.livesLeft = connection.livesLeft - 1
+
+                if connection.livesLeft == 0 then
+
+                    local deathText = connection.accountId .. " was killed by " .. rocketFiredBy.accountId
+
+                    if connection == rocketFiredBy then
+                        deathText = connection.accountId .. " killed themeslves"
+                    end
+
+                    for _, connection2 in pairs (instance.connections) do
+                        dio.network.sendChat (
+                                connection2.connectionId, 
+                                "SERVER", 
+                                deathText)
+                    end
+
+                    connection.livesLeft = instance.livesPerPlayer
+                    dio.world.destroyPlayer (connection.entityId)
+                    connection.entityId = createNewPlayerEntity (connection.connectionId)
+
+                    connection.deaths = connection.deaths + 1
+                    rocketFiredBy.kills = rocketFiredBy.kills + 1
+                    wasScoreUpdated = true
+
+                end
+
+                dio.network.sendEvent (connection.connectionId, "voxel_arena.HEALTH_UPDATE", tostring (connection.livesLeft))
+
+            end
+        end
+    end
+
+    if wasScoreUpdated then
+        broadcastScore ()
+    end
+
+    instance.rocketEntityIds [event.entityId] = nil
+end
+
+--------------------------------------------------
+local function getRocketEntitySettings ()
+
+    local components = dio.entities.components
+    local rocketEntitySettings =
+    {
+        [components.AABB_COLLIDER] =
+        {
+            min = {-0.1, -0.1, -0.1},
+            size = {0.2, 0.2, 0.2},
+        },
+
+        [components.BASE_NETWORK] =
+        {
+            -- with this line out, we use the regular chooser
+            --shouldSync = function (event) return true end,
+        },
+
+        [components.COLLISION_LISTENER] =
+        {
+            onCollision = onRocketAndSceneryCollision,
+        },
+
+        [components.MESH_PLACEHOLDER] =
+        {
+            blueprintId = "ROCKET",
+        },
+
+        [components.NAME] =
+        {
+            name = "ROCKET",
+            debug = true,
+        },
+
+        [components.PARENT] =
+        {
+        },
+
+        [components.RIGID_BODY] =
+        {
+            --velocity = {0.0, 0.0, 0.0},
+            --acceleration = {0.0, 0.0, 0.0}
+            acceleration = {0.0, -9.806 * 1.0, 0.0},
+        },
+
+        [components.TRANSFORM] =
+        {
+        },
+    }
+
+    return rocketEntitySettings
+end
+
+--------------------------------------------------
 local function checkForRoundStart (connectionId)
 
     if instance.readyCount > instance.connectionsCount / 2 then
@@ -174,6 +237,7 @@ local function checkForRoundStart (connectionId)
         for _, connection in pairs (instance.connections) do
 
             dio.network.sendEvent (connection.connectionId, "voxel_arena.BEGIN_GAME", tostring (instance.roundTimeLeft))
+            dio.network.sendEvent (connection.connectionId, "voxel_arena.HEALTH_UPDATE", tostring (instance.livesPerPlayer))
 
             dio.world.destroyPlayer (connection.entityId)
             connection.entityId = createNewPlayerEntity (connection.connectionId)
@@ -203,6 +267,8 @@ local function doGameOver ()
 
         dio.network.sendChat (connection.connectionId, "SERVER", winning_text)
     end    
+
+    instance.rocketEntityIds = {}
 end
 
 --------------------------------------------------
@@ -217,6 +283,7 @@ local function onClientConnected (event)
         entityId = entityId,
         kills = 0,
         deaths = 0,
+        livesLeft = instance.livesPerPlayer,
     }
 
     instance.connections [event.connectionId] = connection
@@ -276,7 +343,8 @@ local function fireWeapon (connection)
     local rigidBody = rocketEntitySettings [components.RIGID_BODY]
     rigidBody.forwardSpeed = 30.0
 
-    dio.entities.create (roomEntityId, rocketEntitySettings)
+    local rocketEntityId = dio.entities.create (roomEntityId, rocketEntitySettings)
+    instance.rocketEntityIds [rocketEntityId] = connection
 end
 
 --------------------------------------------------
