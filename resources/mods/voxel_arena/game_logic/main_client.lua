@@ -22,7 +22,7 @@ local function onServerEventReceived (event)
 
     if event.id == "voxel_arena.JOIN_GAME" or event.id == "voxel_arena.BEGIN_GAME" then
 
-        dio.inputs.setPlayerBlockId (1, 0) -- air, but will be changed to jump pad (10)
+        -- dio.inputs.setPlayerBlockId (1, 0) -- air, but will be changed to jump pad (10)
 
     elseif event.id == "voxel_arena.EXPLOSION" then
         

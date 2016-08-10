@@ -13,7 +13,7 @@ end
 
 --------------------------------------------------
 local function onMultiplayerClicked ()
-    return "multiplayer_top_menu"
+    return "mp_select_server_menu"
 end
 
 --------------------------------------------------
