@@ -411,7 +411,6 @@ local modSettings =
     permissionsRequired =
     {
         file = true,
-        inputs = true,
         world = true,
     },
 }
