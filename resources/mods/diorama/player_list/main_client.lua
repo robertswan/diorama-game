@@ -124,7 +124,7 @@ local modSettings =
     {
         drawing = true,
         world = true,
-        input = true,
+        inputs = true,
     },
 }
 

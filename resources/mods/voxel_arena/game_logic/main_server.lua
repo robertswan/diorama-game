@@ -378,7 +378,9 @@ end
 
 --------------------------------------------------
 local function onPlayerSecondaryAction (event)
-    event.cancel = true
+    if event.isBlockValid then
+        event.sourceBlockId = 10 -- jump pad
+    end
 end
 
 --------------------------------------------------
