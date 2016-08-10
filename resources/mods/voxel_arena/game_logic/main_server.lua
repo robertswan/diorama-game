@@ -129,15 +129,17 @@ local function onRocketAndSceneryCollision (event)
             local player = dio.world.getPlayerXyz (connection.accountId)
             local distanceSqr = calcDistanceSqr (event.chunkId, event.xyz, player.chunkId, player.xyz)
 
-            if distanceSqr < (3 * 3) then
+            if distanceSqr < (4 * 4) then
 
                 connection.livesLeft = connection.livesLeft - 1
 
                 if connection.livesLeft == 0 then
 
                     local deathText = connection.accountId .. " was killed by " .. rocketFiredBy.accountId
+                    local isSuicide = false
 
                     if connection == rocketFiredBy then
+                        isSuicide = true
                         deathText = connection.accountId .. " killed themeslves"
                     end
 
@@ -153,7 +155,9 @@ local function onRocketAndSceneryCollision (event)
                     connection.entityId = createNewPlayerEntity (connection.connectionId)
 
                     connection.deaths = connection.deaths + 1
-                    rocketFiredBy.kills = rocketFiredBy.kills + 1
+                    if not isSuicide then
+                        rocketFiredBy.kills = rocketFiredBy.kills + 1
+                    end
                     wasScoreUpdated = true
 
                 end
@@ -291,6 +295,7 @@ local function onClientConnected (event)
 
     if instance.isPlaying then
         dio.network.sendEvent (connection.connectionId, "voxel_arena.JOIN_GAME", tostring (instance.roundTimeLeft))
+        dio.network.sendEvent (connection.connectionId, "voxel_arena.HEALTH_UPDATE", tostring (instance.livesPerPlayer))
     else
         dio.network.sendEvent (connection.connectionId, "voxel_arena.JOIN_WAITING_ROOM")
     end
@@ -378,7 +383,9 @@ end
 
 --------------------------------------------------
 local function onPlayerSecondaryAction (event)
-    event.cancel = true
+    -- if event.isBlockValid then
+    --     event.sourceBlockId = 10 -- jump pad
+    -- end
 end
 
 --------------------------------------------------
@@ -404,7 +411,7 @@ local function onLoadSuccessful ()
     dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
     dio.events.addListener (types.CLIENT_DISCONNECTED, onClientDisconnected)
     dio.events.addListener (types.ENTITY_PLACED, onPlayerPrimaryAction)
-    dio.events.addListener (types.ENTITY_DESTROYED, onPlayerSecondaryAction)
+    -- dio.events.addListener (types.ENTITY_DESTROYED, onPlayerSecondaryAction)
     dio.events.addListener (types.ROOM_CREATED, onRoomCreated)
     dio.events.addListener (types.TICK, onServerTick)
 

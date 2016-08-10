@@ -50,7 +50,7 @@ local function main ()
         diagnostics = true,
         file = true,
         world = true,
-        input = true,
+        inputs = true,
     }
 
     for _, modData in ipairs (modsToLoad) do

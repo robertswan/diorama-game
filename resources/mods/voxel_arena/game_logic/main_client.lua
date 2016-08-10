@@ -20,7 +20,11 @@ end
 --------------------------------------------------
 local function onServerEventReceived (event)
 
-    if event.id == "voxel_arena.EXPLOSION" then
+    if event.id == "voxel_arena.JOIN_GAME" or event.id == "voxel_arena.BEGIN_GAME" then
+
+        -- dio.inputs.setPlayerBlockId (1, 0) -- air, but will be changed to jump pad (10)
+
+    elseif event.id == "voxel_arena.EXPLOSION" then
         
         -- unpack the data
         local unpacked_payload = {}
@@ -82,6 +86,7 @@ local modSettings =
     {
         drawing = true,
         entities = true,
+        inputs = true,
         world = true,
     },
 }

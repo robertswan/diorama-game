@@ -130,7 +130,7 @@ local modSettings =
         drawing = true,
         diagnostics = true,
         world = true,
-        input = true,
+        inputs = true,
     },
 }
 

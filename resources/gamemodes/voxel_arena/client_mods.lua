@@ -45,8 +45,8 @@ local function main ()
         diagnostics = true,
         entities = true,
         file = true,
+        inputs = true,
         world = true,
-        input = true,
     }
 
     for _, modData in ipairs (modsToLoad) do
