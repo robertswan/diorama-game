@@ -379,6 +379,30 @@ end
 --------------------------------------------------
 local function onRoomCreated (event)
 
+    local components = dio.entities.components
+    local calendarEntity =
+    {
+        [components.BASE_NETWORK] =
+        {
+        },
+        [components.CALENDAR] =
+        {
+            time = 12 * 60 * 60,
+            timeMultiplier = 2000,
+        },
+        [components.NAME] =
+        {
+            name = "CALENDAR",
+            debug = false,
+        },
+        [components.PARENT] =
+        {
+            parentEntityId = event.roomEntityId,
+        },
+    }
+    
+    local calendarEntityId = dio.entities.create (event.roomEntityId, calendarEntity)
+
     gameVars.mostRecentRoom =
     {
         folder = event.roomFolder,
@@ -572,6 +596,7 @@ local modSettings =
 
     permissionsRequired =
     {
+        entities = true,
         file = true,
         world = true,
         network = true,

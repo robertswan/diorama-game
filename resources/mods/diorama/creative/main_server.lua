@@ -295,6 +295,34 @@ local function onChatReceived (event)
 end
 
 --------------------------------------------------
+local function onRoomCreated (event)
+
+    local components = dio.entities.components
+    local calendarEntity =
+    {
+        [components.BASE_NETWORK] =
+        {
+        },
+        [components.CALENDAR] =
+        {
+            time = 12 * 60 * 60, -- midday
+            timeMultiplier = 0,
+        },
+        [components.NAME] =
+        {
+            name = "CALENDAR",
+            debug = false,
+        },
+        [components.PARENT] =
+        {
+            parentEntityId = event.roomEntityId,
+        },
+    }
+    
+    local calendarEntityId = dio.entities.create (event.roomEntityId, calendarEntity)
+end
+
+--------------------------------------------------
 local function onLoadSuccessful ()
 
     -- dio.players.setPlayerAction (player, actions.LEFT_CLICK, outcomes.DESTROY_BLOCK)
@@ -305,6 +333,7 @@ local function onLoadSuccessful ()
     dio.events.addListener (types.ENTITY_PLACED, onEntityPlaced)
     dio.events.addListener (types.ENTITY_DESTROYED, onEntityDestroyed)
     dio.events.addListener (types.CHAT_RECEIVED, onChatReceived)
+    dio.events.addListener (types.ROOM_CREATED, onRoomCreated)
 
 end
 
@@ -327,6 +356,7 @@ local modSettings =
 
     permissionsRequired =
     {
+        entities = true,
         file = true,
         world = true,
     },
