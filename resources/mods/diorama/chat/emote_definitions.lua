@@ -18,6 +18,14 @@ local emotes =
     [":)"] =            {uvs = {5, 0}},
     [":("] =            {uvs = {6, 0}},
     ["<3"] =            {uvs = {7, 0}},
+    ["<hot>"] =         {uvs = {0, 1}},
+    ["<what>"] =        {uvs = {1, 1}},
+    ["<teazelhot>"] =   {uvs = {2, 1}},
+    ["<boxoffivers>"] =       {uvs = {3, 1}},
+    ["Kappa"] =         {uvs = {4, 1}},
+    [":|"] =            {uvs = {5, 1}},
+    [":D"] =            {uvs = {6, 1}},
+    ["</3"] =            {uvs = {7, 1}},
 }
 
 return {emoteSpecs = emoteSpecs, emotes = emotes}
