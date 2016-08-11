@@ -98,7 +98,7 @@ local blocks =
     {name = "all grass",            uvs = {0, 0}},
     {name = "water",                uvs = {14, 0},         isLiquid = true},
     {name = "ice",                  uvs = {3, 4}},
-    {name = "coal block",           uvs = {1, 15}},
+    {name = "coal block",           uvs = {14, 1}},
 
     -- 64
     {name = "gold ore",             uvs = {0, 2}},
