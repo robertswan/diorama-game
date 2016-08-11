@@ -99,7 +99,6 @@ local function main ()
         main_menu =                     require (menu_path .. "main_menu") (),
         single_player_top_menu =        require (menu_path .. "single_player_top_menu") (),
         mp_select_server_menu =         require (menu_path .. "multiplayer/mp_select_server_menu") (),
-        mp_add_server_menu =            require (menu_path .. "multiplayer/mp_add_server_menu") (),
         mp_edit_server_menu =           require (menu_path .. "multiplayer/mp_edit_server_menu") (),
         mp_delete_server_menu =         require (menu_path .. "multiplayer/mp_delete_server_menu") (),
         mp_edit_profile_menu =          require (menu_path .. "multiplayer/mp_edit_profile_menu") (),
