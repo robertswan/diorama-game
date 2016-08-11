@@ -13,14 +13,17 @@ local instance =
 }
 
 --------------------------------------------------
-local function calcComparerScore (connection)
-    local score = connection.kills
-    return score
-end
-
---------------------------------------------------
 local function comparer (lhs, rhs)
-    return calcComparerScore (lhs) > calcComparerScore (rhs)
+
+    if lhs.kills == rhs.kills then
+        if lhs.deaths == rhs.deaths then
+            return lhs.accountId < rhs.accountId
+        else
+            return (lhs.deaths < rhs.deaths)
+        end
+    else
+        return (lhs.kills > rhs.kills)
+    end
 end
 
 --------------------------------------------------

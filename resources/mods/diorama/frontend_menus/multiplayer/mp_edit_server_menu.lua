@@ -14,53 +14,41 @@ local TextEntryMenuItem = require ("resources/mods/diorama/frontend_menus/menu_i
 local BlockDefinitions = require ("resources/mods/diorama/blocks/block_definitions")
 
 --------------------------------------------------
-local function onConnectClicked (menuItem, menu)
-
-    if menu.accountId.value == "" then
-        menu.warningLabel.text = "ERROR! Player Name must not be empty"
-        return
-
-    elseif menu.accountPassword.value == "" then
-        menu.warningLabel.text = "ERROR! Player Password must not be empty"
-        return
-
-    end
-
-    local params =
-    {
-        ipAddress =         menu.ipAddress.value,
-        ipPort =            menu.ipPort:getValueAsNumber (),
-        accountId =         menu.accountId.value,
-        accountPassword =   menu.accountPassword.value,
-        avatarTop =         menu.avatarTop.value,
-        avatarBottom =      menu.avatarBottom.value,
-    }
-
-    dio.file.saveLua (dio.file.locations.SETTINGS, "multiplayer_settings.lua", params, "multiplayerSettings")
-
-    local isOk, errorString = dio.session.beginMp (params)
-    if isOk then
-        return "playing_game_menu"
-    end
-end
-
---------------------------------------------------
 local function onCancelClicked ()
     return "mp_select_server_menu"
 end
 
-
 --------------------------------------------------
 local function onSaveClicked (menuItem, menu)
-    local server = 
-    {   
-        name = menu.serverName.value,
-        password = menu.accountPassword.value,
-        ipAddress = menu.ipAddress.value,
-        ipPort = menu.ipPort:getValueAsNumber (),
+
+    local data =
+    {
+        name =          menu.serverName.value,
+        ipAddress =     menu.serverIp.value,
+        ipPort =        menu.serverPort:getValueAsNumber (),
+        password =      menu.serverPassword.value,
     }
-    menu.menus.mp_select_server_menu:recordUpdatedServer (server)
+
+    menu.menus.mp_select_server_menu:recordUpdatedServer (menu.serverId, data)
+    menu.serverId = nil
     return "mp_select_server_menu"
+end
+
+--------------------------------------------------
+local function updateWarningLabel (menu)
+
+    if menu.serverPassword.value == "" then
+        menu.warningLabel.text = "PASSWORD IS EMPTY"
+    elseif menu.serverPassword.value:len () <= 3 then
+        menu.warningLabel.text = "PASSWORD MUST BE MORE THAN 3 CHARACTERS"
+    else
+        menu.warningLabel.text = ""
+    end
+end
+
+--------------------------------------------------
+local function onPasswordChanged (menuItem, menu)
+    updateWarningLabel (menu)
 end
 
 --------------------------------------------------
@@ -69,49 +57,47 @@ local c = {}
 --------------------------------------------------
 function c:onEnter (menus)
     self.menus = menus
-    self.warningLabel.text = ""
+    updateWarningLabel (self)
 end
 
 --------------------------------------------------
-function c:setServerData (serverData)
-    self.serverName.value = serverData.name
-    self.accountPassword.value = serverData.password
-    self.ipAddress.value = serverData.ipAddress
-    self.ipPort.value = tostring (serverData.ipPort)
+function c:recordServerData (serverId, server)
+
+    self.serverId =                 serverId
+    self.serverName.value =         server.name
+    self.serverIp.value =           server.ipAddress
+    self.serverPort.value =         tostring (server.ipPort)
+    self.serverPassword.value =     server.password
 end
 
 --------------------------------------------------
 return function ()
 
-    math.randomseed (os.time())
-
-    local instance = MenuClass ("Edit Multiplayer Server")
-
+    local instance = MenuClass ("Multiplayer Server Settings")
     local properties =
     {
-        serverName =        TextEntryMenuItem ("Server Name", nil, nil, "NAMEYNAMENAME", 24),
-        accountPassword =   PasswordTextEntryMenuItem ("Password", nil, nil, "DEFAULT", 15),
-        ipAddress =         TextEntryMenuItem ("IP Address", nil, nil, "DEFAULT", 16),
-        ipPort =            NumberEntryMenuItem ("Port", nil, nil, 99999, true),
-        warningLabel =      LabelMenuItem (""),
+        serverName =            TextEntryMenuItem ("Server Name", nil, nil, "", 30),
+        serverIp =              TextEntryMenuItem ("Server Ip", nil, nil, "", 15),
+        serverPort =            NumberEntryMenuItem ("Server Port", nil, nil, 10, true),
+        serverPassword =        PasswordTextEntryMenuItem ("Password", onPasswordChanged, nil, "", 15),
+        warningLabel =          LabelMenuItem (""),
     }
 
     Mixin.CopyTo (instance, properties)
     Mixin.CopyToAndBackupParents (instance, c)
 
+    instance:addMenuItem (LabelMenuItem ("Servers require passwords."))
     instance:addMenuItem (LabelMenuItem ("Passwords are per server and stored in plain text."))
     instance:addMenuItem (LabelMenuItem ("DO NOT REUSE important passwords."))
-    instance:addMenuItem (LabelMenuItem ("Passwords are tied to a username when a user is promoted"))
-    instance:addMenuItem (LabelMenuItem ("to a builder (type '.group' into chat to check)"))
     instance:addMenuItem (BreakMenuItem ())
     instance:addMenuItem (properties.serverName)
-    instance:addMenuItem (properties.accountPassword)
-    instance:addMenuItem (properties.ipAddress)
-    instance:addMenuItem (properties.ipPort)
+    instance:addMenuItem (properties.serverIp)
+    instance:addMenuItem (properties.serverPort)
+    instance:addMenuItem (properties.serverPassword)
     instance:addMenuItem (BreakMenuItem ())
-    instance:addMenuItem (ButtonMenuItem ("Cancel and Return to MP menu", onCancelClicked))
+    instance:addMenuItem (ButtonMenuItem ("Cancel and Quit", onCancelClicked))
     instance:addMenuItem (BreakMenuItem ())
-    instance:addMenuItem (ButtonMenuItem ("Save and Return to MP menu", onSaveClicked))
+    instance:addMenuItem (ButtonMenuItem ("Save and Quit", onSaveClicked))
     instance:addMenuItem (BreakMenuItem ())
     instance:addMenuItem (properties.warningLabel)
 

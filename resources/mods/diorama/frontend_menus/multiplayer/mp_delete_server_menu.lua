@@ -11,13 +11,14 @@ local populateMenus = nil
 
 --------------------------------------------------
 local function onConfirmDeleteClicked (menuItem, menu)
-    dio.file.deleteWorld (menu.filenameLabel.text)
-    return "delete_level_menu"
+    menu.menus.mp_select_server_menu:recordDeleteServer (menu.serverId)
+    menu.serverId = nil
+    return "mp_select_server_menu"
 end
 
 --------------------------------------------------
 local function onCancelDeleteClicked ()
-    return "delete_level_menu"
+    return "mp_select_server_menu"
 end
 
 --------------------------------------------------
@@ -25,28 +26,30 @@ local c = {}
 
 --------------------------------------------------
 function c:onEnter (menus)
-    assert (self.filenameLabel.text ~= "")
+    self.menus = menus
+    assert (self.serverLabel.text ~= "")
 end
 
 --------------------------------------------------
 function c:onExit ()
-    self.filenameLabel.text = ""
+    self.serverLabel.text = ""
 end
 
 --------------------------------------------------
-function c:recordWorldToDelete (worldFilename)
-    self.filenameLabel.text = worldFilename
-    self.deleteConfirmedButton.text = "Confirm Delete " .. worldFilename
+function c:recordServerData (serverId, server)
+    self.serverId = serverId
+    self.serverLabel.text = server.name
+    self.deleteConfirmedButton.text = "Confirm Delete " .. server.name
 end
 
 --------------------------------------------------
 return function ()
 
-    local instance = MenuClass ("Confirm Level Deletion")
+    local instance = MenuClass ("Confirm Server Deletion")
 
     local properties =
     {
-        filenameLabel = LabelMenuItem (""),
+        serverLabel = LabelMenuItem (""),
         deleteConfirmedButton = ButtonMenuItem ("", onConfirmDeleteClicked),
     }
 
@@ -55,9 +58,9 @@ return function ()
 
     instance:addMenuItem (LabelMenuItem ("WARNING"))
     instance:addMenuItem (LabelMenuItem ("Are you sure you want to"))
-    instance:addMenuItem (LabelMenuItem ("delete the following world:"))
+    instance:addMenuItem (LabelMenuItem ("delete the following server:"))
     instance:addMenuItem (LabelMenuItem (""))
-    instance:addMenuItem (properties.filenameLabel)
+    instance:addMenuItem (properties.serverLabel)
     instance:addMenuItem (LabelMenuItem (""))
 
     instance:addMenuItem (BreakMenuItem ())
