@@ -14,40 +14,6 @@ local TextEntryMenuItem = require ("resources/mods/diorama/frontend_menus/menu_i
 local BlockDefinitions = require ("resources/mods/diorama/blocks/block_definitions")
 
 --------------------------------------------------
-local defaultServerSettings =
-{
-    servers =
-    {
-        {
-            ipAddress = "84.92.48.10",
-            ipPort = 25276,
-            name = "DIO Primary",
-            password = "password",
-        },
-        {
-            ipAddress = "84.92.48.10",
-            ipPort = 25274,
-            name = "DIO Secondary",
-            password = "password",
-        },
-        {
-            ipAddress = "localhost",
-            ipPort = 25276,
-            name = "localhost",
-            password = "password",
-        },
-    },
-    profiles =
-    {
-        {
-            accountId = "NoName",
-            avatarBottom = 18,
-            avatarTop = 9,
-        }
-    },
-}
-
---------------------------------------------------
 local colors = 
 {
     selected = 0x80ff80ff,
@@ -60,7 +26,7 @@ local function saveSettings (menu)
 end
 
 --------------------------------------------------
-local function onServerClicked (menuItem, menu)
+local function onServerClicked (menuItem, menu, serverIdx)
 
     for idx, button in ipairs (menu.serverButtons) do
         if button ~= menuItem then
@@ -74,25 +40,31 @@ local function onServerClicked (menuItem, menu)
 
     -- update the buttons here as appropriate
     menu.joinButton.isHighlightable = menuItem.isSelected
-    -- menu.editButton.isHighlightable = menuItem.isSelected
+    menu.editButton.isHighlightable = menuItem.isSelected
     menu.deleteButton.isHighlightable = menuItem.isSelected
 
     menu.currentServerButton = menuItem.isSelected and menuItem or nil
+    menu.currentServerIdx = serverIdx
+
+    menu.warningLabel.text = ""
+    menu.warningLabel2.text = ""
 
 end
 
 --------------------------------------------------
 local function onJoinServerClicked (menuItem, menu)
 
-    -- if menu.currentServer.accountId.value == "" then
-    --     menu.warningLabel.text = "ERROR! Player Name must not be empty"
-    --     return
+    if menu.settings.profiles [1].accountId == "" then
+        menu.warningLabel.text = "ERROR! Player Name must not be empty"
+        menu.warningLabel2.text = "Choose EDIT PLAYER PROFILE first"
+        return
 
-    -- elseif menu.currentServer.accountPassword.value == "" then
-    --     menu.warningLabel.text = "ERROR! Player Password must not be empty"
-    --     return
+    elseif menu.currentServerButton.server.password == "" then
+        menu.warningLabel.text = "ERROR! Server Password must not be empty"
+        menu.warningLabel2.text = "Choose EDIT SERVER first"
+        return
 
-    -- end
+    end
 
     local server = menu.currentServerButton.server
     local profile = menu.settings.profiles [1]
@@ -117,8 +89,28 @@ end
 
 --------------------------------------------------
 local function onEditServerClicked (menuItem, menu)
-    menu.menus.mp_edit_server_menu:setServerData (menu.currentServerButton.server)
+    menu.menus.mp_edit_server_menu:recordServerData (menu.currentServerButton.server, menu.currentServerButton.server)
     return "mp_edit_server_menu"
+end
+
+--------------------------------------------------
+local function onAddServerClicked (menuItem, menu)
+    local settings =
+    {
+        name = "NEW SERVER NAME",
+        ipAddress = "0.0.0.0",
+        ipPort = "25276",
+        password = "",
+    }
+
+    menu.menus.mp_edit_server_menu:recordServerData (nil, settings)
+    return "mp_edit_server_menu"
+end
+
+--------------------------------------------------
+local function onDeleteServerClicked (menuItem, menu)
+    menu.menus.mp_delete_server_menu:recordServerData (menu.currentServerButton.server, menu.currentServerButton.server)
+    return "mp_delete_server_menu"
 end
 
 --------------------------------------------------
@@ -150,42 +142,113 @@ local function generateIconsFromNumbers ()
 end
 
 --------------------------------------------------
-local c = {}
-
---------------------------------------------------
-function c:onEnter (menus)
-
-    self.warningLabel.text = ""
-    self.menus = menus
-
-    for idx, button in ipairs (self.serverButtons) do
-        button.color = colors.deselected
-        button.isSelected = nil
-    end
-
-    self.joinButton.isHighlightable = false
-    -- self.editButton.isHighlightable = false
-    self.deleteButton.isHighlightable = false
-    self.currentServerButton = nil
-end
-
---------------------------------------------------
 local function TextFromServer (server)
     return server.name .. "     " .. server.ipAddress .. " : " .. tostring (server.ipPort)
 end
 
 --------------------------------------------------
-function c:recordUpdatedServer (server)
+local c = {}
 
-    local currentServer = self.currentServerButton.server
-    currentServer.name = server.name
-    currentServer.ipAddress = server.ipAddress
-    currentServer.ipPort = server.ipPort
-    currentServer.password = server.password
+--------------------------------------------------
+function c:onEnter (menus)
+
+    local settings = self.settings
+
+    self.serverButtons = {}
+
+    for idx, server in ipairs (settings.servers) do
+        local button = ButtonMenuItem (TextFromServer (server), function (menuItem, menu) onServerClicked (menuItem, menu, idx) end)
+        button.color = colors.deselected
+        button.server = server
+        table.insert (self.serverButtons, button)
+    end
+
+    for idx, button in ipairs (self.serverButtons) do
+
+        if idx == self.currentServerIdx then
+            self.currentServerButton = button
+        end
+
+        self:addMenuItem (button)
+    end
+
+    if not self.currentServerButton then
+        if #settings.servers > 0 then
+            self.currentServerIdx = 1
+            self.currentServerButton = self.serverButtons [1]
+        else
+            self.currentServerIdx = 0        
+        end
+    end
+
+    if self.currentServerButton then
+        self.currentServerButton.color = colors.selected
+        self.joinButton.isHighlightable = true
+        self.editButton.isHighlightable = true
+        self.deleteButton.isHighlightable = true
+    else
+        self.joinButton.isHighlightable = false
+        self.editButton.isHighlightable = false
+        self.deleteButton.isHighlightable = false
+    end
+
+    self:addMenuItem (BreakMenuItem ())
+
+    self:addMenuItem (self.joinButton)
+    self:addMenuItem (self.editButton)
+    self:addMenuItem (ButtonMenuItem ("Add Server", onAddServerClicked))
+    self:addMenuItem (self.deleteButton)
+
+    self:addMenuItem (BreakMenuItem ())
+    self:addMenuItem (ButtonMenuItem ("Edit Player Profile", onEditPlayerProfileClicked))
+    self:addMenuItem (BreakMenuItem ())
+    self:addMenuItem (ButtonMenuItem ("Return to Main Menu", onMainMenuClicked))
+    self:addMenuItem (BreakMenuItem ())
+    self:addMenuItem (self.warningLabel)
+    self:addMenuItem (self.warningLabel2)
+
+    self.warningLabel.text = ""
+    self.warningLabel2.text = ""
+
+    self.menus = menus
+end
+
+--------------------------------------------------
+function c:onExit ()
+    self.currentServerButton = nil
+    self:clearAllMenuItems ();
+end
+
+--------------------------------------------------
+function c:recordUpdatedServer (serverId, server)
+
+    if not serverId then
+        serverId = {}
+        table.insert (self.settings.servers, serverId)
+        self.currentServerIdx = #self.settings.servers
+    end
+
+    serverId.name = server.name
+    serverId.ipAddress = server.ipAddress
+    serverId.ipPort = server.ipPort
+    serverId.password = server.password
     
-    self.currentServerButton.text = TextFromServer (currentServer)
-
     saveSettings (self)
+end
+
+--------------------------------------------------
+function c:recordDeleteServer (serverId)
+
+    for idx, server in ipairs (self.settings.servers) do
+        if server == serverId then
+            table.remove (self.settings.servers, idx)
+            break
+        end
+    end
+
+    self.currentServerIdx = 0
+
+    saveSettings (self)    
 end
 
 --------------------------------------------------
@@ -207,67 +270,28 @@ return function ()
     local instance = MenuClass ("Multiplayer")
     local settings = dio.file.loadLua (dio.file.locations.SETTINGS, "multiplayer_settings.lua")
     if not settings then
-        settings = defaultServerSettings
+        settings = dio.file.loadLua (dio.file.locations.DEFAULTS, "default_multiplayer_settings.lua")
     end
 
     local properties = 
     {  
         settings = settings,
-        serverButtons = {},
         joinButton =        ButtonMenuItem ("Join Server", onJoinServerClicked),
-        -- editButton =        ButtonMenuItem ("Edit Server", onEditServerClicked),
+        editButton =        ButtonMenuItem ("Edit Server", onEditServerClicked),
         deleteButton =      ButtonMenuItem ("Delete Server", onDeleteServerClicked),
         warningLabel =      LabelMenuItem (""),
+        warningLabel2 =     LabelMenuItem (""),        
+        currentServerIdx =  1,
     }
 
     -- local iconsFromNumbers = generateIconsFromNumbers ()
     -- local iconTexture = dio.drawing.loadTexture ("resources/textures/diorama_terrain_harter_00.png")
 
-    properties.joinButton.isHighlightable = false
-    -- properties.editButton.isHighlightable = false
-    -- properties.deleteButton.isHighlightable = false
-
-    for idx, server in ipairs (settings.servers) do
-        local button = ButtonMenuItem (TextFromServer (server), onServerClicked)
-        button.color = colors.deselected
-        button.server = server
-        table.insert (properties.serverButtons, button)
-    end
-
     Mixin.CopyTo (instance, properties)
     Mixin.CopyToAndBackupParents (instance, c)
 
-    for idx, button in ipairs (properties.serverButtons) do
-        instance:addMenuItem (button)
-    end
-
-    -- instance:addMenuItem (LabelMenuItem ("Passwords are per server and stored in plain text."))
-    -- instance:addMenuItem (LabelMenuItem ("DO NOT REUSE important passwords."))
-    -- instance:addMenuItem (LabelMenuItem ("Passwords are tied to a username when a user is promoted"))
-    -- instance:addMenuItem (LabelMenuItem ("to a builder (type '.group' into chat to check)"))
-    -- instance:addMenuItem (BreakMenuItem ())
-    -- instance:addMenuItem (properties.accountId)
-    -- instance:addMenuItem (properties.avatarTop)
-    -- instance:addMenuItem (BreakMenuItem ())
-    -- instance:addMenuItem (properties.avatarBottom)
-    -- instance:addMenuItem (ButtonMenuItem ("Join Server", onJoinServerClicked))
-    -- instance:addMenuItem (BreakMenuItem ())
-    -- instance:addMenuItem (ButtonMenuItem ("Return To Main Menu", onMainMenuClicked))
-
-    instance:addMenuItem (BreakMenuItem ())
-
-    instance:addMenuItem (properties.joinButton)
-    -- instance:addMenuItem (properties.editButton)
-    -- instance:addMenuItem (ButtonMenuItem ("Add Server", onAddServerClicked))
-    -- instance:addMenuItem (properties.deleteButton)
-
-    instance:addMenuItem (BreakMenuItem ())
-    instance:addMenuItem (ButtonMenuItem ("Edit Player Profile", onEditPlayerProfileClicked))
-
-    instance:addMenuItem (BreakMenuItem ())
-    instance:addMenuItem (properties.warningLabel)
-
-    properties.warningLabel.color = 0xff8000ff
+    instance.warningLabel.color = 0xff8000ff
+    instance.warningLabel2.color = 0xff8000ff
 
     return instance
 end
