@@ -1,4 +1,20 @@
 --------------------------------------------------
+local roomSettings =
+{
+    ["default/"] =
+    {
+        time = 12 * 60 * 60,
+        timeMultiplier = 0,
+    },
+
+    ["waiting_room/"] =
+    {
+        time = 0 * 60 * 60,
+        timeMultiplier = 2000,
+    },
+}
+
+--------------------------------------------------
 local instance = 
 {
     isPlaying = false,
@@ -394,6 +410,32 @@ end
 --------------------------------------------------
 local function onRoomCreated (event)
     instance.roomEntityIds [event.roomFolder] = event.roomEntityId
+
+    local roomSettings = roomSettings [event.roomFolder]
+
+    local components = dio.entities.components
+    local calendarEntity =
+    {
+        [components.BASE_NETWORK] =
+        {
+        },
+        [components.CALENDAR] =
+        {
+            time =  roomSettings.time,
+            timeMultiplier = roomSettings.timeMultiplier,
+        },
+        [components.NAME] =
+        {
+            name = "CALENDAR",
+            debug = false,
+        },
+        [components.PARENT] =
+        {
+            parentEntityId = event.roomEntityId,
+        },
+    }
+    
+    local calendarEntityId = dio.entities.create (event.roomEntityId, calendarEntity)
 end
 
 --------------------------------------------------

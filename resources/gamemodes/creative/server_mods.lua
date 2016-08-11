@@ -30,6 +30,7 @@ local function main ()
     {
         blocks = true,
         drawing = true,
+        entities = true,
         file = true,
         network = true,
         world = true,
