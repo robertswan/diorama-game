@@ -60,7 +60,7 @@
         - cod1ngJamm3r
         - CozyDino
         - CritCrank
-        - SarcasticDante
+        - DatSparrow
         - Defusselkid
         - dgendreau
         - DiggingDJ_
@@ -102,11 +102,14 @@
         - Magnavode
         - Mistapnut
         - Moopaloo
+        - MrEP1Cman
         - MrPancakeGuy___
         - N3rdFall
+        - Napolean89
         - NeutralNoise
         - Niceguy_3210
         - Nidaegwyn
+        - NightlyArcade
         - nomadd917
         - OfficialEvilWalrus
         - Old_Man_Gibbon
@@ -122,6 +125,7 @@
         - Riyyi
         - Roblon
         - SAFCxHarter
+        - SarcasticDante
         - Scellow
         - Scott
         - SirMomster
