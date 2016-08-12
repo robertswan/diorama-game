@@ -1,7 +1,46 @@
 --------------------------------------------------
+local generators =
+{
+    {
+        voxelPass =
+        {
+            {
+                chanceOfTree = 0.005,
+                sizeMin = 2,
+                sizeRange = 3,
+                trunkHeight = 2,
+                type = "addTrees",
+            },
+            
+            {
+                mudHeight = 4,
+                type = "addGrass",
+            },
+        },
+        weightPass = 
+        {
+            {
+                baseVoxel = -64,
+                heightInVoxels = 128,
+                mode = "replace",
+                type = "gradient",
+            },
+            {
+                mode = "lessThan",
+                octaves = 4,
+                perOctaveAmplitude = 0.5,
+                perOctaveFrequency = 2,
+                scale = 64,
+                type = "perlinNoise",
+            },
+        },
+    },
+}
+
+--------------------------------------------------
 local roomSettings =
 {
-    ["default/"] =
+    ["arena/"] =
     {
         time = 12 * 60 * 60,
         timeMultiplier = 0,
@@ -26,6 +65,7 @@ local instance =
     timePerRound = 60 * 3,
     livesPerPlayer = 5,
     rocketEntityIds = {},
+    nextRoundCanBePlayed = true,
 }
 
 --------------------------------------------------
@@ -77,7 +117,7 @@ end
 
 --------------------------------------------------
 local function getCurrentRoomFolder ()
-    return instance.isPlaying and "default/" or "waiting_room/"
+    return instance.isPlaying and "arena/" or "waiting_room/"
 end
 
 --------------------------------------------------
@@ -89,7 +129,7 @@ local function createNewPlayerEntity (connectionId)
     if instance.isPlaying then
         local chunkRadius = 2
         chunkId = {math.random (-chunkRadius, chunkRadius), 0, math.random (-chunkRadius, chunkRadius)}
-        xyz = {math.random (0, 31) + 0.5, 29, math.random (0, 31) + 0.5}
+        xyz = {math.random (0, 31) + 0.5, chunkRadius * 32 - 5, math.random (0, 31) + 0.5}
     end
 
     local playerSettings =
@@ -159,7 +199,7 @@ local function onRocketAndSceneryCollision (event)
 
                     if connection == rocketFiredBy then
                         isSuicide = true
-                        deathText = connection.accountId .. " killed themeslves"
+                        deathText = connection.accountId .. " killed themself"
                     end
 
                     for _, connection2 in pairs (instance.connections) do
@@ -248,10 +288,34 @@ local function getRocketEntitySettings ()
 end
 
 --------------------------------------------------
+local function createRandomSeed ()
+    local seed = "seed" .. tostring (math.random ())
+    return seed
+end
+
+--------------------------------------------------
 local function checkForRoundStart (connectionId)
 
     if instance.readyCount > instance.connectionsCount / 2 then
     --if instance.readyCount > 1 and instance.readyCount > instance.connectionsCount / 2 then
+
+        dio.file.deleteRoom ("arena/")
+
+        local roomSettings =
+        {
+            path = "arena/",
+            randomSeedAsString = createRandomSeed (),
+            terrainId = "paramaterized",
+            generators = generators,
+            roomShape =
+            {
+                x = {min = -2, max = 2},
+                y = {min = -2, max = 2},
+                z = {min = -2, max = 2},
+            }
+        }
+
+        dio.file.newRoom (dio.session.getWorldFolder (), roomSettings)
 
         instance.isPlaying = true
         instance.readyCount = 0
@@ -270,6 +334,8 @@ local function checkForRoundStart (connectionId)
         end
 
         broadcastScore ()
+
+        instance.nextRoundCanBePlayed = false
     end
 end
 
@@ -386,13 +452,19 @@ local function onPlayerPrimaryAction (event)
             if connection.isReady then
 
                 dio.network.sendChat (connection.connectionId, "SERVER", "You are already READY")
-            else
+            
+            elseif instance.nextRoundCanBePlayed then
 
                 dio.network.sendChat (connection.connectionId, "SERVER", "You are now READY")
 
                 instance.readyCount = instance.readyCount + 1
                 connection.isReady = true
                 checkForRoundStart (event.connectionId)
+
+            else
+
+                dio.network.sendChat (connection.connectionId, "SERVER", "You are NOT READY. Please try again in a few seconds!")
+
             end
         end
     end
@@ -409,6 +481,7 @@ end
 
 --------------------------------------------------
 local function onRoomCreated (event)
+
     instance.roomEntityIds [event.roomFolder] = event.roomEntityId
 
     local roomSettings = roomSettings [event.roomFolder]
@@ -439,6 +512,16 @@ local function onRoomCreated (event)
 end
 
 --------------------------------------------------
+local function onRoomDestroyed (event)
+
+    if event.roomFolder == "arena/" then
+        dio.file.deleteRoom ("arena/")
+        instance.nextRoundCanBePlayed = true
+    end
+
+end
+
+--------------------------------------------------
 local function onServerTick (event)
 
     if instance.isPlaying then
@@ -458,6 +541,7 @@ local function onLoadSuccessful ()
     dio.events.addListener (types.ENTITY_PLACED, onPlayerPrimaryAction)
     -- dio.events.addListener (types.ENTITY_DESTROYED, onPlayerSecondaryAction)
     dio.events.addListener (types.ROOM_CREATED, onRoomCreated)
+    dio.events.addListener (types.ROOM_DESTROYED, onRoomDestroyed)
     dio.events.addListener (types.TICK, onServerTick)
 
     math.randomseed (os.time ())
@@ -470,14 +554,16 @@ local modSettings =
     description =
     {
         name = "Voxel Arena",
-        description = "This is required to play the plummet game!",
+        description = "This is required to play the SHOOT IN FACE game!",
     },
 
     permissionsRequired =
     {
         entities = true,
         events = true,
+        file = true,
         network = true,
+        session = true,
         world = true,
     },
 }
