@@ -199,7 +199,7 @@ local function onRocketAndSceneryCollision (event)
 
                     if connection == rocketFiredBy then
                         isSuicide = true
-                        deathText = connection.accountId .. " killed themeslves"
+                        deathText = connection.accountId .. " killed themself"
                     end
 
                     for _, connection2 in pairs (instance.connections) do
