@@ -306,7 +306,7 @@ local function onRoomCreated (event)
         [components.CALENDAR] =
         {
             time = 10 * 60 * 60, -- midday
-            timeMultiplier = 5000,
+            timeMultiplier = 0,
         },
         [components.NAME] =
         {

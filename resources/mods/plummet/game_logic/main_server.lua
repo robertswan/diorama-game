@@ -82,7 +82,7 @@ local gameVars =
     playersReadyCount = 0,
     playersPlayingCount = 0,
     tickCount = 0,
-    gameOverScore = 400,
+    gameOverScore = 4000,
     chunksToModify =
     {
         lobby =
@@ -177,8 +177,6 @@ end
 --------------------------------------------------
 local function createNewLevel ()
 
-    print ("createNewLevel")
-
     -- create alternate room
     dio.file.deleteRoom ("plummet/")
 
@@ -228,8 +226,6 @@ end
 --------------------------------------------------
 local function createPlayer (connectionId)
 
-    print ("createPlayer")
-
     local playerParams =
     {
         connectionId = connectionId,
@@ -248,8 +244,6 @@ end
 
 --------------------------------------------------
 local function endGame ()
-
-    print ("endGame")
 
     local winner = updateScores ()
 
@@ -279,8 +273,6 @@ end
 --------------------------------------------------
 local function onClientConnected (event)
 
-    print ("onClientConnected")
-
     local connection =
     {
         connectionId = event.connectionId,
@@ -302,8 +294,6 @@ end
 
 --------------------------------------------------
 local function onClientDisconnected (event)
-
-    print ("onClientDisconnected")
 
     local connection = connections [event.connectionId]
 
@@ -343,8 +333,6 @@ end
 --------------------------------------------------
 local function onRoomCreated (event)
 
-    print ("onRoomCreated: " .. event.roomFolder)
-
     gameVars.roomEntityId = event.roomEntityId
 
     local components = dio.entities.components
@@ -375,8 +363,6 @@ end
 
 --------------------------------------------------
 local function onRoomDestroyed (event)
-
-    print ("onRoomDestroyed: " .. event.roomFolder)
 
     gameVars.roomEntityId = nil
 
@@ -491,8 +477,6 @@ end
 
 --------------------------------------------------
 local function onChunkGenerated (event)
-
-    print ("onChunkGenerated: " .. tostring (event.roomEntityId))
 
     for _, build in pairs (gameVars.chunksToModify) do
 
