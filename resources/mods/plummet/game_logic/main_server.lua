@@ -74,21 +74,15 @@ local function buildWaitingRoom (roomEntityId, chunkId)
 end
 
 --------------------------------------------------
-local roomFolders =
-{
-    "plummet1/",
-    "plummet2/",
-}
-
---------------------------------------------------
 local gameVars =
 {
-    isPlaying = false,
+    state = "waiting", -- "waiting", "playing", "saving"
+
     playersWaitingCount = 0,
     playersReadyCount = 0,
     playersPlayingCount = 0,
     tickCount = 0,
-    gameOverScore = 4000,
+    gameOverScore = 400,
     chunksToModify =
     {
         lobby =
@@ -154,7 +148,7 @@ local function updateScores ()
                 playerColors [score.groupId] ..
                 score.accountId ..
                 ((score.groupId == "waiting") and " (W)" or "") ..
-                ((not gameVars.isPlaying and score.groupId == "ready") and " (R)" or "") ..
+                ((gameVars.state ~= "playing" and score.groupId == "ready") and " (R)" or "") ..
                 ":" ..
                 scoreAsText ..
                 ":"
@@ -181,18 +175,17 @@ local function teleportPlayer (connectionId, coordinatesId)
 end
 
 --------------------------------------------------
-local function createNewLevel (isFirstTime)
+local function createNewLevel ()
+
+    print ("createNewLevel")
 
     -- create alternate room
-
-    -- local currentRoomFolder = roomFolders [gameVars.currentRoomIdx]
-    -- gameVars.currentRoomIdx = #roomFolders - gameVars.currentRoomIdx + 1
-    local nextRoomFolder = roomFolders [gameVars.currentRoomIdx]
+    dio.file.deleteRoom ("plummet/")
 
     local roomSettings =
     {
-        path = nextRoomFolder,
-        randomSeedAsString = nextRoomFolder,
+        path = "plummet/",
+        randomSeedAsString = "seed" .. tostring (math.random ()),
         terrainId = "paramaterized",
         generators = generators,
         roomShape =
@@ -202,114 +195,47 @@ local function createNewLevel (isFirstTime)
         }
     }
 
-    -- -- teleport everyone!
-    -- for connectionId, connection in pairs (connections) do
-    --     dio.world.destroyPlayer (connection.entityId)
-    -- end
-
-    -- dio.file.abortRoom (currentRoomFolder)
-    -- dio.file.deleteWorld (currentRoomFolder)
-    dio.file.deleteWorld (nextRoomFolder)
     dio.file.newRoom (dio.session.getWorldFolder (), roomSettings)
 
-    -- -- teleport everyone!
-    -- for connectionId, connection in pairs (connections) do
-
-    --     -- dio.serverChat.send (connectionId, "Server", roomFolders [gameVars.currentRoomIdx])
-
-    --     local playerParams =
-    --     {
-    --         connectionId = connectionId,
-    --         accountId = connection.accountId,
-    --         gravityDir = "DOWN",
-    --         roomFolder = nextRoomFolder,
-    --         xyz = {}, -- currently unused
-    --     }
-
-    --     connection.entityId = dio.world.createPlayer (playerParams)
-
-    --     -- hack - teleport players via client
-    --     teleportPlayer (connectionId, "lobby")
-    -- end
-
-    for _, build in pairs (gameVars.chunksToModify) do
-        build.isBuilt = false
-    end
 end
 
 --------------------------------------------------
 local function startGame ()
 
-    fillCube (gameVars.mostRecentRoom.entityId, {0, -1, 0}, {2, 25, 2}, {29, 25, 29}, 0)
+    fillCube (gameVars.roomEntityId, {0, -1, 0}, {2, 25, 2}, {29, 25, 29}, 0)
 
-    gameVars.isPlaying = true
+    gameVars.state = "playing"
     gameVars.tickCount = 0
 
     for _, player in pairs (connections) do
+
         if player.groupId == "ready" then
             player.groupId = "playing"
             player.currentY = 2
         end
+
         player.score = 0
         dio.network.sendEvent (player.connectionId, "plummet.START")
         dio.network.sendChat (player.connectionId, "START", "Let the game begin!")
     end
 
     gameVars.playersPlayingCount = gameVars.playersReadyCount
+    gameVars.playersWaitingCount = 0
     gameVars.playersReadyCount = 0
 
 end
 
 --------------------------------------------------
-local function endGame ()
+local function createPlayer (connectionId)
 
-    local winner = updateScores ()
-
-    if winner then
-        local text = "The winner is: " .. winner.accountId
-
-        for _, connection in pairs (connections) do
-            -- must send chat as well, until inter mod comms is completed
-            dio.network.sendEvent (connection.connectionId, "plummet.RESULT")
-            dio.network.sendChat (connection.connectionId, "RESULT", text)
-        end
-    end
-
-    for _, connection in pairs (connections) do
-        if connection.groupId == "playing" then
-
-            teleportPlayer (connection.connectionId, "lobby")
-            connection.groupId = "lobby"
-        end
-    end
-
-    gameVars.playersPlayingCount = 0
-    gameVars.isPlaying = false
-    gameVars.tickCount = 0
-
-end
-
---------------------------------------------------
-local function onClientConnected (event)
-
-    -- local usersCount = 0
-    -- for _, _ in pairs (connections) do
-    --     usersCount = usersCount + 1
-    -- end
-
-    -- -- is first player on server
-    -- if usersCount == 1 then
-    --     createNewLevel ()
-    -- end
-
-    createNewLevel ()
+    print ("createPlayer")
 
     local playerParams =
     {
-        connectionId = event.connectionId,
+        connectionId = connectionId,
         avatar =
         {
-            roomFolder = roomFolders [gameVars.currentRoomIdx],
+            roomFolder = "plummet/",
             chunkId = {0, 0, 0},
             xyz = {15, 4, 15},
             ypr = {0, 0, 0}
@@ -317,18 +243,56 @@ local function onClientConnected (event)
         gravityDir = 5,
     }
 
-    local entityId = dio.world.createPlayer (playerParams)
+    return dio.world.createPlayer (playerParams)
+end
+
+--------------------------------------------------
+local function endGame ()
+
+    print ("endGame")
+
+    local winner = updateScores ()
+
+    if winner then
+        local text = "The winner is: " .. winner.accountId
+
+        for _, connection in pairs (connections) do
+            dio.network.sendEvent (connection.connectionId, "plummet.RESULT")
+            dio.network.sendChat (connection.connectionId, "RESULT", text)
+        end
+    end
+
+    for connectionId, connection in pairs (connections) do
+        if connection.entityId then
+            dio.world.destroyPlayer (connection.entityId)
+            connection.entityId = nil
+        end
+    end
+
+    gameVars.state = "saving"
+
+    gameVars.playersPlayingCount = 0
+    gameVars.tickCount = 0
+
+end
+
+--------------------------------------------------
+local function onClientConnected (event)
+
+    print ("onClientConnected")
 
     local connection =
     {
         connectionId = event.connectionId,
         accountId = event.accountId,
-        -- gravityDir = "DOWN",
         currentY = 2,
         score = 0,
         groupId = "lobby",
-        entityId = entityId,
     }
+
+    if gameVars.state == "waiting" or gameVars.state == "playing" then
+        connection.entityId = createPlayer (event.connectionId)
+    end
 
     connections [event.connectionId] = connection
 
@@ -339,9 +303,14 @@ end
 --------------------------------------------------
 local function onClientDisconnected (event)
 
+    print ("onClientDisconnected")
+
     local connection = connections [event.connectionId]
 
-    dio.world.destroyPlayer (connection.entityId)
+    if connection.entityId then
+        dio.world.destroyPlayer (connection.entityId)
+        connection.entityId = nil
+    end
 
     if connection.groupId == "lobby" then
         -- do nothing
@@ -371,13 +340,12 @@ local function onClientDisconnected (event)
     updateScores ()
 end
 
--- --------------------------------------------------
--- local function onPlayerReady (event)
---     teleportPlayer (event.connectionId, "lobby")
--- end
-
 --------------------------------------------------
 local function onRoomCreated (event)
+
+    print ("onRoomCreated: " .. event.roomFolder)
+
+    gameVars.roomEntityId = event.roomEntityId
 
     local components = dio.entities.components
     local calendarEntity =
@@ -403,11 +371,27 @@ local function onRoomCreated (event)
     
     local calendarEntityId = dio.entities.create (event.roomEntityId, calendarEntity)
 
-    gameVars.mostRecentRoom =
-    {
-        folder = event.roomFolder,
-        entityId = event.roomEntityId,
-    }
+end
+
+--------------------------------------------------
+local function onRoomDestroyed (event)
+
+    print ("onRoomDestroyed: " .. event.roomFolder)
+
+    gameVars.roomEntityId = nil
+
+    for _, build in pairs (gameVars.chunksToModify) do
+        build.isBuilt = false
+    end
+
+    gameVars.state = "waiting"
+
+    createNewLevel ()
+
+    for connectionId, connection in pairs (connections) do
+        connection.entityId = createPlayer (connectionId)
+        connection.groupId = "lobby"
+    end
 end
 
 --------------------------------------------------
@@ -418,9 +402,6 @@ end
 --------------------------------------------------
 local function onEntityDestroyed (event)
     event.cancel = true
-    -- local connection = connections [event.playerId]
-    -- local canDestroy = groups [connection.groupId].canDestroy
-    -- event.cancel = not canDestroy
 end
 
 --------------------------------------------------
@@ -442,11 +423,11 @@ local function onChatReceived (event)
 
         event.targetConnectionId = event.authorConnectionId
 
-        if connection.groupId == "lobby" then
+        if gameVars.state == "waiting" and connection.groupId == "lobby" then
             connection.groupId = "waiting"
             gameVars.playersWaitingCount = gameVars.playersWaitingCount + 1
             teleportPlayer (connectionId, "waitingRoom")
-            fillCube (gameVars.mostRecentRoom.entityId, {0, -1, 0}, {2, 25, 2}, {29, 25, 29}, 15)
+            fillCube (gameVars.roomEntityId, {0, -1, 0}, {2, 25, 2}, {29, 25, 29}, 15)
             updateScores ()
 
             event.text = colors.ok .. "You have joined the next game. Type '.ready' to begin."
@@ -458,7 +439,7 @@ local function onChatReceived (event)
     elseif words [1] == ".leave" then
 
         event.targetConnectionId = event.authorConnectionId
-        if connection.groupId == "waiting" then
+        if gameVars.state == "waiting" and connection.groupId == "waiting" then
             connection.groupId = "lobby"
             gameVars.playersWaitingCount = gameVars.playersWaitingCount - 1
             teleportPlayer (connection.connectionId, "lobby")
@@ -473,7 +454,7 @@ local function onChatReceived (event)
     elseif words [1] == ".ready" then
         event.targetConnectionId = event.authorConnectionId
 
-        if not gameVars.isPlaying and connection.groupId == "waiting" then
+        if gameVars.state == "waiting" and connection.groupId == "waiting" then
 
             connection.groupId = "ready"
             gameVars.playersWaitingCount = gameVars.playersWaitingCount - 1
@@ -494,7 +475,7 @@ local function onChatReceived (event)
 
     elseif words [1] == ".unready" then
         event.targetConnectionId = event.authorConnectionId
-        if not gameVars.isPlaying and connection.groupId == "ready" then
+        if gameVars.state == "waiting" and connection.groupId == "ready" then
 
             connection.groupId = "waiting"
             gameVars.playersReadyCount = gameVars.playersReadyCount - 1
@@ -511,19 +492,18 @@ end
 --------------------------------------------------
 local function onChunkGenerated (event)
 
-    if event.roomEntityId == gameVars.mostRecentRoom.entityId then
+    print ("onChunkGenerated: " .. tostring (event.roomEntityId))
 
-        for _, build in pairs (gameVars.chunksToModify) do
+    for _, build in pairs (gameVars.chunksToModify) do
 
-            if not build.isBuilt and
-                    build.chunkId [1] == event.chunkId [1] and
-                    build.chunkId [2] == event.chunkId [2] and
-                    build.chunkId [3] == event.chunkId [3] then
+        if not build.isBuilt and
+                build.chunkId [1] == event.chunkId [1] and
+                build.chunkId [2] == event.chunkId [2] and
+                build.chunkId [3] == event.chunkId [3] then
 
-                build.buildFunction (event.roomEntityId, event.chunkId)
-                build.isBuilt = true
+            build.buildFunction (event.roomEntityId, event.chunkId)
+            build.isBuilt = true
 
-            end
         end
     end
 end
@@ -531,7 +511,7 @@ end
 -------------------------------------------------
 local function onTick ()
 
-    if gameVars.isPlaying then
+    if gameVars.state == "playing" then
 
         for k, record in pairs (connections) do
 
@@ -554,7 +534,6 @@ local function onTick ()
             local winner = updateScores ()
             if not winner or winner.score > gameVars.gameOverScore then
                 endGame ()
-                -- createNewLevel (false)
             end
         end
     end
@@ -563,18 +542,20 @@ end
 --------------------------------------------------
 local function onLoadSuccessful ()
 
-    -- dio.players.setPlayerAction (player, actions.LEFT_CLICK, outcomes.DESTROY_BLOCK)
-
     local types = dio.events.serverTypes
     dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
     dio.events.addListener (types.CLIENT_DISCONNECTED, onClientDisconnected)
-    -- dio.events.addListener (types.PLAYER_READY, onPlayerReady)
     dio.events.addListener (types.ROOM_CREATED, onRoomCreated)
+    dio.events.addListener (types.ROOM_DESTROYED, onRoomDestroyed)
     dio.events.addListener (types.ENTITY_PLACED, onEntityPlaced)
     dio.events.addListener (types.ENTITY_DESTROYED, onEntityDestroyed)
     dio.events.addListener (types.CHAT_RECEIVED, onChatReceived)
     dio.events.addListener (types.CHUNK_GENERATED, onChunkGenerated)
     dio.events.addListener (types.TICK, onTick)
+
+    math.randomseed (os.time ())
+
+    createNewLevel ()
 
 end
 
