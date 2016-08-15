@@ -33,7 +33,6 @@ local roomSettings =
 			},
 		},
 	},
-	path = "default/",
 	randomSeedAsString = "Teazel",
 	terrainId = "paramaterized",
 }

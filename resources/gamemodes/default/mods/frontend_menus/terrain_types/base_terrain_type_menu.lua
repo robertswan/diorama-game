@@ -20,7 +20,7 @@ local function onCreateLevelClicked (menuItem, menu)
 
         local worldSettings =
         {
-            modFolder = "creative",
+            gameMode = "creative",
             dataFolder = menu.filename.value,
             shouldSave = true,
         }

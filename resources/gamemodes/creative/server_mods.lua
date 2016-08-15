@@ -2,20 +2,20 @@
 local modsToLoad =
 {
     {
-        folder = "creative",
-        modName = "world_logic",
+        gameMode = "creative",
+        modFolder = "world_logic",
     },
     {
-        folder = "default",
-        modName = "blocks",
+        gameMode = "default",
+        modFolder = "blocks",
     },
     {
-        folder = "default",
-        modName = "motd",
+        gameMode = "default",
+        modFolder = "motd",
     },
     {
-        folder = "default",
-        modName = "spawn",
+        gameMode = "default",
+        modFolder = "spawn",
     },
 }
 
@@ -37,11 +37,6 @@ local function main ()
 
     for _, modData in ipairs (modsToLoad) do
         local mod, error = dio.mods.load (modData, regularPermissions)
-        if mod then
-            mods [modData.modName] = mod
-        else
-            print (error)
-        end
     end
 end
 

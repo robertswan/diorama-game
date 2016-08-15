@@ -2,23 +2,23 @@
 local modsToLoad =
 {
     {
-        folder = "diorama_server",
-        modName = "room_teleport",
+        gameMode = "diorama_server",
+        modFolder = "room_teleport",
         versionRequired = {major = 1, minor = 0},
     },
     {
-        folder = "diorama",
-        modName = "blocks",
+        gameMode = "default",
+        modFolder = "blocks",
         versionRequired = {major = 1, minor = 0},
     },
     {
-        folder = "diorama",
-        modName = "motd",
+        gameMode = "default",
+        modFolder = "motd",
         versionRequired = {major = 1, minor = 0},
     },
     {
-        folder = "diorama",
-        modName = "spawn",
+        gameMode = "default",
+        modFolder = "spawn",
         versionRequired = {major = 1, minor = 0},
     },
 }
@@ -40,11 +40,6 @@ local function main ()
 
     for _, modData in ipairs (modsToLoad) do
         local mod, error = dio.mods.load (modData, regularPermissions)
-        if mod then
-            mods [modData.modName] = mod
-        else
-            print (error)
-        end
     end
 end
 
