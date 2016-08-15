@@ -31,13 +31,12 @@ local function onCreateLevelClicked (menuItem, menu)
 
             local roomSettings =
             {
-                path = "default",
                 randomSeedAsString = menu.randomSeed.value,
                 terrainId = menu.menuProperties.terrainId,
                 generators = menu.menuProperties.generators,
             }
 
-            isOk = dio.file.newRoom (worldSettings.dataFolder, roomSettings)
+            isOk = dio.file.newRoom ("default/", roomSettings)
 
             if isOk then
 

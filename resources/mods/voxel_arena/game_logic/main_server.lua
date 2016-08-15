@@ -27,10 +27,10 @@ local generators =
             },
             {
                 mode = "lessThan",
-                octaves = 4,
+                octaves = 1,
                 perOctaveAmplitude = 0.5,
                 perOctaveFrequency = 2,
-                scale = 64,
+                scale = 4,
                 type = "perlinNoise",
             },
         },
@@ -301,21 +301,27 @@ local function checkForRoundStart (connectionId)
 
         dio.file.deleteRoom ("arena/")
 
-        local roomSettings =
-        {
-            path = "arena/",
-            randomSeedAsString = createRandomSeed (),
-            terrainId = "paramaterized",
-            generators = generators,
-            roomShape =
-            {
-                x = {min = -2, max = 2},
-                y = {min = -2, max = 2},
-                z = {min = -2, max = 2},
-            }
-        }
 
-        dio.file.newRoom (dio.session.getWorldFolder (), roomSettings)
+        -- -- generating a new room!
+        -- local roomSettings =
+        -- {
+        --     path = "arena/",
+        --     randomSeedAsString = createRandomSeed (),
+        --     terrainId = "paramaterized",
+        --     generators = generators,
+        --     roomShape =
+        --     {
+        --         x = {min = -2, max = 2},
+        --         y = {min = -2, max = 2},
+        --         z = {min = -2, max = 2},
+        --     }
+        -- }
+
+        -- dio.file.newRoom (roomSettings)
+
+        -- copying from a default
+
+        dio.file.copyRoom ("arena/", "defaults/arena/")
 
         instance.isPlaying = true
         instance.readyCount = 0

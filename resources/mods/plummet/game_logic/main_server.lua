@@ -182,7 +182,6 @@ local function createNewLevel ()
 
     local roomSettings =
     {
-        path = "plummet/",
         randomSeedAsString = "seed" .. tostring (math.random ()),
         terrainId = "paramaterized",
         generators = generators,
@@ -193,7 +192,7 @@ local function createNewLevel ()
         }
     }
 
-    dio.file.newRoom (dio.session.getWorldFolder (), roomSettings)
+    dio.file.newRoom ("plummet/", roomSettings)
 
 end
 
