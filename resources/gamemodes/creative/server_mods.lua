@@ -2,20 +2,19 @@
 local modsToLoad =
 {
     {
-        id = "creative2",
-        folder = "diorama",
-        modName = "creative",
+        folder = "creative",
+        modName = "world_logic",
     },
     {
-        folder = "diorama",
+        folder = "default",
         modName = "blocks",
     },
     {
-        folder = "diorama",
+        folder = "default",
         modName = "motd",
     },
     {
-        folder = "diorama",
+        folder = "default",
         modName = "spawn",
     },
 }
