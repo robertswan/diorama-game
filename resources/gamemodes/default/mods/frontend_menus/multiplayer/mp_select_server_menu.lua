@@ -285,7 +285,7 @@ return function ()
     }
 
     -- local iconsFromNumbers = generateIconsFromNumbers ()
-    -- local iconTexture = dio.drawing.loadTexture ("resources/gamemodes/default/textures/diorama_terrain_harter_00.png")
+    -- local iconTexture = dio.drawing.loadTexture ("resources/gamemodes/default/textures/chunks_diffuse_00.png")
 
     Mixin.CopyTo (instance, properties)
     Mixin.CopyToAndBackupParents (instance, c)

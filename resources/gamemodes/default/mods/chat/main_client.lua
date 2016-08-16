@@ -396,7 +396,7 @@ local function onLoadSuccessful ()
         isVisible = false,
         chatAppearKeyCode = dio.inputs.keyCodes.T,
         text = "",
-        emoteTexture = dio.drawing.loadTexture ("resources/gamemodes/default/textures/emotes.png"),
+        emoteTexture = dio.drawing.loadTexture ("resources/gamemodes/default/textures/emotes_00.png"),
 
         ticker =
         {

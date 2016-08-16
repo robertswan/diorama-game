@@ -306,8 +306,8 @@ local function onLoadSuccessful ()
         rowHeight = rowHeight,
         iconScale = iconScale,
 
-        crosshairTexture = dio.drawing.loadTexture ("resources/gamemodes/default/textures/crosshair.png"),
-        blockTexture = dio.drawing.loadTexture ("resources/gamemodes/default/textures/diorama_terrain_harter_00.png"),
+        crosshairTexture = dio.drawing.loadTexture ("resources/gamemodes/default/textures/crosshair_00.png"),
+        blockTexture = dio.drawing.loadTexture ("resources/gamemodes/default/textures/chunks_diffuse_00.png"),
     }
 
     instance.renderToTexture = dio.drawing.createRenderToTexture (instance.w, instance.h)

@@ -68,7 +68,7 @@ local function onLoadSuccessful ()
     instance =
     {
         myAccountId = nil,
-        crosshairTexture = dio.drawing.loadTexture ("resources/gamemodes/default/textures/crosshair.png"),
+        crosshairTexture = dio.drawing.loadTexture ("resources/gamemodes/default/textures/crosshair_00.png"),
     }
 
     dio.drawing.addRenderPassAfter (1, function () onLateRender (instance) end)
