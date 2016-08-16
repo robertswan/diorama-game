@@ -2,16 +2,16 @@
 local modsToLoad =
 {
     {
+        gameMode = "plummet",
+        modFolder = "game_logic",
+    },
+    {
         gameMode = "default",
         modFolder = "blocks",
     },
     {
         gameMode = "default",
         modFolder = "diagnostics",
-    },
-    {
-        gameMode = "plummet",
-        modFolder = "game_logic",
     },
     {
         gameMode = "plummet",
@@ -38,8 +38,9 @@ local function main ()
         drawing = true,
         diagnostics = true,
         file = true,
-        world = true,
         inputs = true,
+        resources = true,
+        world = true,
     }
 
     for _, modData in ipairs (modsToLoad) do

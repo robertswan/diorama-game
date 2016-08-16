@@ -60,13 +60,27 @@ local function onLoad ()
 
     instance =
     {
-        crosshairTexture = dio.resources.getTexture ("CHUNKS_DIFFUSE")
+        crosshairTexture = dio.resources.loadTexture ("CROSSHAIR", "textures/crosshair_00.png")
     }
 
     dio.drawing.addRenderPassAfter (1, function () onLateRender (instance) end)
 
     local types = dio.events.clientTypes
     dio.events.addListener (types.SERVER_EVENT_RECEIVED, onServerEventReceived)
+
+    dio.resources.loadTexture ("CHUNKS_DIFFUSE",    "textures/chunks_diffuse_00.png")
+    dio.resources.loadTexture ("LIQUIDS_DIFFUSE",   "textures/liquids_diffuse_00.png")
+    dio.resources.loadTexture ("SKY_COLOUR",        "textures/sky_colour_00.png")
+
+end
+
+--------------------------------------------------
+local function onUnload ()
+
+    dio.resources.destroyTexture ("CHUNKS_DIFFUSE")
+    dio.resources.destroyTexture ("LIQUIDS_DIFFUSE")
+    dio.resources.destroyTexture ("SKY_COLOUR")
+    dio.resources.destroyTexture ("CROSSHAIR")
 
 end
 
@@ -94,6 +108,7 @@ local modSettings =
     callbacks = 
     {
         onLoad = onLoad,
+        onUnload = onUnload,
     },
 }
 
