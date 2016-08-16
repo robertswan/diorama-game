@@ -12,7 +12,7 @@ local colors =
 local function onLateRender (self)
 
     local windowW, windowH = dio.drawing.getWindowSize ()
-    local params = dio.drawing.getTextureParams (self.crosshairTexture)
+    local params = dio.resources.getTextureParams (self.crosshairTexture)
     params.width = params.width * 3
     params.height = params.height * 3
 
@@ -68,7 +68,7 @@ local function onLoadSuccessful ()
     instance =
     {
         myAccountId = nil,
-        crosshairTexture = dio.drawing.loadTexture ("resources/gamemodes/default/textures/crosshair_00.png"),
+        crosshairTexture = dio.resources.loadTexture ("CROSSHAIR", "textures/crosshair_00.png"),
     }
 
     dio.drawing.addRenderPassAfter (1, function () onLateRender (instance) end)
@@ -94,6 +94,7 @@ local modSettings =
     permissionsRequired =
     {
         drawing = true,
+        resources = true,
         world = true,
     },
 }

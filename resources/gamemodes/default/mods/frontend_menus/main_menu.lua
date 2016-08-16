@@ -85,8 +85,6 @@ return function ()
 
     local properties =
     {
-        -- texture1 = dio.drawing.loadTexture ("resources/gamemodes/default/textures/chunks_diffuse_00.png"),
-        -- texture2 = dio.drawing.loadTexture ("resources/gamemodes/default/textures/diorama_terrain_robtheswan_00.png"),
     }
 
     Mixin.CopyTo (instance, properties)

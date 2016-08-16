@@ -396,7 +396,7 @@ local function onLoadSuccessful ()
         isVisible = false,
         chatAppearKeyCode = dio.inputs.keyCodes.T,
         text = "",
-        emoteTexture = dio.drawing.loadTexture ("resources/gamemodes/default/textures/emotes_00.png"),
+        emoteTexture = dio.resources.loadTexture ("EMOTES", "textures/emotes_00.png"),
 
         ticker =
         {
@@ -427,8 +427,9 @@ local modSettings =
     permissionsRequired =
     {
         drawing = true,
-        world = true,
         inputs = true,
+        resources = true,
+        world = true,
     },
 }
 

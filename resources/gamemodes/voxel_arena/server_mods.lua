@@ -31,7 +31,7 @@ local function main ()
     }
 
     for _, modData in ipairs (modsToLoad) do
-        local mod, error = dio.mods.load (modData, regularPermissions)
+        local mod, error = dio.mods.loadMod (modData, regularPermissions)
     end
 end
 

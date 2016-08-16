@@ -69,7 +69,7 @@ end
 return function ()
 
     local iconsFromNumbers = generateIconsFromNumbers ()
-    local iconTexture = dio.drawing.loadTexture ("resources/gamemodes/default/textures/chunks_diffuse_00.png")
+    local iconTexture = dio.resources.getTexture ("MENU_CHUNKS_DIFFUSE")
 
     local instance = MenuClass ("Multiplayer")
     local properties =

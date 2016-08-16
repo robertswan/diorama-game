@@ -166,7 +166,7 @@ local function onLateRender (self)
     local y = self.y
     dio.drawing.drawTexture (self.renderToTexture, x, y, self.w * scale, self.h * scale, 0xffffffff)
 
-    local params = dio.drawing.getTextureParams (self.crosshairTexture)
+    local params = dio.resources.getTextureParams (self.crosshairTexture)
     params.width = params.width * 3
     params.height = params.height * 3
     dio.drawing.drawTexture2 (
@@ -306,8 +306,8 @@ local function onLoadSuccessful ()
         rowHeight = rowHeight,
         iconScale = iconScale,
 
-        crosshairTexture = dio.drawing.loadTexture ("resources/gamemodes/default/textures/crosshair_00.png"),
-        blockTexture = dio.drawing.loadTexture ("resources/gamemodes/default/textures/chunks_diffuse_00.png"),
+        crosshairTexture =  dio.resources.loadTexture ("CROSSHAIR", "textures/crosshair_00.png"),
+        blockTexture =      dio.resources.getTexture ("CHUNKS_DIFFUSE")
     }
 
     instance.renderToTexture = dio.drawing.createRenderToTexture (instance.w, instance.h)
@@ -334,8 +334,9 @@ local modSettings =
     permissionsRequired =
     {
         drawing = true,
-        world = true,
         inputs = true,
+        resources = true,
+        world = true,
     },
 }
 

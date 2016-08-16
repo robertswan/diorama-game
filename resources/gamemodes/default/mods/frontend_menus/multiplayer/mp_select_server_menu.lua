@@ -284,9 +284,6 @@ return function ()
         currentServerIdx =  1,
     }
 
-    -- local iconsFromNumbers = generateIconsFromNumbers ()
-    -- local iconTexture = dio.drawing.loadTexture ("resources/gamemodes/default/textures/chunks_diffuse_00.png")
-
     Mixin.CopyTo (instance, properties)
     Mixin.CopyToAndBackupParents (instance, c)
 

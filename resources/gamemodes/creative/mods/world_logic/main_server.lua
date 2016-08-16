@@ -327,6 +327,10 @@ local function onLoadSuccessful ()
 
     -- dio.players.setPlayerAction (player, actions.LEFT_CLICK, outcomes.DESTROY_BLOCK)
 
+    -- lua is GC
+    -- but do we want to reference count textures? ill go for yes!
+    -- what does this mean though if the lua texture is unloaded while playing the game????
+
     local types = dio.events.serverTypes
     dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
     dio.events.addListener (types.CLIENT_DISCONNECTED, onClientDisconnected)

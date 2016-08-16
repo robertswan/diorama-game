@@ -78,6 +78,8 @@ end
 --------------------------------------------------
 local function main ()
 
+    dio.resources.loadTexture ("MENU_CHUNKS_DIFFUSE", "textures/chunks_diffuse_00.png")
+
     loadPlayerControls ()
 
     dio.drawing.addRenderPassBefore (10.0, onEarlyRender)

@@ -2,6 +2,10 @@
 local modsToLoad =
 {
     {
+        gameMode = "creative",
+        modFolder = "world_logic",
+    },  
+    {
         gameMode = "default",
         modFolder = "attract_mode",
     },
@@ -43,11 +47,12 @@ local function main ()
         diagnostics = true,
         file = true,
         inputs = true,
+        resources = true,
         world = true,
     }
 
     for _, modData in ipairs (modsToLoad) do
-        local mod, error = dio.mods.load (modData, permissions)
+        local mod, error = dio.mods.loadMod (modData, permissions)
     end
 end
 
