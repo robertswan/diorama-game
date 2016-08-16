@@ -323,7 +323,7 @@ local function onRoomCreated (event)
 end
 
 --------------------------------------------------
-local function onLoadSuccessful ()
+local function onLoad ()
 
     -- dio.players.setPlayerAction (player, actions.LEFT_CLICK, outcomes.DESTROY_BLOCK)
 
@@ -364,7 +364,12 @@ local modSettings =
         file = true,
         world = true,
     },
+
+    callbacks = 
+    {
+        onLoad = onLoad,
+    },    
 }
 
 --------------------------------------------------
-return modSettings, onLoadSuccessful
+return modSettings

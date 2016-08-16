@@ -284,7 +284,7 @@ local function onChatMessagePreSent (text)
 end
 
 --------------------------------------------------
-local function onLoadSuccessful ()
+local function onLoad ()
 
     local iconScale = 2
     local blocksPerPage = 9
@@ -338,7 +338,13 @@ local modSettings =
         resources = true,
         world = true,
     },
+
+    callbacks = 
+    {
+        onLoad = onLoad,
+        onUnload = function () dio.resources.destroyTexture ("CROSSHAIR") end,
+    },    
 }
 
 --------------------------------------------------
-return modSettings, onLoadSuccessful
+return modSettings

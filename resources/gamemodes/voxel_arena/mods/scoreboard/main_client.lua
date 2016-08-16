@@ -91,7 +91,7 @@ local function onServerEventReceived (event)
 end
 
 --------------------------------------------------
-local function onLoadSuccessful ()
+local function onLoad ()
 
     instance.renderToTexture = dio.drawing.createRenderToTexture (instance.w, instance.h)
     dio.drawing.addRenderPassBefore (1.0, function () onEarlyRender (instance) end)
@@ -113,7 +113,12 @@ local modSettings =
         drawing = true,
         world = true,
     },
+
+    callbacks = 
+    {
+        onLoad = onLoad,
+    },    
 }
 
 --------------------------------------------------
-return modSettings, onLoadSuccessful
+return modSettings

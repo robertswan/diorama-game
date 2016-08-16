@@ -121,7 +121,7 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 end
 
 --------------------------------------------------
-local function onLoadSuccessful ()
+local function onLoad ()
 
     instance =
     {
@@ -159,7 +159,11 @@ local modSettings =
         inputs = true,
     },
 
+    callbacks = 
+    {
+        onLoad = onLoad,
+    },
 }
 
 --------------------------------------------------
-return modSettings, onLoadSuccessful
+return modSettings

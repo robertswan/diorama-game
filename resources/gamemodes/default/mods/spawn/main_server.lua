@@ -93,7 +93,7 @@ local function onChatReceived (event)
 end
 
 --------------------------------------------------
-local function onLoadSuccessful ()
+local function onLoad ()
 
     local types = dio.events.serverTypes
     dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
@@ -116,7 +116,12 @@ local modSettings =
         network = true,
         world = true,
     },
+
+    callbacks = 
+    {
+        onLoad = onLoad,
+    },    
 }
 
 --------------------------------------------------
-return modSettings, onLoadSuccessful
+return modSettings

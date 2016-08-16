@@ -109,7 +109,7 @@ local function onClientConnected (event)
 end
 
 --------------------------------------------------
-local function onLoadSuccessful ()
+local function onLoad ()
 
     instance =
     {
@@ -143,7 +143,12 @@ local modSettings =
         drawing = true,
         world = true,
     },
+
+    callbacks = 
+    {
+        onLoad = onLoad,
+    },    
 }
 
 --------------------------------------------------
-return modSettings, onLoadSuccessful
+return modSettings

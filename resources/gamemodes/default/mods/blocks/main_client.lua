@@ -1,7 +1,7 @@
 local definitions = require ("resources/gamemodes/default/mods/blocks/block_definitions")
 
 --------------------------------------------------
-local function onLoadSuccessful ()
+local function onLoad ()
 
     for _, definition in ipairs (definitions.blocks) do
         local definitionId = dio.blocks.createNewDefinitionId ()
@@ -21,7 +21,12 @@ local modSettings =
     {
         blocks = true,
     },
+
+    callbacks = 
+    {
+        onLoad = onLoad,
+    },    
 }
 
 --------------------------------------------------
-return modSettings, onLoadSuccessful
+return modSettings

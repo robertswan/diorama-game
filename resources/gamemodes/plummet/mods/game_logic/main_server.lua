@@ -523,7 +523,7 @@ local function onTick ()
 end
 
 --------------------------------------------------
-local function onLoadSuccessful ()
+local function onLoad ()
 
     local types = dio.events.serverTypes
     dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
@@ -567,7 +567,12 @@ local modSettings =
         session = true,
         world = true,
     },
+
+    callbacks = 
+    {
+        onLoad = onLoad,
+    },    
 }
 
 --------------------------------------------------
-return modSettings, onLoadSuccessful
+return modSettings

@@ -91,7 +91,7 @@ local function onClientDisconnected (event)
 end
 
 --------------------------------------------------
-local function onLoadSuccessful ()
+local function onLoad ()
 
     instance =
     {
@@ -132,7 +132,12 @@ local modSettings =
         world = true,
         inputs = true,
     },
+
+    callbacks = 
+    {
+        onLoad = onLoad,
+    },    
 }
 
 --------------------------------------------------
-return modSettings, onLoadSuccessful
+return modSettings

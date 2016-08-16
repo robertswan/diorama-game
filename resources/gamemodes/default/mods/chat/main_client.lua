@@ -373,7 +373,7 @@ local function onClientDisconnected (event)
 end
 
 --------------------------------------------------
-local function onLoadSuccessful ()
+local function onLoad ()
 
     local chatLinesToDraw = 18
     local textEntryLinesToDraw = 2
@@ -431,7 +431,13 @@ local modSettings =
         resources = true,
         world = true,
     },
+
+    callbacks = 
+    {
+        onLoad = onLoad,
+        onUnload = function () dio.resources.destroyTexture ("EMOTES") end,
+    },    
 }
 
 --------------------------------------------------
-return modSettings, onLoadSuccessful
+return modSettings
