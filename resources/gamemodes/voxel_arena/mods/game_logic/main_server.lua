@@ -242,8 +242,8 @@ local function getRocketEntitySettings ()
     {
         [components.AABB_COLLIDER] =
         {
-            min = {-0.1, -0.1, -0.1},
-            size = {0.2, 0.2, 0.2},
+            min = {-0.01, -0.01, -0.01},
+            size = {0.02, 0.02, 0.02},
         },
 
         [components.BASE_NETWORK] =
@@ -294,6 +294,15 @@ local function createRandomSeed ()
 end
 
 --------------------------------------------------
+local function modifyRoomSeed ()
+
+    local settings = dio.file.loadLua (dio.file.locations.WORLD, "arena/room_settings.lua")
+    settings.randomSeedAsString = createRandomSeed ()
+    dio.file.saveLua (dio.file.locations.WORLD, "arena/room_settings.lua", settings, "roomSettings")
+
+end
+
+--------------------------------------------------
 local function checkForRoundStart (connectionId)
 
     if instance.readyCount > instance.connectionsCount / 2 then
@@ -301,27 +310,8 @@ local function checkForRoundStart (connectionId)
 
         dio.file.deleteRoom ("arena/")
 
-
-        -- -- generating a new room!
-        -- local roomSettings =
-        -- {
-        --     path = "arena/",
-        --     randomSeedAsString = createRandomSeed (),
-        --     terrainId = "paramaterized",
-        --     generators = generators,
-        --     roomShape =
-        --     {
-        --         x = {min = -2, max = 2},
-        --         y = {min = -2, max = 2},
-        --         z = {min = -2, max = 2},
-        --     }
-        -- }
-
-        -- dio.file.newRoom (roomSettings)
-
-        -- copying from a default
-
-        dio.file.copyRoom ("arena/", "defaults/arena/")
+        dio.file.copyFolder ("arena/", dio.file.locations.MOD_RESOURCES, "new_saves/default/arena/")
+        modifyRoomSeed ()
 
         instance.isPlaying = true
         instance.readyCount = 0
@@ -434,7 +424,7 @@ local function fireWeapon (connection)
     transform.chunkId = avatar.chunkId
     transform.xyz = avatar.xyz
     transform.ypr = avatar.ypr
-    transform.xyz [2] = transform.xyz [2] + 1.0
+    transform.xyz [2] = transform.xyz [2] + 1.25
 
     local rigidBody = rocketEntitySettings [components.RIGID_BODY]
     rigidBody.forwardSpeed = 30.0

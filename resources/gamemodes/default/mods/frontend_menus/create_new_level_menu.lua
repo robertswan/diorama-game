@@ -21,9 +21,40 @@ function c:onAppShouldClose ()
 end
 
 --------------------------------------------------
+function c:onEnter (menus)
+
+    local gameModes = dio.file.listGameModes ()
+    for idx, gameMode in ipairs (gameModes) do
+
+        local function onClicked ()
+            if gameMode.variations == 1 then
+                menus.new_world_settings_menu:recordGameModeVariation (gameMode, 1)
+                return "new_world_settings_menu"
+            else
+                menus.choosing_game_mode_variation_menu:recordGameMode (gameMode)
+                return "choosing_game_mode_variation_menu"
+            end
+            
+        end
+
+        local button = ButtonMenuItem (gameMode.title, onClicked)
+        self:addMenuItem (button)
+    end
+
+    self:addMenuItem (BreakMenuItem ())
+
+    addMenuButton (self, "Return To Parent Menu",       "single_player_top_menu")
+end
+
+--------------------------------------------------
+function c:onExit ()
+    self:clearAllMenuItems ();
+end
+
+--------------------------------------------------
 return function ()
 
-    local instance = MenuClass ("Create New Level")
+    local instance = MenuClass ("Create New World")
 
     local properties =
     {
@@ -31,18 +62,6 @@ return function ()
 
     Mixin.CopyTo (instance, properties)
     Mixin.CopyToAndBackupParents (instance, c)
-
-    addMenuButton (instance, "Back To Back",        "back_to_back_terrain_type_menu")
-    addMenuButton (instance, "Cubic World",         "cubic_terrain_type_menu")
-    addMenuButton (instance, "Normal",              "flat_terrain_type_menu")
-    addMenuButton (instance, "Floating Islands",    "floating_islands_terrain_type_menu")
-    addMenuButton (instance, "Hollow Earth",        "hollow_earth_terrain_type_menu")
-    addMenuButton (instance, "Parallel World",      "parallel_facing_terrain_type_menu")
-    addMenuButton (instance, "Square World",        "square_ring_terrain_type_menu")
-
-    instance:addMenuItem (BreakMenuItem ())
-
-    addMenuButton (instance, "Return To Parent Menu",       "single_player_top_menu")
 
     return instance
 end

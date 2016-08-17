@@ -23,20 +23,22 @@ end
 --------------------------------------------------
 function c:onEnter (menus)
 
-    local worlds = dio.file.listExistingWorlds ()
-    for idx, worldFolder in ipairs (worlds) do
+    local variations = dio.file.loadLua (dio.file.locations.GAME_MODE, self.gameMode.folder .. "new_saves/options.lua")
+
+    for idx, variation in ipairs (variations.variations) do
 
         local function onClicked ()
-            menus.loading_level_menu:recordWorldSettings (worldFolder, self.menuKey)
-            return "loading_level_menu"
+            local idxCopy = idx
+            menus.new_world_settings_menu:recordGameModeVariation (self.gameMode, idxCopy)
+            return "new_world_settings_menu"
         end
 
-        local button = ButtonMenuItem ("Load " .. worldFolder, onClicked)
+        local button = ButtonMenuItem (variation.title, onClicked)
         self:addMenuItem (button)
     end
 
-    if #worlds == 0 then
-        self:addMenuItem (LabelMenuItem ("No Worlds Found"))
+    if #variations.variations == 0 then
+        self:addMenuItem (LabelMenuItem ("No Variations Found"))
     end
 
     self:addMenuItem (BreakMenuItem ())
@@ -46,14 +48,18 @@ end
 
 --------------------------------------------------
 function c:onExit ()
-    self.loadingLevelMenu = nil
     self:clearAllMenuItems ();
+end
+
+--------------------------------------------------
+function c:recordGameMode (gameMode)
+    self.gameMode = gameMode
 end
 
 --------------------------------------------------
 return function ()
 
-    local instance = MenuClass ("LOAD WORLD MENU")
+    local instance = MenuClass ("CHOOSE GAME MODE VARIATION")
 
     local properties =
     {

@@ -8,36 +8,28 @@ local c = {}
 
 --------------------------------------------------
 function c:onEnter (menus)
-    assert (self.isNew)
-    assert (self.dataFolder)
-    -- assert (self.worldSettings ~= nil)
-    -- assert (not self.worldSettings.isNew or self.fromMenu ~= nil)
+    assert (self.worldFolder)
+    assert (self.fromMenuId)
 end
 
 --------------------------------------------------
 function c:onUpdate (menus)
 
-    if self.isNew then
+    local isOk = dio.session.beginSp (self.worldFolder)
 
-        local isOk = dio.session.beginSp (self.dataFolder)
-
-        self.dataFolder = nil
-        self.isNew = nil
-
-        if not isOk then
-            self.fromMenu:recordWorldAlreadyExistsError ()
-            return self.fromMenu.menuKey
-        else
-            return "playing_game_menu"
-        end
-
-    else
-
+    if not isOk then
         self.fromMenu:recordWorldAlreadyExistsError ()
-        return self.fromMenu.menuKey
-
+        return self.fromMenuId
+    else
+        return "playing_game_menu"
     end
 
+end
+
+--------------------------------------------------
+function c:onExit ()
+    self.worldFolder = nil
+    self.fromMenuId = nil
 end
 
 --------------------------------------------------
@@ -47,24 +39,19 @@ function c:onAppShouldClose (parent_func)
     return "quitting_menu", true
 end
 
--- --------------------------------------------------
--- function c:recordWorldSettings (worldSettings, roomSettings, fromMenu)
---     self.isNew = nil
---     self.worldSettings = worldSettings
---     self.roomSettings = roomSettings
---     self.fromMenu = fromMenu
--- end
-
 --------------------------------------------------
-function c:recordWorldSettingsNew (dataFolder, fromMenu)
-    self.isNew = true
-    self.dataFolder = dataFolder
-    self.fromMenu = fromMenu
+function c:recordWorldSettings (worldFolder, fromMenuId)
+    print ("recordWorldSettings")
+    print (worldFolder)
+    print (fromMenuId)
+
+    self.worldFolder = worldFolder
+    self.fromMenuId = fromMenuId
 end
 
 --------------------------------------------------
 return function ()
-    local instance = MenuClass ("Load World")
+    local instance = MenuClass ("Loading World")
 
     Mixin.CopyToAndBackupParents (instance, c)
 

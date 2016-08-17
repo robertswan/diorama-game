@@ -1,27 +1,36 @@
 -- repeatedly generated file. not safe to hand edit
 local roomSettings =
 {
-	generators =
+	generators = 
 	{
+		
 		{
-			voxelPass =
+			voxelPass = 
 			{
+				
 				{
-					chanceOfTree = 0.03,
-					sizeMin = 3,
+					chanceOfTree = 0.005,
+					sizeMin = 2,
 					sizeRange = 3,
-					trunkHeight = 5,
+					trunkHeight = 2,
 					type = "addTrees",
 				},
-
+				
 				{
 					mudHeight = 4,
 					type = "addGrass",
 				},
 			},
-			weightPass =
+			weightPass = 
 			{
-
+				
+				{
+					baseVoxel = -64,
+					heightInVoxels = 128,
+					mode = "replace",
+					type = "gradient",
+				},
+				
 				{
 					mode = "lessThan",
 					octaves = 4,
@@ -33,7 +42,25 @@ local roomSettings =
 			},
 		},
 	},
-	randomSeedAsString = "Teazel",
+	randomSeedAsString = "seed0.7337565233314",
+	roomShape = 
+	{
+		x = 
+		{
+			max = 2,
+			min = -2,
+		},
+		y = 
+		{
+			max = 2,
+			min = -2,
+		},
+		z = 
+		{
+			max = 2,
+			min = -2,
+		},
+	},
 	terrainId = "paramaterized",
 }
 
