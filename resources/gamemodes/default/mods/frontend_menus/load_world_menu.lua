@@ -1,4 +1,4 @@
---------------------------------------------------
+------------------------------------------------
 local BreakMenuItem = require ("resources/gamemodes/default/mods/frontend_menus/menu_items/break_menu_item")
 local ButtonMenuItem = require ("resources/gamemodes/default/mods/frontend_menus/menu_items/button_menu_item")
 local LabelMenuItem = require ("resources/gamemodes/default/mods/frontend_menus/menu_items/label_menu_item")
@@ -27,8 +27,8 @@ function c:onEnter (menus)
     for idx, worldFolder in ipairs (worlds) do
 
         local function onClicked ()
-            menus.loading_level_menu:recordWorldSettings (worldFolder, self.menuKey)
-            return "loading_level_menu"
+            menus.loading_world_menu:recordWorldSettings (worldFolder, self.menuKey)
+            return "loading_world_menu"
         end
 
         local button = ButtonMenuItem ("Load " .. worldFolder, onClicked)
@@ -46,7 +46,6 @@ end
 
 --------------------------------------------------
 function c:onExit ()
-    self.loadingLevelMenu = nil
     self:clearAllMenuItems ();
 end
 

@@ -30,16 +30,16 @@ local function onCreateWorldClicked (menuItem, menu)
 
         dio.file.copyFolder ("saves/" .. newFolder, dio.file.locations.GAME_MODE, folder_to_copy)
 
-        menu.loadingLevelMenu:recordWorldSettings (newFolder, menu.menuKey)
+        menu.loadingWorldMenu:recordWorldSettings (newFolder, menu.menuKey)
 
         menu.warningLabel.text = ""
-        return "loading_level_menu"
+        return "loading_world_menu"
     end
 end
 
 --------------------------------------------------
 local function onReturnToParentClicked ()
-    return "create_new_level_menu"
+    return "create_new_world_menu"
 end
 
 -- --------------------------------------------------
@@ -60,7 +60,7 @@ end
 
 --------------------------------------------------
 function c:onEnter (menus)
-    self.loadingLevelMenu = menus.loading_level_menu
+    self.loadingWorldMenu = menus.loading_world_menu
 
     if self.doesWorldAlreadyExistError then
         self.warningLabel.text = "World already exists. Please Rename it"
@@ -71,7 +71,7 @@ end
 --------------------------------------------------
 function c:onExit ()
     self.warningLabel.text = ""
-    self.loadingLevelMenu = nil
+    self.loadingWorldMenu = nil
 end
 
 --------------------------------------------------
@@ -92,7 +92,7 @@ return function ()
 
     local properties =
     {
-        loadingLevelMenu = nil,
+        loadingWorldMenu = nil,
         filename =                          TextEntryMenuItem ("Filename", nil, nil, "MyWorld", 16),
         -- randomSeed =                        TextEntryMenuItem ("Random Seed", nil, nil, "RobTheSwan", 16),
         createWorld =                       ButtonMenuItem ("Create World", onCreateWorldClicked),

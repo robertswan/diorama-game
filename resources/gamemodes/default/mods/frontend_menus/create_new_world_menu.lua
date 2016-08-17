@@ -23,21 +23,24 @@ end
 --------------------------------------------------
 function c:onEnter (menus)
 
-    local gameModes = dio.file.listGameModes ()
-    for idx, gameMode in ipairs (gameModes) do
+    local gameModeFolders = dio.file.listGameModeFolders ()
+    for idx, gameModeFolder in ipairs (gameModeFolders) do
+
+        local settings = dio.file.loadLua (dio.file.locations.GAME_MODE, gameModeFolder .. "new_saves/options.lua")
+        settings.folder = gameModeFolder
 
         local function onClicked ()
-            if gameMode.variations == 1 then
-                menus.new_world_settings_menu:recordGameModeVariation (gameMode, 1)
+            if #settings.variations == 1 then
+                menus.new_world_settings_menu:recordGameModeVariation (settings, 1)
                 return "new_world_settings_menu"
             else
-                menus.choosing_game_mode_variation_menu:recordGameMode (gameMode)
+                menus.choosing_game_mode_variation_menu:recordGameMode (settings)
                 return "choosing_game_mode_variation_menu"
             end
             
         end
 
-        local button = ButtonMenuItem (gameMode.title, onClicked)
+        local button = ButtonMenuItem (settings.title, onClicked)
         self:addMenuItem (button)
     end
 
