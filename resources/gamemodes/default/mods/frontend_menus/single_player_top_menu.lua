@@ -8,12 +8,12 @@ local Mixin = require ("resources/gamemodes/default/mods/frontend_menus/mixin")
 
 --------------------------------------------------
 local function onCreateNewLevelClicked ()
-    return "create_new_level_menu"
+    return "create_new_world_menu"
 end
 
 --------------------------------------------------
 local function onLoadLevelClicked ()
-    return "load_level_menu"
+    return "load_world_menu"
 end
 
 --------------------------------------------------

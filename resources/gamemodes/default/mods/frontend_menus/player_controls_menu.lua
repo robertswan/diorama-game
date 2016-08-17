@@ -86,7 +86,7 @@ local function onResetToDefaultsClicked (menuItem, menu)
 
     local keyCodeFromString = dio.inputs.keys.keyCodeFromString
     menu.fov.value = "90"
-    menu.fov.value = "0.075"
+    menu.gravity.value = "0.075"
 
     menu.invertMouse.isChecked = false
     menu.keyMenuItems [1].keyCode = keyCodeFromString ("W")
