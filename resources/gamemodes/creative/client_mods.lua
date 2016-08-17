@@ -2,39 +2,36 @@
 local modsToLoad =
 {
     {
-        folder = "diorama",
-        modName = "attract_mode",
-        versionRequired = {major = 1, minor = 0},
+        gameMode = "creative",
+        modFolder = "world_logic",
+    },  
+    {
+        gameMode = "default",
+        modFolder = "attract_mode",
     },
     {
-        folder = "diorama",
-        modName = "blocks",
-        versionRequired = {major = 1, minor = 0},
+        gameMode = "default",
+        modFolder = "blocks",
     },
     {
-        folder = "diorama",
-        modName = "player_list",
-        versionRequired = {major = 1, minor = 0},
+        gameMode = "default",
+        modFolder = "player_list",
     },
     {
-        folder = "diorama",
-        modName = "inventory",
-        versionRequired = {major = 1, minor = 0},
+        gameMode = "default",
+        modFolder = "inventory",
     },
     {
-        folder = "diorama",
-        modName = "chat",
-        versionRequired = {major = 1, minor = 0},
+        gameMode = "default",
+        modFolder = "chat",
     },
     {
-        folder = "diorama",
-        modName = "spawn",
-        versionRequired = {major = 1, minor = 0},
+        gameMode = "default",
+        modFolder = "spawn",
     },
     {
-        folder = "diorama",
-        modName = "diagnostics",
-        versionRequired = {major = 1, minor = 0},
+        gameMode = "default",
+        modFolder = "diagnostics",
     },
 }
 
@@ -50,16 +47,12 @@ local function main ()
         diagnostics = true,
         file = true,
         inputs = true,
+        resources = true,
         world = true,
     }
 
     for _, modData in ipairs (modsToLoad) do
-        local mod, error = dio.mods.load (modData, permissions)
-        if mod then
-            mods [modData.modName] = mod
-        else
-            print (error)
-        end
+        local mod, error = dio.mods.loadMod (modData, permissions)
     end
 end
 

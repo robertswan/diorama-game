@@ -14,6 +14,12 @@ local multiplayerSettings =
             name = "Diorama (Creative)",
             password = "",
         },
+        {
+            ipAddress = "84.92.48.10",
+            ipPort = 25272,
+            name = "Diorama (Plummet)",
+            password = "",
+        },        
     },
     profiles =
     {

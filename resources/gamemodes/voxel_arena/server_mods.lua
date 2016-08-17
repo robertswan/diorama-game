@@ -2,13 +2,13 @@
 local modsToLoad =
 {
     {
-        folder = "diorama",
-        modName = "blocks",
+        gameMode = "default",
+        modFolder = "blocks",
         versionRequired = {major = 1, minor = 0},
     },
     {
-        folder = "voxel_arena",
-        modName = "game_logic",
+        gameMode = "voxel_arena",
+        modFolder = "game_logic",
         versionRequired = {major = 1, minor = 0},
     },
 }
@@ -31,12 +31,7 @@ local function main ()
     }
 
     for _, modData in ipairs (modsToLoad) do
-        local mod, error = dio.mods.load (modData, regularPermissions)
-        if mod then
-            mods [modData.modName] = mod
-        else
-            print (error)
-        end
+        local mod, error = dio.mods.loadMod (modData, regularPermissions)
     end
 end
 

@@ -2,34 +2,28 @@
 local modsToLoad =
 {
     {
-        folder = "diorama",
-        modName = "blocks",
-        versionRequired = {major = 1, minor = 0},
+        gameMode = "plummet",
+        modFolder = "game_logic",
     },
     {
-        folder = "diorama",
-        modName = "diagnostics",
-        versionRequired = {major = 1, minor = 0},
+        gameMode = "default",
+        modFolder = "blocks",
     },
     {
-        folder = "plummet",
-        modName = "game_logic",
-        versionRequired = {major = 1, minor = 0},
+        gameMode = "default",
+        modFolder = "diagnostics",
     },
     {
-        folder = "plummet",
-        modName = "scoreboard",
-        versionRequired = {major = 1, minor = 0},
+        gameMode = "plummet",
+        modFolder = "scoreboard",
     },
     {
-        folder = "diorama",
-        modName = "chat",
-        versionRequired = {major = 1, minor = 0},
+        gameMode = "default",
+        modFolder = "chat",
     },
     {
-        folder = "plummet",
-        modName = "chat_shortcuts",
-        versionRequired = {major = 1, minor = 0},
+        gameMode = "plummet",
+        modFolder = "chat_shortcuts",
     },
 }
 
@@ -44,17 +38,13 @@ local function main ()
         drawing = true,
         diagnostics = true,
         file = true,
-        world = true,
         inputs = true,
+        resources = true,
+        world = true,
     }
 
     for _, modData in ipairs (modsToLoad) do
-        local mod, error = dio.mods.load (modData, permissions)
-        if mod then
-            mods [modData.modName] = mod
-        else
-            print (error)
-        end
+        local mod, error = dio.mods.loadMod (modData, permissions)
     end
 end
 
