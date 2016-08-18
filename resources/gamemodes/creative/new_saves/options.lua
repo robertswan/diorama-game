@@ -22,6 +22,15 @@ local options =
             },
         },
         {
+            title = "Floating Islands",
+            folder = "floating/",
+            options = 
+            {
+                title = "Random Seed",
+                randomSeedAsString = "default_seed",
+            },
+        },        
+        {
             title = "Normal",
             folder = "flat_earth/",
             options = 
