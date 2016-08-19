@@ -17,6 +17,10 @@ local clientSettings =
         majorVersion = 3,
         minorVersion = 3,
     },
+    experimental =
+    {
+        raymarchSmoothing = false,
+    },
 }
 
 return clientSettings
