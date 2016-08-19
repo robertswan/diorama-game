@@ -240,48 +240,14 @@ local function getRocketEntitySettings ()
     local components = dio.entities.components
     local rocketEntitySettings =
     {
-        [components.AABB_COLLIDER] =
-        {
-            min = {-0.01, -0.01, -0.01},
-            size = {0.02, 0.02, 0.02},
-        },
-
-        [components.BASE_NETWORK] =
-        {
-            -- with this line out, we use the regular chooser
-            --shouldSync = function (event) return true end,
-        },
-
-        [components.COLLISION_LISTENER] =
-        {
-            onCollision = onRocketAndSceneryCollision,
-        },
-
-        [components.MESH_PLACEHOLDER] =
-        {
-            blueprintId = "ROCKET",
-        },
-
-        [components.NAME] =
-        {
-            name = "ROCKET",
-            debug = true,
-        },
-
-        [components.PARENT] =
-        {
-        },
-
-        [components.RIGID_BODY] =
-        {
-            --velocity = {0.0, 0.0, 0.0},
-            --acceleration = {0.0, 0.0, 0.0}
-            acceleration = {0.0, -9.806 * 1.0, 0.0},
-        },
-
-        [components.TRANSFORM] =
-        {
-        },
+        [components.AABB_COLLIDER] =        {min = {-0.01, -0.01, -0.01}, size = {0.02, 0.02, 0.02},},
+        [components.BASE_NETWORK] =         {},
+        [components.COLLISION_LISTENER] =   {onCollision = onRocketAndSceneryCollision,},
+        [components.MESH_PLACEHOLDER] =     {blueprintId = "ROCKET",},
+        [components.NAME] =                 {name = "ROCKET", debug = true,},
+        [components.PARENT] =               {},
+        [components.RIGID_BODY] =           {acceleration = {0.0, -9.806 * 1.0, 0.0},},
+        [components.TRANSFORM] =            {},
     }
 
     return rocketEntitySettings

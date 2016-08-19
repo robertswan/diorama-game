@@ -82,33 +82,58 @@ local function onClientConnected (event)
         isPasswordCorrect = (settings.accountPassword == event.accountPassword)
     end
 
-    local playerParams = nil
+    local roomFolder = (settings and isPasswordCorrect) and settings.xyz.roomFolder or "default/"
+    local roomEntityId = dio.world.ensureRoomIsLoaded (roomFolder)
 
-    if settings and isPasswordCorrect then
-        playerParams =
+    local components = dio.entities.components
+    local playerComponents =
+    {
+            -- [components.AABB_COLLIDER] =        {min = {-0.01, -0.01, -0.01}, size = {0.02, 0.02, 0.02},},
+            -- [components.COLLISION_LISTENER] =   {onCollision = onRocketAndSceneryCollision,},
+            -- [components.MESH_PLACEHOLDER] =     {blueprintId = "ROCKET",},
+            -- [components.RIGID_BODY] =           {acceleration = {0.0, -9.806 * 1.0, 0.0},},
+        
+        [components.BASE_NETWORK] =         {},
+        [components.EYE_POSITION] =         {offset = {0, 1.65, 0}},
+        [components.FOCUS] =                {connectionId = event.connectionId, radius = 4},
+        [components.NAME] =                 {name = "PLAYER", debug = true}, -- temp for debugging
+        [components.PARENT] =               {parentEntityId = roomEntityId},
+        [components.SERVER_CHARACTER_CONTROLLER] =               
         {
             connectionId = event.connectionId,
-            avatar = settings.xyz,
-            gravityDir = gravityDirIndices [settings.gravityDir],
+            accountId = event.accountId,
+        },
+        [components.TEMP_PLAYER] =
+        {
+            connectionId = event.connectionId,
+            accountId = event.accountId,
+            -- walkSpeed = 5,
+            -- jumpHeight = 5,
+            -- pickingDistance = 10,
+        },
+    }
+
+    if settings and isPasswordCorrect then
+
+        playerComponents [components.GRAVITY_TRANSFORM] =
+        {
+            chunkId =       settings.xyz.chunkId,
+            xyz =           settings.xyz.xyz,
+            ypr =           settings.xyz.ypr,
+            gravityDir =    gravityDirIndices [settings.gravityDir],
         }
 
     else
-        playerParams =
+        playerComponents [components.GRAVITY_TRANSFORM] =
         {
-            connectionId = event.connectionId,
-            avatar =
-            {
-                roomFolder = "default/",
-                chunkId = {0, 0, 0},
-                xyz = {0, 0, 0},
-                ypr = {0, 0, 0},
-            },
-            gravityDir = gravityDirIndices.DOWN,
+            chunkId =       {0, 0, 0},
+            xyz =           {0, 0, 0},
+            ypr =           {0, 0, 0},
+            gravityDir =    gravityDirIndices.DOWN,
         }
-
     end
-
-    local entityId = dio.world.createPlayer (playerParams)
+    
+    local entityId = dio.entities.create (roomEntityId, playerComponents)
 
     local connection =
     {
@@ -159,7 +184,8 @@ local function onClientDisconnected (event)
         end
     end
 
-    dio.world.destroyPlayer (connection.entityId)
+    dio.entities.destroyEntity (connection.entityId)
+    --dio.world.destroyPlayer (connection.entityId)
 
     connections [event.connectionId] = nil
 end
