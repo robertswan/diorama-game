@@ -184,7 +184,7 @@ local function onClientDisconnected (event)
         end
     end
 
-    dio.entities.destroyEntity (connection.entityId)
+    dio.entities.destroy (connection.entityId)
     --dio.world.destroyPlayer (connection.entityId)
 
     connections [event.connectionId] = nil
@@ -332,7 +332,7 @@ local function onRoomCreated (event)
         [components.CALENDAR] =
         {
             time = 10 * 60 * 60, -- midday
-            timeMultiplier = 0,
+            timeMultiplier = 1000,
         },
         [components.NAME] =
         {
