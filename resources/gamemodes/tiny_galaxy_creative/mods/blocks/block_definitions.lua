@@ -97,6 +97,9 @@ local blocks =
     -- 60
     {name = "artifact placeholder",     uvs = {4, 8, 3, 8, 2, 8, 3, 8, 0, 8, 1, 8}},
     {name = "item placeholder",         uvs = {4, 9, 3, 9, 2, 9, 3, 9, 0, 9, 1, 9}},
+    {name = "small rocks",              uvs = {9, 5}},
+    {name = "rock teleporter",          uvs = {1, 0, 6, 1, 1, 0}, tag = "teleporter"},
+    {name = "rock bar",                 uvs = {1, 0}, shape = "pole"},
 }
 
 return {blocks = blocks, tiles = tiles, entities = entities}
