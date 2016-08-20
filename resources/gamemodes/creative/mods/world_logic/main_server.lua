@@ -72,16 +72,8 @@ local function stripColourCodes (text)
 end
 
 --------------------------------------------------
-local function onClientConnected (event)
-
-    local filename = "player_" .. event.accountId .. ".lua"
-    local settings = dio.file.loadLua (dio.file.locations.WORLD_PLAYER, filename)
-
-    local isPasswordCorrect = true
-    if settings then
-        isPasswordCorrect = (settings.accountPassword == event.accountPassword)
-    end
-
+local function createPlayerEntity (connectionId, accountId, settings, isPasswordCorrect)
+    
     local roomFolder = (settings and isPasswordCorrect) and settings.xyz.roomFolder or "default/"
     local roomEntityId = dio.world.ensureRoomIsLoaded (roomFolder)
 
@@ -95,21 +87,18 @@ local function onClientConnected (event)
         
         [components.BASE_NETWORK] =         {},
         [components.EYE_POSITION] =         {offset = {0, 1.65, 0}},
-        [components.FOCUS] =                {connectionId = event.connectionId, radius = 4},
+        [components.FOCUS] =                {connectionId = connectionId, radius = 4},
         [components.NAME] =                 {name = "PLAYER", debug = true}, -- temp for debugging
         [components.PARENT] =               {parentEntityId = roomEntityId},
         [components.SERVER_CHARACTER_CONTROLLER] =               
         {
-            connectionId = event.connectionId,
-            accountId = event.accountId,
+            connectionId = connectionId,
+            accountId = accountId,
         },
         [components.TEMP_PLAYER] =
         {
-            connectionId = event.connectionId,
-            accountId = event.accountId,
-            -- walkSpeed = 5,
-            -- jumpHeight = 5,
-            -- pickingDistance = 10,
+            connectionId = connectionId,
+            accountId = accountId,
         },
     }
 
@@ -133,7 +122,19 @@ local function onClientConnected (event)
         }
     end
     
-    local entityId = dio.entities.create (roomEntityId, playerComponents)
+    return dio.entities.create (roomEntityId, playerComponents)
+end
+
+--------------------------------------------------
+local function onClientConnected (event)
+
+    local filename = "player_" .. event.accountId .. ".lua"
+    local settings = dio.file.loadLua (dio.file.locations.WORLD_PLAYER, filename)
+
+    local isPasswordCorrect = true
+    if settings then
+        isPasswordCorrect = (settings.accountPassword == event.accountPassword)
+    end
 
     local connection =
     {
@@ -144,7 +145,7 @@ local function onClientConnected (event)
         groupId = event.isSinglePlayer and "builder" or "tourist",
         isPasswordCorrect = isPasswordCorrect,
         needsSaving = event.isSinglePlayer,
-        entityId = entityId,
+        entityId = createPlayerEntity (event.connectionId, event.accountId, settings, isPasswordCorrect),
     }
 
     if settings and isPasswordCorrect then

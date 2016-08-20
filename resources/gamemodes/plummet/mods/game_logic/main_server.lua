@@ -82,7 +82,7 @@ local gameVars =
     playersReadyCount = 0,
     playersPlayingCount = 0,
     tickCount = 0,
-    gameOverScore = 4000,
+    gameOverScore = 100, -- 4000
     chunksToModify =
     {
         lobby =
@@ -223,22 +223,43 @@ local function startGame ()
 end
 
 --------------------------------------------------
-local function createPlayer (connectionId)
+local function createPlayerEntity (connectionId, accountId)
+    
+    local roomEntityId = dio.world.ensureRoomIsLoaded ("plummet/")
 
-    local playerParams =
+    local components = dio.entities.components
+    local playerComponents =
     {
-        connectionId = connectionId,
-        avatar =
+            -- [components.AABB_COLLIDER] =        {min = {-0.01, -0.01, -0.01}, size = {0.02, 0.02, 0.02},},
+            -- [components.COLLISION_LISTENER] =   {onCollision = onRocketAndSceneryCollision,},
+            -- [components.MESH_PLACEHOLDER] =     {blueprintId = "ROCKET",},
+            -- [components.RIGID_BODY] =           {acceleration = {0.0, -9.806 * 1.0, 0.0},},
+        
+        [components.BASE_NETWORK] =         {},
+        [components.EYE_POSITION] =         {offset = {0, 1.65, 0}},
+        [components.FOCUS] =                {connectionId = connectionId, radius = 4},
+        [components.GRAVITY_TRANSFORM] =
         {
-            roomFolder = "plummet/",
-            chunkId = {0, 0, 0},
-            xyz = {15, 4, 15},
-            ypr = {0, 0, 0}
+            chunkId =       {0, 0, 0},
+            xyz =           {15, 4, 15},
+            ypr =           {0, 0, 0},
+            gravityDir =    5,
         },
-        gravityDir = 5,
+        [components.NAME] =                 {name = "PLAYER", debug = true}, -- temp for debugging
+        [components.PARENT] =               {parentEntityId = roomEntityId},
+        [components.SERVER_CHARACTER_CONTROLLER] =               
+        {
+            connectionId = connectionId,
+            accountId = accountId,
+        },
+        [components.TEMP_PLAYER] =
+        {
+            connectionId = connectionId,
+            accountId = accountId,
+        },
     }
 
-    return dio.world.createPlayer (playerParams)
+    return dio.entities.create (roomEntityId, playerComponents)
 end
 
 --------------------------------------------------
@@ -257,7 +278,7 @@ local function endGame ()
 
     for connectionId, connection in pairs (connections) do
         if connection.entityId then
-            dio.world.destroyPlayer (connection.entityId)
+            dio.entities.destroy (connection.entityId)
             connection.entityId = nil
         end
     end
@@ -282,7 +303,7 @@ local function onClientConnected (event)
     }
 
     if gameVars.state == "waiting" or gameVars.state == "playing" then
-        connection.entityId = createPlayer (event.connectionId)
+        connection.entityId = createPlayerEntity (event.connectionId, event.accountId)
     end
 
     connections [event.connectionId] = connection
@@ -297,7 +318,7 @@ local function onClientDisconnected (event)
     local connection = connections [event.connectionId]
 
     if connection.entityId then
-        dio.world.destroyPlayer (connection.entityId)
+        dio.entities.destroy (connection.entityId)
         connection.entityId = nil
     end
 
@@ -374,7 +395,7 @@ local function onRoomDestroyed (event)
     createNewLevel ()
 
     for connectionId, connection in pairs (connections) do
-        connection.entityId = createPlayer (connectionId)
+        connection.entityId = createPlayerEntity (connectionId, connection.accountId)
         connection.groupId = "lobby"
     end
 end
