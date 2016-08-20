@@ -186,7 +186,6 @@ local function onClientDisconnected (event)
     end
 
     dio.entities.destroy (connection.entityId)
-    --dio.world.destroyPlayer (connection.entityId)
 
     connections [event.connectionId] = nil
 end
