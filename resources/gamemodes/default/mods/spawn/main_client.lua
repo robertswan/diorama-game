@@ -2,12 +2,12 @@
 local instance = nil
 
 --------------------------------------------------
-local function teleportTo (x, y, z)
+local function teleportTo (x, y, z, yaw, pitch, roll)
     setting =
     {
         chunkId = {0, 0, 0},
         xyz = {x, y, z},
-        ypr = {0, 0, 0},
+        ypr = {yaw, pitch, roll},
     }
 
     dio.world.setPlayerXyz (instance.myAccountId, setting)
@@ -95,7 +95,11 @@ local function onServerEventReceived (event)
         local y = tonumber (words [2])
         local z = tonumber (words [3])
 
-        teleportTo (x, y, z)
+        local yaw = tonumber (words [4])
+        local pitch = tonumber (words [5])
+        local roll = tonumber (words [6])
+
+        teleportTo (x, y, z, yaw, pitch, roll)
 
         event.cancel = true
     end

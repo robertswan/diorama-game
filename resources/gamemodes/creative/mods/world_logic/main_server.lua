@@ -72,6 +72,60 @@ local function stripColourCodes (text)
 end
 
 --------------------------------------------------
+local function createPlayerEntity (connectionId, accountId, settings, isPasswordCorrect)
+    
+    local roomFolder = (settings and isPasswordCorrect) and settings.xyz.roomFolder or "default/"
+    local roomEntityId = dio.world.ensureRoomIsLoaded (roomFolder)
+
+    local components = dio.entities.components
+    local playerComponents =
+    {
+            -- [components.AABB_COLLIDER] =        {min = {-0.01, -0.01, -0.01}, size = {0.02, 0.02, 0.02},},
+            -- [components.COLLISION_LISTENER] =   {onCollision = onRocketAndSceneryCollision,},
+            -- [components.MESH_PLACEHOLDER] =     {blueprintId = "ROCKET",},
+            -- [components.RIGID_BODY] =           {acceleration = {0.0, -9.806 * 1.0, 0.0},},
+        
+        [components.BASE_NETWORK] =         {},
+        [components.EYE_POSITION] =         {offset = {0, 1.65, 0}},
+        [components.FOCUS] =                {connectionId = connectionId, radius = 4},
+        [components.NAME] =                 {name = "PLAYER", debug = true}, -- temp for debugging
+        [components.PARENT] =               {parentEntityId = roomEntityId},
+        [components.SERVER_CHARACTER_CONTROLLER] =               
+        {
+            connectionId = connectionId,
+            accountId = accountId,
+        },
+        [components.TEMP_PLAYER] =
+        {
+            connectionId = connectionId,
+            accountId = accountId,
+        },
+    }
+
+    if settings and isPasswordCorrect then
+
+        playerComponents [components.GRAVITY_TRANSFORM] =
+        {
+            chunkId =       settings.xyz.chunkId,
+            xyz =           settings.xyz.xyz,
+            ypr =           settings.xyz.ypr,
+            gravityDir =    gravityDirIndices [settings.gravityDir],
+        }
+
+    else
+        playerComponents [components.GRAVITY_TRANSFORM] =
+        {
+            chunkId =       {0, 0, 0},
+            xyz =           {0, 0, 0},
+            ypr =           {0, 0, 0},
+            gravityDir =    gravityDirIndices.DOWN,
+        }
+    end
+    
+    return dio.entities.create (roomEntityId, playerComponents)
+end
+
+--------------------------------------------------
 local function onClientConnected (event)
 
     local filename = "player_" .. event.accountId .. ".lua"
@@ -82,34 +136,6 @@ local function onClientConnected (event)
         isPasswordCorrect = (settings.accountPassword == event.accountPassword)
     end
 
-    local playerParams = nil
-
-    if settings and isPasswordCorrect then
-        playerParams =
-        {
-            connectionId = event.connectionId,
-            avatar = settings.xyz,
-            gravityDir = gravityDirIndices [settings.gravityDir],
-        }
-
-    else
-        playerParams =
-        {
-            connectionId = event.connectionId,
-            avatar =
-            {
-                roomFolder = "default/",
-                chunkId = {0, 0, 0},
-                xyz = {0, 0, 0},
-                ypr = {0, 0, 0},
-            },
-            gravityDir = gravityDirIndices.DOWN,
-        }
-
-    end
-
-    local entityId = dio.world.createPlayer (playerParams)
-
     local connection =
     {
         connectionId = event.connectionId,
@@ -119,7 +145,7 @@ local function onClientConnected (event)
         groupId = event.isSinglePlayer and "builder" or "tourist",
         isPasswordCorrect = isPasswordCorrect,
         needsSaving = event.isSinglePlayer,
-        entityId = entityId,
+        entityId = createPlayerEntity (event.connectionId, event.accountId, settings, isPasswordCorrect),
     }
 
     if settings and isPasswordCorrect then
@@ -159,7 +185,7 @@ local function onClientDisconnected (event)
         end
     end
 
-    dio.world.destroyPlayer (connection.entityId)
+    dio.entities.destroy (connection.entityId)
 
     connections [event.connectionId] = nil
 end
@@ -305,7 +331,7 @@ local function onRoomCreated (event)
         },
         [components.CALENDAR] =
         {
-            time = 10 * 60 * 60, -- midday
+            time = 9 * 60 * 60, -- midday
             timeMultiplier = 0,
         },
         [components.NAME] =
