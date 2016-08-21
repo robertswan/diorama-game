@@ -20,6 +20,7 @@ local clientSettings =
     experimental =
     {
         raymarchSmoothing = false,
+        raymarchSmoothingWeight = 0.5,
     },
 }
 

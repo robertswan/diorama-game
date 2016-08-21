@@ -2,16 +2,12 @@
 local modsToLoad =
 {
     {
-        gameMode = "creative",
+        gameMode = "tiny_galaxy",
         modFolder = "world_logic",
     },
     {
         gameMode = "tiny_galaxy",
         modFolder = "blocks",
-    },
-    {
-        gameMode = "default",
-        modFolder = "spawn",
     },
 }
 

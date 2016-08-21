@@ -2,37 +2,45 @@
 local modsToLoad =
 {
     {
-        gameMode = "creative",
+        gameMode = "tiny_galaxy",
         modFolder = "world_logic",
-    },
+    },  
     {
         gameMode = "tiny_galaxy",
         modFolder = "blocks",
     },
     {
         gameMode = "default",
+        modFolder = "chat",
+    },
+    {
+        gameMode = "default",
         modFolder = "spawn",
     },
+    {
+        gameMode = "default",
+        modFolder = "diagnostics",
+    },    
 }
 
---------------------------------------------------
 local mods = {}
 
 --------------------------------------------------
 local function main ()
 
-    local regularPermissions =
+    local permissions =
     {
         blocks = true,
         drawing = true,
-        entities = true,
+        diagnostics = true,
         file = true,
-        network = true,
+        inputs = true,
+        resources = true,
         world = true,
     }
 
     for _, modData in ipairs (modsToLoad) do
-        local mod, error = dio.mods.loadMod (modData, regularPermissions)
+        local mod, error = dio.mods.loadMod (modData, permissions)
     end
 end
 
