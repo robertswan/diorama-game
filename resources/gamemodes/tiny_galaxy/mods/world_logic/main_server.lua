@@ -5,15 +5,16 @@ local instance =
 {
     blocks = BlockDefinitions.blocks,
 
+    initialJumpSpeed = 10.0,
     itemsAvailable = 
     {
         {id = "smallAxe",             description = "Small Axe"},
-        {id = "smallJumpBoots",       description = "Small Jump Boots"},
+        {id = "smallJumpBoots",       description = "Small Jump Boots", jumpSpeed = 12.0},
         {id = "iceShield",            description = "Ice Shield"},
         {id = "belt",                 description = "Belt of Strength"},
         {id = "fireShield",           description = "Fire Shield"},
         {id = "teleporter",           description = "Teleporter"},
-        {id = "largeJumpBoots",       description = "Large Jump Boots"},
+        {id = "largeJumpBoots",       description = "Large Jump Boots", jumpSpeed = 15.0},
         {id = "beans",                description = "Magic Beans"},
         {id = "bigAxe",               description = "Big Axe"},
     },
@@ -189,10 +190,14 @@ local function createPlayerEntity (connectionId, accountId)
         },
         [components.NAME] =                 {name = "PLAYER", debug = true}, -- temp for debugging
         [components.PARENT] =               {parentEntityId = roomEntityId},
-        [components.SERVER_CHARACTER_CONTROLLER] =               
+        [components.SERVER_CHARACTER_CONTROLLER] =
         {
             connectionId = connectionId,
             accountId = accountId,
+            crouchSpeed = 1.0,
+            walkSpeed = 6.0,
+            sprintSpeed = 50.0,
+            jumpSpeed = instance.initialJumpSpeed,
         },
         [components.TEMP_PLAYER] =
         {
@@ -299,7 +304,13 @@ function blockCallbacks.itemChest (event, connection)
         dio.network.sendChat (connection.connectionId, "ITEM", "You have collected the " .. item.description)
         instance.inventory [item.id] = true
         instance.nextItemIdx = instance.nextItemIdx + 1
-        dio.world.setBlock (event.roomEntityId, event.chunkId, event.xyz [1], event.xyz [2], event.xyz [3], 0)
+        dio.world.setBlock (event.roomEntityId, event.chunkId, event.cellId [1], event.cellId [2], event.cellId [3], 0)
+
+        if item.jumpSpeed then
+            local component = dio.entities.getComponent (connection.entityId, dio.entities.components.SERVER_CHARACTER_CONTROLLER)
+            component.jumpSpeed = item.jumpSpeed
+            dio.entities.setComponent (connection.entityId, dio.entities.components.SERVER_CHARACTER_CONTROLLER, component)
+        end
     end
 
 end
@@ -310,7 +321,7 @@ function blockCallbacks.artifactChest (event, connection)
     if event.isBlockValid then
         instance.artifactsCollectedCount = instance.artifactsCollectedCount + 1
         dio.network.sendChat (connection.connectionId, "ARTEFACT", tostring (instance.artifactsCollectedCount) .. " collected!")
-        dio.world.setBlock (event.roomEntityId, event.chunkId, event.xyz [1], event.xyz [2], event.xyz [3], 0)
+        dio.world.setBlock (event.roomEntityId, event.chunkId, event.cellId [1], event.cellId [2], event.cellId [3], 0)
     end
 
 end
@@ -319,7 +330,7 @@ end
 function blockCallbacks.smallAxe (event, connection) 
 
     if event.isBlockValid and instance.inventory.smallAxe then
-        dio.world.setBlock (event.roomEntityId, event.chunkId, event.xyz [1], event.xyz [2], event.xyz [3], 0)
+        dio.world.setBlock (event.roomEntityId, event.chunkId, event.cellId [1], event.cellId [2], event.cellId [3], 0)
     end
 end
 
@@ -327,7 +338,7 @@ end
 function blockCallbacks.belt (event, connection) 
 
     if event.isBlockValid and instance.inventory.belt then
-        dio.world.setBlock (event.roomEntityId, event.chunkId, event.xyz [1], event.xyz [2], event.xyz [3], 0)
+        dio.world.setBlock (event.roomEntityId, event.chunkId, event.cellId [1], event.cellId [2], event.cellId [3], 0)
     end
 end
 
@@ -337,7 +348,7 @@ function blockCallbacks.beans (event, connection)
         dio.world.setBlock (
                 event.roomEntityId,
                 event.chunkId, 
-                event.xyz [1], event.xyz [2], event.xyz [3],
+                event.cellId [1], event.cellId [2], event.cellId [3],
                 event.destinationBlockId + 1)
     end
 end
@@ -346,7 +357,7 @@ end
 function blockCallbacks.bigAxe (event, connection)
     
     if event.isBlockValid and instance.inventory.bigAxe then
-        dio.world.setBlock (event.roomEntityId, event.chunkId, event.xyz [1], event.xyz [2], event.xyz [3], 0)
+        dio.world.setBlock (event.roomEntityId, event.chunkId, event.cellId [1], event.cellId [2], event.cellId [3], 0)
     end
 end
 
