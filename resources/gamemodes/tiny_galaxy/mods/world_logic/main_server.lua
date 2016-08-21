@@ -60,18 +60,18 @@ local instance =
 --------------------------------------------------
 local connections = {}
 
--- --------------------------------------------------
--- local function fillCube (roomEntityId, chunkId, min, max, value)
+--------------------------------------------------
+local function fillCube (roomEntityId, chunkId, min, max, value)
 
---     local setBlock = dio.world.setBlock
---     for x = min [1], max [1] do
---         for y = min [2], max [2] do
---             for z = min [3], max [3] do
---                 setBlock (roomEntityId, chunkId, x, y, z, value)
---             end
---         end
---     end
--- end
+    local setBlock = dio.world.setBlock
+    for x = min [1], max [1] do
+        for y = min [2], max [2] do
+            for z = min [3], max [3] do
+                setBlock (roomEntityId, chunkId, x, y, z, value)
+            end
+        end
+    end
+end
 
 --------------------------------------------------
 local function calcIsSafeMove (moveDelta)
@@ -364,18 +364,9 @@ end
 --------------------------------------------------
 local function onChunkGenerated (event)
 
-    -- for _, build in pairs (gameVars.chunksToModify) do
-
-    --     if not build.isBuilt and
-    --             build.chunkId [1] == event.chunkId [1] and
-    --             build.chunkId [2] == event.chunkId [2] and
-    --             build.chunkId [3] == event.chunkId [3] then
-
-    --         build.buildFunction (event.roomEntityId, event.chunkId)
-    --         build.isBuilt = true
-
-    --     end
-    -- end
+    if event.chunkId [2] == -1 then
+        fillCube (event.roomEntityId, event.chunkId, {0, 0, 0}, {31, 0, 31}, 0)
+    end
 end
 
 --------------------------------------------------
