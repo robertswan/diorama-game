@@ -195,8 +195,8 @@ local function createPlayerEntity (connectionId, accountId)
             connectionId = connectionId,
             accountId = accountId,
             crouchSpeed = 1.0,
-            walkSpeed = 6.0,
-            sprintSpeed = 50.0,
+            walkSpeed = 5.0,
+            sprintSpeed = 30.0,
             jumpSpeed = instance.initialJumpSpeed,
         },
         [components.TEMP_PLAYER] =
