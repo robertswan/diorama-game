@@ -35,14 +35,14 @@ local blocks =
     {name = "leaves",                   uvs = {7, 0}},
 
     -- 10    
-    {name = "thin grass",               uvs = {8, 0}, shape = "cross",    isSolid = false},
+    {name = "thin grass",               uvs = {8, 0}, shape = "cross", isSolid = false},
     {name = "concrete",                 uvs = {1, 0}},
     {name = "concrete breakable",       uvs = {9, 3}, tag = "belt"},
     {name = "vector tile",              uvs = {1, 6}},
     {name = "vector brick",             uvs = {2, 6, 1, 6, 1, 6}},
     {name = "vector breakable brick",   uvs = {3, 6}, tag = "belt"},
     {name = "vector pole",              uvs = {5, 6, 1, 6, 1, 6}, shape = "pole"},
-    {name = "vector grass",             uvs = {6, 6}, shape = "cross",    isSolid = false},
+    {name = "vector grass",             uvs = {6, 6}, shape = "cross", isSolid = false},
     {name = "vector glass",             uvs = {4, 6}, isTransparent = true},
     {name = "vector circle",            uvs = {7, 6}},
 
@@ -60,7 +60,7 @@ local blocks =
 
     -- 30
     {name = "sand column ridged",       uvs = {2, 2}},
-    {name = "cactus",                   uvs = {9, 2}, shape = "cross",    isSolid = false},
+    {name = "cactus",                   uvs = {9, 2}, shape = "cross", isSolid = false},
     {name = "sand jump pad",            uvs = {0, 2, 6, 2, 0, 2}, tag = "jumppad"},
     {name = "sand teleporter",          uvs = {0, 2, 7, 2, 0, 2}, tag = "teleporter"},
     {name = "sand pole",                uvs = {8, 2, 0, 2, 0, 2}, shape = "pole"},
