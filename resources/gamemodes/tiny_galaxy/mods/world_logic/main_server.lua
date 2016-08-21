@@ -62,19 +62,6 @@ local instance =
 local connections = {}
 
 --------------------------------------------------
-local function fillCube (roomEntityId, chunkId, min, max, value)
-
-    local setBlock = dio.world.setBlock
-    for x = min [1], max [1] do
-        for y = min [2], max [2] do
-            for z = min [3], max [3] do
-                setBlock (roomEntityId, chunkId, x, y, z, value)
-            end
-        end
-    end
-end
-
---------------------------------------------------
 local function calcIsSafeMove (moveDelta)
     local newX = instance.ship [1] + moveDelta [1]
     local newZ = instance.ship [2] + moveDelta [2]
@@ -399,14 +386,6 @@ local function onEntityDestroyed (event)
 end
 
 --------------------------------------------------
-local function onChunkGenerated (event)
-
-    if event.chunkId [2] == -1 then
-        fillCube (event.roomEntityId, event.chunkId, {0, 0, 0}, {31, 0, 31}, 0)
-    end
-end
-
---------------------------------------------------
 local function onLoad ()
 
     local types = dio.events.serverTypes
@@ -416,7 +395,6 @@ local function onLoad ()
     dio.events.addListener (types.ROOM_DESTROYED, onRoomDestroyed)
     dio.events.addListener (types.ENTITY_PLACED, onEntityPlaced)
     dio.events.addListener (types.ENTITY_DESTROYED, onEntityDestroyed)
-    dio.events.addListener (types.CHUNK_GENERATED, onChunkGenerated)
 
     createNewLevel ()
 

@@ -6,7 +6,7 @@ local modsToLoad =
         modFolder = "world_logic",
     },
     {
-        gameMode = "tiny_galaxy_creative",
+        gameMode = "tiny_galaxy",
         modFolder = "blocks",
     },
 }
