@@ -1,4 +1,4 @@
-local definitions = require ("resources/gamemodes/tiny_galaxy_creative/mods/blocks/block_definitions")
+local definitions = require ("resources/gamemodes/tiny_galaxy/mods/blocks/block_definitions")
 
 --------------------------------------------------
 local function onLoad ()

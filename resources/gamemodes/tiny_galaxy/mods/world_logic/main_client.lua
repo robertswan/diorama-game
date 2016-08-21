@@ -16,13 +16,18 @@ local function onClientConnected (event)
 end
 
 --------------------------------------------------
-local function teleportBy (x, y, z)
+local function teleport (data)
 
     local settings = dio.world.getPlayerXyz (instance.accountId)
 
-    settings.xyz [1] = settings.xyz [1] + x
-    settings.xyz [2] = settings.xyz [2] + y
-    settings.xyz [3] = settings.xyz [3] + z
+    if data [1] == "delta" then
+        settings.xyz [1] = settings.xyz [1] + data [2]
+        settings.xyz [2] = settings.xyz [2] + data [3]
+        settings.xyz [3] = settings.xyz [3] + data [4]
+    else
+        settings.chunkId = {0, 0, 0}
+        settings.xyz = {data [2], data [3], data [4]}
+    end
     
     dio.world.setPlayerXyz (instance.accountId, settings)
 end
@@ -33,14 +38,12 @@ local function onServerEventReceived (event)
 
     if event.id == "tinyGalaxy.TP" then
 
-        print ("tinyGalaxy.TP = " .. event.payload)
-
         local words = {}
         for word in string.gmatch (event.payload, "[^ ]+") do
             table.insert (words, word)
         end
 
-        teleportBy (words [1], words [2], words [3])
+        teleport (words)
 
         event.cancel = true
 

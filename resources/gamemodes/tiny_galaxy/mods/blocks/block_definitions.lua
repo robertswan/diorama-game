@@ -61,7 +61,7 @@ local blocks =
     -- 30
     {name = "sand column ridged",       uvs = {2, 2}},
     {name = "cactus",                   uvs = {9, 2}, shape = "cross", isSolid = false},
-    {name = "sand jump pad",            uvs = {0, 2, 6, 2, 0, 2}, tag = "jumppad"},
+    {name = "sand jump pad",            uvs = {0, 2, 6, 2, 0, 2}, isJumpPad = true},
     {name = "sand teleporter",          uvs = {0, 2, 7, 2, 0, 2}, tag = "teleporter"},
     {name = "sand pole",                uvs = {8, 2, 0, 2, 0, 2}, shape = "pole"},
     {name = "sun bright 1",             uvs = {0, 7}},
@@ -91,7 +91,7 @@ local blocks =
     {name = "nuke pole",                uvs = {2, 5}, shape = "pole"},
     {name = "nuke waste",               uvs = {6, 5, 5, 5, 7, 5}},
     {name = "nuke bean",                uvs = {0, 5, 3, 5, 0, 5}, tag = "bean"},
-    {name = "nuke jumppad",             uvs = {0, 5, 4, 5, 0, 5}, tag = "jumppad"},
+    {name = "nuke jumppad",             uvs = {0, 5, 4, 5, 0, 5}, isJumpPad = true},
     {name = "nuke teleporter",          uvs = {0, 5, 8, 5, 0, 5}, tag = "teleporter"},
 
     -- 60
