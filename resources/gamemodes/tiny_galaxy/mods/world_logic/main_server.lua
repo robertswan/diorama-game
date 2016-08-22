@@ -5,6 +5,9 @@ local instance =
 {
     blocks = BlockDefinitions.blocks,
 
+    timeOfDay = 0,
+    currentWorldIdx = nil,
+
     initialJumpSpeed = 10.0,
     itemsAvailable = 
     {
@@ -39,31 +42,31 @@ local instance =
     worldLimits = {16, 16},
     worlds = 
     {
-        {name = "Grass World 1",    xz = {0, 12},   timeOfDay = 1},
-        {name = "Grass World 2",    xz = {3, 13},   timeOfDay = 2},
-        {name = "Grass World 3",    xz = {5, 15},   timeOfDay = 3},
-        {name = "Grass World 4",    xz = {9, 12},   timeOfDay = 4},
-        {name = "Grass World 5",    xz = {4, 4},    timeOfDay = 5},
-        {name = "Vector World",     xz = {3, 7},    timeOfDay = 6},
-        {name = "Rot World",        xz = {1, 1},    timeOfDay = 7},
-        {name = "Ice World",        xz = {15, 15},  timeOfDay = 8},
-        {name = "Desert World",     xz = {9, 2},    timeOfDay = 9},
-        {name = "Toxic World",      xz = {13, 3},   timeOfDay = 10},
-        {name = "Binary Sun World", xz = {10, 5},   timeOfDay = 11},
+        {name = "Tiny Grass World 1",    xz = {0, 12},   timeOfDay = 1},
+        {name = "Tiny Grass World 2",    xz = {3, 13},   timeOfDay = 2},
+        {name = "Tiny Grass World 3",    xz = {5, 15},   timeOfDay = 3},
+        {name = "Tiny Grass World 4",    xz = {9, 12},   timeOfDay = 4},
+        {name = "Tiny Grass World 5",    xz = {4, 4},    timeOfDay = 5},
+        {name = "Tiny Vector World",     xz = {3, 7},    timeOfDay = 6},
+        {name = "Tiny Rot World",        xz = {1, 1},    timeOfDay = 7},
+        {name = "Tiny Ice World",        xz = {15, 15},  timeOfDay = 8},
+        {name = "Tiny Desert World",     xz = {9, 2},    timeOfDay = 9},
+        {name = "Tiny Toxic World",      xz = {13, 3},   timeOfDay = 10},
+        {name = "Tiny Binary Sun World", xz = {10, 5},   timeOfDay = 11},
 
-        {name = "Asteroids 1",      xz = {5, 10},   timeOfDay = 23},
-        {name = "Asteroids 2",      xz = {7, 10},   timeOfDay = 23},
-        {name = "Asteroids 3",      xz = {10, 10},  timeOfDay = 23},
-        {name = "Asteroids 4",      xz = {14, 10},  timeOfDay = 23},
-        {name = "Asteroids 5",      xz = {15, 8},   timeOfDay = 23},
-        {name = "Asteroids 6",      xz = {15, 4},   timeOfDay = 23},
-        {name = "Asteroids 7",      xz = {15, 2},   timeOfDay = 23},
-        {name = "Asteroids 8",      xz = {14, 0},   timeOfDay = 23},
-        {name = "Asteroids 9",      xz = {11, 0},   timeOfDay = 23},
-        {name = "Asteroids 10",     xz = {7, 0},    timeOfDay = 23},
-        {name = "Asteroids 11",     xz = {5, 0},    timeOfDay = 23},
-        {name = "Asteroids 12",     xz = {5, 3},    timeOfDay = 23},
-        {name = "Asteroids 13",     xz = {5, 7},    timeOfDay = 23},
+        {name = "Tiny Asteroids 1",      xz = {5, 10},   timeOfDay = 23},
+        {name = "Tiny Asteroids 2",      xz = {7, 10},   timeOfDay = 23},
+        {name = "Tiny Asteroids 3",      xz = {10, 10},  timeOfDay = 23},
+        {name = "Tiny Asteroids 4",      xz = {14, 10},  timeOfDay = 23},
+        {name = "Tiny Asteroids 5",      xz = {15, 8},   timeOfDay = 23},
+        {name = "Tiny Asteroids 6",      xz = {15, 4},   timeOfDay = 23},
+        {name = "Tiny Asteroids 7",      xz = {15, 2},   timeOfDay = 23},
+        {name = "Tiny Asteroids 8",      xz = {14, 0},   timeOfDay = 23},
+        {name = "Tiny Asteroids 9",      xz = {11, 0},   timeOfDay = 23},
+        {name = "Tiny Asteroids 10",     xz = {7, 0},    timeOfDay = 23},
+        {name = "Tiny Asteroids 11",     xz = {5, 0},    timeOfDay = 23},
+        {name = "Tiny Asteroids 12",     xz = {5, 3},    timeOfDay = 23},
+        {name = "Tiny Asteroids 13",     xz = {5, 7},    timeOfDay = 23},
     }    
 }
 
@@ -252,7 +255,7 @@ local function onRoomCreated (event)
         },
         [components.CALENDAR] =
         {
-            time = convertHourToTime (0),
+            time = convertHourToTime (instance.timeOfDay),
             timeMultiplier = 0,
         },
         [components.NAME] =
@@ -440,23 +443,23 @@ local function onTick (event)
         local xyz = dio.world.getPlayerXyz (connection.accountId)
         local mapCell = convertPlayerXyxToMapCell (xyz)
 
-        -- print ( "onTick: " ..
-        --         tostring (xyz.chunkId [1]) .. ", " ..
-        --         tostring (xyz.chunkId [3]) .. ", " ..
-        --         tostring (mapCell [1]) .. ", " ..
-        --         tostring (mapCell [2]))
-
+        local worldIdx = 0
         local timeOfDay = 0
-        for _, world in ipairs (instance.worlds) do
+        for idx, world in ipairs (instance.worlds) do
             if mapCell [1] == world.xz [1] and mapCell [2] == world.xz [2] then
-                -- print ("***************************** found!")
                 timeOfDay = world.timeOfDay
+                worldIdx = idx
                 break
             end
         end
 
+        if worldIdx ~= instance.currentWorldIdx then
+            instance.currentWorldIdx = worldIdx
+            local description = worldIdx == 0 and "" or instance.worlds [worldIdx].name
+            dio.network.sendEvent (connection.connectionId, "tinyGalaxy.WORLD", description)
+        end
+
         if timeOfDay ~= instance.timeOfDay then
-            print ("***************************** time change from, to " .. tostring (instance.timeOfDay) .. ", " .. tostring (timeOfDay))
             instance.timeOfDay = timeOfDay
             local component = dio.entities.getComponent (instance.calendarEntityId, dio.entities.components.CALENDAR)
             component.time = convertHourToTime (timeOfDay)
