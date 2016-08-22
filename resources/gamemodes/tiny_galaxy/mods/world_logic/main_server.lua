@@ -25,13 +25,13 @@ local instance =
 
     inventory = 
     {
-        smallAxe = true, 
-        iceShield = true,
-        belt = true,
-        fireShield = true,
-        teleporter = true,
-        bean = true,
-        bigAxe = true,
+        -- smallAxe = true, 
+        -- iceShield = true,
+        -- belt = true,
+        -- fireShield = true,
+        -- teleporter = true,
+        -- bean = true,
+        -- bigAxe = true,
     },
     artifactsCollectedCount = 0,
 
@@ -54,19 +54,19 @@ local instance =
         {name = "Tiny Toxic World",      xz = {13, 3},   timeOfDay = 10},
         {name = "Tiny Binary Sun World", xz = {10, 5},   timeOfDay = 11},
 
-        {name = "Tiny Asteroids 1",      xz = {5, 10},   timeOfDay = 23},
-        {name = "Tiny Asteroids 2",      xz = {7, 10},   timeOfDay = 23},
-        {name = "Tiny Asteroids 3",      xz = {10, 10},  timeOfDay = 23},
-        {name = "Tiny Asteroids 4",      xz = {14, 10},  timeOfDay = 23},
-        {name = "Tiny Asteroids 5",      xz = {15, 8},   timeOfDay = 23},
-        {name = "Tiny Asteroids 6",      xz = {15, 4},   timeOfDay = 23},
-        {name = "Tiny Asteroids 7",      xz = {15, 2},   timeOfDay = 23},
-        {name = "Tiny Asteroids 8",      xz = {14, 0},   timeOfDay = 23},
-        {name = "Tiny Asteroids 9",      xz = {11, 0},   timeOfDay = 23},
-        {name = "Tiny Asteroids 10",     xz = {7, 0},    timeOfDay = 23},
-        {name = "Tiny Asteroids 11",     xz = {5, 0},    timeOfDay = 23},
-        {name = "Tiny Asteroids 12",     xz = {5, 3},    timeOfDay = 23},
-        {name = "Tiny Asteroids 13",     xz = {5, 7},    timeOfDay = 23},
+        {name = "Tiny Asteroid World 1",      xz = {5, 10},   timeOfDay = 23},
+        {name = "Tiny Asteroid World 2",      xz = {7, 10},   timeOfDay = 23},
+        {name = "Tiny Asteroid World 3",      xz = {10, 10},  timeOfDay = 23},
+        {name = "Tiny Asteroid World 4",      xz = {14, 10},  timeOfDay = 23},
+        {name = "Tiny Asteroid World 5",      xz = {15, 8},   timeOfDay = 23},
+        {name = "Tiny Asteroid World 6",      xz = {15, 4},   timeOfDay = 23},
+        {name = "Tiny Asteroid World 7",      xz = {15, 2},   timeOfDay = 23},
+        {name = "Tiny Asteroid World 8",      xz = {14, 0},   timeOfDay = 23},
+        {name = "Tiny Asteroid World 9",      xz = {11, 0},   timeOfDay = 23},
+        {name = "Tiny Asteroid World 10",     xz = {7, 0},    timeOfDay = 23},
+        {name = "Tiny Asteroid World 11",     xz = {5, 0},    timeOfDay = 23},
+        {name = "Tiny Asteroid World 12",     xz = {5, 3},    timeOfDay = 23},
+        {name = "Tiny Asteroid World 13",     xz = {5, 7},    timeOfDay = 23},
     }    
 }
 
@@ -205,6 +205,7 @@ local function createPlayerEntity (connectionId, accountId)
             walkSpeed = 4.0,
             sprintSpeed = 4.0,
             jumpSpeed = instance.initialJumpSpeed,
+            highlightBlockIds = {80, 81}, -- todo place in own component
         },
         [components.TEMP_PLAYER] =
         {
@@ -279,6 +280,13 @@ local function onRoomDestroyed (event)
 
     instance.roomEntityId = nil
 
+    if instance.isRestartingGame then
+        instance.isRestartingGame = false
+        createNewLevel ()
+        for _, connection in pairs (connections) do
+            connection.entityId = createPlayerEntity (connection.connectionId, connection.accountId)
+        end
+    end
 end
 
 --------------------------------------------------
@@ -400,6 +408,38 @@ function blockCallbacks.teleporter (event, connection)
 end
 
 --------------------------------------------------
+local function convertPlayerXyxToMapCell (xyz)
+    return 
+    {
+        math.floor (((xyz.chunkId [1] - instance.mapTopLeftChunkOrigin [1]) * 32 + xyz.xyz [1]) / 8),
+        math.floor (((xyz.chunkId [3] - instance.mapTopLeftChunkOrigin [2]) * 32 + xyz.xyz [3]) / 8),
+    }
+end
+
+--------------------------------------------------
+local function doGameOver (connection, hasWonGame)
+    
+    dio.entities.destroy (connection.entityId)
+    connection.entityId = nil
+
+    instance.roomEntityId = nil
+    instance.calendarEntityId = nil
+
+    instance.isRestartingGame = true
+
+    -- reset game vars
+    instance.timeOfDay = 0
+    instance.currentWorldIdx = nil
+    instance.initialJumpSpeed = 10.0
+    instance.nextItemIdx = 1
+    instance.inventory = {}
+    instance.artifactsCollectedCount = 0
+    instance.shipXyz = {-32, -8, 88}
+    instance.mapTopLeftChunkOrigin = {-1, -1}
+    instance.ship = {0, 15}
+end
+
+--------------------------------------------------
 local function onEntityPlaced (event)
 
     if event.isBlockValid then
@@ -421,15 +461,6 @@ local function onEntityDestroyed (event)
 end
 
 --------------------------------------------------
-local function convertPlayerXyxToMapCell (xyz)
-    return 
-    {
-        math.floor (((xyz.chunkId [1] - instance.mapTopLeftChunkOrigin [1]) * 32 + xyz.xyz [1]) / 8),
-        math.floor (((xyz.chunkId [3] - instance.mapTopLeftChunkOrigin [2]) * 32 + xyz.xyz [3]) / 8),
-    }
-end
-
---------------------------------------------------
 local function onTick (event)
 
     local connection = nil
@@ -441,6 +472,7 @@ local function onTick (event)
     if connection and instance.calendarEntityId then
 
         local xyz = dio.world.getPlayerXyz (connection.accountId)
+
         local mapCell = convertPlayerXyxToMapCell (xyz)
 
         local worldIdx = 0
@@ -464,6 +496,10 @@ local function onTick (event)
             local component = dio.entities.getComponent (instance.calendarEntityId, dio.entities.components.CALENDAR)
             component.time = convertHourToTime (timeOfDay)
             dio.entities.setComponent (instance.calendarEntityId, dio.entities.components.CALENDAR, component)
+        end
+
+        if xyz.chunkId [2] == -1 and xyz.xyz [2] < 2 then
+            doGameOver (connection, false)
         end
     end
 end

@@ -1,24 +1,13 @@
 --------------------------------------------------
--- TODO turn this into an enum
-local modes =
-{
-    repeat1x1 = 0,
-    repeat2x2 = 1,
-}
-
---------------------------------------------------
 local tiles =
 {
-    {mode = modes.repeat1x1, uvs = {3, 0}},                         -- side of grass (1)
-    {mode = modes.repeat2x2, uvs = {7, 12, 8, 12, 7, 13, 8, 13}},   -- grass (2)
-    {mode = modes.repeat1x1, uvs = {2, 0}},                         -- mud (2)
 }
 
 --------------------------------------------------
 local entities =
 {
-    sign = {type = "SIGN", text = "Placeholder Text"}
 }
+
 --------------------------------------------------
 local blocks =
 {
@@ -99,7 +88,7 @@ local blocks =
     {name = "DO NOT USE (art)",         uvs = {15, 15, 0, 9, 15, 15}},
     {name = "small rocks",              uvs = {9, 5}},
     {name = "rock teleporter",          uvs = {1, 0, 6, 1, 1, 0}, tag = "teleporter"},
-    {name = "rock pole",                uvs = {1, 0}, shape = "pole"},
+    {name = "rock pole",                uvs = {10, 6, 1, 0, 1, 0}, shape = "pole"},
     {name = "DO NOT USE (empty)",       uvs = {15, 15, 5, 8, 15, 15}},
     {name = "ship teleporter",          uvs = {4, 1, 8, 6, 4, 1}, tag = "teleporter"},
     {name = "item chest N",             uvs = {2, 8, 3, 8, 4, 8, 3, 8, 0, 8, 1, 8}, tag = "itemChest"}, -- 67
@@ -117,6 +106,10 @@ local blocks =
     {name = "empty chest S",            uvs = {9, 8, 8, 8, 7, 8, 8, 8, 5, 8, 6, 8}},
     {name = "empty chest W",            uvs = {8, 8, 9, 8, 8, 8, 7, 8, 5, 8, 6, 8}},
     {name = "grass jump",               uvs = {10, 0, 10, 5, 11, 0}, isJumpPad = true},
+    
+    -- 80
+    {name = "highlight block A",        uvs = {9, 6}},
+    {name = "highlight block B",        uvs = {0, 6}},
 }
 
 return {blocks = blocks, tiles = tiles, entities = entities}
