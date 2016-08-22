@@ -22,13 +22,13 @@ local instance =
 
     inventory = 
     {
-        -- smallAxe = true, 
-        -- iceShield = true,
-        -- belt = true,
-        -- fireShield = true,
-        -- teleporter = true,
-        -- bean = true,
-        -- bigAxe = true,
+        smallAxe = true, 
+        iceShield = true,
+        belt = true,
+        fireShield = true,
+        teleporter = true,
+        bean = true,
+        bigAxe = true,
     },
     artifactsCollectedCount = 0,
 
@@ -39,31 +39,31 @@ local instance =
     worldLimits = {16, 16},
     worlds = 
     {
-        {name = "Grass World 1",    xz = {0, 12}},
-        {name = "Grass World 2",    xz = {3, 13}},
-        {name = "Grass World 3",    xz = {5, 15}},
-        {name = "Grass World 4",    xz = {9, 12}},
-        {name = "Grass World 5",    xz = {4, 4}},
-        {name = "Vector World",     xz = {3, 7}},
-        {name = "Rot World",        xz = {1, 1}},
-        {name = "Ice World",        xz = {15, 15}},
-        {name = "Desert World",     xz = {9, 2}},
-        {name = "Toxic World",      xz = {13, 3}},
-        {name = "Binary Sun World", xz = {10, 5}},
+        {name = "Grass World 1",    xz = {0, 12},   timeOfDay = 1},
+        {name = "Grass World 2",    xz = {3, 13},   timeOfDay = 2},
+        {name = "Grass World 3",    xz = {5, 15},   timeOfDay = 3},
+        {name = "Grass World 4",    xz = {9, 12},   timeOfDay = 4},
+        {name = "Grass World 5",    xz = {4, 4},    timeOfDay = 5},
+        {name = "Vector World",     xz = {3, 7},    timeOfDay = 6},
+        {name = "Rot World",        xz = {1, 1},    timeOfDay = 7},
+        {name = "Ice World",        xz = {15, 15},  timeOfDay = 8},
+        {name = "Desert World",     xz = {9, 2},    timeOfDay = 9},
+        {name = "Toxic World",      xz = {13, 3},   timeOfDay = 10},
+        {name = "Binary Sun World", xz = {10, 5},   timeOfDay = 11},
 
-        {name = "Asteroids 1",      xz = {5, 10}},
-        {name = "Asteroids 2",      xz = {7, 10}},
-        {name = "Asteroids 3",      xz = {10, 10}},
-        {name = "Asteroids 4",      xz = {14, 10}},
-        {name = "Asteroids 5",      xz = {15, 8}},
-        {name = "Asteroids 6",      xz = {15, 4}},
-        {name = "Asteroids 7",      xz = {15, 2}},
-        {name = "Asteroids 8",      xz = {14, 0}},
-        {name = "Asteroids 9",      xz = {11, 0}},
-        {name = "Asteroids 10",     xz = {7, 0}},
-        {name = "Asteroids 11",     xz = {5, 0}},
-        {name = "Asteroids 12",     xz = {5, 3}},
-        {name = "Asteroids 13",     xz = {5, 7}},
+        {name = "Asteroids 1",      xz = {5, 10},   timeOfDay = 23},
+        {name = "Asteroids 2",      xz = {7, 10},   timeOfDay = 23},
+        {name = "Asteroids 3",      xz = {10, 10},  timeOfDay = 23},
+        {name = "Asteroids 4",      xz = {14, 10},  timeOfDay = 23},
+        {name = "Asteroids 5",      xz = {15, 8},   timeOfDay = 23},
+        {name = "Asteroids 6",      xz = {15, 4},   timeOfDay = 23},
+        {name = "Asteroids 7",      xz = {15, 2},   timeOfDay = 23},
+        {name = "Asteroids 8",      xz = {14, 0},   timeOfDay = 23},
+        {name = "Asteroids 9",      xz = {11, 0},   timeOfDay = 23},
+        {name = "Asteroids 10",     xz = {7, 0},    timeOfDay = 23},
+        {name = "Asteroids 11",     xz = {5, 0},    timeOfDay = 23},
+        {name = "Asteroids 12",     xz = {5, 3},    timeOfDay = 23},
+        {name = "Asteroids 13",     xz = {5, 7},    timeOfDay = 23},
     }    
 }
 
@@ -98,6 +98,13 @@ local function calcIsSafeMove (moveDelta)
     end
 
     return true
+end
+
+--------------------------------------------------
+local function convertHourToTime (hour)
+    -- assume texture is 32 wide
+    local time = (hour + 0.5) * 60 * 60
+    return time
 end
 
 --------------------------------------------------
@@ -245,7 +252,7 @@ local function onRoomCreated (event)
         },
         [components.CALENDAR] =
         {
-            time = 12 * 60 * 60,
+            time = convertHourToTime (0),
             timeMultiplier = 0,
         },
         [components.NAME] =
@@ -259,7 +266,8 @@ local function onRoomCreated (event)
         },
     }
     
-    dio.entities.create (event.roomEntityId, calendarEntity)
+    instance.calendarEntityId = dio.entities.create (event.roomEntityId, calendarEntity)
+    print ("onRoomCreated " .. tostring (instance.calendarEntityId))
 
 end
 
@@ -410,6 +418,54 @@ local function onEntityDestroyed (event)
 end
 
 --------------------------------------------------
+local function convertPlayerXyxToMapCell (xyz)
+    return 
+    {
+        math.floor (((xyz.chunkId [1] - instance.mapTopLeftChunkOrigin [1]) * 32 + xyz.xyz [1]) / 8),
+        math.floor (((xyz.chunkId [3] - instance.mapTopLeftChunkOrigin [2]) * 32 + xyz.xyz [3]) / 8),
+    }
+end
+
+--------------------------------------------------
+local function onTick (event)
+
+    local connection = nil
+    for _, connection2 in pairs (connections) do
+        connection = connection2
+        break
+    end
+
+    if connection and instance.calendarEntityId then
+
+        local xyz = dio.world.getPlayerXyz (connection.accountId)
+        local mapCell = convertPlayerXyxToMapCell (xyz)
+
+        -- print ( "onTick: " ..
+        --         tostring (xyz.chunkId [1]) .. ", " ..
+        --         tostring (xyz.chunkId [3]) .. ", " ..
+        --         tostring (mapCell [1]) .. ", " ..
+        --         tostring (mapCell [2]))
+
+        local timeOfDay = 0
+        for _, world in ipairs (instance.worlds) do
+            if mapCell [1] == world.xz [1] and mapCell [2] == world.xz [2] then
+                -- print ("***************************** found!")
+                timeOfDay = world.timeOfDay
+                break
+            end
+        end
+
+        if timeOfDay ~= instance.timeOfDay then
+            print ("***************************** time change from, to " .. tostring (instance.timeOfDay) .. ", " .. tostring (timeOfDay))
+            instance.timeOfDay = timeOfDay
+            local component = dio.entities.getComponent (instance.calendarEntityId, dio.entities.components.CALENDAR)
+            component.time = convertHourToTime (timeOfDay)
+            dio.entities.setComponent (instance.calendarEntityId, dio.entities.components.CALENDAR, component)
+        end
+    end
+end
+
+--------------------------------------------------
 local function onLoad ()
 
     local types = dio.events.serverTypes
@@ -419,6 +475,7 @@ local function onLoad ()
     dio.events.addListener (types.ROOM_DESTROYED, onRoomDestroyed)
     dio.events.addListener (types.ENTITY_PLACED, onEntityPlaced)
     dio.events.addListener (types.ENTITY_DESTROYED, onEntityDestroyed)
+    dio.events.addListener (types.TICK, onTick)
 
     createNewLevel ()
 
