@@ -10,6 +10,10 @@ local modsToLoad =
         modFolder = "blocks",
     },
     {
+        gameMode = "tiny_galaxy",
+        modFolder = "osd",
+    },
+    {
         gameMode = "default",
         modFolder = "chat",
     },
@@ -17,10 +21,6 @@ local modsToLoad =
         gameMode = "default",
         modFolder = "spawn",
     },
-    {
-        gameMode = "default",
-        modFolder = "diagnostics",
-    },    
 }
 
 local mods = {}
