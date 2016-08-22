@@ -8,19 +8,28 @@ local instance =
     initialJumpSpeed = 10.0,
     itemsAvailable = 
     {
-        {id = "smallAxe",             description = "Small Axe"},
-        {id = "smallJumpBoots",       description = "Small Jump Boots", jumpSpeed = 12.0},
-        {id = "iceShield",            description = "Ice Shield"},
-        {id = "belt",                 description = "Belt of Strength"},
-        {id = "fireShield",           description = "Fire Shield"},
-        {id = "teleporter",           description = "Teleporter"},
-        {id = "largeJumpBoots",       description = "Large Jump Boots", jumpSpeed = 15.0},
-        {id = "beans",                description = "Magic Beans"},
-        {id = "bigAxe",               description = "Big Axe"},
+        {id = "smallAxe",               description = "Small Axe"},
+        {id = "smallJumpBoots",         description = "Small Jump Boots", jumpSpeed = 12.0},
+        {id = "iceShield",              description = "Ice Shield"},
+        {id = "belt",                   description = "Belt of Strength"},
+        {id = "fireShield",             description = "Fire Shield"},
+        {id = "teleporter",             description = "Teleporter"},
+        {id = "largeJumpBoots",         description = "Large Jump Boots", jumpSpeed = 15.0},
+        {id = "bean",                   description = "Magic Beans"},
+        {id = "bigAxe",                 description = "Big Axe"},
     },
     nextItemIdx = 1,
 
-    inventory = {},
+    inventory = 
+    {
+        -- smallAxe = true, 
+        -- iceShield = true,
+        -- belt = true,
+        -- fireShield = true,
+        -- teleporter = true,
+        -- bean = true,
+        -- bigAxe = true,
+    },
     artifactsCollectedCount = 0,
 
     shipXyz = {-32, -8, 88},
@@ -141,7 +150,6 @@ local function moveShipAndPlayer (connectionId, xyz, moveDelta)
         instance.ship [1] = instance.ship [1] + moveDelta [1]
         instance.ship [2] = instance.ship [2] + moveDelta [2]
     end
-
 end
 
 --------------------------------------------------
@@ -172,6 +180,8 @@ local function createPlayerEntity (connectionId, accountId)
         {
             chunkId =       {0, 0, 0},
             xyz =           {-31, 4, 95},
+            -- chunkId =       {0, 0, 0},
+            -- xyz =           {74, 1, -3},
             ypr =           {0, 0, 0},
             gravityDir =    5,
         },
@@ -182,8 +192,8 @@ local function createPlayerEntity (connectionId, accountId)
             connectionId = connectionId,
             accountId = accountId,
             crouchSpeed = 1.0,
-            walkSpeed = 5.0,
-            sprintSpeed = 30.0,
+            walkSpeed = 4.0,
+            sprintSpeed = 4.0,
             jumpSpeed = instance.initialJumpSpeed,
         },
         [components.TEMP_PLAYER] =
@@ -281,6 +291,8 @@ function blockCallbacks.computer (event, connection)
     end
 
     moveShipAndPlayer (event.connectionId, xyz, delta)        
+
+    return true
 end
 
 --------------------------------------------------
@@ -291,15 +303,18 @@ function blockCallbacks.itemChest (event, connection)
         dio.network.sendChat (connection.connectionId, "ITEM", "You have collected the " .. item.description)
         instance.inventory [item.id] = true
         instance.nextItemIdx = instance.nextItemIdx + 1
-        dio.world.setBlock (event.roomEntityId, event.chunkId, event.cellId [1], event.cellId [2], event.cellId [3], 0)
+        event.sourceBlockId = event.destinationBlockId + 8
 
         if item.jumpSpeed then
             local component = dio.entities.getComponent (connection.entityId, dio.entities.components.SERVER_CHARACTER_CONTROLLER)
             component.jumpSpeed = item.jumpSpeed
             dio.entities.setComponent (connection.entityId, dio.entities.components.SERVER_CHARACTER_CONTROLLER, component)
         end
+
+        return false
     end
 
+    return true
 end
 
 --------------------------------------------------
@@ -308,8 +323,12 @@ function blockCallbacks.artifactChest (event, connection)
     if event.isBlockValid then
         instance.artifactsCollectedCount = instance.artifactsCollectedCount + 1
         dio.network.sendChat (connection.connectionId, "ARTEFACT", tostring (instance.artifactsCollectedCount) .. " collected!")
-        dio.world.setBlock (event.roomEntityId, event.chunkId, event.cellId [1], event.cellId [2], event.cellId [3], 0)
+        event.sourceBlockId = event.destinationBlockId + 4
+
+        return false
     end
+    
+    return true
 
 end
 
@@ -317,35 +336,40 @@ end
 function blockCallbacks.smallAxe (event, connection) 
 
     if event.isBlockValid and instance.inventory.smallAxe then
-        dio.world.setBlock (event.roomEntityId, event.chunkId, event.cellId [1], event.cellId [2], event.cellId [3], 0)
+        event.sourceBlockId = 0
+        return false
     end
+    return true
 end
 
 --------------------------------------------------
 function blockCallbacks.belt (event, connection) 
 
     if event.isBlockValid and instance.inventory.belt then
-        dio.world.setBlock (event.roomEntityId, event.chunkId, event.cellId [1], event.cellId [2], event.cellId [3], 0)
+        event.sourceBlockId = 0
+        return false
     end
+    return true
 end
 
 --------------------------------------------------
-function blockCallbacks.beans (event, connection) 
-    if event.isBlockValid and instance.inventory.beans then
-        dio.world.setBlock (
-                event.roomEntityId,
-                event.chunkId, 
-                event.cellId [1], event.cellId [2], event.cellId [3],
-                event.destinationBlockId + 1)
+function blockCallbacks.bean (event, connection) 
+
+    if event.isBlockValid and instance.inventory.bean then
+        event.sourceBlockId = event.destinationBlockId + 1
+        return false
     end
+    return true
 end
 
 --------------------------------------------------
 function blockCallbacks.bigAxe (event, connection)
     
     if event.isBlockValid and instance.inventory.bigAxe then
-        dio.world.setBlock (event.roomEntityId, event.chunkId, event.cellId [1], event.cellId [2], event.cellId [3], 0)
+        event.sourceBlockId = 0
+        return false
     end
+    return true
 end
 
 --------------------------------------------------
@@ -360,8 +384,8 @@ function blockCallbacks.teleporter (event, connection)
                 tostring (event.chunkId [3] * 32 + event.cellId [3] + 0.5)
 
         dio.network.sendEvent (connection.connectionId, "tinyGalaxy.TP", teleport)
-
     end
+    return true
 end
 
 --------------------------------------------------
@@ -370,10 +394,10 @@ local function onEntityPlaced (event)
     if event.isBlockValid then
 
         local blockTag = instance.blocks [event.destinationBlockId].tag
-
         if blockTag then
             local connection = connections [event.connectionId]
-            blockCallbacks [blockTag] (event, connection)
+            event.cancel = blockCallbacks [blockTag] (event, connection)
+            return
         end
     end
 

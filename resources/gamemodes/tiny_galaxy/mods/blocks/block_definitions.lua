@@ -84,7 +84,7 @@ local blocks =
 
     -- 50
     {name = "castle roof",              uvs = {8, 4, 7, 4, 5, 4}},
-    {name = "castle door",              uvs = {5, 4, 5, 4, 10, 4, 5, 4, 5, 4, 5, 4}},
+    {name = "castle door",              uvs = {10, 4, 5, 4, 5, 4, 5, 4, 5, 4, 5, 4}},
     {name = "castle clock",             uvs = {5, 4, 5, 4, 9, 4, 5, 4, 5, 4, 5, 4}},
     {name = "nuke brick",               uvs = {0, 5}},
     {name = "nuke scaffold",            uvs = {1, 5}, isTransparent = true},
@@ -95,11 +95,28 @@ local blocks =
     {name = "nuke teleporter",          uvs = {0, 5, 8, 5, 0, 5}, tag = "teleporter"},
 
     -- 60
-    {name = "artifact placeholder",     uvs = {4, 8, 3, 8, 2, 8, 3, 8, 0, 8, 1, 8}, tag = "itemChest"},
-    {name = "item placeholder",         uvs = {4, 9, 3, 9, 2, 9, 3, 9, 0, 9, 1, 9}, tag = "artifactChest"},
+    {name = "DO NOT USE (item)",        uvs = {15, 15, 0, 8, 15, 15}},
+    {name = "DO NOT USE (art)",         uvs = {15, 15, 0, 9, 15, 15}},
     {name = "small rocks",              uvs = {9, 5}},
     {name = "rock teleporter",          uvs = {1, 0, 6, 1, 1, 0}, tag = "teleporter"},
-    {name = "rock pole",                 uvs = {1, 0}, shape = "pole"},
+    {name = "rock pole",                uvs = {1, 0}, shape = "pole"},
+    {name = "DO NOT USE (empty)",       uvs = {15, 15, 5, 8, 15, 15}},
+    {name = "ship teleporter",          uvs = {4, 1, 8, 6, 4, 1}, tag = "teleporter"},
+    {name = "item chest N",             uvs = {2, 8, 3, 8, 4, 8, 3, 8, 0, 8, 1, 8}, tag = "itemChest"}, -- 67
+    {name = "item chest E",             uvs = {3, 8, 2, 8, 3, 8, 4, 8, 0, 8, 1, 8}, tag = "itemChest"},
+    {name = "item chest S",             uvs = {4, 8, 3, 8, 2, 8, 3, 8, 0, 8, 1, 8}, tag = "itemChest"},
+
+    -- 70
+    {name = "item chest W",             uvs = {3, 8, 4, 8, 3, 8, 2, 8, 0, 8, 1, 8}, tag = "itemChest"},
+    {name = "artefact chest N",         uvs = {2, 9, 3, 9, 4, 9, 3, 9, 0, 9, 1, 9}, tag = "artifactChest"}, -- 71
+    {name = "artefact chest E",         uvs = {3, 9, 2, 9, 3, 9, 4, 9, 0, 9, 1, 9}, tag = "artifactChest"},
+    {name = "artefact chest S",         uvs = {4, 9, 3, 9, 2, 9, 3, 9, 0, 9, 1, 9}, tag = "artifactChest"},
+    {name = "artefact chest W",         uvs = {3, 9, 4, 9, 3, 9, 2, 9, 0, 9, 1, 9}, tag = "artifactChest"},
+    {name = "empty chest N",            uvs = {7, 8, 8, 8, 9, 8, 8, 8, 5, 8, 6, 8}}, -- 75
+    {name = "empty chest E",            uvs = {8, 8, 7, 8, 8, 8, 9, 8, 5, 8, 6, 8}},
+    {name = "empty chest S",            uvs = {9, 8, 8, 8, 7, 8, 8, 8, 5, 8, 6, 8}},
+    {name = "empty chest W",            uvs = {8, 8, 9, 8, 8, 8, 7, 8, 5, 8, 6, 8}},
+    {name = "grass jump",               uvs = {10, 0, 10, 5, 11, 0}, isJumpPad = true},
 }
 
 return {blocks = blocks, tiles = tiles, entities = entities}
