@@ -175,29 +175,27 @@ local function createPlayerEntity (connectionId, accountId)
     
     local roomEntityId = dio.world.ensureRoomIsLoaded ("tiny_galaxy/")
 
-    local components = dio.entities.components
-    local playerComponents =
+    local c = dio.entities.components
+    local player =
     {
             -- [components.AABB_COLLIDER] =        {min = {-0.01, -0.01, -0.01}, size = {0.02, 0.02, 0.02},},
             -- [components.COLLISION_LISTENER] =   {onCollision = onRocketAndSceneryCollision,},
             -- [components.MESH_PLACEHOLDER] =     {blueprintId = "ROCKET",},
             -- [components.RIGID_BODY] =           {acceleration = {0.0, -9.806 * 1.0, 0.0},},
         
-        [components.BASE_NETWORK] =         {},
-        [components.EYE_POSITION] =         {offset = {0, 1.65, 0}},
-        [components.FOCUS] =                {connectionId = connectionId, radius = 4},
-        [components.GRAVITY_TRANSFORM] =
+        [c.BASE_NETWORK] =          {},
+        [c.EYE_POSITION] =          {offset = {0, 1.65, 0}},
+        [c.FOCUS] =                 {connectionId = connectionId, radius = 4},
+        [c.GRAVITY_TRANSFORM] =
         {
             chunkId =       {0, 0, 0},
             xyz =           {-31, 4, 95},
-            -- chunkId =       {0, 0, 0},
-            -- xyz =           {74, 1, -3},
             ypr =           {0, 0, 0},
             gravityDir =    5,
         },
-        [components.NAME] =                 {name = "PLAYER", debug = true}, -- temp for debugging
-        [components.PARENT] =               {parentEntityId = roomEntityId},
-        [components.SERVER_CHARACTER_CONTROLLER] =
+        [c.NAME] =                  {name = "PLAYER", debug = false},
+        [c.PARENT] =                {parentEntityId = roomEntityId},
+        [c.SERVER_CHARACTER_CONTROLLER] =
         {
             connectionId = connectionId,
             accountId = accountId,
@@ -207,14 +205,10 @@ local function createPlayerEntity (connectionId, accountId)
             jumpSpeed = instance.initialJumpSpeed,
             highlightBlockIds = {80, 81}, -- todo place in own component
         },
-        [components.TEMP_PLAYER] =
-        {
-            connectionId = connectionId,
-            accountId = accountId,
-        },
+        [c.TEMP_PLAYER] =           {connectionId = connectionId, accountId = accountId},
     }
 
-    return dio.entities.create (roomEntityId, playerComponents)
+    return dio.entities.create (roomEntityId, player)
 end
 
 --------------------------------------------------

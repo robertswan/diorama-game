@@ -113,6 +113,23 @@ local function onClientConnected (event)
 end
 
 --------------------------------------------------
+local function onNamedEntityCreated (event)
+
+    if event.name == "PLAYER" then
+
+        local c = dio.entities.components
+        local camera = 
+        {
+            [c.CAMERA] =        {},
+            [c.PARENT] =        {parentEntityId = event.entityId},
+            [c.TRANSFORM] =     {xyz = {0, 1.65, 0}},
+        }
+
+        dio.entities.create (event.roomEntityId, camera)
+    end
+end
+
+--------------------------------------------------
 local function onLoad ()
 
     instance =
@@ -124,6 +141,7 @@ local function onLoad ()
     dio.events.addListener (types.CHAT_MESSAGE_PRE_SENT, onChatMessagePreSent)
     dio.events.addListener (types.SERVER_EVENT_RECEIVED, onServerEventReceived)
     dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
+    dio.events.addListener (types.NAMED_ENTITY_CREATED, onNamedEntityCreated)
 end
 
 --------------------------------------------------
@@ -145,6 +163,7 @@ local modSettings =
     permissionsRequired =
     {
         drawing = true,
+        entities = true,
         world = true,
     },
 
