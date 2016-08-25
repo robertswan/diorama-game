@@ -115,16 +115,15 @@ end
 --------------------------------------------------
 local function onNamedEntityCreated (event)
 
-    if event.name == "PLAYER" then
+    if event.name == "PLAYER_EYE_POSITION" then
 
         local c = dio.entities.components
         local camera = 
         {
-            [c.CAMERA] =        {},
+            [c.CAMERA] =        {isMainCamera = true, fov = 90},
             [c.PARENT] =        {parentEntityId = event.entityId},
-            [c.TRANSFORM] =     {xyz = {0, 1.65, 0}},
+            [c.TRANSFORM] =     {},
         }
-
         dio.entities.create (event.roomEntityId, camera)
     end
 end

@@ -236,7 +236,6 @@ local function createPlayerEntity (connectionId, accountId)
             -- [components.RIGID_BODY] =           {acceleration = {0.0, -9.806 * 1.0, 0.0},},
         
         [components.BASE_NETWORK] =         {},
-        [components.EYE_POSITION] =         {offset = {0, 1.65, 0}},
         [components.FOCUS] =                {connectionId = connectionId, radius = 4},
         [components.GRAVITY_TRANSFORM] =
         {

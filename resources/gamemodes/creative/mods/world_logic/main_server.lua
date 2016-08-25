@@ -86,7 +86,6 @@ local function createPlayerEntity (connectionId, accountId, settings, isPassword
             -- [components.RIGID_BODY] =           {acceleration = {0.0, -9.806 * 1.0, 0.0},},
         
         [components.BASE_NETWORK] =         {},
-        [components.EYE_POSITION] =         {offset = {0, 1.65, 0}},
         [components.FOCUS] =                {connectionId = connectionId, radius = 4},
         [components.NAME] =                 {name = "PLAYER", debug = true}, -- temp for debugging
         [components.PARENT] =               {parentEntityId = roomEntityId},
@@ -94,6 +93,8 @@ local function createPlayerEntity (connectionId, accountId, settings, isPassword
         {
             connectionId = connectionId,
             accountId = accountId,
+            eyeHeight = 1.65,
+            crouchEyeHeight = 0.25,
         },
         [components.TEMP_PLAYER] =
         {
