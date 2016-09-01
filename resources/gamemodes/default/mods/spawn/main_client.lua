@@ -118,13 +118,22 @@ local function onNamedEntityCreated (event)
     if event.name == "PLAYER_EYE_POSITION" then
 
         local c = dio.entities.components
+        -- local cb = dio.entities.callbacks
         local camera = 
         {
-            [c.CAMERA] =        {isMainCamera = true, fov = 90},
-            [c.PARENT] =        {parentEntityId = event.entityId},
-            [c.TRANSFORM] =     {},
+            [c.CAMERA] =                {fov = 90},
+            [c.PARENT] =                {parentEntityId = event.entityId},
+            [c.TRANSFORM] =             {},
+        
+            -- [cb.ON_DESTROY] =   function () dio.drawing.setMainCamera (nil) end,
         }
-        dio.entities.create (event.roomEntityId, camera)
+
+        local cameraEntityId = dio.entities.create (event.roomEntityId, camera)
+
+        dio.drawing.setMainCamera (cameraEntityId)
+
+        -- dio.entities.setCallback (entityId, "onDestroy", function end)
+        -- dio.entities.clearCallback (entityId, "onDestroy")
     end
 end
 
