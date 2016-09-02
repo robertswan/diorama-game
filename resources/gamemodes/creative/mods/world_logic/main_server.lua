@@ -78,6 +78,7 @@ local function createPlayerEntity (connectionId, accountId, settings, isPassword
     local roomEntityId = dio.world.ensureRoomIsLoaded (roomFolder)
 
     local components = dio.entities.components
+
     local playerComponents =
     {
             -- [components.AABB_COLLIDER] =        {min = {-0.01, -0.01, -0.01}, size = {0.02, 0.02, 0.02},},
@@ -86,6 +87,7 @@ local function createPlayerEntity (connectionId, accountId, settings, isPassword
             -- [components.RIGID_BODY] =           {acceleration = {0.0, -9.806 * 1.0, 0.0},},
         
         [components.BASE_NETWORK] =         {},
+        [components.CHILD_IDS] =            {},
         [components.FOCUS] =                {connectionId = connectionId, radius = 4},
         [components.NAME] =                 {name = "PLAYER", debug = true}, -- temp for debugging
         [components.PARENT] =               {parentEntityId = roomEntityId},
@@ -122,8 +124,21 @@ local function createPlayerEntity (connectionId, accountId, settings, isPassword
             gravityDir =    gravityDirIndices.DOWN,
         }
     end
+
+    local playerEntityId = dio.entities.create (roomEntityId, playerComponents)
+
+    local eyeComponents =
+    {
+        [components.BASE_NETWORK] =         {},
+        [components.CHILD_IDS] =            {},
+        [components.NAME] =                 {name = "PLAYER_EYE_POSITION"},
+        [components.PARENT] =               {parentEntityId = playerEntityId},
+        [components.TRANSFORM] =            {}
+    }
+
+    local eyeEntityId = dio.entities.create (roomEntityId, eyeComponents) 
     
-    return dio.entities.create (roomEntityId, playerComponents)
+    return playerEntityId, eyeEntityId
 end
 
 --------------------------------------------------
@@ -137,6 +152,8 @@ local function onClientConnected (event)
         isPasswordCorrect = (settings.accountPassword == event.accountPassword)
     end
 
+    local playerEntityId, eyeEntityId = createPlayerEntity (event.connectionId, event.accountId, settings, isPasswordCorrect)
+
     local connection =
     {
         connectionId = event.connectionId,
@@ -146,7 +163,8 @@ local function onClientConnected (event)
         groupId = event.isSinglePlayer and "builder" or "tourist",
         isPasswordCorrect = isPasswordCorrect,
         needsSaving = event.isSinglePlayer,
-        entityId = createPlayerEntity (event.connectionId, event.accountId, settings, isPasswordCorrect),
+        entityId = playerEntityId,
+        eyeEntityId = eyeEntityId,
     }
 
     if settings and isPasswordCorrect then
@@ -186,6 +204,7 @@ local function onClientDisconnected (event)
         end
     end
 
+    dio.entities.destroy (connection.eyeEntityId)
     dio.entities.destroy (connection.entityId)
 
     connections [event.connectionId] = nil
