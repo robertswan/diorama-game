@@ -125,21 +125,16 @@ local function onNamedEntityCreated (event)
 
         if player.connectionId == instance.myConnectionId then
         
-            -- local cb = dio.entities.callbacks
             local camera = 
             {
                 [c.CAMERA] =                {fov = 90},
                 [c.PARENT] =                {parentEntityId = event.entityId},
                 [c.TRANSFORM] =             {},
-                -- [cb.ON_DESTROY] =   function () dio.drawing.setMainCamera (nil) end,
             }
 
             local cameraEntityId = dio.entities.create (event.roomEntityId, camera)
 
             dio.drawing.setMainCamera (cameraEntityId)
-
-            -- dio.entities.setCallback (entityId, "onDestroy", function end)
-            -- dio.entities.clearCallback (entityId, "onDestroy")
         end
     end
 end
