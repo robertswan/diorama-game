@@ -108,6 +108,7 @@ end
 --------------------------------------------------
 local function onClientConnected (event)
     if event.isMe then
+        instance.myConnectionId = event.connectionId
         instance.myAccountId = event.accountId
     end
 end
@@ -118,22 +119,28 @@ local function onNamedEntityCreated (event)
     if event.name == "PLAYER_EYE_POSITION" then
 
         local c = dio.entities.components
-        -- local cb = dio.entities.callbacks
-        local camera = 
-        {
-            [c.CAMERA] =                {fov = 90},
-            [c.PARENT] =                {parentEntityId = event.entityId},
-            [c.TRANSFORM] =             {},
+
+        local parentEntityId = dio.entities.getComponent (event.entityId, c.PARENT).parentEntityId
+        local player = dio.entities.getComponent (parentEntityId, c.TEMP_PLAYER)
+
+        if player.connectionId == instance.myConnectionId then
         
-            -- [cb.ON_DESTROY] =   function () dio.drawing.setMainCamera (nil) end,
-        }
+            -- local cb = dio.entities.callbacks
+            local camera = 
+            {
+                [c.CAMERA] =                {fov = 90},
+                [c.PARENT] =                {parentEntityId = event.entityId},
+                [c.TRANSFORM] =             {},
+                -- [cb.ON_DESTROY] =   function () dio.drawing.setMainCamera (nil) end,
+            }
 
-        local cameraEntityId = dio.entities.create (event.roomEntityId, camera)
+            local cameraEntityId = dio.entities.create (event.roomEntityId, camera)
 
-        dio.drawing.setMainCamera (cameraEntityId)
+            dio.drawing.setMainCamera (cameraEntityId)
 
-        -- dio.entities.setCallback (entityId, "onDestroy", function end)
-        -- dio.entities.clearCallback (entityId, "onDestroy")
+            -- dio.entities.setCallback (entityId, "onDestroy", function end)
+            -- dio.entities.clearCallback (entityId, "onDestroy")
+        end
     end
 end
 
