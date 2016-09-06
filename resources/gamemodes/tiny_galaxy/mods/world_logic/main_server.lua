@@ -176,7 +176,7 @@ local function createPlayerEntity (connectionId, accountId)
     local roomEntityId = dio.world.ensureRoomIsLoaded ("tiny_galaxy/")
 
     local c = dio.entities.components
-    local player =
+    local playerComponents =
     {
             -- [components.AABB_COLLIDER] =        {min = {-0.01, -0.01, -0.01}, size = {0.02, 0.02, 0.02},},
             -- [components.COLLISION_LISTENER] =   {onCollision = onRocketAndSceneryCollision,},
@@ -184,6 +184,7 @@ local function createPlayerEntity (connectionId, accountId)
             -- [components.RIGID_BODY] =           {acceleration = {0.0, -9.806 * 1.0, 0.0},},
         
         [c.BASE_NETWORK] =          {},
+        [c.CHILD_IDS] =             {},
         [c.FOCUS] =                 {connectionId = connectionId, radius = 4},
         [c.GRAVITY_TRANSFORM] =
         {
@@ -192,7 +193,7 @@ local function createPlayerEntity (connectionId, accountId)
             ypr =           {0, 0, 0},
             gravityDir =    5,
         },
-        [c.NAME] =                  {name = "PLAYER", debug = false},
+        [c.NAME] =                  {name = "PLAYER"},
         [c.PARENT] =                {parentEntityId = roomEntityId},
         [c.SERVER_CHARACTER_CONTROLLER] =
         {
@@ -207,7 +208,20 @@ local function createPlayerEntity (connectionId, accountId)
         [c.TEMP_PLAYER] =           {connectionId = connectionId, accountId = accountId},
     }
 
-    return dio.entities.create (roomEntityId, player)
+    local playerEntityId = dio.entities.create (roomEntityId, playerComponents)
+
+    local eyeComponents =
+    {
+        [c.BASE_NETWORK] =          {},
+        [c.CHILD_IDS] =             {},
+        [c.NAME] =                  {name = "PLAYER_EYE_POSITION"},
+        [c.PARENT] =                {parentEntityId = playerEntityId},
+        [c.TRANSFORM] =             {}
+    }
+
+    local eyeEntityId = dio.entities.create (roomEntityId, eyeComponents)     
+
+    return playerEntityId, eyeEntityId
 end
 
 --------------------------------------------------
@@ -215,11 +229,14 @@ local function onClientConnected (event)
 
     createNewLevel ()
 
+    local playerEntityId, eyeEntityId = createPlayerEntity (event.connectionId, event.accountId)
+
     local connection =
     {
         connectionId = event.connectionId,
         accountId = event.accountId,
-        entityId = createPlayerEntity (event.connectionId, event.accountId),
+        entityId = playerEntityId,
+        eyeEntityId = eyeEntityId,
     }
 
     connections [event.connectionId] = connection
@@ -231,6 +248,7 @@ local function onClientDisconnected (event)
 
     local connection = connections [event.connectionId]
 
+    dio.entities.destroy (connection.eyeEntityId)
     dio.entities.destroy (connection.entityId)
 
     connections [event.connectionId] = nil
@@ -277,7 +295,10 @@ local function onRoomDestroyed (event)
         instance.isRestartingGame = false
         createNewLevel ()
         for _, connection in pairs (connections) do
-            connection.entityId = createPlayerEntity (connection.connectionId, connection.accountId)
+
+            local playerEntityId, eyeEntityId = createPlayerEntity (connection.connectionId, connection.accountId)
+            connection.entityId = playerEntityId
+            connection.eyeEntityId = eyeEntityId
         end
     end
 end
@@ -295,11 +316,11 @@ function blockCallbacks.computer (event, connection)
     if yaw < (math.pi * 0.25) then
         
     elseif yaw < (math.pi * (0.25 + 0.5 * 1)) then
-        delta = {1, 0}
+        delta = {-1, 0}
     elseif yaw < (math.pi * (0.25 + 0.5 * 2)) then
         delta = {0, 1}
     elseif yaw < (math.pi * (0.25 + 0.5 * 3)) then
-        delta = {-1, 0}
+        delta = {1, 0}
     end
 
     moveShipAndPlayer (event.connectionId, xyz, delta)        
@@ -412,7 +433,9 @@ end
 --------------------------------------------------
 local function doGameOver (connection, hasWonGame)
     
+    dio.entities.destroy (connection.eyeEntityId)
     dio.entities.destroy (connection.entityId)
+    connection.eyeEntityId = nil
     connection.entityId = nil
 
     instance.roomEntityId = nil
@@ -525,7 +548,6 @@ local modSettings =
     {
         entities = true,
         file = true,
-        world = true,
         network = true,
         world = true,
     },

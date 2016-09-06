@@ -89,7 +89,7 @@ local function createPlayerEntity (connectionId, accountId, settings, isPassword
         [components.BASE_NETWORK] =         {},
         [components.CHILD_IDS] =            {},
         [components.FOCUS] =                {connectionId = connectionId, radius = 4},
-        [components.NAME] =                 {name = "PLAYER", debug = true}, -- temp for debugging
+        [components.NAME] =                 {name = "PLAYER"},
         [components.PARENT] =               {parentEntityId = roomEntityId},
         [components.SERVER_CHARACTER_CONTROLLER] =               
         {
@@ -98,11 +98,7 @@ local function createPlayerEntity (connectionId, accountId, settings, isPassword
             eyeHeight = 1.65,
             crouchEyeHeight = 0.25,
         },
-        [components.TEMP_PLAYER] =
-        {
-            connectionId = connectionId,
-            accountId = accountId,
-        },
+        [components.TEMP_PLAYER] =          {connectionId = connectionId, accountId = accountId,},
     }
 
     if settings and isPasswordCorrect then
