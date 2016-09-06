@@ -98,7 +98,7 @@ local function createPlayerEntity (connectionId, accountId, settings, isPassword
             eyeHeight = 1.65,
             crouchEyeHeight = 0.25,
         },
-        [components.TEMP_PLAYER] =          {connectionId = connectionId, accountId = accountId,},
+        [components.TEMP_PLAYER] =          {connectionId = connectionId, accountId = accountId},
     }
 
     if settings and isPasswordCorrect then

@@ -119,8 +119,7 @@ local function onNamedEntityCreated (event)
     if event.name == "PLAYER_EYE_POSITION" then
 
         local c = dio.entities.components
-        local cb = dio.entities.callbacks
-
+        
         local parentEntityId = dio.entities.getComponent (event.entityId, c.PARENT).parentEntityId
         local player = dio.entities.getComponent (parentEntityId, c.TEMP_PLAYER)
 

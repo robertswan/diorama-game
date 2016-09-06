@@ -236,6 +236,7 @@ local function createPlayerEntity (connectionId, accountId)
             -- [components.RIGID_BODY] =           {acceleration = {0.0, -9.806 * 1.0, 0.0},},
         
         [components.BASE_NETWORK] =         {},
+        [components.CHILD_IDS] =            {},
         [components.FOCUS] =                {connectionId = connectionId, radius = 4},
         [components.GRAVITY_TRANSFORM] =
         {
@@ -244,21 +245,30 @@ local function createPlayerEntity (connectionId, accountId)
             ypr =           {0, 0, 0},
             gravityDir =    5,
         },
-        [components.NAME] =                 {name = "PLAYER", debug = true}, -- temp for debugging
+        [components.NAME] =                 {name = "PLAYER"},
         [components.PARENT] =               {parentEntityId = roomEntityId},
         [components.SERVER_CHARACTER_CONTROLLER] =               
         {
             connectionId = connectionId,
             accountId = accountId,
         },
-        [components.TEMP_PLAYER] =
-        {
-            connectionId = connectionId,
-            accountId = accountId,
-        },
+        [components.TEMP_PLAYER] =          {connectionId = connectionId, accountId = accountId},
     }
 
-    return dio.entities.create (roomEntityId, playerComponents)
+    local playerEntityId = dio.entities.create (roomEntityId, playerComponents)
+
+    local eyeComponents =
+    {
+        [components.BASE_NETWORK] =         {},
+        [components.CHILD_IDS] =            {},
+        [components.NAME] =                 {name = "PLAYER_EYE_POSITION"},
+        [components.PARENT] =               {parentEntityId = playerEntityId},
+        [components.TRANSFORM] =            {}
+    }
+
+    local eyeEntityId = dio.entities.create (roomEntityId, eyeComponents) 
+    
+    return playerEntityId, eyeEntityId
 end
 
 --------------------------------------------------
@@ -277,8 +287,10 @@ local function endGame ()
 
     for connectionId, connection in pairs (connections) do
         if connection.entityId then
+            dio.entities.destroy (connection.eyeEntityId)
             dio.entities.destroy (connection.entityId)
             connection.entityId = nil
+            connection.eyeEntityId = nil
         end
     end
 
@@ -302,7 +314,9 @@ local function onClientConnected (event)
     }
 
     if gameVars.state == "waiting" or gameVars.state == "playing" then
-        connection.entityId = createPlayerEntity (event.connectionId, event.accountId)
+        local entityId, eyeEntityId = createPlayerEntity (event.connectionId, event.accountId)
+        connection.entityId = entityId
+        connection.eyeEntityId = eyeEntityId
     end
 
     connections [event.connectionId] = connection
@@ -317,8 +331,10 @@ local function onClientDisconnected (event)
     local connection = connections [event.connectionId]
 
     if connection.entityId then
+        dio.entities.destroy (connection.eyeEntityId)
         dio.entities.destroy (connection.entityId)
         connection.entityId = nil
+        connection.eyeEntityId = nil
     end
 
     if connection.groupId == "lobby" then
@@ -394,7 +410,9 @@ local function onRoomDestroyed (event)
     createNewLevel ()
 
     for connectionId, connection in pairs (connections) do
-        connection.entityId = createPlayerEntity (connectionId, connection.accountId)
+        local entityId, eyeEntityId = createPlayerEntity (connectionId, connection.accountId)
+        connection.entityId = entityId
+        connection.eyeEntityId = eyeEntityId
         connection.groupId = "lobby"
     end
 end
