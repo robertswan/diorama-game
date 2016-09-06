@@ -1,4 +1,19 @@
 --------------------------------------------------
+local instance = 
+{
+    isPlaying = false,
+    connections = {},
+    connectionsCount = 0,
+    readyCount = 0,
+    roomEntityIds = {},
+    roundTimeLeft = 0,
+    timePerRound = 60 * 3,
+    livesPerPlayer = 5,
+    rocketEntityIds = {},
+    nextRoundCanBePlayed = true,
+}
+
+--------------------------------------------------
 local generators =
 {
     {
@@ -54,21 +69,6 @@ local roomSettings =
 }
 
 --------------------------------------------------
-local instance = 
-{
-    isPlaying = false,
-    connections = {},
-    connectionsCount = 0,
-    readyCount = 0,
-    roomEntityIds = {},
-    roundTimeLeft = 0,
-    timePerRound = 60 * 3,
-    livesPerPlayer = 5,
-    rocketEntityIds = {},
-    nextRoundCanBePlayed = true,
-}
-
---------------------------------------------------
 local function comparer (lhs, rhs)
 
     if lhs.kills == rhs.kills then
@@ -121,7 +121,7 @@ local function getCurrentRoomFolder ()
 end
 
 --------------------------------------------------
-local function createNewPlayerEntity (connectionId, accountId)
+local function createPlayerEntity (connectionId, accountId)
 
     local roomFolder = getCurrentRoomFolder ()
     local roomEntityId = dio.world.ensureRoomIsLoaded (roomFolder)
@@ -145,20 +145,8 @@ local function createNewPlayerEntity (connectionId, accountId)
             -- [components.RIGID_BODY] =           {acceleration = {0.0, -9.806 * 1.0, 0.0},},
         
         [components.BASE_NETWORK] =         {},
-        [components.EYE_POSITION] =         {offset = {0, 1.65, 0}},
+        [components.CHILD_IDS] =            {},
         [components.FOCUS] =                {connectionId = connectionId, radius = 4},
-        [components.NAME] =                 {name = "PLAYER", debug = true}, -- temp for debugging
-        [components.PARENT] =               {parentEntityId = roomEntityId},
-        [components.SERVER_CHARACTER_CONTROLLER] =               
-        {
-            connectionId = connectionId,
-            accountId = accountId,
-        },
-        [components.TEMP_PLAYER] =
-        {
-            connectionId = connectionId,
-            accountId = accountId,
-        },
         [components.GRAVITY_TRANSFORM] =
         {
             chunkId =       chunkId,
@@ -166,9 +154,30 @@ local function createNewPlayerEntity (connectionId, accountId)
             ypr =           {0, 0, 0},
             gravityDir =    5,
         },
+        [components.NAME] =                 {name = "PLAYER", debug = true}, -- temp for debugging
+        [components.PARENT] =               {parentEntityId = roomEntityId},
+        [components.SERVER_CHARACTER_CONTROLLER] =               
+        {
+            connectionId = connectionId,
+            accountId = accountId,
+        },
+        [components.TEMP_PLAYER] =          {connectionId = connectionId, accountId = accountId},
     }
 
-    return dio.entities.create (roomEntityId, playerComponents)
+    local playerEntityId = dio.entities.create (roomEntityId, playerComponents)
+
+    local eyeComponents =
+    {
+        [components.BASE_NETWORK] =         {},
+        [components.CHILD_IDS] =            {},
+        [components.NAME] =                 {name = "PLAYER_EYE_POSITION"},
+        [components.PARENT] =               {parentEntityId = playerEntityId},
+        [components.TRANSFORM] =            {}
+    }
+
+    local eyeEntityId = dio.entities.create (roomEntityId, eyeComponents) 
+    
+    return playerEntityId, eyeEntityId
 end
 
 --------------------------------------------------
@@ -234,7 +243,9 @@ local function onRocketAndSceneryCollision (event)
 
                     connection.livesLeft = instance.livesPerPlayer
                     dio.entities.destroy (connection.entityId)
-                    connection.entityId = createNewPlayerEntity (connection.connectionId, connection.accountId)
+                    local entityId, eyeEntityId = createPlayerEntity (connection.connectionId, connection.accountId)
+                    connection.entityId = entityId
+                    connection.eyeEntityId = eyeEntityId
 
                     connection.deaths = connection.deaths + 1
                     if not isSuicide then
@@ -258,22 +269,22 @@ local function onRocketAndSceneryCollision (event)
 end
 
 --------------------------------------------------
-local function getRocketEntitySettings ()
+local function createRocketEntity (roomEntityId, chunkId, xyz, ypr)
 
     local components = dio.entities.components
-    local rocketEntitySettings =
+    local rocket =
     {
-        [components.AABB_COLLIDER] =        {min = {-0.01, -0.01, -0.01}, size = {0.02, 0.02, 0.02},},
-        [components.BASE_NETWORK] =         {},
-        [components.COLLISION_LISTENER] =   {onCollision = onRocketAndSceneryCollision,},
-        [components.MESH_PLACEHOLDER] =     {blueprintId = "ROCKET",},
-        [components.NAME] =                 {name = "ROCKET", debug = true,},
-        [components.PARENT] =               {},
-        [components.RIGID_BODY] =           {acceleration = {0.0, -9.806 * 1.0, 0.0},},
-        [components.TRANSFORM] =            {},
+        [components.AABB_COLLIDER] =            {min = {-0.01, -0.01, -0.01}, size = {0.02, 0.02, 0.02},},
+        [components.BASE_NETWORK] =             {},
+        [components.COLLISION_LISTENER] =       {onCollision = onRocketAndSceneryCollision,},
+        [components.MESH_PLACEHOLDER] =         {blueprintId = "ROCKET",},
+        [components.NAME] =                     {name = "ROCKET", debug = true,},
+        [components.PARENT] =                   {parentEntityId = roomEntityId},
+        [components.RIGID_BODY] =               {acceleration = {0.0, -9.806 * 1.0, 0.0}, forwardSpeed = 30.0},
+        [components.TRANSFORM] =                {chunkId = chunkId, xyz = xyz, ypr = ypr},
     }
 
-    return rocketEntitySettings
+    return dio.entities.create (roomEntityId, rocket)
 end
 
 --------------------------------------------------
@@ -312,7 +323,9 @@ local function checkForRoundStart (connectionId)
             dio.network.sendEvent (connection.connectionId, "voxel_arena.HEALTH_UPDATE", tostring (instance.livesPerPlayer))
 
             dio.entities.destroy (connection.entityId)
-            connection.entityId = createNewPlayerEntity (connection.connectionId, connection.accountId)
+            local entityId, eyeEntityId = createPlayerEntity (connection.connectionId, connection.accountId)
+            connection.entityId = entityId
+            connection.eyeEntityId = eyeEntityId
             connection.isReady = false
             connection.kills = 0
             connection.deaths = 0
@@ -337,7 +350,9 @@ local function doGameOver ()
         dio.network.sendEvent (connection.connectionId, "voxel_arena.END_GAME")
 
         dio.entities.destroy (connection.entityId)
-        connection.entityId = createNewPlayerEntity (connection.connectionId, connection.accountId)
+        local entityId, eyeEntityId = createPlayerEntity (connection.connectionId, connection.accountId)
+        connection.entityId = entityId
+        connection.eyeEntityId = eyeEntityId
 
         dio.network.sendChat (connection.connectionId, "SERVER", winning_text)
     end    
@@ -348,13 +363,14 @@ end
 --------------------------------------------------
 local function onClientConnected (event)
 
-    local entityId = createNewPlayerEntity (event.connectionId, event.accountId)
+    local entityId, eyeEntityId = createPlayerEntity (event.connectionId, event.accountId)
 
     local connection =
     {
         connectionId = event.connectionId,
         accountId = event.accountId,
         entityId = entityId,
+        eyeEntityId = eyeEntityId,
         kills = 0,
         deaths = 0,
         livesLeft = instance.livesPerPlayer,
@@ -400,25 +416,17 @@ end
 local function fireWeapon (connection)
 
     local roomEntityId = instance.roomEntityIds [getCurrentRoomFolder ()]
-
+    
     local avatar = dio.world.getPlayerXyz (connection.accountId)
+    local chunkId = avatar.chunkId
+    local xyz = avatar.xyz
+    local ypr = avatar.ypr
 
-    local rocketEntitySettings = getRocketEntitySettings ()
-    local components = dio.entities.components
-
-    local parent = rocketEntitySettings [components.PARENT]
-    parent.parentEntityId = roomEntityId
-
-    local transform = rocketEntitySettings [components.TRANSFORM]
-    transform.chunkId = avatar.chunkId
-    transform.xyz = avatar.xyz
-    transform.ypr = avatar.ypr
-    transform.xyz [2] = transform.xyz [2] + 1.25
-
-    local rigidBody = rocketEntitySettings [components.RIGID_BODY]
-    rigidBody.forwardSpeed = 30.0
-
-    local rocketEntityId = dio.entities.create (roomEntityId, rocketEntitySettings)
+    local eyeTransform = dio.entities.getComponent (connection.eyeEntityId, dio.entities.components.TRANSFORM)
+    xyz [2] = xyz [2] + eyeTransform.xyz [2]
+    ypr [1] = eyeTransform.ypr [1]
+    
+    local rocketEntityId = createRocketEntity (roomEntityId, chunkId, xyz, ypr)
     instance.rocketEntityIds [rocketEntityId] = connection
 end
 

@@ -78,6 +78,7 @@ local function createPlayerEntity (connectionId, accountId, settings, isPassword
     local roomEntityId = dio.world.ensureRoomIsLoaded (roomFolder)
 
     local components = dio.entities.components
+
     local playerComponents =
     {
             -- [components.AABB_COLLIDER] =        {min = {-0.01, -0.01, -0.01}, size = {0.02, 0.02, 0.02},},
@@ -86,20 +87,18 @@ local function createPlayerEntity (connectionId, accountId, settings, isPassword
             -- [components.RIGID_BODY] =           {acceleration = {0.0, -9.806 * 1.0, 0.0},},
         
         [components.BASE_NETWORK] =         {},
-        [components.EYE_POSITION] =         {offset = {0, 1.65, 0}},
+        [components.CHILD_IDS] =            {},
         [components.FOCUS] =                {connectionId = connectionId, radius = 4},
-        [components.NAME] =                 {name = "PLAYER", debug = true}, -- temp for debugging
+        [components.NAME] =                 {name = "PLAYER"},
         [components.PARENT] =               {parentEntityId = roomEntityId},
         [components.SERVER_CHARACTER_CONTROLLER] =               
         {
             connectionId = connectionId,
             accountId = accountId,
+            eyeHeight = 1.65,
+            crouchEyeHeight = 0.25,
         },
-        [components.TEMP_PLAYER] =
-        {
-            connectionId = connectionId,
-            accountId = accountId,
-        },
+        [components.TEMP_PLAYER] =          {connectionId = connectionId, accountId = accountId},
     }
 
     if settings and isPasswordCorrect then
@@ -121,8 +120,21 @@ local function createPlayerEntity (connectionId, accountId, settings, isPassword
             gravityDir =    gravityDirIndices.DOWN,
         }
     end
+
+    local playerEntityId = dio.entities.create (roomEntityId, playerComponents)
+
+    local eyeComponents =
+    {
+        [components.BROADCAST_WITH_PARENT] =    {},
+        [components.CHILD_IDS] =                {},
+        [components.NAME] =                     {name = "PLAYER_EYE_POSITION"},
+        [components.PARENT] =                   {parentEntityId = playerEntityId},
+        [components.TRANSFORM] =                {}
+    }
+
+    local eyeEntityId = dio.entities.create (roomEntityId, eyeComponents) 
     
-    return dio.entities.create (roomEntityId, playerComponents)
+    return playerEntityId, eyeEntityId
 end
 
 --------------------------------------------------

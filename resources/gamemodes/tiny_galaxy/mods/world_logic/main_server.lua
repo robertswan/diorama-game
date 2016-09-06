@@ -175,7 +175,7 @@ local function createPlayerEntity (connectionId, accountId)
     
     local roomEntityId = dio.world.ensureRoomIsLoaded ("tiny_galaxy/")
 
-    local components = dio.entities.components
+    local c = dio.entities.components
     local playerComponents =
     {
             -- [components.AABB_COLLIDER] =        {min = {-0.01, -0.01, -0.01}, size = {0.02, 0.02, 0.02},},
@@ -183,21 +183,19 @@ local function createPlayerEntity (connectionId, accountId)
             -- [components.MESH_PLACEHOLDER] =     {blueprintId = "ROCKET",},
             -- [components.RIGID_BODY] =           {acceleration = {0.0, -9.806 * 1.0, 0.0},},
         
-        [components.BASE_NETWORK] =         {},
-        [components.EYE_POSITION] =         {offset = {0, 1.65, 0}},
-        [components.FOCUS] =                {connectionId = connectionId, radius = 4},
-        [components.GRAVITY_TRANSFORM] =
+        [c.BASE_NETWORK] =          {},
+        [c.CHILD_IDS] =             {},
+        [c.FOCUS] =                 {connectionId = connectionId, radius = 4},
+        [c.GRAVITY_TRANSFORM] =
         {
             chunkId =       {0, 0, 0},
             xyz =           {-31, 4, 95},
-            -- chunkId =       {0, 0, 0},
-            -- xyz =           {74, 1, -3},
             ypr =           {0, 0, 0},
             gravityDir =    5,
         },
-        [components.NAME] =                 {name = "PLAYER", debug = true}, -- temp for debugging
-        [components.PARENT] =               {parentEntityId = roomEntityId},
-        [components.SERVER_CHARACTER_CONTROLLER] =
+        [c.NAME] =                  {name = "PLAYER"},
+        [c.PARENT] =                {parentEntityId = roomEntityId},
+        [c.SERVER_CHARACTER_CONTROLLER] =
         {
             connectionId = connectionId,
             accountId = accountId,
@@ -207,14 +205,23 @@ local function createPlayerEntity (connectionId, accountId)
             jumpSpeed = instance.initialJumpSpeed,
             highlightBlockIds = {80, 81}, -- todo place in own component
         },
-        [components.TEMP_PLAYER] =
-        {
-            connectionId = connectionId,
-            accountId = accountId,
-        },
+        [c.TEMP_PLAYER] =           {connectionId = connectionId, accountId = accountId},
     }
 
-    return dio.entities.create (roomEntityId, playerComponents)
+    local playerEntityId = dio.entities.create (roomEntityId, playerComponents)
+
+    local eyeComponents =
+    {
+        [c.BASE_NETWORK] =          {},
+        [c.CHILD_IDS] =             {},
+        [c.NAME] =                  {name = "PLAYER_EYE_POSITION"},
+        [c.PARENT] =                {parentEntityId = playerEntityId},
+        [c.TRANSFORM] =             {}
+    }
+
+    local eyeEntityId = dio.entities.create (roomEntityId, eyeComponents)     
+
+    return playerEntityId, eyeEntityId
 end
 
 --------------------------------------------------
@@ -284,6 +291,7 @@ local function onRoomDestroyed (event)
         instance.isRestartingGame = false
         createNewLevel ()
         for _, connection in pairs (connections) do
+
             connection.entityId = createPlayerEntity (connection.connectionId, connection.accountId)
         end
     end
@@ -302,11 +310,11 @@ function blockCallbacks.computer (event, connection)
     if yaw < (math.pi * 0.25) then
         
     elseif yaw < (math.pi * (0.25 + 0.5 * 1)) then
-        delta = {1, 0}
+        delta = {-1, 0}
     elseif yaw < (math.pi * (0.25 + 0.5 * 2)) then
         delta = {0, 1}
     elseif yaw < (math.pi * (0.25 + 0.5 * 3)) then
-        delta = {-1, 0}
+        delta = {1, 0}
     end
 
     moveShipAndPlayer (event.connectionId, xyz, delta)        
@@ -532,7 +540,6 @@ local modSettings =
     {
         entities = true,
         file = true,
-        world = true,
         network = true,
         world = true,
     },

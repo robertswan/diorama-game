@@ -56,6 +56,40 @@ local function onServerEventReceived (event)
 end
 
 --------------------------------------------------
+local function onClientConnected (event)
+    local self = instance
+    if event.isMe then
+        self.myConnectionId = event.connectionId
+        self.myAccountId = event.accountId
+    end
+end
+
+--------------------------------------------------
+local function onNamedEntityCreated (event)
+
+    if event.name == "PLAYER_EYE_POSITION" then
+
+        local c = dio.entities.components
+        
+        local parentEntityId = dio.entities.getComponent (event.entityId, c.PARENT).parentEntityId
+        local player = dio.entities.getComponent (parentEntityId, c.TEMP_PLAYER)
+
+        if player.connectionId == instance.myConnectionId then
+        
+            local camera = 
+            {
+                [c.CAMERA] =                {fov = 90},
+                [c.PARENT] =                {parentEntityId = event.entityId},
+                [c.TRANSFORM] =             {},
+            }
+
+            local cameraEntityId = dio.entities.create (event.roomEntityId, camera)
+            dio.drawing.setMainCamera (cameraEntityId)
+        end
+    end
+end
+
+--------------------------------------------------
 local function onLoad ()
 
     instance =
@@ -67,6 +101,8 @@ local function onLoad ()
 
     local types = dio.events.clientTypes
     dio.events.addListener (types.SERVER_EVENT_RECEIVED, onServerEventReceived)
+    dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
+    dio.events.addListener (types.NAMED_ENTITY_CREATED, onNamedEntityCreated)
 
     dio.resources.loadTexture ("CHUNKS_DIFFUSE",    "textures/chunks_diffuse_00.png")
     dio.resources.loadTexture ("LIQUIDS_DIFFUSE",   "textures/liquids_diffuse_00.png")
