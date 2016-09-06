@@ -229,14 +229,11 @@ local function onClientConnected (event)
 
     createNewLevel ()
 
-    local playerEntityId, eyeEntityId = createPlayerEntity (event.connectionId, event.accountId)
-
     local connection =
     {
         connectionId = event.connectionId,
         accountId = event.accountId,
-        entityId = playerEntityId,
-        eyeEntityId = eyeEntityId,
+        entityId = createPlayerEntity (event.connectionId, event.accountId),
     }
 
     connections [event.connectionId] = connection
@@ -248,7 +245,6 @@ local function onClientDisconnected (event)
 
     local connection = connections [event.connectionId]
 
-    dio.entities.destroy (connection.eyeEntityId)
     dio.entities.destroy (connection.entityId)
 
     connections [event.connectionId] = nil
@@ -296,9 +292,7 @@ local function onRoomDestroyed (event)
         createNewLevel ()
         for _, connection in pairs (connections) do
 
-            local playerEntityId, eyeEntityId = createPlayerEntity (connection.connectionId, connection.accountId)
-            connection.entityId = playerEntityId
-            connection.eyeEntityId = eyeEntityId
+            connection.entityId = createPlayerEntity (connection.connectionId, connection.accountId)
         end
     end
 end
@@ -433,9 +427,7 @@ end
 --------------------------------------------------
 local function doGameOver (connection, hasWonGame)
     
-    dio.entities.destroy (connection.eyeEntityId)
     dio.entities.destroy (connection.entityId)
-    connection.eyeEntityId = nil
     connection.entityId = nil
 
     instance.roomEntityId = nil

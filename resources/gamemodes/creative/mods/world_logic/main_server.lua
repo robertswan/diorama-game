@@ -148,8 +148,6 @@ local function onClientConnected (event)
         isPasswordCorrect = (settings.accountPassword == event.accountPassword)
     end
 
-    local playerEntityId, eyeEntityId = createPlayerEntity (event.connectionId, event.accountId, settings, isPasswordCorrect)
-
     local connection =
     {
         connectionId = event.connectionId,
@@ -159,8 +157,7 @@ local function onClientConnected (event)
         groupId = event.isSinglePlayer and "builder" or "tourist",
         isPasswordCorrect = isPasswordCorrect,
         needsSaving = event.isSinglePlayer,
-        entityId = playerEntityId,
-        eyeEntityId = eyeEntityId,
+        entityId = createPlayerEntity (event.connectionId, event.accountId, settings, isPasswordCorrect),
     }
 
     if settings and isPasswordCorrect then
@@ -200,7 +197,6 @@ local function onClientDisconnected (event)
         end
     end
 
-    dio.entities.destroy (connection.eyeEntityId)
     dio.entities.destroy (connection.entityId)
 
     connections [event.connectionId] = nil

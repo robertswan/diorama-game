@@ -287,10 +287,8 @@ local function endGame ()
 
     for connectionId, connection in pairs (connections) do
         if connection.entityId then
-            dio.entities.destroy (connection.eyeEntityId)
             dio.entities.destroy (connection.entityId)
             connection.entityId = nil
-            connection.eyeEntityId = nil
         end
     end
 
@@ -314,9 +312,7 @@ local function onClientConnected (event)
     }
 
     if gameVars.state == "waiting" or gameVars.state == "playing" then
-        local entityId, eyeEntityId = createPlayerEntity (event.connectionId, event.accountId)
-        connection.entityId = entityId
-        connection.eyeEntityId = eyeEntityId
+        connection.entityId = createPlayerEntity (event.connectionId, event.accountId)
     end
 
     connections [event.connectionId] = connection
@@ -331,10 +327,8 @@ local function onClientDisconnected (event)
     local connection = connections [event.connectionId]
 
     if connection.entityId then
-        dio.entities.destroy (connection.eyeEntityId)
         dio.entities.destroy (connection.entityId)
         connection.entityId = nil
-        connection.eyeEntityId = nil
     end
 
     if connection.groupId == "lobby" then
@@ -410,9 +404,7 @@ local function onRoomDestroyed (event)
     createNewLevel ()
 
     for connectionId, connection in pairs (connections) do
-        local entityId, eyeEntityId = createPlayerEntity (connectionId, connection.accountId)
-        connection.entityId = entityId
-        connection.eyeEntityId = eyeEntityId
+        connection.entityId = createPlayerEntity (connectionId, connection.accountId)
         connection.groupId = "lobby"
     end
 end
