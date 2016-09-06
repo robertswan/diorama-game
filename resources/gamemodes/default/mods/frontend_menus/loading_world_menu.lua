@@ -41,7 +41,6 @@ end
 
 --------------------------------------------------
 function c:recordWorldSettings (worldFolder, fromMenuId)
-    print ("recordWorldSettings")
     print (worldFolder)
     print (fromMenuId)
 
