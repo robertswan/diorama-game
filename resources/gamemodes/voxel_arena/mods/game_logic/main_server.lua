@@ -168,11 +168,11 @@ local function createPlayerEntity (connectionId, accountId)
 
     local eyeComponents =
     {
-        [components.BASE_NETWORK] =         {},
-        [components.CHILD_IDS] =            {},
-        [components.NAME] =                 {name = "PLAYER_EYE_POSITION"},
-        [components.PARENT] =               {parentEntityId = playerEntityId},
-        [components.TRANSFORM] =            {}
+        [components.BROADCAST_WITH_PARENT] =    {},
+        [components.CHILD_IDS] =                {},
+        [components.NAME] =                     {name = "PLAYER_EYE_POSITION"},
+        [components.PARENT] =                   {parentEntityId = playerEntityId},
+        [components.TRANSFORM] =                {},
     }
 
     local eyeEntityId = dio.entities.create (roomEntityId, eyeComponents) 

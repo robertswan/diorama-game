@@ -212,7 +212,7 @@ local function createPlayerEntity (connectionId, accountId)
 
     local eyeComponents =
     {
-        [c.BASE_NETWORK] =          {},
+        [c.BROADCAST_WITH_PARENT] = {},
         [c.CHILD_IDS] =             {},
         [c.NAME] =                  {name = "PLAYER_EYE_POSITION"},
         [c.PARENT] =                {parentEntityId = playerEntityId},
