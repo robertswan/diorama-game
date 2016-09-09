@@ -500,8 +500,18 @@ local function onTick (event)
         end
 
         if worldIdx ~= instance.currentWorldIdx then
+
             instance.currentWorldIdx = worldIdx
-            local description = worldIdx == 0 and "" or instance.worlds [worldIdx].name
+
+            local description = "Tiny Nowhere"
+            if worldIdx == 0 then
+                if mapCell [1] == instance.ship [1] and mapCell [2] == instance.ship [2] then
+                    description = "Tiny Space ship"
+                end
+            elseif instance.worlds [worldIdx] then
+                description = instance.worlds [worldIdx].name
+            end
+
             dio.network.sendEvent (connection.connectionId, "tinyGalaxy.WORLD", description)
         end
 

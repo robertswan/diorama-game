@@ -36,7 +36,7 @@ local messages =
 
 --------------------------------------------------
 local function renderBg (self)
-    dio.drawing.font.drawBox (0, 0, self.size.w, self.size.h, 0x333333A0);
+    dio.drawing.font.drawBox (0, 0, self.size.w, self.size.h, 0x000000A0);
 end
 
 --------------------------------------------------
@@ -48,17 +48,20 @@ local function onEarlyRender (self)
 
         local lines = Chat.linesFromSentence (messages [instance.eventId], instance.size.w, EmoteDefinitions)
 
-
         dio.drawing.setRenderToTexture (self.renderToTexture)
         renderBg (self)
 
         local lineHeight = 14
-        local y = (instance.size.h * 0.5) + (#lines * lineHeight * 0.5);
+        local y = ((instance.size.h + lineHeight) * 0.5) + (#lines * lineHeight * 0.5);
 
         for _, line in ipairs (lines) do
             y = y - lineHeight
             Chat.renderLine ((instance.size.w - line.width) * 0.5, y, line, EmoteDefinitions, instance.emoteTexture)
         end
+
+        local text = "CLICK TO CONTINUE"
+        local width = dio.drawing.font.measureString (text)
+        dio.drawing.font.drawString ((instance.size.w - width) * 0.5, 0, text, 0xff000ff)
 
         dio.drawing.setRenderToTexture (nil)
 
@@ -91,8 +94,36 @@ local function onServerEventReceived (event)
         instance.isVisible = true
         instance.isDirty = true
         event.cancel = true
+
+        dio.inputs.setArePlayingControlsEnabled (false)
     end
 end
+
+--------------------------------------------------
+local function onPlayerControlChanged (event)
+    if event.isEnabled then
+        if instance.isVisible then
+            dio.inputs.setArePlayingControlsEnabled (false)
+        end
+    end
+end
+
+--------------------------------------------------
+local function onUpdated (event)
+
+    if instance.isVisible then
+
+        print ("onUpdated: " .. tostring (instance.isVisible))
+
+        local mouse = dio.inputs.getMouse ()
+
+        if mouse.leftClicked then
+            instance.isVisible = false
+            dio.inputs.setArePlayingControlsEnabled (true)
+        end
+    end
+end
+
 
 --------------------------------------------------
 local function onLoad ()
@@ -116,9 +147,14 @@ local function onLoad ()
 
     local types = dio.events.clientTypes
     dio.events.addListener (types.SERVER_EVENT_RECEIVED, onServerEventReceived)
-
+    dio.events.addListener (types.PLAYER_CONTROL_CHANGED, onPlayerControlChanged)
+    dio.events.addListener (types.UPDATED, onUpdated)
 end
 
+--------------------------------------------------
+local function onUnload ()
+    dio.resources.destroyTexture ("DIALOG_EMOTES")
+end
 
 --------------------------------------------------
 local modSettings =
@@ -130,12 +166,14 @@ local modSettings =
     permissionsRequired =
     {
         drawing = true,
+        inputs = true,
         resources = true,
     },
 
     callbacks = 
     {
         onLoad = onLoad,
+        onUnload = onUnload,
     },    
 }
 

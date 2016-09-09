@@ -36,11 +36,13 @@ function c:update ()
     self.x = (windowW - self.w * self.scale) / 2
     self.y = (windowH - self.h * self.scale) / 2
 
-    local x = (dio.inputs.mouse.x - self.x) / self.scale
-    local y = (dio.inputs.mouse.y - self.y) / self.scale
-    local is_left_clicked = dio.inputs.mouse.left_button.is_clicked
+    local mouse = dio.inputs.getMouse ()    
 
-    local nextMenuName = self.current_menu:onUpdate (x, y, is_left_clicked);
+    local x = (mouse.x - self.x) / self.scale
+    local y = (mouse.y - self.y) / self.scale
+    local leftClicked = mouse.leftClicked
+
+    local nextMenuName = self.current_menu:onUpdate (x, y, leftClicked);
     self:changeMenu (nextMenuName)
 end
 
