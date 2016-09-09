@@ -238,6 +238,8 @@ local function onClientConnected (event)
 
     connections [event.connectionId] = connection
 
+    dio.network.sendEvent (event.connectionId, "tinyGalaxy.DIALOGS", "BEGIN_GAME")
+
 end
 
 --------------------------------------------------
@@ -293,6 +295,7 @@ local function onRoomDestroyed (event)
         for _, connection in pairs (connections) do
 
             connection.entityId = createPlayerEntity (connection.connectionId, connection.accountId)
+            dio.network.sendEvent (connection.connectionId, "tinyGalaxy.DIALOGS", "BEGIN_GAME")
         end
     end
 end
@@ -327,7 +330,10 @@ function blockCallbacks.itemChest (event, connection)
 
     if event.isBlockValid then
         local item = instance.itemsAvailable [instance.nextItemIdx]
+        
         dio.network.sendChat (connection.connectionId, "ITEM", "You have collected the " .. item.description)
+        dio.network.sendEvent (connection.connectionId, "tinyGalaxy.DIALOGS", item.id)
+
         instance.inventory [item.id] = true
         instance.nextItemIdx = instance.nextItemIdx + 1
         event.sourceBlockId = event.destinationBlockId + 8

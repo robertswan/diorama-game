@@ -1,5 +1,6 @@
-local TickerLine = require ("resources/gamemodes/default/mods/chat/ticker_line")
+local Chat = require ("resources/_scripts/utils/chat")
 local EmoteDefinitions = require ("resources/gamemodes/default/mods/chat/emote_definitions")
+local TickerLine = require ("resources/gamemodes/default/mods/chat/ticker_line")
 
 --------------------------------------------------
 local instance = nil
@@ -7,8 +8,6 @@ local instance = nil
 --------------------------------------------------
 local chatHistory = {}
 local currentElement = 0
-local emoteSpecs = EmoteDefinitions.emoteSpecs
-local emotes = EmoteDefinitions.emotes
 
 --------------------------------------------------
 local function renderBg (self)
@@ -24,33 +23,36 @@ local function renderChatLine (self, line, y)
     drawString (0, y, line.author, 0x000000ff, true)
     drawString (0, y + 2, line.author, 0xffff00ff, true)
 
-    local x = self.textOffset
+    -- local x = self.textOffset
 
-    for _, word in ipairs (line.textList) do
+    Chat.renderLine (self.textOffset, y, line.textList, EmoteDefinitions, self.emoteTexture)
 
-        if word then
 
-            local emote = emotes [word]
+    -- for _, word in ipairs (line.textList) do
 
-            if emote then
-                -- draw the emote
-                local u, v = emote.uvs [1], emote.uvs [2]
+    --     if word then
 
-                dio.drawing.drawTextureRegion2 (self.emoteTexture,      x, y,
-                                                emoteSpecs.renderWidth, emoteSpecs.renderHeight,
-                                                u * emoteSpecs.width,   v * emoteSpecs.height,
-                                                emoteSpecs.width,       emoteSpecs.height)
+    --         local emote = emotes [word]
 
-                x = x + emoteSpecs.renderWidth
+    --         if emote then
+    --             -- draw the emote
+    --             local u, v = emote.uvs [1], emote.uvs [2]
 
-            else
-                -- draw the string (with shadow)
-                drawString (x, y, word, 0x000000ff, true)
-                drawString (x, y+2, word, 0xffffffff, true)
-                x = x + dio.drawing.font.measureString (word)
-            end
-        end
-    end
+    --             dio.drawing.drawTextureRegion2 (self.emoteTexture,      x, y,
+    --                                             emoteSpecs.renderWidth, emoteSpecs.renderHeight,
+    --                                             u * emoteSpecs.width,   v * emoteSpecs.height,
+    --                                             emoteSpecs.width,       emoteSpecs.height)
+
+    --             x = x + emoteSpecs.renderWidth
+
+    --         else
+    --             -- draw the string (with shadow)
+    --             drawString (x, y, word, 0x000000ff, true)
+    --             drawString (x, y+2, word, 0xffffffff, true)
+    --             x = x + dio.drawing.font.measureString (word)
+    --         end
+    --     end
+    -- end
 end
 
 --------------------------------------------------
@@ -122,6 +124,7 @@ local function addNewTickerLine (self, line)
 
     local newTickerLine = TickerLine (line, self.size.w, self.heightPerLine,
                                       self.textOffset, self.emoteTexture)
+
     table.insert (ticker.lines, newTickerLine)
 end
 
@@ -185,55 +188,60 @@ local function onChatMessageReceived (event)
     local self = instance
 
     local spaceLeft = self.size.w - self.textOffset
-    local spaceWidth = dio.drawing.font.measureString (" ") -- this should probably be in instance properties
-    local currentString = ""
-    -- list of strings
-    local currentLine = {}
+    
     -- keep track of the lines to create ticker lines from
-    local linesAdded = {}
+    -- local linesAdded = {}
 
-    for word in string.gmatch (event.text, "%S+") do
-        local wordLength = dio.drawing.font.measureString (word)
-        local isEmote = false
 
-        -- Check if word is an emote
-        if emotes [word] then
-            wordLength = emoteSpecs.renderWidth
-            isEmote = true
-        end
 
-        if wordLength + spaceWidth > spaceLeft then
-            -- Line has exceed maximum line length, split rest into another line
-            table.insert (currentLine, currentString)
-            table.insert (self.lines, { author = event.author, textList = currentLine })
-            table.insert (linesAdded, { author = event.author, textList = currentLine })
-            currentLine = {}
-
-            if isEmote then
-                table.insert (currentLine, word)
-                currentString = " "
-            else
-                currentString = word .. " "
-            end
-
-            spaceLeft = self.size.w - self.textOffset - wordLength
-        else
-            -- Else add the word/emote onto the current line
-            if isEmote then
-                table.insert (currentLine, currentString)
-                table.insert (currentLine, word)
-                currentString = " "
-            else
-                currentString = currentString .. word .. " "
-            end
-
-            spaceLeft = spaceLeft - (wordLength + spaceWidth)
-        end
+    local lines = Chat.linesFromSentence (event.text, spaceLeft, EmoteDefinitions)
+    for _, line in ipairs (lines) do
+        table.insert (self.lines, { author = event.author, textList = line })
+        -- table.insert (linesAdded, { author = event.author, textList = line })
     end
 
-    table.insert (currentLine, currentString)
-    table.insert (self.lines, { author = event.author, textList = currentLine })
-    table.insert (linesAdded, { author = event.author, textList = currentLine })
+    -- for word in string.gmatch (event.text, "%S+") do
+    --     local wordLength = dio.drawing.font.measureString (word)
+    --     local isEmote = false
+
+    --     -- Check if word is an emote
+    --     if emotes [word] then
+    --         wordLength = emoteSpecs.renderWidth
+    --         isEmote = true
+    --     end
+
+    --     if wordLength + spaceWidth > spaceLeft then
+    --         -- Line has exceed maximum line length, split rest into another line
+    --         table.insert (currentLine, currentString)
+    --         table.insert (self.lines, { author = event.author, textList = currentLine })
+    --         table.insert (linesAdded, { author = event.author, textList = currentLine })
+    --         currentLine = {}
+
+    --         if isEmote then
+    --             table.insert (currentLine, word)
+    --             currentString = " "
+    --         else
+    --             currentString = word .. " "
+    --         end
+
+    --         spaceLeft = self.size.w - self.textOffset - wordLength
+    --     else
+    --         -- Else add the word/emote onto the current line
+    --         if isEmote then
+    --             table.insert (currentLine, currentString)
+    --             table.insert (currentLine, word)
+    --             currentString = " "
+    --         else
+    --             currentString = currentString .. word .. " "
+    --         end
+
+    --         spaceLeft = spaceLeft - (wordLength + spaceWidth)
+    --     end
+    -- end
+
+    -- table.insert (currentLine, currentString)
+    -- table.insert (self.lines, { author = event.author, textList = currentLine })
+    -- table.insert (linesAdded, { author = event.author, textList = currentLine })
 
     if self.autoScroll then
         self.firstLineToDraw = #self.lines - self.chatLinesToDraw + 1
@@ -243,11 +251,15 @@ local function onChatMessageReceived (event)
     end
 
     -- create the ticker lines
-    local i = 1
-    while linesAdded[i] ~= nil do
-        addNewTickerLine (self, linesAdded[i])
-        i = i + 1
+    for _, line in ipairs (self.lines) do
+        addNewTickerLine (self, line)
     end
+
+    -- local i = 1
+    -- while self.lines [i] ~= nil do
+    --     addNewTickerLine (self, linesAdded[i])
+    --     i = i + 1
+    -- end
 
     self.isDirty = true
 end

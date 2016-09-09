@@ -8,20 +8,27 @@ end
 
 --------------------------------------------------
 local function onEarlyRender (self)
-	local windowW, windowH = dio.drawing.getWindowSize ()
-	self.position.y = windowH - (self.size.h + 50)
 
-    dio.drawing.setRenderToTexture (self.renderToTexture)
-    renderBg (self)
+    if instance.isDirty then
 
-    local drawString = dio.drawing.font.drawString
-    drawString (3, 1, instance.text, 0xffAA66ff)
+        dio.drawing.setRenderToTexture (self.renderToTexture)
+        renderBg (self)
 
-	dio.drawing.setRenderToTexture (nil)
+        local drawString = dio.drawing.font.drawString
+        drawString (3, 1, instance.text, 0xffAA66ff)
+
+        dio.drawing.setRenderToTexture (nil)
+
+        instance.isDirty = false
+    end
 end
 
 --------------------------------------------------
 local function onLateRender (self)
+
+    local windowW, windowH = dio.drawing.getWindowSize ()
+    self.position.y = windowH - (self.size.h + 50)
+
     dio.drawing.drawTexture (self.renderToTexture, self.position.x, self.position.y, self.texture.w * self.scale, self.texture.h * self.scale, 0xffffffff)
 end
 
