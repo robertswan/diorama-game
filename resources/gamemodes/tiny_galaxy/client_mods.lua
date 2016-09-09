@@ -35,6 +35,7 @@ local function main ()
     local permissions =
     {
         blocks = true,
+        clientChat = true,
         drawing = true,
         diagnostics = true,
         entities = true,

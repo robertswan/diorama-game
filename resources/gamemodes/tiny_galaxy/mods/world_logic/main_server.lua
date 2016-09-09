@@ -33,7 +33,7 @@ local instance =
         -- bean = true,
         -- bigAxe = true,
     },
-    artifactsCollectedCount = 0,
+    artifactsCollectedCount = 5,
 
     shipXyz = {-32, -8, 88},
     
@@ -90,13 +90,13 @@ local function calcIsSafeMove (moveDelta)
 
     if not instance.inventory.iceShield then
         if newX >= 14 and newZ >= 14 then
-            return false
+            return false, "WARN_COLD"
         end
     end
 
     if not instance.inventory.fireShield then
         if newX >= 5 and newZ <= 10 then
-            return false
+            return false, "WARN_HEAT"
         end
     end
 
@@ -113,7 +113,8 @@ end
 --------------------------------------------------
 local function moveShipAndPlayer (connectionId, xyz, moveDelta)
 
-    if calcIsSafeMove (moveDelta) then
+    local isSafe, dialog = calcIsSafeMove (moveDelta)
+    if isSafe then
 
         local origin = instance.mapTopLeftChunkOrigin
         local ship = instance.ship
@@ -159,6 +160,11 @@ local function moveShipAndPlayer (connectionId, xyz, moveDelta)
 
         instance.ship [1] = instance.ship [1] + moveDelta [1]
         instance.ship [2] = instance.ship [2] + moveDelta [2]
+
+    elseif dialog then
+
+        dio.network.sendEvent (connectionId, "tinyGalaxy.DIALOGS", dialog)
+
     end
 end
 
@@ -355,8 +361,11 @@ function blockCallbacks.artifactChest (event, connection)
 
     if event.isBlockValid then
         instance.artifactsCollectedCount = instance.artifactsCollectedCount + 1
-        dio.network.sendChat (connection.connectionId, "ARTEFACT", tostring (instance.artifactsCollectedCount) .. " collected!")
+        local count = tostring (instance.artifactsCollectedCount);
+        dio.network.sendChat (connection.connectionId, "ARTEFACT", count .. " collected!")
         event.sourceBlockId = event.destinationBlockId + 4
+
+        dio.network.sendEvent (event.connectionId, "tinyGalaxy.DIALOGS", "ARTIFACT_" .. count)
 
         return false
     end
@@ -433,6 +442,17 @@ end
 --------------------------------------------------
 local function doGameOver (connection, hasWonGame)
     
+    --dio.network.sendEvent (connection.connectionId, "tinyGalaxy.DIALOGS", hasWonGame and "SUCCESS" or "DIED")
+    dio.network.sendEvent (connection.connectionId, "tinyGalaxy.DIALOGS", "DIED")
+
+    instance.isGameOver = true
+end
+
+--------------------------------------------------
+local function restartGame (connection)
+
+    instance.isGameOver = false
+
     dio.entities.destroy (connection.entityId)
     connection.entityId = nil
 
@@ -529,6 +549,17 @@ local function onTick (event)
 end
 
 --------------------------------------------------
+local function onChatReceived (event)
+
+    if event.text == "DIALOG_CLOSED" then
+        if instance.isGameOver then
+            restartGame (connections [event.authorConnectionId])
+        end
+        event.cancel = true
+    end
+end
+
+--------------------------------------------------
 local function onLoad ()
 
     local types = dio.events.serverTypes
@@ -539,6 +570,7 @@ local function onLoad ()
     dio.events.addListener (types.ENTITY_PLACED, onEntityPlaced)
     dio.events.addListener (types.ENTITY_DESTROYED, onEntityDestroyed)
     dio.events.addListener (types.TICK, onTick)
+    dio.events.addListener (types.CHAT_RECEIVED, onChatReceived)
 
     createNewLevel ()
 

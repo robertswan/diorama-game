@@ -7,7 +7,7 @@ local instance = nil
 --------------------------------------------------
 local messages = 
 {
-    BEGIN_GAME = "<3 You live on a tiny, tiny world... in a tiny, tiny galaxy. If only you could collect all the hidden artifacts then maybe the 'collect all the artifacts and be happy for ever' legend could come true. All your tiny, tiny world has is a computer and thrusters. Use your computer and scour the galaxy...! You have but one life.",
+    BEGIN_GAME = "You live on a tiny, tiny world... in a tiny, tiny galaxy. If only you could collect all the hidden artifacts then maybe the 'collect all the artifacts and be happy for ever' legend could come true. All your tiny, tiny world has is a computer and thrusters. Use your computer and scour the galaxy...! You have but one life <3.",
 
     smallAxe =          "You have found an AXE. You can chop thin tree trunks with the left mouse button!",
     smallJumpBoots =    "You have found JUMPS BOOTS. You can jump just a little bit higher!",
@@ -20,11 +20,11 @@ local messages =
     bigAxe =            "You have found the BIG AXE. Chop down bigger tree trunks! You have all the items. Now collect all the artifacts!",
 
     ARTIFACT_1 = "You have found artifact 1 of 6! Remember - collect them all and be happy for! YMMV.",
-    ARTIFACT_2 = "You have found artifact 1 of 6! Remember - collect them all and be happy for! YMMV.",
-    ARTIFACT_3 = "You have found artifact 1 of 6! Remember - collect them all and be happy for! YMMV.",
-    ARTIFACT_4 = "You have found artifact 1 of 6! Remember - collect them all and be happy for! YMMV.",
-    ARTIFACT_5 = "You have found artifact 1 of 6! Remember - collect them all and be happy for! YMMV.",
-    ARTIFACT_6 = "You have found artifact 1 of 6! Remember - collect them all and be happy for! YMMV.",
+    ARTIFACT_2 = "You have found artifact 2 of 6! Remember - collect them all and be happy for! YMMV.",
+    ARTIFACT_3 = "You have found artifact 3 of 6! Remember - collect them all and be happy for! YMMV.",
+    ARTIFACT_4 = "You have found artifact 4 of 6! Remember - collect them all and be happy for! YMMV.",
+    ARTIFACT_5 = "You have found artifact 5 of 6! Remember - collect them all and be happy for! YMMV.",
+    ARTIFACT_6 = "You have found artifact 6 of 6! Get to the magic thing to win!",
     
     SUCCESS = "You have found all the artifacts. But are you any happier, really? You shouldn't believe in legends at your age. Still, YOU BEAT THE TINY GAME!",
 
@@ -36,7 +36,7 @@ local messages =
 
 --------------------------------------------------
 local function renderBg (self)
-    dio.drawing.font.drawBox (0, 0, self.size.w, self.size.h, 0x000000A0);
+    dio.drawing.font.drawBox (0, 0, self.size.w, self.size.h, 0x000000C0);
 end
 
 --------------------------------------------------
@@ -120,6 +120,8 @@ local function onUpdated (event)
         if mouse.leftClicked then
             instance.isVisible = false
             dio.inputs.setArePlayingControlsEnabled (true)
+
+            dio.clientChat.send ("DIALOG_CLOSED")
         end
     end
 end
@@ -165,6 +167,7 @@ local modSettings =
 
     permissionsRequired =
     {
+        clientChat = true,
         drawing = true,
         inputs = true,
         resources = true,
