@@ -85,6 +85,7 @@
         - JFrap12
         - JustGuy
         - Kanamoto_
+        - Kanteran
         - Kazunekit
         - kingdragon2713
         - Knight_LT
