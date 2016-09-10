@@ -25,15 +25,16 @@ local instance =
 
     inventory = 
     {
-        -- smallAxe = true, 
-        -- iceShield = true,
-        -- belt = true,
-        -- fireShield = true,
-        -- teleporter = true,
-        -- bean = true,
-        -- bigAxe = true,
+        smallAxe = true, 
+        iceShield = true,
+        belt = true,
+        fireShield = true,
+        teleporter = true,
+        bean = true,
+        bigAxe = true,
     },
-    artifactsCollectedCount = 5,
+    artifactsCollectedCount = 0,
+    regularItemReach = 1.9,
 
     shipXyz = {-32, -8, 88},
     
@@ -209,7 +210,9 @@ local function createPlayerEntity (connectionId, accountId)
             walkSpeed = 4.0,
             sprintSpeed = 4.0,
             jumpSpeed = instance.initialJumpSpeed,
-            highlightBlockIds = {80, 81}, -- todo place in own component
+            selectionDistance = 16,
+            hasHighlight = false,
+            --highlightBlockIds = {80, 81}, -- todo place in own component
         },
         [c.TEMP_PLAYER] =           {connectionId = connectionId, accountId = accountId},
     }
@@ -312,29 +315,30 @@ local blockCallbacks = {}
 --------------------------------------------------
 function blockCallbacks.computer (event, connection) 
         
-    local xyz = dio.world.getPlayerXyz (connection.accountId)
-    local yaw = xyz.ypr [2]
+    if event.distance <= instance.regularItemReach then
+        local xyz = dio.world.getPlayerXyz (connection.accountId)
+        local yaw = xyz.ypr [2]
 
-    local delta = {0, -1}
-    if yaw < (math.pi * 0.25) then
-        
-    elseif yaw < (math.pi * (0.25 + 0.5 * 1)) then
-        delta = {-1, 0}
-    elseif yaw < (math.pi * (0.25 + 0.5 * 2)) then
-        delta = {0, 1}
-    elseif yaw < (math.pi * (0.25 + 0.5 * 3)) then
-        delta = {1, 0}
+        local delta = {0, -1}
+        if yaw < (math.pi * 0.25) then
+            
+        elseif yaw < (math.pi * (0.25 + 0.5 * 1)) then
+            delta = {-1, 0}
+        elseif yaw < (math.pi * (0.25 + 0.5 * 2)) then
+            delta = {0, 1}
+        elseif yaw < (math.pi * (0.25 + 0.5 * 3)) then
+            delta = {1, 0}
+        end
+
+        moveShipAndPlayer (event.connectionId, xyz, delta)        
     end
-
-    moveShipAndPlayer (event.connectionId, xyz, delta)        
-
     return true
 end
 
 --------------------------------------------------
 function blockCallbacks.itemChest (event, connection) 
 
-    if event.isBlockValid then
+    if event.distance <= instance.regularItemReach then
         local item = instance.itemsAvailable [instance.nextItemIdx]
         
         dio.network.sendChat (connection.connectionId, "ITEM", "You have collected the " .. item.description)
@@ -359,7 +363,7 @@ end
 --------------------------------------------------
 function blockCallbacks.artifactChest (event, connection)
 
-    if event.isBlockValid then
+    if event.distance <= instance.regularItemReach then
         instance.artifactsCollectedCount = instance.artifactsCollectedCount + 1
         local count = tostring (instance.artifactsCollectedCount);
         dio.network.sendChat (connection.connectionId, "ARTEFACT", count .. " collected!")
@@ -377,7 +381,7 @@ end
 --------------------------------------------------
 function blockCallbacks.smallAxe (event, connection) 
 
-    if event.isBlockValid and instance.inventory.smallAxe then
+    if instance.inventory.smallAxe and event.distance <= instance.regularItemReach then
         event.sourceBlockId = 0
         return false
     end
@@ -387,7 +391,7 @@ end
 --------------------------------------------------
 function blockCallbacks.belt (event, connection) 
 
-    if event.isBlockValid and instance.inventory.belt then
+    if instance.inventory.belt and event.distance <= instance.regularItemReach then
         event.sourceBlockId = 0
         return false
     end
@@ -397,7 +401,7 @@ end
 --------------------------------------------------
 function blockCallbacks.bean (event, connection) 
 
-    if event.isBlockValid and instance.inventory.bean then
+    if instance.inventory.bean and event.distance <= instance.regularItemReach then
         event.sourceBlockId = event.destinationBlockId + 1
         return false
     end
@@ -407,7 +411,7 @@ end
 --------------------------------------------------
 function blockCallbacks.bigAxe (event, connection)
     
-    if event.isBlockValid and instance.inventory.bigAxe then
+    if instance.inventory.bigAxe and event.distance <= instance.regularItemReach then
         event.sourceBlockId = 0
         return false
     end
@@ -417,15 +421,24 @@ end
 --------------------------------------------------
 function blockCallbacks.teleporter (event, connection)
     
-    if event.isBlockValid and instance.inventory.teleporter then
+    if instance.inventory.teleporter then
 
-        local teleport = 
-                "absolute " .. 
-                tostring (event.chunkId [1] * 32 + event.cellId [1] + 0.5) .. " " ..
-                tostring (event.chunkId [2] * 32 + event.cellId [2] + 1.5) .. " " ..
-                tostring (event.chunkId [3] * 32 + event.cellId [3] + 0.5)
+        -- FACE_NORTH = 0,
+        -- FACE_SOUTH = 1,
+        -- FACE_EAST = 2,
+        -- FACE_WEST = 3,
+        -- FACE_TOP = 4,
+        -- FACE_BOTTOM = 5,
 
-        dio.network.sendEvent (connection.connectionId, "tinyGalaxy.TP", teleport)
+        if event.face == 4 then
+            local teleport = 
+                    "absolute " .. 
+                    tostring (event.chunkId [1] * 32 + event.cellId [1] + 0.5) .. " " ..
+                    tostring (event.chunkId [2] * 32 + event.cellId [2] + 1.5) .. " " ..
+                    tostring (event.chunkId [3] * 32 + event.cellId [3] + 0.5)
+
+            dio.network.sendEvent (connection.connectionId, "tinyGalaxy.TP", teleport)
+        end
     end
     return true
 end
