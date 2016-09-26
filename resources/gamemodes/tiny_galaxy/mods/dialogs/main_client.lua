@@ -1,4 +1,5 @@
 local Chat = require ("resources/_scripts/utils/chat")
+local Easing = require ("resources/libraries/easing/easing")
 local EmoteDefinitions = require ("resources/gamemodes/default/mods/chat/emote_definitions")
 
 --------------------------------------------------
@@ -59,9 +60,11 @@ local function onEarlyRender (self)
             Chat.renderLine ((instance.size.w - line.width) * 0.5, y, line, EmoteDefinitions, instance.emoteTexture)
         end
 
-        local text = "CLICK TO CONTINUE"
-        local width = dio.drawing.font.measureString (text)
-        dio.drawing.font.drawString ((instance.size.w - width) * 0.5, 0, text, 0xff000ff)
+        if instance.mode == "STATIC" then
+            local text = "CLICK TO CONTINUE"
+            local width = dio.drawing.font.measureString (text)
+            dio.drawing.font.drawString ((instance.size.w - width) * 0.5, 0, text, 0xff000ff)
+        end
 
         dio.drawing.setRenderToTexture (nil)
 
@@ -76,14 +79,21 @@ local function onLateRender (self)
     if instance.isVisible then
 
         local windowW, windowH = dio.drawing.getWindowSize ()
-        local x = (windowW - self.size.w * self.scale) * 0.5
-        local y = (windowH - self.size.h * self.scale) * 0.5
+        local x = windowW * 0.5
+        local y = windowH * 0.5
 
-        dio.drawing.drawTexture (self.renderToTexture, x, y, self.texture.w * self.scale, self.texture.h * self.scale, 0xffffffff)
+        dio.drawing.drawTexture3 (
+                self.renderToTexture, 
+                0.5, 0.5,
+                x, y, 
+                self.texture.w * self.scale, self.texture.h * self.scale, 
+                instance.rotation,
+                0xffffffff)
+
+        -- dio.drawing.drawTexture (self.renderToTexture, x, y, self.texture.w * self.scale, self.texture.h * self.scale, 0xffffffff, instance.rotation)
+
     end
 end
-
-
 
 --------------------------------------------------
 local function onServerEventReceived (event)
@@ -93,16 +103,21 @@ local function onServerEventReceived (event)
         instance.eventId = event.payload
         instance.isVisible = true
         instance.isDirty = true
-        event.cancel = true
+        instance.mode = "ON"
+        instance.modeTime = 0
+        instance.scale = 0
+        instance.rotation = 0
 
         dio.inputs.setArePlayingControlsEnabled (false)
+        event.cancel = true
+
     end
 end
 
 --------------------------------------------------
 local function onPlayerControlChanged (event)
     if event.isEnabled then
-        if instance.isVisible then
+        if instance.isVisible and instance.mode ~= "OFF" then
             dio.inputs.setArePlayingControlsEnabled (false)
         end
     end
@@ -113,15 +128,55 @@ local function onUpdated (event)
 
     if instance.isVisible then
 
-        print ("onUpdated: " .. tostring (instance.isVisible))
+        if instance.mode == "ON" then
 
-        local mouse = dio.inputs.getMouse ()
+            instance.modeTime = instance.modeTime + event.timeDelta
 
-        if mouse.leftClicked then
-            instance.isVisible = false
-            dio.inputs.setArePlayingControlsEnabled (true)
+            local coeff1 = Easing.backOut (instance.modeTime / instance.appearDuration)
+            instance.scale = Easing.tween (coeff1, 0, instance.maxScale)
 
-            dio.clientChat.send ("DIALOG_CLOSED")
+            -- local coeff2 = Easing.easeOutCubic (instance.modeTime / instance.appearDuration)
+            -- instance.rotation = Easing.tween (coeff2, 0, math.pi * 2)
+
+            if instance.modeTime >= instance.appearDuration then
+                instance.mode = "STATIC"
+                instance.modeTime = 0
+                instance.scale = instance.maxScale
+                instance.rotation = 0
+                instance.isDirty = true
+
+            end
+        
+        elseif instance.mode == "STATIC" then
+
+            local mouse = dio.inputs.getMouse ()
+
+            if mouse.leftClicked then
+                instance.mode = "OFF"
+                instance.modeTime = 0
+                instance.isDirty = true
+                instance.scale = instance.maxScale
+                instance.rotation = 0
+                
+                dio.inputs.setArePlayingControlsEnabled (true)
+            end
+        
+        elseif instance.mode == "OFF" then
+
+            instance.modeTime = instance.modeTime + event.timeDelta
+
+            local coeff1 = Easing.easeInCubic (instance.modeTime / instance.offDuration)
+            instance.scale = Easing.tween (coeff1, instance.maxScale, 0)
+
+            local coeff2 = Easing.easeInCubic (instance.modeTime / instance.offDuration)
+            instance.rotation = Easing.tween (coeff2, -math.pi * 2, 0)
+
+            if instance.modeTime >= instance.offDuration then
+                instance.mode = nil
+                instance.modeTime = 0
+                instance.isVisible = false
+                dio.clientChat.send ("DIALOG_CLOSED")
+            end
         end
     end
 end
@@ -135,11 +190,14 @@ local function onLoad ()
         size = {w = 256, h = 128},
         texture = {w = 256, h = 128},
         border = 4,
-        scale = 3,
         isVisible = false,
         isDirty = false,
         eventId = "TEST",
         emoteTexture = dio.resources.loadTexture ("DIALOG_EMOTES", "textures/emotes_00.png"),
+
+        appearDuration = 0.4,
+        offDuration = 0.4,
+        maxScale = 3,
     }
 
     instance.renderToTexture = dio.drawing.createRenderToTexture (instance.texture.w, instance.texture.h)

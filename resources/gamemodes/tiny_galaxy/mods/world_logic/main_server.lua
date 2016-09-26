@@ -25,13 +25,13 @@ local instance =
 
     inventory = 
     {
-        smallAxe = true, 
-        iceShield = true,
-        belt = true,
-        fireShield = true,
-        teleporter = true,
-        bean = true,
-        bigAxe = true,
+        -- smallAxe = true, 
+        -- iceShield = true,
+        -- belt = true,
+        -- fireShield = true,
+        -- teleporter = true,
+        -- bean = true,
+        -- bigAxe = true,
     },
     artifactsCollectedCount = 0,
     regularItemReach = 1.9,
@@ -455,10 +455,11 @@ end
 --------------------------------------------------
 local function doGameOver (connection, hasWonGame)
     
-    --dio.network.sendEvent (connection.connectionId, "tinyGalaxy.DIALOGS", hasWonGame and "SUCCESS" or "DIED")
-    dio.network.sendEvent (connection.connectionId, "tinyGalaxy.DIALOGS", "DIED")
-
-    instance.isGameOver = true
+    if not instance.isGameOver then
+        --dio.network.sendEvent (connection.connectionId, "tinyGalaxy.DIALOGS", hasWonGame and "SUCCESS" or "DIED")
+        dio.network.sendEvent (connection.connectionId, "tinyGalaxy.DIALOGS", "DIED")
+        instance.isGameOver = true
+    end
 end
 
 --------------------------------------------------
