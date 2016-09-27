@@ -115,6 +115,7 @@ local blocks =
     {name = "artifact block 4",         uvs = {8, 7, 14, 7, 14, 7}},
     {name = "artifact block 5",         uvs = {9, 7, 14, 7, 14, 7}},
     {name = "artifact block 6",         uvs = {10, 7, 14, 7, 14, 7}},
+    {name = "artifact cookie",          uvs = {11, 6}, tag = "cookie"},
 }
 
 return {blocks = blocks, tiles = tiles, entities = entities}

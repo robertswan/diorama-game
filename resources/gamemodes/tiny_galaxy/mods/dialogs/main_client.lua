@@ -36,6 +36,13 @@ local messages =
 }
 
 --------------------------------------------------
+local clickToRestart =
+{
+    SUCCESS = true,
+    DIED = true,
+}
+
+--------------------------------------------------
 local function renderBg (self)
     dio.drawing.font.drawBox (0, 0, self.size.w, self.size.h, 0x000000C0);
 end
@@ -61,7 +68,7 @@ local function onEarlyRender (self)
         end
 
         if instance.mode == "STATIC" then
-            local text = "CLICK TO CONTINUE"
+            local text = clickToRestart [instance.eventId] and "CLICK TO RESTART" or "CLICK TO CONTINUE"
             local width = dio.drawing.font.measureString (text)
             dio.drawing.font.drawString ((instance.size.w - width) * 0.5, 0, text, 0xff000ff)
         end
@@ -71,7 +78,6 @@ local function onEarlyRender (self)
         instance.isDirty = false
 
     end
-
 end
 
 --------------------------------------------------

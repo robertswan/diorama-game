@@ -98,7 +98,7 @@ local function onServerEventReceived (event)
         if event.payload == "RESET" then
             instance.items = {}
             instance.artifacts = {}
-            crashA ()
+            
         else
             local icon = icons [event.payload]
             if icon.isArtifact then

@@ -76,12 +76,20 @@ local instance =
     artifactBlocks =
     {
         {blockId = 81, xyz = {8, 1, 24}},
-        {blockId = 81, xyz = {15, 2, 24}},
-        {blockId = 81, xyz = {15, 3, 31}},
-        {blockId = 81, xyz = {8, 4, 31}},
-        {blockId = 81, xyz = {13, 5, 27}},
-        {blockId = 81, xyz = {10, 6, 28}},
+        {blockId = 82, xyz = {15, 2, 24}},
+        {blockId = 83, xyz = {15, 3, 31}},
+        {blockId = 84, xyz = {8, 4, 31}},
+        {blockId = 85, xyz = {13, 5, 27}},
+        {blockId = 86, xyz = {10, 6, 28}},
     },
+
+    cookieBlocks = 
+    {
+        {13, 1, 26},
+        {10, 1, 26},
+        {10, 1, 29},
+        {13, 1, 29},
+    }
 }
 
 --------------------------------------------------
@@ -323,7 +331,26 @@ local function onRoomDestroyed (event)
 end
 
 --------------------------------------------------
+local function doGameOver (connection, hasWonGame)
+    
+    if not instance.isGameOver then
+        if hasWonGame then
+            dio.network.sendEvent (connection.connectionId, "tinyGalaxy.DIALOGS", "SUCCESS")
+        else
+            dio.network.sendEvent (connection.connectionId, "tinyGalaxy.DIALOGS", "DIED")
+        end
+        dio.network.sendEvent (connection.connectionId, "tinyGalaxy.OSD", "RESET")
+        instance.isGameOver = true
+    end
+end
+
+--------------------------------------------------
 local blockCallbacks = {}
+
+--------------------------------------------------
+function blockCallbacks.cookie (event, connection) 
+    doGameOver (connection, true)
+end
 
 --------------------------------------------------
 function blockCallbacks.computer (event, connection) 
@@ -395,6 +422,18 @@ function blockCallbacks.artifactChest (event, connection)
 
         dio.network.sendEvent (event.connectionId, "tinyGalaxy.DIALOGS", "ARTIFACT_" .. count)
         dio.network.sendEvent (connection.connectionId, "tinyGalaxy.OSD", "artifact" .. count)
+
+        if instance.artifactsCollectedCount == #instance.artifactBlocks then
+            for _, cookie in ipairs (instance.cookieBlocks) do
+                dio.world.setBlock (
+                        event.roomEntityId, 
+                        instance.artifactHomeworldChunk,
+                        cookie [1],
+                        cookie [2],
+                        cookie [3],
+                        87)
+            end
+        end
 
         return false
     end
@@ -475,17 +514,6 @@ local function convertPlayerXyxToMapCell (xyz)
         math.floor (((xyz.chunkId [1] - instance.mapTopLeftChunkOrigin [1]) * 32 + xyz.xyz [1]) / 8),
         math.floor (((xyz.chunkId [3] - instance.mapTopLeftChunkOrigin [2]) * 32 + xyz.xyz [3]) / 8),
     }
-end
-
---------------------------------------------------
-local function doGameOver (connection, hasWonGame)
-    
-    if not instance.isGameOver then
-        --dio.network.sendEvent (connection.connectionId, "tinyGalaxy.DIALOGS", hasWonGame and "SUCCESS" or "DIED")
-        dio.network.sendEvent (connection.connectionId, "tinyGalaxy.DIALOGS", "DIED")
-        dio.network.sendEvent (connection.connectionId, "tinyGalaxy.OSD", "RESET")
-        instance.isGameOver = true
-    end
 end
 
 --------------------------------------------------
