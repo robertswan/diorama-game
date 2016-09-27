@@ -68,7 +68,20 @@ local instance =
         {name = "Tiny Asteroid World 11",     xz = {5, 0},    timeOfDay = 23},
         {name = "Tiny Asteroid World 12",     xz = {5, 3},    timeOfDay = 23},
         {name = "Tiny Asteroid World 13",     xz = {5, 7},    timeOfDay = 23},
-    }    
+
+        {name = "Tiny Artifact Homeworld",    xz = {1, 15},    timeOfDay = 23},
+    },
+
+    artifactHomeworldChunk = {-1, 0, 2},
+    artifactBlockIds =
+    {
+        {8, 1, 24},
+        {15, 2, 24},
+        {15, 3, 31},
+        {8, 4, 31},
+        {13, 5, 27},
+        {10, 6, 28},
+    },
 }
 
 --------------------------------------------------
@@ -210,7 +223,7 @@ local function createPlayerEntity (connectionId, accountId)
             walkSpeed = 4.0,
             sprintSpeed = 4.0,
             jumpSpeed = instance.initialJumpSpeed,
-            selectionDistance = 16,
+            selectionDistance = 20,
             hasHighlight = false,
             --highlightBlockIds = {80, 81}, -- todo place in own component
         },
@@ -343,6 +356,7 @@ function blockCallbacks.itemChest (event, connection)
         
         dio.network.sendChat (connection.connectionId, "ITEM", "You have collected the " .. item.description)
         dio.network.sendEvent (connection.connectionId, "tinyGalaxy.DIALOGS", item.id)
+        dio.network.sendEvent (connection.connectionId, "tinyGalaxy.OSD", item.id)
 
         instance.inventory [item.id] = true
         instance.nextItemIdx = instance.nextItemIdx + 1
@@ -364,12 +378,23 @@ end
 function blockCallbacks.artifactChest (event, connection)
 
     if event.distance <= instance.regularItemReach then
+
         instance.artifactsCollectedCount = instance.artifactsCollectedCount + 1
         local count = tostring (instance.artifactsCollectedCount);
         dio.network.sendChat (connection.connectionId, "ARTEFACT", count .. " collected!")
         event.sourceBlockId = event.destinationBlockId + 4
 
+        local artifactBlockId = instance.artifactBlockIds [instance.artifactsCollectedCount]
+        dio.world.setBlock (
+                event.roomEntityId, 
+                instance.artifactHomeworldChunk,
+                artifactBlockId [1],
+                artifactBlockId [2],
+                artifactBlockId [3],
+                81)
+
         dio.network.sendEvent (event.connectionId, "tinyGalaxy.DIALOGS", "ARTIFACT_" .. count)
+        dio.network.sendEvent (connection.connectionId, "tinyGalaxy.OSD", "artifact" .. count)
 
         return false
     end
@@ -458,6 +483,7 @@ local function doGameOver (connection, hasWonGame)
     if not instance.isGameOver then
         --dio.network.sendEvent (connection.connectionId, "tinyGalaxy.DIALOGS", hasWonGame and "SUCCESS" or "DIED")
         dio.network.sendEvent (connection.connectionId, "tinyGalaxy.DIALOGS", "DIED")
+        dio.network.sendEvent (connection.connectionId, "tinyGalaxy.OSD", "RESET")
         instance.isGameOver = true
     end
 end

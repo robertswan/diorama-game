@@ -25,14 +25,14 @@ local messages =
     ARTIFACT_3 = "You have found artifact 3 of 6! Remember - collect them all and be happy for! YMMV.",
     ARTIFACT_4 = "You have found artifact 4 of 6! Remember - collect them all and be happy for! YMMV.",
     ARTIFACT_5 = "You have found artifact 5 of 6! Remember - collect them all and be happy for! YMMV.",
-    ARTIFACT_6 = "You have found artifact 6 of 6! Get to the magic thing to win!",
+    ARTIFACT_6 = "You have found artifact 6 of 6! Get to the Tiny Artifact Howmeworld to win!",
     
     SUCCESS = "You have found all the artifacts. But are you any happier, really? You shouldn't believe in legends at your age. Still, YOU BEAT THE TINY GAME!",
 
     DIED = "You died. And you were warned this game only gives you one life per attempt. Don't like it? Add the code yourself.",
 
-    WARN_HEAT = "You are too close to the SUN. You can not pass the asteroid belt until you have found a HEAT SHIELD.",
-    WARN_COLD = "You are too close to an ICE WORLD. You can not get any closer until you have found an ICE SHIELD.",
+    WARN_HEAT = "You are too close to the Tiny Binary Sun World. You can not pass the asteroid belt until you have found a HEAT SHIELD.",
+    WARN_COLD = "You are too close to the Tiny Ice World. You can not get any closer until you have found an ICE SHIELD.",
 }
 
 --------------------------------------------------
@@ -198,6 +198,9 @@ local function onLoad ()
         appearDuration = 0.4,
         offDuration = 0.4,
         maxScale = 3,
+
+        bgFadeDuration = 0.2,
+        bgFadeAmount = 0,
     }
 
     instance.renderToTexture = dio.drawing.createRenderToTexture (instance.texture.w, instance.texture.h)

@@ -22,9 +22,9 @@ local function onEarlyRender (self)
 
     		if xyz then
 
-                local xCoord = math.floor (xyz.chunkId [1] * 32 + xyz.xyz [1])
-    			local yCoord = math.floor (xyz.chunkId [2] * 32 + xyz.xyz [2])
-    			local zCoord = math.floor (xyz.chunkId [3] * 32 + xyz.xyz [3])
+                local xCoord = tostring (xyz.chunkId [1]) .. "," .. tostring (math.floor (xyz.xyz [1]))
+    			local yCoord = tostring (xyz.chunkId [2]) .. "," .. tostring (math.floor (xyz.xyz [2]))
+    			local zCoord = tostring (xyz.chunkId [3]) .. "," .. tostring (math.floor (xyz.xyz [3]))
 
                 local x = self.border
                 local y = self.border
@@ -96,8 +96,8 @@ local function onLoad ()
     instance =
     {
 		position = {x = 20, y = 50},
-		size = {w = 100, h = 28},
-		texture = {w = 150, h = 28},
+		size = {w = 256, h = 28},
+		texture = {w = 256, h = 28},
 		border = 4,
 		scale = 2,
 		isVisible = true,
