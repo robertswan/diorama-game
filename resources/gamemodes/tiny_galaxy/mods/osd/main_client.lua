@@ -55,8 +55,6 @@ local function onEarlyRender (self)
         local x = -16 + 7 * 18
         local y = 2
         for idx, artifact in ipairs (instance.artifacts) do
-        -- for idx = 1, 6 do
-        --     local artifact = icons ["artifact" .. tostring (idx)].uvs
 
             dio.drawing.drawTextureRegion (
                     instance.itemsTexture,

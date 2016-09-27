@@ -108,8 +108,13 @@ local blocks =
     {name = "grass jump",               uvs = {10, 0, 10, 5, 11, 0}, isJumpPad = true},
     
     -- 80
-    {name = "highlight block A",        uvs = {9, 6}},
-    {name = "highlight block B",        uvs = {0, 6}},
+    {name = "artifact world",           uvs = {9, 6}},
+    {name = "artifact block 1",         uvs = {5, 7, 14, 7, 14, 7}},
+    {name = "artifact block 2",         uvs = {6, 7, 14, 7, 14, 7}},
+    {name = "artifact block 3",         uvs = {7, 7, 14, 7, 14, 7}},
+    {name = "artifact block 4",         uvs = {8, 7, 14, 7, 14, 7}},
+    {name = "artifact block 5",         uvs = {9, 7, 14, 7, 14, 7}},
+    {name = "artifact block 6",         uvs = {10, 7, 14, 7, 14, 7}},
 }
 
 return {blocks = blocks, tiles = tiles, entities = entities}

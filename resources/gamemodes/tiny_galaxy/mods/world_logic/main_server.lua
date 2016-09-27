@@ -73,14 +73,14 @@ local instance =
     },
 
     artifactHomeworldChunk = {-1, 0, 2},
-    artifactBlockIds =
+    artifactBlocks =
     {
-        {8, 1, 24},
-        {15, 2, 24},
-        {15, 3, 31},
-        {8, 4, 31},
-        {13, 5, 27},
-        {10, 6, 28},
+        {blockId = 81, xyz = {8, 1, 24}},
+        {blockId = 81, xyz = {15, 2, 24}},
+        {blockId = 81, xyz = {15, 3, 31}},
+        {blockId = 81, xyz = {8, 4, 31}},
+        {blockId = 81, xyz = {13, 5, 27}},
+        {blockId = 81, xyz = {10, 6, 28}},
     },
 }
 
@@ -384,14 +384,14 @@ function blockCallbacks.artifactChest (event, connection)
         dio.network.sendChat (connection.connectionId, "ARTEFACT", count .. " collected!")
         event.sourceBlockId = event.destinationBlockId + 4
 
-        local artifactBlockId = instance.artifactBlockIds [instance.artifactsCollectedCount]
+        local artifactBlock = instance.artifactBlocks [instance.artifactsCollectedCount]
         dio.world.setBlock (
                 event.roomEntityId, 
                 instance.artifactHomeworldChunk,
-                artifactBlockId [1],
-                artifactBlockId [2],
-                artifactBlockId [3],
-                81)
+                artifactBlock.xyz [1],
+                artifactBlock.xyz [2],
+                artifactBlock.xyz [3],
+                artifactBlock.blockId)
 
         dio.network.sendEvent (event.connectionId, "tinyGalaxy.DIALOGS", "ARTIFACT_" .. count)
         dio.network.sendEvent (connection.connectionId, "tinyGalaxy.OSD", "artifact" .. count)
