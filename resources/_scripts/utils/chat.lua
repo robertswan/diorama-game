@@ -31,8 +31,6 @@ function m.linesFromSentence (sentence, width, emoteDefinitions)
             currentLine.width = width - widthRemaining
             table.insert (currentLine, currentString)
             table.insert (lines, currentLine)
-            -- table.insert (self.lines, { author = event.author, textList = currentLine })
-            -- table.insert (linesAdded, { author = event.author, textList = currentLine })
             currentLine = {}
 
             if isEmote then

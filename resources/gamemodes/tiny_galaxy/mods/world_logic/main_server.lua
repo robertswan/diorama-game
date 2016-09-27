@@ -233,7 +233,6 @@ local function createPlayerEntity (connectionId, accountId)
             jumpSpeed = instance.initialJumpSpeed,
             selectionDistance = 20,
             hasHighlight = false,
-            --highlightBlockIds = {80, 81}, -- todo place in own component
         },
         [c.TEMP_PLAYER] =           {connectionId = connectionId, accountId = accountId},
     }

@@ -8,7 +8,11 @@ local instance = nil
 --------------------------------------------------
 local messages = 
 {
-    BEGIN_GAME = "You live on a tiny, tiny world... in a tiny, tiny galaxy. If only you could collect all the hidden artifacts then maybe the 'collect all the artifacts and be happy for ever' legend could come true. All your tiny, tiny world has is a computer and thrusters. Use your computer and scour the galaxy...! You have but one life <3.",
+    BEGIN_GAME =        "You live on a tiny, tiny world... in a tiny, tiny galaxy. If only you could collect all the hidden artifacts then maybe the 'collect all the artifacts and be happy for ever' legend could come true. All your tiny, tiny world has is a computer and thrusters. Use your computer and scour the galaxy...! You have but one life <3.",
+    WARN_HEAT =         "You are too close to the Tiny Binary Sun World. You can not pass the asteroid belt until you have found a HEAT SHIELD.",
+    WARN_COLD =         "You are too close to the Tiny Ice World. You can not get any closer until you have found an ICE SHIELD.",
+    SUCCESS =           "You have found all the artifacts. But are you any happier, really? You shouldn't believe in legends at your age. Still, YOU BEAT THE TINY GAME!",
+    DIED =              "You died. And you were warned this game only gives you one life per attempt. Don't like it? Add the code yourself.",
 
     smallAxe =          "You have found an AXE. You can chop thin tree trunks with the left mouse button!",
     smallJumpBoots =    "You have found JUMPS BOOTS. You can jump just a little bit higher!",
@@ -20,19 +24,12 @@ local messages =
     bean =              "You have found SOME MAGIC BEANS. Plant on BEAN squares with the left mouse button to grow a jump pad plant!",
     bigAxe =            "You have found the BIG AXE. Chop down bigger tree trunks! You have all the items. Now collect all the artifacts!",
 
-    ARTIFACT_1 = "You have found artifact 1 of 6! Remember - collect them all and be happy for! YMMV.",
-    ARTIFACT_2 = "You have found artifact 2 of 6! Remember - collect them all and be happy for! YMMV.",
-    ARTIFACT_3 = "You have found artifact 3 of 6! Remember - collect them all and be happy for! YMMV.",
-    ARTIFACT_4 = "You have found artifact 4 of 6! Remember - collect them all and be happy for! YMMV.",
-    ARTIFACT_5 = "You have found artifact 5 of 6! Remember - collect them all and be happy for! YMMV.",
-    ARTIFACT_6 = "You have found artifact 6 of 6! Get to the Tiny Artifact Howmeworld to win!",
-    
-    SUCCESS = "You have found all the artifacts. But are you any happier, really? You shouldn't believe in legends at your age. Still, YOU BEAT THE TINY GAME!",
-
-    DIED = "You died. And you were warned this game only gives you one life per attempt. Don't like it? Add the code yourself.",
-
-    WARN_HEAT = "You are too close to the Tiny Binary Sun World. You can not pass the asteroid belt until you have found a HEAT SHIELD.",
-    WARN_COLD = "You are too close to the Tiny Ice World. You can not get any closer until you have found an ICE SHIELD.",
+    ARTIFACT_1 =        "You have found artifact 1 of 6! Remember - collect them all and be happy for! YMMV.",
+    ARTIFACT_2 =        "You have found artifact 2 of 6! Remember - collect them all and be happy for! YMMV.",
+    ARTIFACT_3 =        "You have found artifact 3 of 6! Remember - collect them all and be happy for! YMMV.",
+    ARTIFACT_4 =        "You have found artifact 4 of 6! Remember - collect them all and be happy for! YMMV.",
+    ARTIFACT_5 =        "You have found artifact 5 of 6! Remember - collect them all and be happy for! YMMV.",
+    ARTIFACT_6 =        "You have found artifact 6 of 6! Get to the Tiny Artifact Howmeworld to win!",
 }
 
 --------------------------------------------------
@@ -95,9 +92,6 @@ local function onLateRender (self)
                 self.texture.w * self.scale, self.texture.h * self.scale, 
                 instance.rotation,
                 0xffffffff)
-
-        -- dio.drawing.drawTexture (self.renderToTexture, x, y, self.texture.w * self.scale, self.texture.h * self.scale, 0xffffffff, instance.rotation)
-
     end
 end
 
@@ -140,9 +134,6 @@ local function onUpdated (event)
 
             local coeff1 = Easing.backOut (instance.modeTime / instance.appearDuration)
             instance.scale = Easing.tween (coeff1, 0, instance.maxScale)
-
-            -- local coeff2 = Easing.easeOutCubic (instance.modeTime / instance.appearDuration)
-            -- instance.rotation = Easing.tween (coeff2, 0, math.pi * 2)
 
             if instance.modeTime >= instance.appearDuration then
                 instance.mode = "STATIC"
