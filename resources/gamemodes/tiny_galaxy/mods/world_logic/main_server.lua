@@ -34,6 +34,7 @@ local instance =
         -- bigAxe = true,
     },
     artifactsCollectedCount = 0,
+    regularItemReach = 1.9,
 
     shipXyz = {-32, -8, 88},
     
@@ -67,7 +68,28 @@ local instance =
         {name = "Tiny Asteroid World 11",     xz = {5, 0},    timeOfDay = 23},
         {name = "Tiny Asteroid World 12",     xz = {5, 3},    timeOfDay = 23},
         {name = "Tiny Asteroid World 13",     xz = {5, 7},    timeOfDay = 23},
-    }    
+
+        {name = "Tiny Artifact Homeworld",    xz = {1, 15},    timeOfDay = 23},
+    },
+
+    artifactHomeworldChunk = {-1, 0, 2},
+    artifactBlocks =
+    {
+        {blockId = 81, xyz = {8, 1, 24}},
+        {blockId = 82, xyz = {15, 2, 24}},
+        {blockId = 83, xyz = {15, 3, 31}},
+        {blockId = 84, xyz = {8, 4, 31}},
+        {blockId = 85, xyz = {13, 5, 27}},
+        {blockId = 86, xyz = {10, 6, 28}},
+    },
+
+    cookieBlocks = 
+    {
+        {13, 1, 26},
+        {10, 1, 26},
+        {10, 1, 29},
+        {13, 1, 29},
+    }
 }
 
 --------------------------------------------------
@@ -90,13 +112,13 @@ local function calcIsSafeMove (moveDelta)
 
     if not instance.inventory.iceShield then
         if newX >= 14 and newZ >= 14 then
-            return false
+            return false, "WARN_COLD"
         end
     end
 
     if not instance.inventory.fireShield then
         if newX >= 5 and newZ <= 10 then
-            return false
+            return false, "WARN_HEAT"
         end
     end
 
@@ -113,7 +135,8 @@ end
 --------------------------------------------------
 local function moveShipAndPlayer (connectionId, xyz, moveDelta)
 
-    if calcIsSafeMove (moveDelta) then
+    local isSafe, dialog = calcIsSafeMove (moveDelta)
+    if isSafe then
 
         local origin = instance.mapTopLeftChunkOrigin
         local ship = instance.ship
@@ -159,6 +182,11 @@ local function moveShipAndPlayer (connectionId, xyz, moveDelta)
 
         instance.ship [1] = instance.ship [1] + moveDelta [1]
         instance.ship [2] = instance.ship [2] + moveDelta [2]
+
+    elseif dialog then
+
+        dio.network.sendEvent (connectionId, "tinyGalaxy.DIALOGS", dialog)
+
     end
 end
 
@@ -203,7 +231,8 @@ local function createPlayerEntity (connectionId, accountId)
             walkSpeed = 4.0,
             sprintSpeed = 4.0,
             jumpSpeed = instance.initialJumpSpeed,
-            highlightBlockIds = {80, 81}, -- todo place in own component
+            selectionDistance = 20,
+            hasHighlight = false,
         },
         [c.TEMP_PLAYER] =           {connectionId = connectionId, accountId = accountId},
     }
@@ -237,6 +266,8 @@ local function onClientConnected (event)
     }
 
     connections [event.connectionId] = connection
+
+    dio.network.sendEvent (event.connectionId, "tinyGalaxy.DIALOGS", "BEGIN_GAME")
 
 end
 
@@ -293,7 +324,22 @@ local function onRoomDestroyed (event)
         for _, connection in pairs (connections) do
 
             connection.entityId = createPlayerEntity (connection.connectionId, connection.accountId)
+            dio.network.sendEvent (connection.connectionId, "tinyGalaxy.DIALOGS", "BEGIN_GAME")
         end
+    end
+end
+
+--------------------------------------------------
+local function doGameOver (connection, hasWonGame)
+    
+    if not instance.isGameOver then
+        if hasWonGame then
+            dio.network.sendEvent (connection.connectionId, "tinyGalaxy.DIALOGS", "SUCCESS")
+        else
+            dio.network.sendEvent (connection.connectionId, "tinyGalaxy.DIALOGS", "DIED")
+        end
+        dio.network.sendEvent (connection.connectionId, "tinyGalaxy.OSD", "RESET")
+        instance.isGameOver = true
     end
 end
 
@@ -301,33 +347,43 @@ end
 local blockCallbacks = {}
 
 --------------------------------------------------
+function blockCallbacks.cookie (event, connection) 
+    doGameOver (connection, true)
+end
+
+--------------------------------------------------
 function blockCallbacks.computer (event, connection) 
         
-    local xyz = dio.world.getPlayerXyz (connection.accountId)
-    local yaw = xyz.ypr [2]
+    if event.distance <= instance.regularItemReach then
+        local xyz = dio.world.getPlayerXyz (connection.accountId)
+        local yaw = xyz.ypr [2]
 
-    local delta = {0, -1}
-    if yaw < (math.pi * 0.25) then
-        
-    elseif yaw < (math.pi * (0.25 + 0.5 * 1)) then
-        delta = {-1, 0}
-    elseif yaw < (math.pi * (0.25 + 0.5 * 2)) then
-        delta = {0, 1}
-    elseif yaw < (math.pi * (0.25 + 0.5 * 3)) then
-        delta = {1, 0}
+        local delta = {0, -1}
+        if yaw < (math.pi * 0.25) then
+            
+        elseif yaw < (math.pi * (0.25 + 0.5 * 1)) then
+            delta = {-1, 0}
+        elseif yaw < (math.pi * (0.25 + 0.5 * 2)) then
+            delta = {0, 1}
+        elseif yaw < (math.pi * (0.25 + 0.5 * 3)) then
+            delta = {1, 0}
+        end
+
+        moveShipAndPlayer (event.connectionId, xyz, delta)        
     end
-
-    moveShipAndPlayer (event.connectionId, xyz, delta)        
-
     return true
 end
 
 --------------------------------------------------
 function blockCallbacks.itemChest (event, connection) 
 
-    if event.isBlockValid then
+    if event.distance <= instance.regularItemReach then
         local item = instance.itemsAvailable [instance.nextItemIdx]
+        
         dio.network.sendChat (connection.connectionId, "ITEM", "You have collected the " .. item.description)
+        dio.network.sendEvent (connection.connectionId, "tinyGalaxy.DIALOGS", item.id)
+        dio.network.sendEvent (connection.connectionId, "tinyGalaxy.OSD", item.id)
+
         instance.inventory [item.id] = true
         instance.nextItemIdx = instance.nextItemIdx + 1
         event.sourceBlockId = event.destinationBlockId + 8
@@ -347,10 +403,36 @@ end
 --------------------------------------------------
 function blockCallbacks.artifactChest (event, connection)
 
-    if event.isBlockValid then
+    if event.distance <= instance.regularItemReach then
+
         instance.artifactsCollectedCount = instance.artifactsCollectedCount + 1
-        dio.network.sendChat (connection.connectionId, "ARTEFACT", tostring (instance.artifactsCollectedCount) .. " collected!")
+        local count = tostring (instance.artifactsCollectedCount);
+        dio.network.sendChat (connection.connectionId, "ARTEFACT", count .. " collected!")
         event.sourceBlockId = event.destinationBlockId + 4
+
+        local artifactBlock = instance.artifactBlocks [instance.artifactsCollectedCount]
+        dio.world.setBlock (
+                event.roomEntityId, 
+                instance.artifactHomeworldChunk,
+                artifactBlock.xyz [1],
+                artifactBlock.xyz [2],
+                artifactBlock.xyz [3],
+                artifactBlock.blockId)
+
+        dio.network.sendEvent (event.connectionId, "tinyGalaxy.DIALOGS", "ARTIFACT_" .. count)
+        dio.network.sendEvent (connection.connectionId, "tinyGalaxy.OSD", "artifact" .. count)
+
+        if instance.artifactsCollectedCount == #instance.artifactBlocks then
+            for _, cookie in ipairs (instance.cookieBlocks) do
+                dio.world.setBlock (
+                        event.roomEntityId, 
+                        instance.artifactHomeworldChunk,
+                        cookie [1],
+                        cookie [2],
+                        cookie [3],
+                        87)
+            end
+        end
 
         return false
     end
@@ -362,7 +444,7 @@ end
 --------------------------------------------------
 function blockCallbacks.smallAxe (event, connection) 
 
-    if event.isBlockValid and instance.inventory.smallAxe then
+    if instance.inventory.smallAxe and event.distance <= instance.regularItemReach then
         event.sourceBlockId = 0
         return false
     end
@@ -372,7 +454,7 @@ end
 --------------------------------------------------
 function blockCallbacks.belt (event, connection) 
 
-    if event.isBlockValid and instance.inventory.belt then
+    if instance.inventory.belt and event.distance <= instance.regularItemReach then
         event.sourceBlockId = 0
         return false
     end
@@ -382,7 +464,7 @@ end
 --------------------------------------------------
 function blockCallbacks.bean (event, connection) 
 
-    if event.isBlockValid and instance.inventory.bean then
+    if instance.inventory.bean and event.distance <= instance.regularItemReach then
         event.sourceBlockId = event.destinationBlockId + 1
         return false
     end
@@ -392,7 +474,7 @@ end
 --------------------------------------------------
 function blockCallbacks.bigAxe (event, connection)
     
-    if event.isBlockValid and instance.inventory.bigAxe then
+    if instance.inventory.bigAxe and event.distance <= instance.regularItemReach then
         event.sourceBlockId = 0
         return false
     end
@@ -402,15 +484,24 @@ end
 --------------------------------------------------
 function blockCallbacks.teleporter (event, connection)
     
-    if event.isBlockValid and instance.inventory.teleporter then
+    if instance.inventory.teleporter then
 
-        local teleport = 
-                "absolute " .. 
-                tostring (event.chunkId [1] * 32 + event.cellId [1] + 0.5) .. " " ..
-                tostring (event.chunkId [2] * 32 + event.cellId [2] + 1.5) .. " " ..
-                tostring (event.chunkId [3] * 32 + event.cellId [3] + 0.5)
+        -- FACE_NORTH = 0,
+        -- FACE_SOUTH = 1,
+        -- FACE_EAST = 2,
+        -- FACE_WEST = 3,
+        -- FACE_TOP = 4,
+        -- FACE_BOTTOM = 5,
 
-        dio.network.sendEvent (connection.connectionId, "tinyGalaxy.TP", teleport)
+        if event.face == 4 then
+            local teleport = 
+                    "absolute " .. 
+                    tostring (event.chunkId [1] * 32 + event.cellId [1] + 0.5) .. " " ..
+                    tostring (event.chunkId [2] * 32 + event.cellId [2] + 1.5) .. " " ..
+                    tostring (event.chunkId [3] * 32 + event.cellId [3] + 0.5)
+
+            dio.network.sendEvent (connection.connectionId, "tinyGalaxy.TP", teleport)
+        end
     end
     return true
 end
@@ -425,8 +516,10 @@ local function convertPlayerXyxToMapCell (xyz)
 end
 
 --------------------------------------------------
-local function doGameOver (connection, hasWonGame)
-    
+local function restartGame (connection)
+
+    instance.isGameOver = false
+
     dio.entities.destroy (connection.entityId)
     connection.entityId = nil
 
@@ -494,8 +587,18 @@ local function onTick (event)
         end
 
         if worldIdx ~= instance.currentWorldIdx then
+
             instance.currentWorldIdx = worldIdx
-            local description = worldIdx == 0 and "" or instance.worlds [worldIdx].name
+
+            local description = "Tiny Nowhere"
+            if worldIdx == 0 then
+                if mapCell [1] == instance.ship [1] and mapCell [2] == instance.ship [2] then
+                    description = "Tiny Space ship"
+                end
+            elseif instance.worlds [worldIdx] then
+                description = instance.worlds [worldIdx].name
+            end
+
             dio.network.sendEvent (connection.connectionId, "tinyGalaxy.WORLD", description)
         end
 
@@ -513,6 +616,17 @@ local function onTick (event)
 end
 
 --------------------------------------------------
+local function onChatReceived (event)
+
+    if event.text == "DIALOG_CLOSED" then
+        if instance.isGameOver then
+            restartGame (connections [event.authorConnectionId])
+        end
+        event.cancel = true
+    end
+end
+
+--------------------------------------------------
 local function onLoad ()
 
     local types = dio.events.serverTypes
@@ -523,6 +637,7 @@ local function onLoad ()
     dio.events.addListener (types.ENTITY_PLACED, onEntityPlaced)
     dio.events.addListener (types.ENTITY_DESTROYED, onEntityDestroyed)
     dio.events.addListener (types.TICK, onTick)
+    dio.events.addListener (types.CHAT_RECEIVED, onChatReceived)
 
     createNewLevel ()
 

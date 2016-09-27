@@ -15,12 +15,12 @@ local modsToLoad =
     },
     {
         gameMode = "default",
-        modFolder = "chat",
-    },
-    {
-        gameMode = "default",
         modFolder = "spawn",
     },
+    {
+        gameMode = "tiny_galaxy",
+        modFolder = "dialogs",
+    },    
 }
 
 local mods = {}
@@ -31,6 +31,7 @@ local function main ()
     local permissions =
     {
         blocks = true,
+        clientChat = true,
         drawing = true,
         diagnostics = true,
         entities = true,
