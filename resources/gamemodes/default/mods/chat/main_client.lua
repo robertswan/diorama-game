@@ -159,15 +159,18 @@ local function onChatMessageReceived (event)
 
     local spaceLeft = self.size.w - self.textOffset
     
-    -- keep track of the lines to create ticker lines from
-    -- local linesAdded = {}
-
-
-
+    local linesAdded = {}
     local lines = Chat.linesFromSentence (event.text, spaceLeft, EmoteDefinitions)
-    for _, line in ipairs (lines) do
-        table.insert (self.lines, { author = event.author, textList = line })
+
+    for _, lineText in ipairs (lines) do
+        local line = {author = event.author, textList = lineText}
+        table.insert (self.lines, line)
+        table.insert (linesAdded, line)
     end
+
+    while #self.lines > self.chatLinesToDraw do
+        table.remove (self.lines, 1)
+    end    
 
     if self.autoScroll then
         self.firstLineToDraw = #self.lines - self.chatLinesToDraw + 1
@@ -177,7 +180,7 @@ local function onChatMessageReceived (event)
     end
 
     -- create the ticker lines
-    for _, line in ipairs (self.lines) do
+    for _, line in ipairs (linesAdded) do
         addNewTickerLine (self, line)
     end
 
