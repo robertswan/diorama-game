@@ -17,7 +17,8 @@ out vec2 ambient_uv;
 
 void main()
 {
-    gl_Position = mvp_matrix * vec4 (vertex_position, 1.0f);
+    gl_Position = mvp_matrix * vec4 (vertex_position, 1.0);
+    gl_Position.w += 0.0001;
 
     final_uv = vertex_uv;
 
@@ -28,8 +29,8 @@ void main()
 
     // ambient
     final_rgba = final_rgba + ambient_color;
-    final_rgba.a = 1.0f;
+    final_rgba.a = 1.0;
 
     ambient_uv.x = time_float;
-    ambient_uv.y = 0.5f;
+    ambient_uv.y = 0.5;
 }
