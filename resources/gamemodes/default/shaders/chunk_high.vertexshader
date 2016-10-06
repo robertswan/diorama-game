@@ -1,6 +1,6 @@
 #version 330
 
-layout (location = 0) in vec3 vertex_position;
+layout (location = 0) in uvec3 vertex_position;
 layout (location = 1) in vec2 vertex_uv;
 layout (location = 2) in vec4 vertex_normal;
 
@@ -17,7 +17,19 @@ out vec2 ambient_uv;
 
 void main()
 {
-    gl_Position = mvp_matrix * vec4 (vertex_position, 1.0);
+    // vec4 vertex_position2 = vec4 (
+    //     float ((vertex_position.x >>  0u) & 0xffffu) / 16.0,
+    //     float ((vertex_position.x >> 16u) & 0xffffu) / 16.0,
+    //     float ((vertex_position.y >>  0u) & 0xffffu) / 16.0,
+    //     1.0);
+
+    vec4 vertex_position2 = vec4 (
+        float (vertex_position.x),// / 16.0,
+        float (vertex_position.y),// / 16.0,
+        float (vertex_position.z),// / 16.0,
+        1.0);
+
+    gl_Position = mvp_matrix * vertex_position2;
     gl_Position.w += 0.0001;
 
     final_uv = vertex_uv;
