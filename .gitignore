@@ -1,6 +1,7 @@
 # Executables
 *.exe
-*.txt
+out.txt
+diff.txt
 logs
 saves
 profiles
