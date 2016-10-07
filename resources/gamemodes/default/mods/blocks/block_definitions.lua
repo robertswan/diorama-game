@@ -24,9 +24,7 @@ local blocks =
 {
     -- 0 = air
     -- 1
-    --{name = "grass",              tiles = {1, 2, 3}},
-    {name = "grass",                uvs = {3, 0, 0, 0, 1, 0}},
-    --{name = "mud",                  tiles = {3}},
+    {name = "grass",                uvs = {3, 0, 0, 0, 1, 0}}, --{name = "grass",              tiles = {1, 2, 3}},
     {name = "mud",                  uvs = {2, 0}},
     {name = "granite",              uvs = {1, 0}},
     {name = "obsidian",             uvs = {5, 2}},

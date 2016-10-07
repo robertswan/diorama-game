@@ -103,7 +103,7 @@ local blocks =
     {name = "artefact chest W",         uvs = {6, 9, 7, 9, 6, 9, 5, 9, 4, 9, 0, 9}, tag = "artifactChest"},
     {name = "artefact chest N",         uvs = {13, 8, 14, 8, 15, 8, 14, 8, 10, 8, 8, 8}}, -- 75
     {name = "artefact chest E",         uvs = {14, 8, 13, 8, 14, 8, 15, 8, 11, 8, 8, 8}},
-    {name = "artefact chest S",         uvs = {13, 8, 14, 8, 13, 8, 14, 8, 9, 8, 8, 8}},
+    {name = "artefact chest S",         uvs = {15, 8, 14, 8, 13, 8, 14, 8, 9, 8, 8, 8}},
     {name = "artefact chest W",         uvs = {14, 8, 15, 8, 14, 8, 13, 8, 12, 8, 8, 8}},
     {name = "grass jump",               uvs = {10, 0, 10, 5, 11, 0}, isJumpPad = true},
     
