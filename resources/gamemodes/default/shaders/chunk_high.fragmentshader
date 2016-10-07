@@ -1,0 +1,37 @@
+#version 330
+
+uniform sampler2D diffuse_map;
+uniform sampler2D ambient_map;
+
+in vec2 final_uv;
+in vec4 final_rgba;
+in vec2 ambient_uv;
+
+out vec4 color;
+
+void main()
+{
+    color = texture (diffuse_map, final_uv).rgba;
+
+    color = color * final_rgba;
+
+    vec3 fog_color = texture (ambient_map, ambient_uv).rgb;
+
+    float fog_coeff = gl_FragCoord.z;
+    fog_coeff *= fog_coeff;
+    fog_coeff *= fog_coeff;
+    fog_coeff *= fog_coeff;
+    fog_coeff *= fog_coeff;
+    fog_coeff *= fog_coeff;
+    fog_coeff *= fog_coeff;
+    fog_coeff *= fog_coeff;
+    fog_coeff *= fog_coeff;
+    fog_coeff *= fog_coeff;
+    fog_coeff *= fog_coeff;
+    fog_coeff *= fog_coeff;
+    fog_coeff *= fog_coeff;
+    fog_coeff *= fog_coeff;    
+
+    color.rgb = mix (color.rgb, fog_color, fog_coeff);
+    //color.rgb = mix (color.rgb, vec3 (1, 1, 1), 0.5);
+}

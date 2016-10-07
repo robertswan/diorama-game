@@ -91,20 +91,20 @@ local blocks =
     {name = "rock pole",                uvs = {10, 6, 1, 0, 1, 0}, shape = "pole"},
     {name = "DO NOT USE (empty)",       uvs = {15, 15, 5, 8, 15, 15}},
     {name = "ship teleporter",          uvs = {4, 1, 8, 6, 4, 1}, tag = "teleporter"},
-    {name = "item chest N",             uvs = {2, 8, 3, 8, 4, 8, 3, 8, 0, 8, 1, 8}, tag = "itemChest"}, -- 67
-    {name = "item chest E",             uvs = {3, 8, 2, 8, 3, 8, 4, 8, 0, 8, 1, 8}, tag = "itemChest"},
-    {name = "item chest S",             uvs = {4, 8, 3, 8, 2, 8, 3, 8, 0, 8, 1, 8}, tag = "itemChest"},
+    {name = "item chest N",             uvs = {5, 8, 6, 8, 7, 8, 6, 8, 2, 8, 0, 8}, tag = "itemChest"}, -- 67
+    {name = "item chest E",             uvs = {6, 8, 5, 8, 6, 8, 7, 8, 3, 8, 0, 8}, tag = "itemChest"},
+    {name = "item chest S",             uvs = {7, 8, 6, 8, 5, 8, 6, 8, 1, 8, 0, 8}, tag = "itemChest"},
 
     -- 70
-    {name = "item chest W",             uvs = {3, 8, 4, 8, 3, 8, 2, 8, 0, 8, 1, 8}, tag = "itemChest"},
-    {name = "artefact chest N",         uvs = {2, 9, 3, 9, 4, 9, 3, 9, 0, 9, 1, 9}, tag = "artifactChest"}, -- 71
-    {name = "artefact chest E",         uvs = {3, 9, 2, 9, 3, 9, 4, 9, 0, 9, 1, 9}, tag = "artifactChest"},
-    {name = "artefact chest S",         uvs = {4, 9, 3, 9, 2, 9, 3, 9, 0, 9, 1, 9}, tag = "artifactChest"},
-    {name = "artefact chest W",         uvs = {3, 9, 4, 9, 3, 9, 2, 9, 0, 9, 1, 9}, tag = "artifactChest"},
-    {name = "empty chest N",            uvs = {7, 8, 8, 8, 9, 8, 8, 8, 5, 8, 6, 8}}, -- 75
-    {name = "empty chest E",            uvs = {8, 8, 7, 8, 8, 8, 9, 8, 5, 8, 6, 8}},
-    {name = "empty chest S",            uvs = {9, 8, 8, 8, 7, 8, 8, 8, 5, 8, 6, 8}},
-    {name = "empty chest W",            uvs = {8, 8, 9, 8, 8, 8, 7, 8, 5, 8, 6, 8}},
+    {name = "item chest W",             uvs = {6, 8, 7, 8, 6, 8, 5, 8, 4, 8, 0, 8}, tag = "itemChest"},
+    {name = "artefact chest N",         uvs = {5, 9, 6, 9, 7, 9, 6, 9, 2, 9, 0, 9}, tag = "artifactChest"}, -- 71
+    {name = "artefact chest E",         uvs = {6, 9, 5, 9, 6, 9, 7, 9, 3, 9, 0, 9}, tag = "artifactChest"},
+    {name = "artefact chest S",         uvs = {7, 9, 6, 9, 5, 9, 6, 9, 1, 9, 0, 9}, tag = "artifactChest"},
+    {name = "artefact chest W",         uvs = {6, 9, 7, 9, 6, 9, 5, 9, 4, 9, 0, 9}, tag = "artifactChest"},
+    {name = "artefact chest N",         uvs = {13, 8, 14, 8, 15, 8, 14, 8, 10, 8, 8, 8}}, -- 75
+    {name = "artefact chest E",         uvs = {14, 8, 13, 8, 14, 8, 15, 8, 11, 8, 8, 8}},
+    {name = "artefact chest S",         uvs = {15, 8, 14, 8, 13, 8, 14, 8, 9, 8, 8, 8}},
+    {name = "artefact chest W",         uvs = {14, 8, 15, 8, 14, 8, 13, 8, 12, 8, 8, 8}},
     {name = "grass jump",               uvs = {10, 0, 10, 5, 11, 0}, isJumpPad = true},
     
     -- 80
