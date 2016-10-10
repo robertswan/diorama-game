@@ -20,9 +20,9 @@ out vec2 ambient_uv;
 void main()
 {
     vec4 vertex_position2 = vec4 (
-        float (vertex_position.x) / 16 + instance_offset.x,
-        float (vertex_position.y) / 16 + instance_offset.y,
-        float (vertex_position.z) / 16 + instance_offset.z,
+        (float (vertex_position.x) / 16) + instance_offset.x,
+        (float (vertex_position.y) / 16) + instance_offset.y,
+        (float (vertex_position.z) / 16) + instance_offset.z,
         1.0);
 
     gl_Position = mvp_matrix * vertex_position2;
