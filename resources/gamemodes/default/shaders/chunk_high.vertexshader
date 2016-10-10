@@ -13,6 +13,14 @@ uniform vec4 light_direction;
 uniform vec4 directional_color;
 uniform vec4 ambient_color;
 
+// https://www.opengl.org/wiki/Uniform_(GLSL)
+// struct RotationTransform
+// {
+//     u32 xyz_ [3];
+// };
+
+// layout (location = 4) uniform RotationTransform rotation_transforms [6];
+
 out vec2 final_uv;
 out vec4 final_rgba;
 out vec2 ambient_uv;
