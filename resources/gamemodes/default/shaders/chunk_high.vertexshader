@@ -2,7 +2,9 @@
 
 layout (location = 0) in ivec3 vertex_position;
 layout (location = 1) in vec2 vertex_uv;
-layout (location = 2) in vec4 vertex_normal;
+layout (location = 2) in vec3 vertex_normal;
+
+layout (location = 3) in uint instance_offset;
 
 uniform mat4 mvp_matrix;
 uniform float time_float;
@@ -11,6 +13,8 @@ uniform vec4 light_direction;
 uniform vec4 directional_color;
 uniform vec4 ambient_color;
 
+uniform sampler2D rotation_transform_map;
+
 out vec2 final_uv;
 out vec4 final_rgba;
 out vec2 ambient_uv;
@@ -18,10 +22,14 @@ out vec2 ambient_uv;
 void main()
 {
     vec4 vertex_position2 = vec4 (
-        float (vertex_position.x) / 16,
-        float (vertex_position.y) / 16,
-        float (vertex_position.z) / 16,
+        (float (vertex_position.x) / 16.0) + float((instance_offset >> 0) & 127u) - 32.0,
+        (float (vertex_position.y) / 16.0) + float((instance_offset >> 7) & 127u) - 32.0,
+        (float (vertex_position.z) / 16.0) + float((instance_offset >> 14) & 127u) - 32.0,
         1.0);
+
+    // need to read the rotation index from the incoming vertex stream (so this means we should probably change the vetrex format first!)
+    // use the rotation idx to look up into a texture
+
 
     gl_Position = mvp_matrix * vertex_position2;
     gl_Position.w -= 0.00001;
@@ -29,7 +37,7 @@ void main()
     final_uv = vertex_uv;
 
     // directional light
-    float strength = clamp (dot (vertex_normal, light_direction), 0, 1);
+    float strength = clamp (dot (vec4 (vertex_normal, 0.0), light_direction), 0, 1);
 
     final_rgba = directional_color * strength;
 
