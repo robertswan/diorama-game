@@ -22,9 +22,9 @@ out vec2 ambient_uv;
 void main()
 {
     vec4 vertex_position2 = vec4 (
-        (float (vertex_position.x) / 16) + float((instance_offset >> 0) & 127u) - 32.0,
-        (float (vertex_position.y) / 16) + float((instance_offset >> 7) & 127u) - 32.0,
-        (float (vertex_position.z) / 16) + float((instance_offset >> 14) & 127u) - 32.0,
+        (float (vertex_position.x) / 16.0) + float((instance_offset >> 0) & 127u) - 32.0,
+        (float (vertex_position.y) / 16.0) + float((instance_offset >> 7) & 127u) - 32.0,
+        (float (vertex_position.z) / 16.0) + float((instance_offset >> 14) & 127u) - 32.0,
         1.0);
 
     // need to read the rotation index from the incoming vertex stream (so this means we should probably change the vetrex format first!)
