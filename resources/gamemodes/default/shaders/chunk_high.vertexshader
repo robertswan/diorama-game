@@ -13,6 +13,10 @@ uniform vec4 light_direction;
 uniform vec4 directional_color;
 uniform vec4 ambient_color;
 
+// uniform float begin_blend_in_distance;
+// uniform float end_blend_in_distance;
+// uniform vec3 camera_xyz;
+
 uniform mat4 transforms [6];
 
 out vec2 final_uv;
@@ -21,33 +25,35 @@ out vec2 ambient_uv;
 
 void main()
 {
-    uint rotation_idx = (instance >> 21) & 7u;
-    vec4 vertex_position2 = transforms [rotation_idx] * vec4 (vertex_position, 1.0);
+    vec3 instance_translation = vec3 (
+            float((instance >> 0u) & 127u) - 32.0, 
+            float((instance >> 7u) & 127u) - 32.0, 
+            float((instance >> 14u) & 127u) - 32.0);
 
-    vec4 vertex_position3 = vec4 (
-        (float (vertex_position2.x) / 16.0) + float((instance >> 0) & 127u) - 32.0,
-        (float (vertex_position2.y) / 16.0) + float((instance >> 7) & 127u) - 32.0,
-        (float (vertex_position2.z) / 16.0) + float((instance >> 14) & 127u) - 32.0,
-        1.0);
+    uint transform_idx = (instance >> 21) & 7u;
+    mat3 rotation = mat3 (transforms [transform_idx]);
+    vec3 translation = transforms [transform_idx][3].xyz;
 
-    vec3 normal_post_transform = mat3 (transforms [rotation_idx]) * vertex_normal;
+    // blending scale
+    // float distance_to_camera = length (instance_translation - camera_xyz);
+    // float blend_range = (begin_blend_in_distance - begin_blend_in_distance);
+    // float blend_scale = (clamp (distance_to_camera, end_blend_in_distance, begin_blend_in_distance) - end_blend_in_distance) / blend_range;
 
-    // need to read the rotation index from the incoming vertex stream (so this means we should probably change the vetrex format first!)
-    // use the rotation idx to look up into a texture
-
-    // the rotation needs rotation and translation. am i going to have to upload a 4x4 for each rotation?
-    // should i be worried at that being many lookups from the texture?
-
-    gl_Position = mvp_matrix * vertex_position3;
-    //gl_Position = mvp_matrix * vertex_position2;
+    // position
+    vec3 vertex_position2 = rotation * vertex_position + translation;
+    vec3 vertex_position3 = (vertex_position2 / 16.0) + instance_translation;
+    gl_Position = mvp_matrix * vec4 (vertex_position3, 1.0);
     gl_Position.w -= 0.00001;
 
+    // normal transform
+    vec3 normal_post_transform = rotation * vertex_normal;
+
+    // uvs
     final_uv = vertex_uv;
 
     // directional light
-    float strength = clamp (dot (vec4 (normal_post_transform, 0.0), light_direction), 0, 1);
-
-    final_rgba = directional_color * strength;
+    float light_strength = clamp (dot (vec4 (normal_post_transform, 0.0), light_direction), 0, 1);
+    final_rgba = directional_color * light_strength;
 
     // ambient
     final_rgba = final_rgba + ambient_color;
