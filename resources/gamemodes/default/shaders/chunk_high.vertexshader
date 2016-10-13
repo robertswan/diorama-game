@@ -35,7 +35,7 @@ void main()
     vec3 translation = transforms [transform_idx][3].xyz;
 
     // blending scale
-    float distance_to_camera = length (instance_translation - camera_xyz);
+    float distance_to_camera = length (instance_translation + vec3 (0.5, 0.5, 0.5) - camera_xyz);
     float blend_range = (begin_blend_in_distance - end_blend_in_distance);
     float blend_scale = 1.0 - (clamp (distance_to_camera, end_blend_in_distance, begin_blend_in_distance) - end_blend_in_distance) / blend_range;
 
