@@ -13,9 +13,9 @@ uniform vec4 light_direction;
 uniform vec4 directional_color;
 uniform vec4 ambient_color;
 
-// uniform float begin_blend_in_distance;
-// uniform float end_blend_in_distance;
-// uniform vec3 camera_xyz;
+uniform float begin_blend_in_distance;
+uniform float end_blend_in_distance;
+uniform vec3 camera_xyz;
 
 uniform mat4 transforms [6];
 
@@ -35,12 +35,14 @@ void main()
     vec3 translation = transforms [transform_idx][3].xyz;
 
     // blending scale
-    // float distance_to_camera = length (instance_translation - camera_xyz);
-    // float blend_range = (begin_blend_in_distance - begin_blend_in_distance);
-    // float blend_scale = (clamp (distance_to_camera, end_blend_in_distance, begin_blend_in_distance) - end_blend_in_distance) / blend_range;
+    float distance_to_camera = length (instance_translation - camera_xyz);
+    float blend_range = (begin_blend_in_distance - end_blend_in_distance);
+    float blend_scale = 1.0 - (clamp (distance_to_camera, end_blend_in_distance, begin_blend_in_distance) - end_blend_in_distance) / blend_range;
 
     // position
-    vec3 vertex_position2 = rotation * vertex_position + translation;
+    vec3 vertex_position1 = vertex_position;
+    vertex_position1.y *= blend_scale; 
+    vec3 vertex_position2 = rotation * vertex_position1 + translation;
     vec3 vertex_position3 = (vertex_position2 / 16.0) + instance_translation;
     gl_Position = mvp_matrix * vec4 (vertex_position3, 1.0);
     gl_Position.w -= 0.00001;
@@ -50,6 +52,8 @@ void main()
 
     // uvs
     final_uv = vertex_uv;
+
+    //final_rgba = vec4 (blend_scale, blend_scale, blend_scale, 1.0);
 
     // directional light
     float light_strength = clamp (dot (vec4 (normal_post_transform, 0.0), light_direction), 0, 1);
