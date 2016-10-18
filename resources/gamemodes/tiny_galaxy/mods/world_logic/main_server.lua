@@ -8,7 +8,7 @@ local instance =
     timeOfDay = 0,
     currentWorldIdx = nil,
 
-    initialJumpSpeed = 15.0, -- 10.0,
+    initialJumpSpeed = 10.0,
     itemsAvailable = 
     {
         {id = "smallAxe",               description = "Small Axe"},
@@ -25,13 +25,13 @@ local instance =
 
     inventory = 
     {
-        smallAxe = true, 
-        iceShield = true,
-        belt = true,
-        fireShield = true,
-        teleporter = true,
-        bean = true,
-        bigAxe = true,
+        -- smallAxe = true, 
+        -- iceShield = true,
+        -- belt = true,
+        -- fireShield = true,
+        -- teleporter = true,
+        -- bean = true,
+        -- bigAxe = true,
     },
     artifactsCollectedCount = 0,
     regularItemReach = 2.1,
