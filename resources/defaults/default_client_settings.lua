@@ -21,7 +21,6 @@ local clientSettings =
     {
         raymarchSmoothing = false,
         raymarchSmoothingWeight = 0.5,
-        useHighDetailMeshes = false,
     },
 }
 

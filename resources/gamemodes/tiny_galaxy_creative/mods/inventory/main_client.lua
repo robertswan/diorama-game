@@ -320,6 +320,8 @@ local function onLoad ()
     dio.events.addListener (types.KEY_CLICKED, onKeyClicked)
     dio.events.addListener (types.CHAT_MESSAGE_PRE_SENT, onChatMessagePreSent)
 
+    dio.resources.loadExtrudedTexture ("CHUNKS_EXTRUDED",    "textures/chunks_extruded_00.png")
+
     setInventoryItem (instance.currentBlockId)
 
 end
@@ -342,7 +344,10 @@ local modSettings =
     callbacks = 
     {
         onLoad = onLoad,
-        onUnload = function () dio.resources.destroyTexture ("CROSSHAIR") end,
+        onUnload = function () 
+            dio.resources.destroyTexture ("CROSSHAIR") 
+            dio.resources.destroyExtrudedTexture ("CHUNKS_EXTRUDED")
+        end,
     },    
 }
 

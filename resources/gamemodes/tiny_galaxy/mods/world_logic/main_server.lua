@@ -34,7 +34,7 @@ local instance =
         -- bigAxe = true,
     },
     artifactsCollectedCount = 0,
-    regularItemReach = 1.9,
+    regularItemReach = 2.1,
 
     shipXyz = {-32, -8, 88},
     
