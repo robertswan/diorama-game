@@ -49,7 +49,7 @@ local function onServerEventReceived (event)
             },
         }
 
-        dio.entities.createParticleEmitter (data)
+        --dio.entities.createParticleEmitter (data)
 
         event.cancel = true
     end
