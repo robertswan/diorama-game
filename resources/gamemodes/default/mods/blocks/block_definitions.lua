@@ -2,29 +2,56 @@
 -- TODO turn this into an enum
 local modes =
 {
-    repeat1x1 = 0,
-    repeat2x2 = 1,
+    repeat1x1 = 1,
+    autotile4 = 2,
 }
 
---------------------------------------------------
+---------------------------------------------------
 local tiles =
 {
-    {mode = modes.repeat1x1, uvs = {3, 0}},                         -- side of grass (1)
-    {mode = modes.repeat2x2, uvs = {7, 12, 8, 12, 7, 13, 8, 13}},   -- grass (2)
-    {mode = modes.repeat1x1, uvs = {2, 0}},                         -- mud (2)
-}
+    -- {mode = modes.repeat1x1, uvs = {3, 0}},                         -- side of grass (1)
+    -- {mode = modes.repeat2x2, uvs = {7, 12, 8, 12, 7, 13, 8, 13}},   -- grass (2)
+    -- {mode = modes.repeat1x1, uvs = {2, 0}},                         -- mud (2)
+ }
 
 --------------------------------------------------
 local entities =
 {
     sign = {type = "SIGN", text = "Placeholder Text"}
 }
+
+-- --------------------------------------------------
+-- local grassTop2x2 =
+-- {
+--     mode = modes.repeat2x2, 
+--     uvs = {{7, 12}, {8, 12}, {7, 13}, {8, 13}},
+-- }
+
+--------------------------------------------------
+-- got to list 16 things... bit 1 = north, bit 2 = east, bit 3 = south, bit 4 = west, bit 5 = top, bit 6 = bottom
+local grassTopAutotile =
+{
+    mode = modes.autotile4,
+    uvs = {{0, 14}, {1, 14}, {2, 14}, {3, 14}, {4, 14}, {5, 14}, {6, 14}, {7, 14}, {8, 14}, {9, 14}, {10, 14}, {11, 14}, {12, 14}, {13, 14}, {14, 14}, {15, 14}},
+}
+
+-- --------------------------------------------------
+-- local new_block_definitions =
+-- {
+--     {name = "grass",                t = {3, 0}, b = {0, 0}, nesw = {1, 0}},
+--     {name = "mud",                  nesw = {2, 0}},
+
+--     {name = "grass",                t = grassTop2x2, b = {0, 0}, nesw = {1, 0}},
+--     {name = "grass",                t = grassTop, b = {0, 0}, nesw = {1, 0}},
+-- }
+
 --------------------------------------------------
 local blocks =
 {
     -- 0 = air
     -- 1
-    {name = "grass",                uvs = {3, 0, 0, 0, 1, 0}}, --{name = "grass",              tiles = {1, 2, 3}},
+    --{name = "grass",                uvs = {3, 0, 0, 0, 1, 0}}, --{name = "grass",              tiles = {1, 2, 3}},
+    {name = "grass",                uvs = grassTopAutotile}, --{name = "grass",              tiles = {1, 2, 3}},
     {name = "mud",                  uvs = {2, 0}},
     {name = "granite",              uvs = {1, 0}},
     {name = "obsidian",             uvs = {5, 2}},
