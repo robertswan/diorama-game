@@ -45,17 +45,7 @@ local function getBlockUV (block_id)
     local block = blocks [block_id]
 
     if block ~= nil then
-        if block.uvs ~= nil then
-          return block.uvs [1], block.uvs [2]
-
-        elseif block.tiles ~= nil then
-            local tile = tiles [block.tiles [1]]
-
-            if tile ~= nil then
-                return tile.uvs [1], tile.uvs [2]
-            end
-
-        end
+        return block.icon [1], block.icon [2]
     end
 
     return nil, nil

@@ -37,12 +37,7 @@ local function generateIconsFromNumbers ()
     local map = {}
 
     for idx, block in ipairs (BlockDefinitions.blocks) do
-        local uvs = block.uvs
-        if not uvs then
-            local tiles = BlockDefinitions.tiles [block.tiles [1]]
-            uvs = tiles.uvs
-        end
-        map [idx] = {uvs [1], uvs [2]}
+        map [idx] = block.icon
     end
 
     return map
