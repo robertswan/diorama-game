@@ -13,9 +13,14 @@ local function onCreateWorldClicked (menuItem, menu)
 
     local newFolder = menu.filename.value
 
-    if newFolder == nil or
+    local exists, reason = dio.file.isExistingWorldFolder (newFolder)
+    
+    if exists == nil then
+        menu.warningLabel.text = "ERROR: " .. reason
+
+    elseif newFolder == nil or
             newFolder == "" or
-            dio.file.isExistingWorldFolder (newFolder) then
+            exists == true then
 
         menu.warningLabel.text = "ERROR: Save folder already exists"
 

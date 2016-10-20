@@ -71,6 +71,7 @@
         - Eksitus
         - emytofast
         - Expatiator
+        - Fantyoon
         - FGArray
         - Fleabum
         - FlopCoat2
@@ -116,6 +117,7 @@
         - Nidaegwyn
         - NightlyArcade
         - nomadd917
+        - Normalement
         - OfficialEvilWalrus
         - Old_Man_Gibbon
         - oliz001 the Explorer

@@ -45,17 +45,7 @@ local function getBlockUV (block_id)
     local block = blocks [block_id]
 
     if block ~= nil then
-        if block.uvs ~= nil then
-          return block.uvs [1], block.uvs [2]
-
-        elseif block.tiles ~= nil then
-            local tile = tiles [block.tiles [1]]
-
-            if tile ~= nil then
-                return tile.uvs [1], tile.uvs [2]
-            end
-
-        end
+        return block.icon [1], block.icon [2]
     end
 
     return nil, nil
@@ -320,8 +310,6 @@ local function onLoad ()
     dio.events.addListener (types.KEY_CLICKED, onKeyClicked)
     dio.events.addListener (types.CHAT_MESSAGE_PRE_SENT, onChatMessagePreSent)
 
-    dio.resources.loadExtrudedTexture ("CHUNKS_EXTRUDED",    "textures/chunks_extruded_00.png")
-
     setInventoryItem (instance.currentBlockId)
 
 end
@@ -346,7 +334,6 @@ local modSettings =
         onLoad = onLoad,
         onUnload = function () 
             dio.resources.destroyTexture ("CROSSHAIR") 
-            dio.resources.destroyExtrudedTexture ("CHUNKS_EXTRUDED")
         end,
     },    
 }
