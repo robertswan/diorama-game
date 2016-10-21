@@ -212,10 +212,9 @@ end
 local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 
     local self = instance
+    local keyCodes = dio.inputs.keyCodes
 
     if self.isVisible then
-
-        local keyCodes = dio.inputs.keyCodes
 
         if keyCharacter then
 
@@ -281,6 +280,14 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
         end
 
         return true
+
+    elseif keyCode == keyCodes.KP_SUBTRACT then
+        
+        dio.drawing.disableDrawing ()
+
+    elseif keyCode == keyCodes.KP_ADD then
+
+        dio.drawing.enableDrawing ()
 
     elseif keyCode == self.chatAppearKeyCode then
 
