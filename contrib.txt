@@ -166,6 +166,7 @@
         - whiteland92
         - WizardNJ
         - xCosminPlays
+        - xpcoin
         - zeiSt
         - Zekronz
         - zlazeray
