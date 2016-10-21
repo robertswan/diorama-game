@@ -48,6 +48,7 @@
         - AutomateAllTheThings
         - Azenris
         - BartonLeo
+        - bd00
         - bowbow
         - braffolk
         - bvdscheMe (http://bravadogaming.com/staff)
@@ -166,6 +167,7 @@
         - whiteland92
         - WizardNJ
         - xCosminPlays
+        - xpcoin
         - zeiSt
         - Zekronz
         - zlazeray
