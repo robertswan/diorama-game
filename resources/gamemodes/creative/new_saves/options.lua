@@ -66,6 +66,15 @@ local options =
                 randomSeedAsString = "default_seed",
             },
         },
+        {
+            title = "Empty",
+            folder = "empty/",
+            options = 
+            {
+                title = "Random Seed",
+                randomSeedAsString = "default_seed",
+            },
+        },        
     }
 }
 
