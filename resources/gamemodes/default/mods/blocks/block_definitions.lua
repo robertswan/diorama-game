@@ -66,7 +66,7 @@ local blocks =
     {name = "leaf",                 icon = {4, 3},      faces = {neswtb = {4, 3}},                   isTransparent = false},
     {name = "glass",                icon = {1, 3},      faces = {neswtb = {1, 3}},                   isTransparent = true,    hidesMatching = true},
     {name = "lit pumpkin",          icon = {8, 7},      faces = {n = {8, 7}, esw = {6, 7}, tb = {6, 6}}},
-    {name = "melon",                icon = {9, 8},      faces = {t = {8, 8}, b = {9, 8}, nesw = {9, 8}}},
+    {name = "melon",                icon = {9, 8},      faces = {tb = {9, 8}, nesw = {8, 8}}},
     {name = "crafting table",       icon = {11, 2},     faces = {neswtb = {11, 2}}},
 
     -- 19
