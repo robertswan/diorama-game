@@ -53,13 +53,13 @@ local blocks =
     {name = "granite",              icon = {1, 0},      faces = {neswtb = {1, 0}}},
     {name = "obsidian",             icon = {5, 2},      faces = {neswtb = {5, 2}}},
     {name = "sand",                 icon = {2, 1},      faces = {neswtb = {2, 1}}},
-    {name = "snowy grass",          icon = {2, 0},      faces = {t = {4, 4}, b = {2, 4}, nesw = {2, 0}}},
+    {name = "snowy grass",          icon = {2, 0},      faces = {t = {2, 4}, b = {2, 0}, nesw = {4, 4}}},
     {name = "brick",                icon = {7, 0},      faces = {neswtb = {7, 0}}},
-    {name = "tnt",                  icon = {10, 0},     faces = {t = {8, 0}, b = {9, 0}, nesw = {10, 0}}},
+    {name = "tnt",                  icon = {10, 0},     faces = {t = {9, 0}, b = {10, 0}, nesw = {8, 0}}},
     {name = "pumpkin",              icon = {7, 7},      faces = {n = {7, 7}, esw = {6, 7}, tb = {6, 6}}},
 
     -- 10
-    {name = "jump pad",             icon = {13, 6},     faces = {t = {12, 6}, b = {11, 6}, nesw = {13, 6}},    isJumpPad = true},
+    {name = "jump pad",             icon = {13, 6},     faces = {t = {11, 6}, b = {13, 6}, nesw = {12, 6}},    isJumpPad = true},
     {name = "cobble",               icon = {0, 1},      faces = {neswtb = {0, 1}}},
     {name = "trunk",                icon = {5, 1},      faces = {tb = {5, 1}, nesw = {4, 1}}},
     {name = "wood",                 icon = {4, 0},      faces = {neswtb = {4, 0}}},
@@ -71,12 +71,12 @@ local blocks =
 
     -- 19
     {name = "gold",                 icon = {7, 1},      faces = {neswtb = {7, 1}}},
-    {name = "slab",                 icon = {5, 0},      faces = {t = {5, 0}, b = {6, 0}, nesw = {6, 0}}},
+    {name = "slab",                 icon = {5, 0},      faces = {tb = {6, 0}, nesw = {5, 0}}},
     {name = "big slab",             icon = {6, 0},      faces = {neswtb = {6, 0}}},
     {name = "gravel",               icon = {3, 1},      faces = {neswtb = {3, 1}}},
     {name = "bedrock",              icon = {1, 1},      faces = {neswtb = {1, 1}}},
     {name = "wood panel",           icon = {9, 1},      faces = {neswtb = {9, 1}}},
-    {name = "books",                icon = {4, 0},      faces = {t = {3, 2}, b = {4, 0}, nesw = {4, 0}}},
+    {name = "books",                icon = {4, 0},      faces = {tb = {4, 0}, nesw = {3, 2}}},
     {name = "mossy cobble",         icon = {4, 2},      faces = {neswtb = {4, 2}}},
     {name = "stone brick",          icon = {6, 3},      faces = {neswtb = {6, 3}}},
 
@@ -85,7 +85,7 @@ local blocks =
     {name = "herringbone",          icon = {10, 4},     faces = {neswtb = {10, 4}}},
     {name = "black wool",           icon = {1, 7},      faces = {neswtb = {1, 7}}},
     {name = "dark grey wool",       icon = {2, 7},      faces = {neswtb = {2, 7}}},
-    {name = "light grey wool",      icon = {1, 14},     faces = {neswtb = {1, 14}}},
+    {name = "light grey wool",      icon = {3, 13},     faces = {neswtb = {3, 13}}},
     {name = "white wool",           icon = {0, 4},      faces = {neswtb = {0, 4}}},
     {name = "dark cyan wool",       icon = {1, 13},     faces = {neswtb = {1, 13}}},
     {name = "brown wool",           icon = {1, 10},     faces = {neswtb = {1, 10}}},
@@ -116,9 +116,9 @@ local blocks =
     -- 55
     {name = "bush",                 icon = {7, 3},      faces = {neswtb = {7, 3}},           shape = "cross",    isSolid = false},
     {name = "stem",                 icon = {15, 6},     faces = {neswtb = {15, 6}},          shape = "cross",    isSolid = false},
-    {name = "cactus top",           icon = {6, 4},      faces = {t = {6, 4}, b = {5, 4}, nesw = {7, 4}}},
-    {name = "cactus body",          icon = {7, 4},      faces = {t = {6, 4}, b = {7, 4}, nesw = {7, 4}}},
-    {name = "gravity block",        icon = {13, 6},     faces = {t = {12, 6}, b = {10, 6}, nesw = {13, 6}}},
+    {name = "cactus top",           icon = {6, 4},      faces = {t = {5, 4}, b = {7, 4}, nesw = {6, 4}}},
+    {name = "cactus body",          icon = {7, 4},      faces = {tb = {7, 4}, nesw = {6, 4}}},
+    {name = "gravity block",        icon = {13, 6},     faces = {t = {10, 6}, b = {13, 6}, nesw = {12, 6}}},
     {name = "all grass",            icon = {0, 0},      faces = {neswtb = {0, 0}}},
     {name = "water",                icon = {14, 0},     faces = {neswtb = {14, 0}},         isLiquid = true},
     {name = "ice",                  icon = {3, 4},      faces = {neswtb = {3, 4}}},
