@@ -442,6 +442,23 @@ function blockCallbacks.artifactChest (event, connection)
 end
 
 --------------------------------------------------
+function blockCallbacks.specialChest (event, connection)
+
+    if event.distance <= instance.regularItemReach then
+
+        dio.network.sendChat (connection.connectionId, "SPECIAL", "Special item collected!")
+        event.sourceBlockId = event.destinationBlockId - 15
+
+        dio.network.sendEvent (event.connectionId, "tinyGalaxy.DIALOGS", "SPECIAL")
+
+        return false
+    end
+    
+    return true
+
+end
+
+--------------------------------------------------
 function blockCallbacks.smallAxe (event, connection) 
 
     if instance.inventory.smallAxe and event.distance <= instance.regularItemReach then
