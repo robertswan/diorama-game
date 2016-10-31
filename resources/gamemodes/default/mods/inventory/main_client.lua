@@ -306,7 +306,7 @@ local function onLoad ()
     dio.drawing.addRenderPassBefore (1, function () onEarlyRender (instance) end)
     dio.drawing.addRenderPassAfter (1, function () onLateRender (instance) end)
 
-    local types = dio.events.clientTypes
+    local types = dio.types.clientEvents
     dio.events.addListener (types.KEY_CLICKED, onKeyClicked)
     dio.events.addListener (types.CHAT_MESSAGE_PRE_SENT, onChatMessagePreSent)
 

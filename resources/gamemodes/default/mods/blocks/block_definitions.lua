@@ -1,10 +1,6 @@
 --------------------------------------------------
 -- TODO turn this into an enum
-local modes =
-{
-    repeat1x1 = 0,
-    autotile4 = 1,
-}
+local modes = dio.types.tileModes
 
 ---------------------------------------------------
 local tiles =
@@ -20,27 +16,38 @@ local entities =
     sign = {type = "SIGN", text = "Placeholder Text"}
 }
 
-
 --------------------------------------------------
 -- got to list 16 things... bit 1 = north, bit 2 = east, bit 3 = south, bit 4 = west, bit 5 = top, bit 6 = bottom
 
 --------------------------------------------------
-local grassTop2x2 =
+local grassRandom2 =
 {
-    mode = modes.repeat2x2, 
-    faces = {{7, 12}, {8, z12}, {7, 13}, {8, 13}},
+    mode = modes.RANDOM_8, 
+    uvs = {{0, 0}, {5, 13}, {4, 13}, {4, 13}, {4, 13}, {4, 13}, {4, 13}, {4, 13}},
 }
 
 local grassTop2x2 =
 {
-    mode = modes.random2x2, 
-    faces = {{7, 12}, {8, z12}, {7, 13}, {8, 13}},
+    mode = modes.REPEAT_2X2, 
+    uvs = {{7, 12}, {8, 12}, {7, 13}, {8, 13}},
+}
+
+local grassTop2x2 =
+{
+    mode = modes.RANDOM_2X2, 
+    uvs = {{7, 12}, {8, 12}, {7, 13}, {8, 13}},
 }
 
 local grassTopAutotile =
 {
-    mode = modes.autotile4,
+    mode = modes.AUTOTILE_4,
     uvs = {{0, 14}, {1, 14}, {2, 14}, {3, 14}, {4, 14}, {5, 14}, {6, 14}, {7, 14}, {8, 14}, {9, 14}, {10, 14}, {11, 14}, {12, 14}, {13, 14}, {14, 14}, {15, 14}},
+}
+
+local grassTopAutotile2 =
+{
+    mode = modes.AUTOTILE_8,
+    uvs = {{15, 7}, {14, 8}, {15, 8}, {14, 9}, {15, 9}},
 }
 
 --------------------------------------------------
@@ -48,7 +55,7 @@ local blocks =
 {
     -- 0 = air
     -- 1
-    {name = "grass",                icon = {3, 0},      faces = {t = grassTopAutotile, b = {2, 0}, nesw = {3, 0}}},
+    {name = "grass",                icon = {3, 0},      faces = {t = grassRandom2, b = {2, 0}, nesw = {3, 0}}},
     {name = "mud",                  icon = {2, 0},      faces = {neswtb = {2, 0}}},
     {name = "granite",              icon = {1, 0},      faces = {neswtb = {1, 0}}},
     {name = "obsidian",             icon = {5, 2},      faces = {neswtb = {5, 2}}},
@@ -63,7 +70,7 @@ local blocks =
     {name = "cobble",               icon = {0, 1},      faces = {neswtb = {0, 1}}},
     {name = "trunk",                icon = {5, 1},      faces = {tb = {5, 1}, nesw = {4, 1}}},
     {name = "wood",                 icon = {4, 0},      faces = {neswtb = {4, 0}}},
-    {name = "leaf",                 icon = {4, 3},      faces = {neswtb = {4, 3}},                   isTransparent = false},
+    {name = "leaf",                 icon = {4, 3},      faces = {neswtb = {mode = modes.RANDOM_2, uvs ={{4, 3}, {5, 3}}}},                   isTransparent = false},
     {name = "glass",                icon = {1, 3},      faces = {neswtb = {1, 3}},                   isTransparent = true,    hidesMatching = true},
     {name = "lit pumpkin",          icon = {8, 7},      faces = {n = {8, 7}, esw = {6, 7}, tb = {6, 6}}},
     {name = "melon",                icon = {9, 8},      faces = {tb = {9, 8}, nesw = {8, 8}}},

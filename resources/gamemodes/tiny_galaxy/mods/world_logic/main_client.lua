@@ -71,7 +71,7 @@ end
 --------------------------------------------------
 local function onLoad ()
 
-    local types = dio.events.clientTypes
+    local types = dio.types.clientEvents
     dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
     dio.events.addListener (types.SERVER_EVENT_RECEIVED, onServerEventReceived) 
 

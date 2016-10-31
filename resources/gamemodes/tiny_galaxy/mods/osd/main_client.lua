@@ -147,7 +147,7 @@ local function onLoad ()
     dio.drawing.addRenderPassBefore (1.0, function () onEarlyRender (instance) end)
 	dio.drawing.addRenderPassAfter (1.0, function () onLateRender (instance) end)
 
-    local types = dio.events.clientTypes
+    local types = dio.types.clientEvents
     dio.events.addListener (types.SERVER_EVENT_RECEIVED, onServerEventReceived)
 
 end
