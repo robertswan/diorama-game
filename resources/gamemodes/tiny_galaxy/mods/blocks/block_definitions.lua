@@ -110,10 +110,10 @@ local blocks =
     {name = "artefact chest E",         icon = {5, 9},     faces = expandAllFaces (6, 9, 5, 9, 6, 9, 7, 9, 3, 9, 0, 9), tag = "artifactChest"},
     {name = "artefact chest S",         icon = {5, 9},     faces = expandAllFaces (7, 9, 6, 9, 5, 9, 6, 9, 1, 9, 0, 9), tag = "artifactChest"},
     {name = "artefact chest W",         icon = {5, 9},     faces = expandAllFaces (6, 9, 7, 9, 6, 9, 5, 9, 4, 9, 0, 9), tag = "artifactChest"},
-    {name = "artefact chest N",         icon = {13, 8},    faces = expandAllFaces (13, 8, 14, 8, 15, 8, 14, 8, 10, 8, 8, 8)}, -- 75
-    {name = "artefact chest E",         icon = {13, 8},    faces = expandAllFaces (14, 8, 13, 8, 14, 8, 15, 8, 11, 8, 8, 8)},
-    {name = "artefact chest S",         icon = {13, 8},    faces = expandAllFaces (15, 8, 14, 8, 13, 8, 14, 8, 9, 8, 8, 8)},
-    {name = "artefact chest W",         icon = {13, 8},    faces = expandAllFaces (14, 8, 15, 8, 14, 8, 13, 8, 12, 8, 8, 8)},
+    {name = "collected chest N",        icon = {13, 8},    faces = expandAllFaces (13, 8, 14, 8, 15, 8, 14, 8, 10, 8, 8, 8)}, -- 75
+    {name = "collected chest E",        icon = {13, 8},    faces = expandAllFaces (14, 8, 13, 8, 14, 8, 15, 8, 11, 8, 8, 8)},
+    {name = "collected chest S",        icon = {13, 8},    faces = expandAllFaces (15, 8, 14, 8, 13, 8, 14, 8, 9, 8, 8, 8)},
+    {name = "collected chest W",        icon = {13, 8},    faces = expandAllFaces (14, 8, 15, 8, 14, 8, 13, 8, 12, 8, 8, 8)},
     {name = "grass jump",               icon = {10, 5},    faces = {nesw = {10, 0}, t = {10, 5}, b = {11, 0}}, isJumpPad = true},
     
     -- 80
@@ -128,6 +128,11 @@ local blocks =
     {name = "vector jump",              icon = {12, 6},    faces = {nesw = {2, 6}, t = {12, 6}, b = {1, 6}}, isJumpPad = true},
     {name = "vector teleport",          icon = {13, 6},    faces = {nesw = {2, 6}, t = {13, 6}, b = {1, 6}}, tag = "teleporter"},
 
+    -- 90
+    {name = "special chest N",          icon = {13, 9},    faces = expandAllFaces (13, 9, 14, 9, 15, 9, 14, 9, 10, 9, 8, 9), tag = "specialChest"},
+    {name = "special chest E",          icon = {13, 9},    faces = expandAllFaces (14, 9, 13, 9, 14, 9, 15, 9, 11, 9, 8, 9), tag = "specialChest"},
+    {name = "special chest S",          icon = {13, 9},    faces = expandAllFaces (15, 9, 14, 9, 13, 9, 14, 9, 9, 9, 8, 9), tag = "specialChest"},
+    {name = "special chest W",          icon = {13, 9},    faces = expandAllFaces (14, 9, 15, 9, 14, 9, 13, 9, 12, 9, 8, 9), tag = "specialChest"},
 }
 
 return {blocks = blocks, tiles = tiles, entities = entities}

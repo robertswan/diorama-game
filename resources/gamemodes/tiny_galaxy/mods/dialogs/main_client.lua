@@ -30,6 +30,8 @@ local messages =
     ARTIFACT_4 =        "You have found artifact 4 of 6! Remember - collect them all and be happy for! YMMV.",
     ARTIFACT_5 =        "You have found artifact 5 of 6! Remember - collect them all and be happy for! YMMV.",
     ARTIFACT_6 =        "You have found artifact 6 of 6! Get to the Tiny Artifact Howmeworld to win!",
+
+    SPECIAL =           "You have found a SPECIAL ITEM but it does nothing for now. Tough."
 }
 
 --------------------------------------------------
