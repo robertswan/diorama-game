@@ -1,18 +1,6 @@
 --------------------------------------------------
 -- TODO turn this into an enum
-local modes =
-{
-    repeat1x1 = 0,
-    autotile4 = 1,
-}
-
----------------------------------------------------
-local tiles =
-{
-    -- {mode = modes.repeat1x1, faces = {3, 0}},                         -- side of grass (1)
-    -- {mode = modes.repeat2x2, faces = {7, 12, 8, 12, 7, 13, 8, 13}},   -- grass (2)
-    -- {mode = modes.repeat1x1, faces = {2, 0}},                         -- mud (2)
- }
+local modes = dio.types.tileModes
 
 --------------------------------------------------
 local entities =
@@ -20,27 +8,29 @@ local entities =
     sign = {type = "SIGN", text = "Placeholder Text"}
 }
 
-
 --------------------------------------------------
--- got to list 16 things... bit 1 = north, bit 2 = east, bit 3 = south, bit 4 = west, bit 5 = top, bit 6 = bottom
-
---------------------------------------------------
-local grassTop2x2 =
+local grassRandom =
 {
-    mode = modes.repeat2x2, 
-    faces = {{7, 12}, {8, z12}, {7, 13}, {8, 13}},
-}
-
-local grassTop2x2 =
-{
-    mode = modes.random2x2, 
-    faces = {{7, 12}, {8, z12}, {7, 13}, {8, 13}},
+    mode = modes.RANDOM_4, 
+    uvs = {{0, 0}, {5, 13}, {4, 13}, {4, 13}},
 }
 
 local grassTopAutotile =
 {
-    mode = modes.autotile4,
-    uvs = {{0, 14}, {1, 14}, {2, 14}, {3, 14}, {4, 14}, {5, 14}, {6, 14}, {7, 14}, {8, 14}, {9, 14}, {10, 14}, {11, 14}, {12, 14}, {13, 14}, {14, 14}, {15, 14}},
+    mode = modes.AUTOTILE_4,
+    uvs = 
+    {
+        {0, 14}, {1, 14}, {2, 14}, {3, 14}, 
+        {4, 14}, {5, 14}, {6, 14}, {7, 14}, 
+        {8, 14}, {9, 14}, {10, 14}, {11, 14}, 
+        {12, 14}, {13, 14}, {14, 14}, grassRandom
+    },
+}
+
+local leafRandom =
+{
+    mode = modes.RANDOM_2, 
+    uvs ={{4, 3}, {5, 3}}
 }
 
 --------------------------------------------------
@@ -63,7 +53,7 @@ local blocks =
     {name = "cobble",               icon = {0, 1},      faces = {neswtb = {0, 1}}},
     {name = "trunk",                icon = {5, 1},      faces = {tb = {5, 1}, nesw = {4, 1}}},
     {name = "wood",                 icon = {4, 0},      faces = {neswtb = {4, 0}}},
-    {name = "leaf",                 icon = {4, 3},      faces = {neswtb = {4, 3}},                   isTransparent = false},
+    {name = "leaf",                 icon = {4, 3},      faces = {neswtb = leafRandom},                   isTransparent = false},
     {name = "glass",                icon = {1, 3},      faces = {neswtb = {1, 3}},                   isTransparent = true,    hidesMatching = true},
     {name = "lit pumpkin",          icon = {8, 7},      faces = {n = {8, 7}, esw = {6, 7}, tb = {6, 6}}},
     {name = "melon",                icon = {9, 8},      faces = {tb = {9, 8}, nesw = {8, 8}}},
@@ -140,4 +130,4 @@ local blocks =
     {name = "spawner",              icon = {1, 4},      faces = {neswtb = {1, 4}},           isTransparent = true},
 }
 
-return {blocks = blocks, tiles = tiles, entities = entities}
+return {blocks = blocks, entities = entities}

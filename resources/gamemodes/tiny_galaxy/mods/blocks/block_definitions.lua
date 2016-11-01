@@ -1,9 +1,4 @@
 --------------------------------------------------
-local tiles =
-{
-}
-
---------------------------------------------------
 local entities =
 {
 }
@@ -135,4 +130,4 @@ local blocks =
     {name = "special chest W",          icon = {13, 9},    faces = expandAllFaces (14, 9, 15, 9, 14, 9, 13, 9, 12, 9, 8, 9), tag = "specialChest"},
 }
 
-return {blocks = blocks, tiles = tiles, entities = entities}
+return {blocks = blocks, entities = entities}

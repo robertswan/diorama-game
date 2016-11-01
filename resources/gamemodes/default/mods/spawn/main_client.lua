@@ -146,7 +146,7 @@ local function onLoad ()
         myAccountId = nil,
     }
 
-    local types = dio.events.clientTypes
+    local types = dio.types.clientEvents
     dio.events.addListener (types.CHAT_MESSAGE_PRE_SENT, onChatMessagePreSent)
     dio.events.addListener (types.SERVER_EVENT_RECEIVED, onServerEventReceived)
     dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)

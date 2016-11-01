@@ -383,7 +383,7 @@ local function onLoad ()
 
     -- dio.players.setPlayerAction (player, actions.LEFT_CLICK, outcomes.DESTROY_BLOCK)
 
-    local types = dio.events.serverTypes
+    local types = dio.types.serverEvents
     dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
     dio.events.addListener (types.CLIENT_DISCONNECTED, onClientDisconnected)
     dio.events.addListener (types.ENTITY_PLACED, onEntityPlaced)

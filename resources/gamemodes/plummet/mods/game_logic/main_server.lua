@@ -555,7 +555,7 @@ end
 --------------------------------------------------
 local function onLoad ()
 
-    local types = dio.events.serverTypes
+    local types = dio.types.serverEvents
     dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
     dio.events.addListener (types.CLIENT_DISCONNECTED, onClientDisconnected)
     dio.events.addListener (types.ROOM_CREATED, onRoomCreated)

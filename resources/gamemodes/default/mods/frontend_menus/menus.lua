@@ -128,7 +128,7 @@ return function (all_menus, initial_menu_name)
 
     instance.renderToTexture = dio.drawing.createRenderToTexture (instance.w, instance.h)
 
-    local types = dio.events.clientTypes
+    local types = dio.types.clientEvents
     dio.events.addListener (types.KEY_CLICKED, function (keyCode, keyCharacter, keyModifier) return instance:onKeyClicked (keyCode, keyCharacter, keyModifier) end)
 
     Mixin.CopyTo (instance, c)

@@ -369,7 +369,7 @@ local function onLoad ()
     -- but do we want to reference count textures? ill go for yes!
     -- what does this mean though if the lua texture is unloaded while playing the game????
 
-    local types = dio.events.serverTypes
+    local types = dio.types.serverEvents
     dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
     dio.events.addListener (types.CLIENT_DISCONNECTED, onClientDisconnected)
     dio.events.addListener (types.ENTITY_PLACED, onEntityPlaced)
