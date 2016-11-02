@@ -12,25 +12,40 @@ local entities =
 local grassRandom =
 {
     mode = modes.RANDOM_4, 
-    uvs = {{0, 0}, {5, 13}, {4, 13}, {4, 13}},
+    uvs = {{4, 13}, {5, 13}, {6, 13}, {7, 13}},
 }
 
+--------------------------------------------------
+local function grass (x, y)
+    return
+    {
+        mode = modes.RANDOM_2,
+        uvs = {{x, y}, {x, y + 1}},
+    }
+end
+
+--------------------------------------------------
 local grassTopAutotile =
 {
     mode = modes.AUTOTILE_4,
     uvs = 
     {
-        {0, 14}, {1, 14}, {2, 14}, {3, 14}, 
-        {4, 14}, {5, 14}, {6, 14}, {7, 14}, 
-        {8, 14}, {9, 14}, {10, 14}, {11, 14}, 
-        {12, 14}, {13, 14}, {14, 14}, grassRandom
+        -- {0, 14}, {1, 14}, {2, 14}, {3, 14}, 
+        -- {4, 14}, {5, 14}, {6, 14}, {7, 14}, 
+        -- {8, 14}, {9, 14}, {10, 14}, {11, 14}, 
+        -- {12, 14}, {13, 14}, {14, 14}, grassRandom
+
+        grass (0, 14), grass (1, 14), grass (2, 14), grass (3, 14), 
+        grass (4, 14), grass (5, 14), grass (6, 14), grass (7, 14), 
+        grass (8, 14), grass (9, 14), grass (10, 14), grass (11, 14), 
+        grass (12, 14), grass (13, 14), grass (14, 14), grassRandom
     },
 }
 
 local leafRandom =
 {
-    mode = modes.RANDOM_2, 
-    uvs ={{4, 3}, {5, 3}}
+    mode = modes.RANDOM_4,
+    uvs ={{4, 3}, {5, 3}, {5, 3}, {8, 3}}
 }
 
 --------------------------------------------------
@@ -93,7 +108,7 @@ local blocks =
     {name = "dark green wool",      icon = {1, 9},      faces = {neswtb = {1, 9}}},
 
     -- 46
-    {name = "floating sign",        icon = {0, 15},     faces = {neswtb = {0, 15}},          entity = "sign"},
+    {name = "floating sign",        icon = {15, 13},    faces = {neswtb = {15, 13}},          entity = "sign"},
     {name = "grass",                icon = {7, 2},      faces = {neswtb = {7, 2}},           shape = "cross",    isSolid = false},
     {name = "red flower",           icon = {12, 0},     faces = {neswtb = {12, 0}},          shape = "cross",    isSolid = false},
     {name = "yellow flower",        icon = {13, 0},     faces = {neswtb = {13, 0}},          shape = "cross",    isSolid = false},
