@@ -42,10 +42,16 @@ local grassTopAutotile =
     },
 }
 
+local granite =
+{
+    mode = modes.RANDOM_4,
+    uvs ={{6, 10}, {7, 10}, {7, 10}, {8, 10}},
+}
+
 local leafRandom =
 {
     mode = modes.RANDOM_4,
-    uvs ={{4, 3}, {5, 3}, {5, 3}, {8, 3}}
+    uvs ={{4, 3}, {5, 3}, {5, 3}, {8, 3}},
 }
 
 --------------------------------------------------
@@ -55,7 +61,7 @@ local blocks =
     -- 1
     {name = "grass",                icon = {3, 0},      faces = {t = grassTopAutotile, b = {2, 0}, nesw = {3, 0}}},
     {name = "mud",                  icon = {2, 0},      faces = {neswtb = {2, 0}}},
-    {name = "granite",              icon = {1, 0},      faces = {neswtb = {1, 0}}},
+    {name = "granite",              icon = {1, 0},      faces = {neswtb = granite}},
     {name = "obsidian",             icon = {5, 2},      faces = {neswtb = {5, 2}}},
     {name = "sand",                 icon = {2, 1},      faces = {neswtb = {2, 1}}},
     {name = "snowy grass",          icon = {2, 0},      faces = {t = {2, 4}, b = {2, 0}, nesw = {4, 4}}},
