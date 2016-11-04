@@ -44,61 +44,49 @@ local grassTopAutotile =
 
 local granite =
 {
-    mode = modes.RANDOM_4,
+    mode = modes.RANDOM_16,
     uvs ={{6, 10}, {7, 10}, {7, 10}, {8, 10}},
 }
 
 local leafRandom =
 {
-    mode = modes.RANDOM_4,
+    mode = modes.RANDOM_16,
     uvs ={{4, 3}, {5, 3}, {5, 3}, {8, 3}},
 }
 
 local trunkRandomN =
 {
-    mode = modes.RANDOM_16,
+    mode = modes.RANDOM_256,
     uvs =
     {
-        {4, 1}, {8, 5}, {4, 1}, {4, 1},
-        {4, 1}, {4, 1}, {4, 1}, {4, 1},
-        {4, 1}, {4, 1}, {4, 1}, {4, 1},
-        {4, 1}, {4, 1}, {4, 1}, {4, 1},
+        {8, 5}, {4, 1}, 
     },
 }
 
 local trunkRandomE =
 {
-    mode = modes.RANDOM_16,
+    mode = modes.RANDOM_256,
     uvs =
     {
-        {4, 1}, {4, 1}, {4, 1}, {4, 1},
-        {4, 1}, {4, 1}, {4, 1}, {8, 5},
-        {4, 1}, {4, 1}, {4, 1}, {4, 1},
-        {4, 1}, {4, 1}, {4, 1}, {4, 1},
+        {4, 1}, {8, 5}, {4, 1}, 
     },
 }
 
 local trunkRandomS =
 {
-    mode = modes.RANDOM_16,
+    mode = modes.RANDOM_256,
     uvs =
     {
-        {4, 1}, {4, 1}, {4, 1}, {4, 1},
-        {4, 1}, {4, 1}, {4, 1}, {4, 1},
-        {8, 5}, {4, 1}, {4, 1}, {4, 1},
-        {4, 1}, {4, 1}, {4, 1}, {4, 1},
+        {4, 1}, {4, 1}, {8, 5}, {4, 1}, 
     },
 }
 
 local trunkRandomW =
 {
-    mode = modes.RANDOM_16,
+    mode = modes.RANDOM_256,
     uvs =
     {
-        {4, 1}, {4, 1}, {4, 1}, {4, 1},
-        {4, 1}, {4, 1}, {4, 1}, {4, 1},
-        {4, 1}, {8, 5}, {4, 1}, {4, 1},
-        {4, 1}, {4, 1}, {4, 1}, {4, 1},
+        {4, 1}, {4, 1}, {4, 1}, {8, 5}, {4, 1}, 
     },
 }
 

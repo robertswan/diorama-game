@@ -3,6 +3,18 @@ local entities =
 {
 }
 
+local grass =
+{
+    mode = dio.types.tileModes.RANDOM_4,
+    uvs = {{12, 2}, {13, 2}, {12, 3}, {13, 3}},
+}
+
+local concrete = 
+{
+    mode = dio.types.tileModes.REPEAT_2X2,
+    uvs = {{10, 2}, {11, 2}, {10, 3}, {11, 3}},
+}
+
 --------------------------------------------------
 local function expandAllFaces (a, b, c, d, e, f, g, h, i, j, k, l)
     local faces = 
@@ -21,7 +33,7 @@ local blocks =
     {name = "ship base",                icon = {3, 1},     faces = {neswtb = {3, 1}}},
     {name = "metal pillar",             icon = {6, 0},     faces = {neswtb = {6, 0}}, shape = "pole"},
     {name = "computer",                 icon = {2, 0},     faces = {newtb = {3, 0}, s = {2, 0}}, tag ="computer"},
-    {name = "grass",                    icon = {10, 0},    faces = {nesw = {10, 0}, t = {9, 0}, b ={11, 0}}},
+    {name = "grass",                    icon = {10, 0},    faces = {nesw = {10, 0}, t = grass, b ={11, 0}}},
     {name = "mud",                      icon = {11, 0},    faces = {neswtb = {11, 0}}},
     {name = "tree trunk big",           icon = {2, 1},     faces = {nesw = {1, 1}, tb = {2, 1}}, tag = "bigAxe"},
     {name = "tree trunk small",         icon = {5, 0},     faces = {nesw = {5, 0}, tb = {2, 1}}, shape = "pole", tag = "smallAxe"},
@@ -29,7 +41,7 @@ local blocks =
 
     -- 10    
     {name = "thin grass",               icon = {8, 0},     faces = {neswtb = {8, 0}}, shape = "cross", isSolid = false},
-    {name = "concrete",                 icon = {1, 0},     faces = {neswtb = {1, 0}}},
+    {name = "concrete",                 icon = {1, 0},     faces = {neswtb = concrete}},
     {name = "concrete breakable",       icon = {9, 3},     faces = {neswtb = {9, 3}}, tag = "belt"},
     {name = "vector tile",              icon = {1, 6},     faces = {neswtb = {1, 6}}},
     {name = "vector brick",             icon = {2, 6},     faces = {nesw = {2, 6}, tb = {1, 6}}},
