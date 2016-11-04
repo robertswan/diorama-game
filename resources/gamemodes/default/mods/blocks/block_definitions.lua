@@ -103,7 +103,7 @@ local blocks =
     {name = "snowy grass",          icon = {2, 0},      faces = {t = {2, 4}, b = {2, 0}, nesw = {4, 4}}},
     {name = "brick",                icon = {7, 0},      faces = {neswtb = {7, 0}}},
     {name = "tnt",                  icon = {10, 0},     faces = {t = {9, 0}, b = {10, 0}, nesw = {8, 0}}},
-    {name = "pumpkin",              icon = {7, 7},      faces = {n = {7, 7}, esw = {6, 7}, tb = {6, 6}}},
+    {name = "pumpkin",              icon = {7, 7},      faces = {n = {7, 7}, esw = {6, 7}, t = {6, 6}, b = {10, 8}}},
 
     -- 10
     {name = "jump pad",             icon = {13, 6},     faces = {t = {11, 6}, b = {13, 6}, nesw = {12, 6}},    isJumpPad = true},
@@ -112,7 +112,7 @@ local blocks =
     {name = "wood",                 icon = {4, 0},      faces = {neswtb = {4, 0}}},
     {name = "leaf",                 icon = {4, 3},      faces = {neswtb = leafRandom},                   isTransparent = false},
     {name = "glass",                icon = {1, 3},      faces = {neswtb = {1, 3}},                   isTransparent = true,    hidesMatching = true},
-    {name = "lit pumpkin",          icon = {8, 7},      faces = {n = {8, 7}, esw = {6, 7}, tb = {6, 6}}},
+    {name = "lit pumpkin",          icon = {8, 7},      faces = {n = {8, 7}, esw = {6, 7}, t = {6, 6}, b = {10, 8}}},
     {name = "melon",                icon = {9, 8},      faces = {tb = {9, 8}, nesw = {8, 8}}},
     {name = "crafting table",       icon = {11, 2},     faces = {neswtb = {11, 2}}},
 
@@ -185,6 +185,8 @@ local blocks =
     -- 73
     {name = "hellsand",             icon = {8, 6},      faces = {neswtb = {8, 6}}},
     {name = "spawner",              icon = {1, 4},      faces = {neswtb = {1, 4}},           isTransparent = true},
+    {name = "thin trunk",           icon = {4, 1},      faces = {tb = {5, 1}, nesw = {4, 1}},           shape = "pole"},
+    {name = "test model",           icon = {15, 12},    faces = {neswtb = {15, 12}}},
 }
 
 return {blocks = blocks, entities = entities}
