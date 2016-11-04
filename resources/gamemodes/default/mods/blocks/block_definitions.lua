@@ -42,10 +42,52 @@ local grassTopAutotile =
     },
 }
 
+local granite =
+{
+    mode = modes.RANDOM_16,
+    uvs ={{6, 10}, {7, 10}, {7, 10}, {8, 10}},
+}
+
 local leafRandom =
 {
-    mode = modes.RANDOM_4,
-    uvs ={{4, 3}, {5, 3}, {5, 3}, {8, 3}}
+    mode = modes.RANDOM_16,
+    uvs ={{4, 3}, {5, 3}, {5, 3}, {8, 3}},
+}
+
+local trunkRandomN =
+{
+    mode = modes.RANDOM_256,
+    uvs =
+    {
+        {8, 5}, {4, 1}, 
+    },
+}
+
+local trunkRandomE =
+{
+    mode = modes.RANDOM_256,
+    uvs =
+    {
+        {4, 1}, {8, 5}, {4, 1}, 
+    },
+}
+
+local trunkRandomS =
+{
+    mode = modes.RANDOM_256,
+    uvs =
+    {
+        {4, 1}, {4, 1}, {8, 5}, {4, 1}, 
+    },
+}
+
+local trunkRandomW =
+{
+    mode = modes.RANDOM_256,
+    uvs =
+    {
+        {4, 1}, {4, 1}, {4, 1}, {8, 5}, {4, 1}, 
+    },
 }
 
 --------------------------------------------------
@@ -55,7 +97,7 @@ local blocks =
     -- 1
     {name = "grass",                icon = {3, 0},      faces = {t = grassTopAutotile, b = {2, 0}, nesw = {3, 0}}},
     {name = "mud",                  icon = {2, 0},      faces = {neswtb = {2, 0}}},
-    {name = "granite",              icon = {1, 0},      faces = {neswtb = {1, 0}}},
+    {name = "granite",              icon = {1, 0},      faces = {neswtb = granite}},
     {name = "obsidian",             icon = {5, 2},      faces = {neswtb = {5, 2}}},
     {name = "sand",                 icon = {2, 1},      faces = {neswtb = {2, 1}}},
     {name = "snowy grass",          icon = {2, 0},      faces = {t = {2, 4}, b = {2, 0}, nesw = {4, 4}}},
@@ -66,7 +108,7 @@ local blocks =
     -- 10
     {name = "jump pad",             icon = {13, 6},     faces = {t = {11, 6}, b = {13, 6}, nesw = {12, 6}},    isJumpPad = true},
     {name = "cobble",               icon = {0, 1},      faces = {neswtb = {0, 1}}},
-    {name = "trunk",                icon = {5, 1},      faces = {tb = {5, 1}, nesw = {4, 1}}},
+    {name = "trunk",                icon = {5, 1},      faces = {tb = {5, 1}, n = trunkRandomN, e = trunkRandomE, s = trunkRandomS, w = trunkRandomW}},
     {name = "wood",                 icon = {4, 0},      faces = {neswtb = {4, 0}}},
     {name = "leaf",                 icon = {4, 3},      faces = {neswtb = leafRandom},                   isTransparent = false},
     {name = "glass",                icon = {1, 3},      faces = {neswtb = {1, 3}},                   isTransparent = true,    hidesMatching = true},

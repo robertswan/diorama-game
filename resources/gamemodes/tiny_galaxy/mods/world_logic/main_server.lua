@@ -25,13 +25,13 @@ local instance =
 
     inventory = 
     {
-        -- smallAxe = true, 
-        -- iceShield = true,
-        -- belt = true,
-        -- fireShield = true,
-        -- teleporter = true,
-        -- bean = true,
-        -- bigAxe = true,
+         -- smallAxe = true, 
+         -- iceShield = true,
+         -- belt = true,
+         -- fireShield = true,
+         -- teleporter = true,
+         -- bean = true,
+         -- bigAxe = true,
     },
     artifactsCollectedCount = 0,
     regularItemReach = 2.1,
