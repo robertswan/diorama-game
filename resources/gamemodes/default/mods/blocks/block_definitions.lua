@@ -186,7 +186,7 @@ local blocks =
     {name = "hellsand",             icon = {8, 6},      faces = {neswtb = {8, 6}}},
     {name = "spawner",              icon = {1, 4},      faces = {neswtb = {1, 4}},           isTransparent = true},
     {name = "thin trunk",           icon = {4, 1},      faces = {tb = {5, 1}, nesw = {4, 1}},           shape = "pole"},
-    {name = "test model",           icon = {15, 12},    faces = {neswtb = {15, 12}}},
+    {name = "test model",           icon = {15, 12},    model = {file = "/gamemodes/defaults/models/cube4.vox"}},
 }
 
 return {blocks = blocks, entities = entities}
