@@ -6,15 +6,29 @@ local models =
 {
     {
         id = "cube",
-        filename = "models/cube.vox"
+        filename = "models/cube.vox",
+        options =
+        {
+            scale = {1, 1, 1},
+        },
     },
     {
         id = "pole",      
-        filename = "models/pole.vox"
+        filename = "models/pole.vox",
+        options =
+        {
+            scale = {0.25, 1.0, 0.25},
+            translate = {0.375, 0, 0.375},
+        },
     },
     {
         id = "cross",
-        filename = "models/cross.vox"
+        filename = "models/cross.vox",
+        options =
+        {
+            scale = {0.25, 0.25, 0.25},
+            translate = {0.375, 0, 0.375},
+        },
     }
 }
 
