@@ -2,6 +2,22 @@
 -- TODO turn this into an enum
 local modes = dio.types.tileModes
 
+local models =
+{
+    {
+        id = "cube",
+        file = "/gamemodes/defaults/models/cube.vox"
+    },
+    {
+        id = "pole",      
+        file = "/gamemodes/defaults/models/pole.vox"
+    },
+    {
+        id = "cross",
+        file = "/gamemodes/defaults/models/cross.vox"
+    }
+}
+
 --------------------------------------------------
 local entities =
 {
@@ -150,7 +166,7 @@ local blocks =
     {name = "dark green wool",      icon = {1, 9},      faces = {neswtb = {1, 9}}},
 
     -- 46
-    {name = "floating sign",        icon = {15, 13},    faces = {neswtb = {15, 13}},          entity = "sign"},
+    {name = "floating sign",        icon = {15, 13},    faces = {neswtb = {15, 13}},         entity = "sign"},
     {name = "grass",                icon = {7, 2},      faces = {neswtb = {7, 2}},           shape = "cross",    isSolid = false},
     {name = "red flower",           icon = {12, 0},     faces = {neswtb = {12, 0}},          shape = "cross",    isSolid = false},
     {name = "yellow flower",        icon = {13, 0},     faces = {neswtb = {13, 0}},          shape = "cross",    isSolid = false},
@@ -186,7 +202,7 @@ local blocks =
     {name = "hellsand",             icon = {8, 6},      faces = {neswtb = {8, 6}}},
     {name = "spawner",              icon = {1, 4},      faces = {neswtb = {1, 4}},           isTransparent = true},
     {name = "thin trunk",           icon = {4, 1},      faces = {tb = {5, 1}, nesw = {4, 1}},           shape = "pole"},
-    {name = "test model",           icon = {15, 12},    model = {file = "/gamemodes/defaults/models/cube4.vox"}},
+    {name = "test model",           icon = {15, 12},    faces = {neswtb = {15, 12}}},
 }
 
-return {blocks = blocks, entities = entities}
+return {blocks = blocks, entities = entities, models = models}
