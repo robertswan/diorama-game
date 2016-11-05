@@ -6,15 +6,15 @@ local models =
 {
     {
         id = "cube",
-        file = "/gamemodes/defaults/models/cube.vox"
+        filename = "models/cube.vox"
     },
     {
         id = "pole",      
-        file = "/gamemodes/defaults/models/pole.vox"
+        filename = "models/pole.vox"
     },
     {
         id = "cross",
-        file = "/gamemodes/defaults/models/cross.vox"
+        filename = "models/cross.vox"
     }
 }
 

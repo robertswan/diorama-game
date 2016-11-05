@@ -34,6 +34,7 @@ local modSettings =
     permissionsRequired =
     {
         blocks = true,
+        resources = true,
     },
 
     callbacks = 
