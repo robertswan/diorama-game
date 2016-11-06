@@ -226,7 +226,7 @@ local blocks =
     {name = "spawner",              icon = {1, 4},      faces = {neswtb = {1, 4}},          isTransparent = true},
     {name = "thin trunk",           icon = {1, 0},      faces = {tb = {1, 0}, nesw = {1, 0}},           shape = "pole"},
     {name = "test model 1",         icon = {15, 12},    faces = {neswtb = {15, 12}},        shape = "test"},
-    {name = "test model 2",         icon = {4, 0},      faces = {neswtb = {4, 0}},          shape = "test"},
+    {name = "test model 2",         icon = {4, 0},      faces = {n = {2, 8}, e = {2, 9}, s = {2, 10}, w = {2, 11}, t = {2, 12}, b = {2, 12}},          shape = "test"},
 }
 
 return {blocks = blocks, entities = entities, models = models}
