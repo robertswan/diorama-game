@@ -9,7 +9,8 @@ local models =
         filename = "models/test.vox",
         options =
         {
-            scale = {0.125, 0.125, 0.125},
+            scale = {0.25, 0.25, 0.25},
+            --scale = {0.125, 0.125, 0.125},
         },
     }, 
     {
