@@ -9,7 +9,7 @@ local models =
         filename = "models/test.vox",
         options =
         {
-            scale = {0.25, 0.25, 0.25},
+            scale = {1 / 16, 1 / 16, 1 / 16},
             --scale = {0.125, 0.125, 0.125},
         },
     }, 
@@ -223,9 +223,10 @@ local blocks =
 
     -- 73
     {name = "hellsand",             icon = {8, 6},      faces = {neswtb = {8, 6}}},
-    {name = "spawner",              icon = {1, 4},      faces = {neswtb = {1, 4}},           isTransparent = true},
+    {name = "spawner",              icon = {1, 4},      faces = {neswtb = {1, 4}},          isTransparent = true},
     {name = "thin trunk",           icon = {1, 0},      faces = {tb = {1, 0}, nesw = {1, 0}},           shape = "pole"},
-    {name = "test model",           icon = {15, 12},    faces = {neswtb = {15, 12}},            shape = "test"},
+    {name = "test model 1",         icon = {15, 12},    faces = {neswtb = {15, 12}},        shape = "test"},
+    {name = "test model 2",         icon = {4, 0},      faces = {neswtb = {4, 0}},          shape = "test"},
 }
 
 return {blocks = blocks, entities = entities, models = models}
