@@ -5,6 +5,14 @@ local modes = dio.types.tileModes
 local models =
 {
     {
+        id = "test",
+        filename = "models/test.vox",
+        options =
+        {
+            scale = {0.125, 0.125, 0.125},
+        },
+    }, 
+    {
         id = "cube",
         filename = "models/cube.vox",
         options =
@@ -29,7 +37,7 @@ local models =
             scale = {0.25, 0.25, 0.25},
             translate = {0.375, 0, 0.375},
         },
-    }
+    },
 }
 
 --------------------------------------------------
@@ -215,8 +223,8 @@ local blocks =
     -- 73
     {name = "hellsand",             icon = {8, 6},      faces = {neswtb = {8, 6}}},
     {name = "spawner",              icon = {1, 4},      faces = {neswtb = {1, 4}},           isTransparent = true},
-    {name = "thin trunk",           icon = {4, 1},      faces = {tb = {5, 1}, nesw = {4, 1}},           shape = "pole"},
-    {name = "test model",           icon = {15, 12},    faces = {neswtb = {15, 12}}},
+    {name = "thin trunk",           icon = {1, 0},      faces = {tb = {1, 0}, nesw = {1, 0}},           shape = "pole"},
+    {name = "test model",           icon = {15, 12},    faces = {neswtb = {15, 12}},            shape = "test"},
 }
 
 return {blocks = blocks, entities = entities, models = models}

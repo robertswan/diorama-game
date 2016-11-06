@@ -59,6 +59,11 @@ void main()
     float light_strength = clamp (dot (vec4 (normal_post_transform, 0.0), light_direction), 0, 1);
     final_rgba = directional_color * light_strength;
 
+    float strength2 = clamp (dot (vec4 (-normal_post_transform, 0.0), light_direction), 0, 1);
+
+    final_rgba = final_rgba + vec4 (0.2, 0.2, 1.0, 1.0) * strength2;
+
+
     // ambient
     final_rgba = final_rgba + ambient_color;
     final_rgba.a = 1.0;
