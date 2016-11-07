@@ -1,18 +1,50 @@
 --------------------------------------------------
+local models =
+{
+    {
+        id = "cube",
+        filename = "models/cube.vox",
+    },
+    {
+        id = "pole",      
+        filename = "models/pole.vox",
+    },
+    {
+        id = "cross",
+        filename = "models/cross.vox",
+    },
+}
+
+--------------------------------------------------
 local entities =
 {
 }
 
+--------------------------------------------------
+local modes = dio.types.tileModes
+
 local grass =
 {
-    mode = dio.types.tileModes.RANDOM_4,
+    mode = modes.RANDOM_4,
     uvs = {{12, 2}, {13, 2}, {12, 3}, {13, 3}},
 }
 
 local concrete = 
 {
-    mode = dio.types.tileModes.REPEAT_2X2,
+    mode = modes.REPEAT_2X2,
     uvs = {{10, 2}, {11, 2}, {10, 3}, {11, 3}},
+}
+
+local leaves =
+{
+    mode = modes.AUTOTILE_4,
+    uvs = 
+    {
+        {0, 14}, {1, 14}, {2, 14}, {3, 14}, 
+        {4, 14}, {5, 14}, {6, 14}, {7, 14}, 
+        {8, 14}, {9, 14}, {10, 14}, {11, 14}, 
+        {12, 14}, {13, 14}, {14, 14}, {15, 14},
+    },
 }
 
 --------------------------------------------------
@@ -37,7 +69,7 @@ local blocks =
     {name = "mud",                      icon = {11, 0},    faces = {neswtb = {11, 0}}},
     {name = "tree trunk big",           icon = {2, 1},     faces = {nesw = {1, 1}, tb = {2, 1}}, tag = "bigAxe"},
     {name = "tree trunk small",         icon = {5, 0},     faces = {nesw = {5, 0}, tb = {2, 1}}, shape = "pole", tag = "smallAxe"},
-    {name = "leaves",                   icon = {7, 0},     faces = {neswtb = {7, 0}}},
+    {name = "leaves",                   icon = {7, 0},     faces = {neswtb = leaves}},
 
     -- 10    
     {name = "thin grass",               icon = {8, 0},     faces = {neswtb = {8, 0}}, shape = "cross", isSolid = false},
@@ -142,4 +174,4 @@ local blocks =
     {name = "special chest W",          icon = {13, 9},    faces = expandAllFaces (14, 9, 15, 9, 14, 9, 13, 9, 12, 9, 8, 9), tag = "specialChest"},
 }
 
-return {blocks = blocks, entities = entities}
+return {blocks = blocks, entities = entities, models = models}

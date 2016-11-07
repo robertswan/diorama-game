@@ -1,6 +1,29 @@
 --------------------------------------------------
--- TODO turn this into an enum
 local modes = dio.types.tileModes
+
+local models =
+{
+    {
+        id = "stairs",
+        filename = "models/stairs.vox",
+    }, 
+    {
+        id = "test",
+        filename = "models/test.vox",
+    }, 
+    {
+        id = "cube",
+        filename = "models/cube.vox",
+    },
+    {
+        id = "pole",      
+        filename = "models/pole.vox",
+    },
+    {
+        id = "cross",
+        filename = "models/cross.vox",
+    },
+}
 
 --------------------------------------------------
 local entities =
@@ -103,7 +126,7 @@ local blocks =
     {name = "snowy grass",          icon = {2, 0},      faces = {t = {2, 4}, b = {2, 0}, nesw = {4, 4}}},
     {name = "brick",                icon = {7, 0},      faces = {neswtb = {7, 0}}},
     {name = "tnt",                  icon = {10, 0},     faces = {t = {9, 0}, b = {10, 0}, nesw = {8, 0}}},
-    {name = "pumpkin",              icon = {7, 7},      faces = {n = {7, 7}, esw = {6, 7}, tb = {6, 6}}},
+    {name = "pumpkin",              icon = {7, 7},      faces = {n = {7, 7}, esw = {6, 7}, t = {6, 6}, b = {10, 8}}},
 
     -- 10
     {name = "jump pad",             icon = {13, 6},     faces = {t = {11, 6}, b = {13, 6}, nesw = {12, 6}},    isJumpPad = true},
@@ -112,7 +135,7 @@ local blocks =
     {name = "wood",                 icon = {4, 0},      faces = {neswtb = {4, 0}}},
     {name = "leaf",                 icon = {4, 3},      faces = {neswtb = leafRandom},                   isTransparent = false},
     {name = "glass",                icon = {1, 3},      faces = {neswtb = {1, 3}},                   isTransparent = true,    hidesMatching = true},
-    {name = "lit pumpkin",          icon = {8, 7},      faces = {n = {8, 7}, esw = {6, 7}, tb = {6, 6}}},
+    {name = "lit pumpkin",          icon = {8, 7},      faces = {n = {8, 7}, esw = {6, 7}, t = {6, 6}, b = {10, 8}}},
     {name = "melon",                icon = {9, 8},      faces = {tb = {9, 8}, nesw = {8, 8}}},
     {name = "crafting table",       icon = {11, 2},     faces = {neswtb = {11, 2}}},
 
@@ -150,7 +173,7 @@ local blocks =
     {name = "dark green wool",      icon = {1, 9},      faces = {neswtb = {1, 9}}},
 
     -- 46
-    {name = "floating sign",        icon = {15, 13},    faces = {neswtb = {15, 13}},          entity = "sign"},
+    {name = "floating sign",        icon = {15, 13},    faces = {neswtb = {15, 13}},         entity = "sign"},
     {name = "grass",                icon = {7, 2},      faces = {neswtb = {7, 2}},           shape = "cross",    isSolid = false},
     {name = "red flower",           icon = {12, 0},     faces = {neswtb = {12, 0}},          shape = "cross",    isSolid = false},
     {name = "yellow flower",        icon = {13, 0},     faces = {neswtb = {13, 0}},          shape = "cross",    isSolid = false},
@@ -184,7 +207,11 @@ local blocks =
 
     -- 73
     {name = "hellsand",             icon = {8, 6},      faces = {neswtb = {8, 6}}},
-    {name = "spawner",              icon = {1, 4},      faces = {neswtb = {1, 4}},           isTransparent = true},
+    {name = "spawner",              icon = {1, 4},      faces = {neswtb = {1, 4}},          isTransparent = true},
+    {name = "thin trunk",           icon = {1, 0},      faces = {tb = {1, 0}, nesw = {1, 0}},           shape = "pole"},
+    {name = "test model 1",         icon = {15, 12},    faces = {neswtb = {15, 12}},        shape = "test"},
+    {name = "test model 2",         icon = {4, 0},      faces = {n = {2, 8}, e = {2, 9}, s = {2, 10}, w = {2, 11}, t = {2, 12}, b = {2, 12}},          shape = "test"},
+    {name = "stairs wood",          icon = {1, 0},      faces = {neswtb = {1, 0}},          shape = "stairs"},
 }
 
-return {blocks = blocks, entities = entities}
+return {blocks = blocks, entities = entities, models = models}
