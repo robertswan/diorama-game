@@ -1,43 +1,27 @@
 --------------------------------------------------
--- TODO turn this into an enum
 local modes = dio.types.tileModes
 
 local models =
 {
     {
+        id = "stairs",
+        filename = "models/stairs.vox",
+    }, 
+    {
         id = "test",
         filename = "models/test.vox",
-        options =
-        {
-            scale = {1 / 16, 1 / 16, 1 / 16},
-            --scale = {0.125, 0.125, 0.125},
-        },
     }, 
     {
         id = "cube",
         filename = "models/cube.vox",
-        options =
-        {
-            scale = {1, 1, 1},
-        },
     },
     {
         id = "pole",      
         filename = "models/pole.vox",
-        options =
-        {
-            scale = {0.25, 1.0, 0.25},
-            translate = {0.375, 0, 0.375},
-        },
     },
     {
         id = "cross",
         filename = "models/cross.vox",
-        options =
-        {
-            scale = {0.25, 0.25, 0.25},
-            translate = {0.375, 0, 0.375},
-        },
     },
 }
 
@@ -227,6 +211,7 @@ local blocks =
     {name = "thin trunk",           icon = {1, 0},      faces = {tb = {1, 0}, nesw = {1, 0}},           shape = "pole"},
     {name = "test model 1",         icon = {15, 12},    faces = {neswtb = {15, 12}},        shape = "test"},
     {name = "test model 2",         icon = {4, 0},      faces = {n = {2, 8}, e = {2, 9}, s = {2, 10}, w = {2, 11}, t = {2, 12}, b = {2, 12}},          shape = "test"},
+    {name = "stairs wood",          icon = {1, 0},      faces = {neswtb = {1, 0}},          shape = "stairs"},
 }
 
 return {blocks = blocks, entities = entities, models = models}
