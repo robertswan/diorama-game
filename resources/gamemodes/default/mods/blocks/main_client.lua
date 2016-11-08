@@ -10,7 +10,6 @@ local function onLoad ()
     for _, definition in ipairs (definitions.blocks) do
         local definitionId = dio.blocks.createNewDefinitionId ()
         definition.definitionId = definitionId
-        definition.shape = definition.shape or "cube"
         dio.blocks.setDefinition (definition)
     end
 end
