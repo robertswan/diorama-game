@@ -1,18 +1,18 @@
 --------------------------------------------------
+local function makeModelEntry (model, options)
+    return
+    {
+        id = model,
+        filename = "models/" .. model .. ".vox",
+        options = options,
+    }
+end
+
 local models =
 {
-    {
-        id = "cube",
-        filename = "models/cube.vox",
-    },
-    {
-        id = "pole",      
-        filename = "models/pole.vox",
-    },
-    {
-        id = "cross",
-        filename = "models/cross.vox",
-    },
+    makeModelEntry ("cube"),
+    makeModelEntry ("grass"),
+    makeModelEntry ("pole"),
 }
 
 --------------------------------------------------
@@ -72,14 +72,14 @@ local blocks =
     {name = "leaves",                   icon = {7, 0},     textures = {neswtb = leaves}},
 
     -- 10    
-    {name = "thin grass",               icon = {8, 0},     textures = {neswtb = {8, 0}}, model = "cross", isSolid = false},
+    {name = "thin grass",               icon = {8, 0},     textures = {neswtb = {13, 0}}, model = "grass", isSolid = false},
     {name = "concrete",                 icon = {1, 0},     textures = {neswtb = concrete}},
     {name = "concrete breakable",       icon = {9, 3},     textures = {neswtb = {9, 3}}, tag = "belt"},
     {name = "vector tile",              icon = {1, 6},     textures = {neswtb = {1, 6}}},
     {name = "vector brick",             icon = {2, 6},     textures = {nesw = {2, 6}, tb = {1, 6}}},
     {name = "vector breakable brick",   icon = {3, 6},     textures = {neswtb = {3, 6}}, tag = "belt"},
     {name = "vector pole",              icon = {5, 6},     textures = {nesw = {5, 6}, tb = {14, 6}}, model = "pole"},
-    {name = "vector grass",             icon = {6, 6},     textures = {neswtb = {6, 6}}, model = "cross", isSolid = false},
+    {name = "vector grass",             icon = {6, 6},     textures = {neswtb = {6, 6}}, model = "grass", isSolid = false},
     {name = "vector glass",             icon = {4, 6},     textures = {neswtb = {4, 6}}, isTransparent = true},
     {name = "vector circle",            icon = {7, 6},     textures = {neswtb = {7, 6}}},
 
@@ -97,7 +97,7 @@ local blocks =
 
     -- 30
     {name = "sand column ridged",       icon = {2, 2},     textures = {neswtb = {2, 2}}},
-    {name = "cactus",                   icon = {9, 2},     textures = {neswtb = {9, 2}}, model = "cross", isSolid = false},
+    {name = "cactus",                   icon = {9, 2},     textures = {neswtb = {9, 2}}, model = "grass", isSolid = false},
     {name = "sand jump pad",            icon = {6, 2},     textures = {nesw = {0, 2}, t = {6, 2}, b = {0, 2}}, isJumpPad = true},
     {name = "sand teleporter",          icon = {7, 2},     textures = {nesw = {0, 2}, t = {7, 2}, b = {0, 2}}, tag = "teleporter"},
     {name = "sand pole",                icon = {8, 2},     textures = {nesw = {8, 2}, tb = {0, 2}}, model = "pole"},
@@ -109,7 +109,7 @@ local blocks =
 
     -- 40
     {name = "rot brick roots",          icon = {2, 4},     textures = {neswtb = {2, 4}}},
-    {name = "rot vines X",              icon = {4, 4},     textures = {neswtb = {4, 4}},        model = "cross", isSolid = false},
+    {name = "rot vines X",              icon = {4, 4},     textures = {neswtb = {4, 4}},        model = "grass", isSolid = false},
     {name = "rot vines []",             icon = {4, 4},     textures = {neswtb = {4, 4}}, isTransparent = true, isSolid = false},
     {name = "rot trunk",                icon = {12, 4},    textures = {neswtb = {12, 4}}, tag = "bigAxe"},
     {name = "rot trunk thin",           icon = {11, 4},    textures = {nesw = {11, 4}, tb = {12, 4}}, model = "pole", tag = "smallAxe"},

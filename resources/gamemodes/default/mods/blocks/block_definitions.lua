@@ -236,7 +236,7 @@ local blocks =
     -- 73
     {name = "hellsand",             icon = {8, 6},      textures = {neswtb = {8, 6}}},
     {name = "spawner",              icon = {1, 4},      textures = {neswtb = {1, 4}},       isTransparent = true},
-    {name = "stairs",               icon = {4, 0},      textures = {neswtb = {4, 0}},       model = "stairs", rotateY = true},
+    {name = "stairs",               icon = {4, 0},      textures = {neswtb = {4, 0}},       model = "stairs",   rotatable = true},
     {name = "wood fence",           icon = {1, 0},      models = fences ({1, 0})},
     {name = "stone fence",          icon = {0, 12},     models = fences ({0, 12})},
     {name = "black fence",          icon = {1, 1},      models = fences ({1, 1})},
