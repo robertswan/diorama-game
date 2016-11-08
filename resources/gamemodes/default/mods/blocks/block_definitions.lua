@@ -11,7 +11,6 @@ end
 local models =
 {
     makeModelEntry ("stairs"),
-    makeModelEntry ("test"),
     makeModelEntry ("cube"),
     makeModelEntry ("cross"),
     makeModelEntry ("pole"),
@@ -236,12 +235,9 @@ local blocks =
 
     -- 73
     {name = "hellsand",             icon = {8, 6},      textures = {neswtb = {8, 6}}},
-    {name = "spawner",              icon = {1, 4},      textures = {neswtb = {1, 4}},          isTransparent = true},
-    {name = "thin trunk",           icon = {4, 0},      textures = {tb = {1, 0}, nesw = {4, 0}},           model = "pole"},
-    {name = "test model 1",         icon = {15, 12},    textures = {neswtb = {15, 12}},        model = "test"},
-    {name = "test model 2",         icon = {4, 0},      textures = {n = {2, 8}, e = {2, 9}, s = {2, 10}, w = {2, 11}, t = {2, 12}, b = {2, 12}},          model = "test"},
-    {name = "stairs",               icon = {4, 0},      textures = {neswtb = {4, 0}},        model = "stairs"},
-    {name = "fence",                icon = {1, 0},      models = fences ({1, 0})},
+    {name = "spawner",              icon = {1, 4},      textures = {neswtb = {1, 4}},       isTransparent = true},
+    {name = "stairs",               icon = {4, 0},      textures = {neswtb = {4, 0}},       model = "stairs", rotateY = true},
+    {name = "wood fence",           icon = {1, 0},      models = fences ({1, 0})},
     {name = "stone fence",          icon = {0, 12},     models = fences ({0, 12})},
     {name = "black fence",          icon = {1, 1},      models = fences ({1, 1})},
 }
