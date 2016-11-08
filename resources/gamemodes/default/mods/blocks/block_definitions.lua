@@ -1,9 +1,10 @@
 --------------------------------------------------
-local function makeModelEntry (model)
+local function makeModelEntry (model, options)
     return
     {
         id = model,
         filename = "models/" .. model .. ".vox",
+        options = options,
     }
 end
 
@@ -14,9 +15,11 @@ local models =
     makeModelEntry ("cube"),
     makeModelEntry ("cross"),
     makeModelEntry ("pole"),
-    makeModelEntry ("pole_e"),
-    makeModelEntry ("pole_w"),
-    makeModelEntry ("pole_ew"),
+    makeModelEntry ("pole_n"),
+    makeModelEntry ("pole_ne"),
+    makeModelEntry ("pole_ns"),
+    makeModelEntry ("pole_nes"),
+    makeModelEntry ("pole_nesw"),
 }
 
 --------------------------------------------------
@@ -66,7 +69,7 @@ local granite =
 --------------------------------------------------
 local leafRandom =
 {
-    mode = modes.RANDOM_16,
+    mode = modes.RANDOM_8,
     uvs ={{4, 3}, {5, 3}, {5, 3}, {8, 3}},
 }
 
@@ -111,17 +114,33 @@ local trunkRandomW =
 }
 
 --------------------------------------------------
-local fenceModels =
-{
-    mode = dio.types.blockModes.AUTOTILE_EW,
-    models = 
-    {   
-        {model = "post",        textures = {neswtb = {1, 0}, isTransparent = false, hidesMatching = false}},
-        {model = "post_e",      textures = {neswtb = {1, 0}}},
-        {model = "post_w",      textures = {neswtb = {1, 0}}},
-        {model = "post_ew",     textures = {neswtb = {1, 0}}},
+local function fences (textures)
+    return 
+    {
+        mode = 1,--dio.types.blockModes.AUTOTILE_4,
+        models = 
+        {   
+            {model = "pole",        textures = {neswtb = textures}, isTransparent = true},
+            {model = "pole_n",      textures = {neswtb = textures}, isTransparent = true},
+            {model = "pole_n",      textures = {neswtb = textures}, isTransparent = true, rotateY = 3},
+            {model = "pole_ne",     textures = {neswtb = textures}, isTransparent = true},
+            {model = "pole_n",      textures = {neswtb = textures}, isTransparent = true, rotateY = 2},
+            {model = "pole_ns",     textures = {neswtb = textures}, isTransparent = true},
+            {model = "pole_ne",     textures = {neswtb = textures}, isTransparent = true, rotateY = 3},
+            {model = "pole_nes",    textures = {neswtb = textures}, isTransparent = true},
+
+            {model = "pole_n",      textures = {neswtb = textures}, isTransparent = true, rotateY = 1},
+            {model = "pole_ne",     textures = {neswtb = textures}, isTransparent = true, rotateY = 1},
+            {model = "pole_ns",     textures = {neswtb = textures}, isTransparent = true, rotateY = 1},
+            {model = "pole_nes",    textures = {neswtb = textures}, isTransparent = true, rotateY = 1},
+            {model = "pole_ne",     textures = {neswtb = textures}, isTransparent = true, rotateY = 2},
+            {model = "pole_nes",    textures = {neswtb = textures}, isTransparent = true, rotateY = 2},
+            {model = "pole_nes",    textures = {neswtb = textures}, isTransparent = true, rotateY = 3},
+            {model = "pole_nesw",   textures = {neswtb = textures}, isTransparent = true},
+        }
     }
-}
+
+end
 
 --------------------------------------------------
 local blocks =
@@ -143,7 +162,7 @@ local blocks =
     {name = "cobble",               icon = {0, 1},      textures = {neswtb = {0, 1}}},
     {name = "trunk",                icon = {5, 1},      textures = {tb = {5, 1}, n = trunkRandomN, e = trunkRandomE, s = trunkRandomS, w = trunkRandomW}},
     {name = "wood",                 icon = {4, 0},      textures = {neswtb = {4, 0}}},
-    {name = "leaf",                 icon = {4, 3},      textures = {neswtb = leafRandom},                   isTransparent = false},
+    {name = "leaf",                 icon = {4, 3},      textures = {neswtb = leafRandom}},
     {name = "glass",                icon = {1, 3},      textures = {neswtb = {1, 3}},                   isTransparent = true,    hidesMatching = true},
     {name = "lit pumpkin",          icon = {8, 7},      textures = {n = {8, 7}, esw = {6, 7}, t = {6, 6}, b = {10, 8}}},
     {name = "melon",                icon = {9, 8},      textures = {tb = {9, 8}, nesw = {8, 8}}},
@@ -222,7 +241,9 @@ local blocks =
     {name = "test model 1",         icon = {15, 12},    textures = {neswtb = {15, 12}},        model = "test"},
     {name = "test model 2",         icon = {4, 0},      textures = {n = {2, 8}, e = {2, 9}, s = {2, 10}, w = {2, 11}, t = {2, 12}, b = {2, 12}},          model = "test"},
     {name = "stairs",               icon = {4, 0},      textures = {neswtb = {4, 0}},        model = "stairs"},
-    {name = "fence",                icon = {1, 0},      models = fenceModels},
+    {name = "fence",                icon = {1, 0},      models = fences ({1, 0})},
+    {name = "stone fence",          icon = {0, 12},     models = fences ({0, 12})},
+    {name = "black fence",          icon = {1, 1},      models = fences ({1, 1})},
 }
 
 return {blocks = blocks, entities = entities, models = models}
