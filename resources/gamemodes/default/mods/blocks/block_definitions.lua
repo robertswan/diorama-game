@@ -110,18 +110,18 @@ local trunkRandomW =
     },
 }
 
--- --------------------------------------------------
--- local fenceModels =
--- {
---     mode = dio.types.blockModes.AUTOTILE_EW,
---     models = 
---     {   
---         {model = "post",        textures = {neswtb = {1, 0}, isTransparent = false, hidesMatching = false}},
---         {model = "post_e",      textures = {neswtb = {1, 0}}},
---         {model = "post_w",      textures = {neswtb = {1, 0}}},
---         {model = "post_ew",     textures = {neswtb = {1, 0}}},
---     }
--- }
+--------------------------------------------------
+local fenceModels =
+{
+    mode = dio.types.blockModes.AUTOTILE_EW,
+    models = 
+    {   
+        {model = "post",        textures = {neswtb = {1, 0}, isTransparent = false, hidesMatching = false}},
+        {model = "post_e",      textures = {neswtb = {1, 0}}},
+        {model = "post_w",      textures = {neswtb = {1, 0}}},
+        {model = "post_ew",     textures = {neswtb = {1, 0}}},
+    }
+}
 
 --------------------------------------------------
 local blocks =
@@ -184,18 +184,18 @@ local blocks =
 
     -- 46
     {name = "floating sign",        icon = {15, 13},    textures = {neswtb = {15, 13}},         entity = "sign"},
-    {name = "grass",                icon = {7, 2},      textures = {neswtb = {7, 2}},           shape = "cross",    isSolid = false},
-    {name = "red flower",           icon = {12, 0},     textures = {neswtb = {12, 0}},          shape = "cross",    isSolid = false},
-    {name = "yellow flower",        icon = {13, 0},     textures = {neswtb = {13, 0}},          shape = "cross",    isSolid = false},
-    {name = "red mushroom",         icon = {12, 1},     textures = {neswtb = {12, 1}},          shape = "cross",    isSolid = false},
-    {name = "brown mushroom",       icon = {13, 1},     textures = {neswtb = {13, 1}},          shape = "cross",    isSolid = false},
-    {name = "sapling",              icon = {15, 0},     textures = {neswtb = {15, 0}},          shape = "cross",    isSolid = false},
-    {name = "bamboo",               icon = {9, 4},      textures = {neswtb = {9, 4}},           shape = "cross",    isSolid = false},
-    {name = "wheat",                icon = {15, 5},     textures = {neswtb = {15, 5}},          shape = "cross",    isSolid = false},
+    {name = "grass",                icon = {7, 2},      textures = {neswtb = {7, 2}},           model = "cross",    isSolid = false},
+    {name = "red flower",           icon = {12, 0},     textures = {neswtb = {12, 0}},          model = "cross",    isSolid = false},
+    {name = "yellow flower",        icon = {13, 0},     textures = {neswtb = {13, 0}},          model = "cross",    isSolid = false},
+    {name = "red mushroom",         icon = {12, 1},     textures = {neswtb = {12, 1}},          model = "cross",    isSolid = false},
+    {name = "brown mushroom",       icon = {13, 1},     textures = {neswtb = {13, 1}},          model = "cross",    isSolid = false},
+    {name = "sapling",              icon = {15, 0},     textures = {neswtb = {15, 0}},          model = "cross",    isSolid = false},
+    {name = "bamboo",               icon = {9, 4},      textures = {neswtb = {9, 4}},           model = "cross",    isSolid = false},
+    {name = "wheat",                icon = {15, 5},     textures = {neswtb = {15, 5}},          model = "cross",    isSolid = false},
 
     -- 55
-    {name = "bush",                 icon = {7, 3},      textures = {neswtb = {7, 3}},           shape = "cross",    isSolid = false},
-    {name = "stem",                 icon = {15, 6},     textures = {neswtb = {15, 6}},          shape = "cross",    isSolid = false},
+    {name = "bush",                 icon = {7, 3},      textures = {neswtb = {7, 3}},           model = "cross",    isSolid = false},
+    {name = "stem",                 icon = {15, 6},     textures = {neswtb = {15, 6}},          model = "cross",    isSolid = false},
     {name = "cactus top",           icon = {6, 4},      textures = {t = {5, 4}, b = {7, 4}, nesw = {6, 4}}},
     {name = "cactus body",          icon = {7, 4},      textures = {tb = {7, 4}, nesw = {6, 4}}},
     {name = "gravity block",        icon = {13, 6},     textures = {t = {10, 6}, b = {13, 6}, nesw = {12, 6}}},
@@ -218,11 +218,11 @@ local blocks =
     -- 73
     {name = "hellsand",             icon = {8, 6},      textures = {neswtb = {8, 6}}},
     {name = "spawner",              icon = {1, 4},      textures = {neswtb = {1, 4}},          isTransparent = true},
-    {name = "thin trunk",           icon = {4, 0},      textures = {tb = {1, 0}, nesw = {4, 0}},           shape = "pole"},
-    {name = "test model 1",         icon = {15, 12},    textures = {neswtb = {15, 12}},        shape = "test"},
-    {name = "test model 2",         icon = {4, 0},      textures = {n = {2, 8}, e = {2, 9}, s = {2, 10}, w = {2, 11}, t = {2, 12}, b = {2, 12}},          shape = "test"},
-    {name = "stairs",               icon = {4, 0},      textures = {neswtb = {4, 0}},        shape = "stairs"},
-    --{name = "fence",                icon = {1, 0},      models = fenceModels}},
+    {name = "thin trunk",           icon = {4, 0},      textures = {tb = {1, 0}, nesw = {4, 0}},           model = "pole"},
+    {name = "test model 1",         icon = {15, 12},    textures = {neswtb = {15, 12}},        model = "test"},
+    {name = "test model 2",         icon = {4, 0},      textures = {n = {2, 8}, e = {2, 9}, s = {2, 10}, w = {2, 11}, t = {2, 12}, b = {2, 12}},          model = "test"},
+    {name = "stairs",               icon = {4, 0},      textures = {neswtb = {4, 0}},        model = "stairs"},
+    {name = "fence",                icon = {1, 0},      models = fenceModels},
 }
 
 return {blocks = blocks, entities = entities, models = models}
