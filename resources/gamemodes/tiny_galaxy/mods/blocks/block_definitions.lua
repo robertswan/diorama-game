@@ -10,10 +10,10 @@ end
 
 local models =
 {
+    makeModelEntry ("chest_item_closed", {isDetailedModel = true}),
     makeModelEntry ("cube"),
     makeModelEntry ("grass"),
     makeModelEntry ("pole"),
-    makeModelEntry ("chest_item_closed", {isDetailedModel = true}),
 }
 
 --------------------------------------------------
