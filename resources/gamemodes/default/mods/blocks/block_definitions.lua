@@ -10,6 +10,7 @@ end
 
 local models =
 {
+    makeModelEntry ("rob", {isDetailedModel = true}),
     makeModelEntry ("stairs"),
     makeModelEntry ("cube"),
     makeModelEntry ("cross"),
@@ -246,7 +247,8 @@ local blocks =
     {name = "wood fence",           icon = {1, 0},      models = fences ("pole", {1, 0})},
     {name = "stone fence",          icon = {0, 12},     models = fences ("pole", {0, 12})},
     {name = "black fence",          icon = {1, 1},      models = fences ("pole", {1, 1})},
-    {name = "wall",                 icon = {15, 1},      models = fences ("wall", {15, 1}, {15, 2})},
+    {name = "wall",                 icon = {15, 1},     models = fences ("wall", {15, 1}, {15, 2})},
+    {name = "head",                 icon = {15, 1},     model = "rob"},
 }
 
 return {blocks = blocks, entities = entities, models = models}
