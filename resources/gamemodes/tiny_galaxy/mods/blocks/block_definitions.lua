@@ -10,6 +10,8 @@ end
 
 local models =
 {
+    makeModelEntry ("chest_item_closed", {isDetailedModel = true}),
+    makeModelEntry ("breakable_vector", {isDetailedModel = true}),
     makeModelEntry ("cube"),
     makeModelEntry ("grass"),
     makeModelEntry ("pole"),
@@ -77,7 +79,8 @@ local blocks =
     {name = "concrete breakable",       icon = {9, 3},     textures = {neswtb = {9, 3}}, tag = "belt"},
     {name = "vector tile",              icon = {1, 6},     textures = {neswtb = {1, 6}}},
     {name = "vector brick",             icon = {2, 6},     textures = {nesw = {2, 6}, tb = {1, 6}}},
-    {name = "vector breakable brick",   icon = {3, 6},     textures = {neswtb = {3, 6}}, tag = "belt"},
+    -- {name = "vector breakable brick",   icon = {3, 6},     textures = {neswtb = {3, 6}}, tag = "belt"},
+    {name = "vector breakable brick",   icon = {3, 6},     model = "breakable_vector", tag = "belt"},
     {name = "vector pole",              icon = {5, 6},     textures = {nesw = {5, 6}, tb = {14, 6}}, model = "pole"},
     {name = "vector grass",             icon = {6, 6},     textures = {neswtb = {6, 6}}, model = "grass", isSolid = false},
     {name = "vector glass",             icon = {4, 6},     textures = {neswtb = {4, 6}}, isTransparent = true},
@@ -141,7 +144,8 @@ local blocks =
     {name = "ship teleporter",          icon = {8, 6},     textures = {nesw = {4, 1}, t = {8, 6}, b = {4, 1}}, tag = "teleporter"},
     {name = "item chest N",             icon = {5, 8},     textures = expandAllFaces (5, 8, 6, 8, 7, 8, 6, 8, 2, 8, 0, 8), tag = "itemChest"}, -- 67
     {name = "item chest E",             icon = {5, 8},     textures = expandAllFaces (6, 8, 5, 8, 6, 8, 7, 8, 3, 8, 0, 8), tag = "itemChest"},
-    {name = "item chest S",             icon = {5, 8},     textures = expandAllFaces (7, 8, 6, 8, 5, 8, 6, 8, 1, 8, 0, 8), tag = "itemChest"},
+--    {name = "item chest S",             icon = {5, 8},     textures = {neswtb = {0, 0}}, tag = "itemChest"},
+    {name = "item chest S",             icon = {5, 8},     model = "chest_item_closed", tag = "itemChest"},
 
     -- 70
     {name = "item chest W",             icon = {5, 8},     textures = expandAllFaces (6, 8, 7, 8, 6, 8, 5, 8, 4, 8, 0, 8), tag = "itemChest"},
