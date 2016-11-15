@@ -36,10 +36,14 @@
 //      OR 5 bits (use partial bits)
 
 // currently its 9*4 bytes per vertex = 36 bytes
-// naive first attempt = 7 bytes (combine normal + position)
+// naive first attempt = 8 bytes (combine normal + position)
 
 // Q: can we make this even smaller! and even faster to generate on CPU side?
 // Q: index bufffers? we have quads, and there 2 out 6 verts are repeats
+
+// total of 30 + 20 + 5 = 55 bits = 7 bytes
+
+
 
 
 layout (location = 0) in vec3 vertex_position; 

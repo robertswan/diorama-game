@@ -21,10 +21,10 @@ local modsToLoad =
         gameMode = "tiny_galaxy",
         modFolder = "dialogs",
     },
-    -- {
-    --     gameMode = "default",
-    --     modFolder = "diagnostics",
-    -- },
+    {
+        gameMode = "default",
+        modFolder = "diagnostics",
+    },
 
 }
 
