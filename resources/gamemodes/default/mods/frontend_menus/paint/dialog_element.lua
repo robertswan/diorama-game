@@ -21,7 +21,7 @@ function c:update (x, y, was_left_clicked)
 end
 
 --------------------------------------------------
-function c:onKeyClicked (keyCode, keyCharacter, keyModifiers, menus)
+function c:onKeyClicked (keyCode, keyModifiers, keyCharacter, menus)
     if self.type == 2 and keyCharacter and self.isFocused then
         self.text = self.text .. string.char (keyCharacter)
 

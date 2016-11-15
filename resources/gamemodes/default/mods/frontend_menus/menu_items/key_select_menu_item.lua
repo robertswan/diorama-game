@@ -57,14 +57,14 @@ function c:onRender (font, menu)
 end
 
 --------------------------------------------------
-function c:onKeyClicked (menu, keyCode, keyCharacter, keyModifiers)
+function c:onKeyClicked (menu, keyCode, keyModifiers, keyCharacter)
 
     assert (self.isSelected)
 
     menu:setUpdateOnlySelectedMenuItems (false)
     self.isSelected = false
 
-    if keyCode ~= dio.inputs.keyCodes.ESCAPE then
+    if keyCode and keyCode ~= dio.inputs.keyCodes.ESCAPE then
 
         self.keyCode = keyCode
 

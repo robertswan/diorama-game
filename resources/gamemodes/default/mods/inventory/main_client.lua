@@ -168,13 +168,13 @@ local function onLateRender (self)
 end
 
 --------------------------------------------------
-local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
+local function onKeyClicked (keyCode, keyModifiers, keyCharacter)
 
     local keyCodes = dio.inputs.keyCodes
 
     local self = instance
 
-    if keyCode >= keyCodes ["1"] and keyCode <= keyCodes ["9"] then
+    if keyCode and keyCode >= keyCodes ["1"] and keyCode <= keyCodes ["9"] then
         if blocks [ (keyCode - keyCodes ["1"] + 1) + self.currentPage * self.blocksPerPage] ~= nil then
             self.currentBlockId = (keyCode - keyCodes ["1"] + 1) + self.currentPage * self.blocksPerPage
             setInventoryItem (self.currentBlockId)
@@ -182,7 +182,7 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
             return true
         end
 
-    elseif keyCode >= keyCodes.F1 and keyCode <= keyCodes.F12 then
+    elseif keyCode and keyCode >= keyCodes.F1 and keyCode <= keyCodes.F12 then
         if keyCode - keyCodes.F1 >= 0 and keyCode - keyCodes.F1    <= self.pages then
             local oldPage = self.currentPage
             self.currentPage = (keyCode - keyCodes.F1)

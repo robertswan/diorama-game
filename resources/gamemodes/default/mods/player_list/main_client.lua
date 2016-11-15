@@ -50,7 +50,7 @@ local function onLateRender (self)
 end
 
 --------------------------------------------------
-local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
+local function onKeyClicked (keyCode, keyModifiers, keyCharacter)
 
     local self = instance
 

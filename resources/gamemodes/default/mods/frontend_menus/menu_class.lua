@@ -74,12 +74,12 @@ function c:onRender ()
 end
 
 --------------------------------------------------
-function c:onKeyClicked (keyCode, keyCharacter, keyModifiers)
+function c:onKeyClicked (keyCode, keyModifiers, keyCharacter)
     for i, item in ipairs (self.items) do
 
         if item.onKeyClicked and item.isSelected then
 
-            local wasConsumed = item:onKeyClicked (self, keyCode, keyCharacter, keyModifiers)
+            local wasConsumed = item:onKeyClicked (self, keyCode, keyModifiers, keyCharacter)
             if wasConsumed then
                 return true
             end

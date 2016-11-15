@@ -40,9 +40,9 @@ function c:onUpdate (x, y, was_left_clicked)
 end
 
 --------------------------------------------------
-function c:onKeyClicked (keyCode, keyCharacter, keyModifiers, menus)
+function c:onKeyClicked (keyCode, keyModifiers, keyCharacter, menus)
 	if self.paint then
-		self.paint:onKeyClicked (keyCode, keyCharacter, keyModifiers, menus)
+		self.paint:onKeyClicked (keyCode, keyModifiers, keyCharacter, menus)
 	end
 end
 

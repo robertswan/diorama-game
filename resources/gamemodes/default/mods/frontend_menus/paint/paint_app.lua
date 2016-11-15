@@ -292,16 +292,16 @@ function c:update (x, y, was_left_clicked)
 end
 
 --------------------------------------------------
-function c:onKeyClicked (keyCode, keyCharacter, keyModifiers, menus)
+function c:onKeyClicked (keyCode, keyModifiers, keyCharacter, menus)
 	if overlay.isShown then
-		Dialog.onKeyClicked (keyCode, keyCharacter, keyModifiers, menus)
+		Dialog.onKeyClicked (keyCode, keyModifiers, keyCharacter, menus)
 	end
 
 	local keyCodes = dio.inputs.keyCodes
 
 	if self.colorCurrentFocus == 1 then
 
-		if keyCode >= keyCodes ["0"] and keyCode <= keyCodes ["9"] then
+		if keyCode and keyCode >= keyCodes ["0"] and keyCode <= keyCodes ["9"] then
 
 			if string.len (self.curRed) < 3 then
 				self.curRed = self.curRed .. string.char (keyCharacter)
@@ -329,7 +329,7 @@ function c:onKeyClicked (keyCode, keyCharacter, keyModifiers, menus)
 
 	elseif self.colorCurrentFocus == 2 then
 
-		if keyCode >= keyCodes ["0"] and keyCode <= keyCodes ["9"] then
+		if keyCode and keyCode >= keyCodes ["0"] and keyCode <= keyCodes ["9"] then
 
 			if string.len (self.curGreen) < 3 then
 				self.curGreen = self.curGreen .. string.char (keyCharacter)
@@ -358,7 +358,7 @@ function c:onKeyClicked (keyCode, keyCharacter, keyModifiers, menus)
 
 	elseif self.colorCurrentFocus == 3 then
 
-		if keyCode >= keyCodes ["0"] and keyCode <= keyCodes ["9"] then
+		if keyCode and keyCode >= keyCodes ["0"] and keyCode <= keyCodes ["9"] then
 
 			if string.len (self.curBlue) < 3 then
 				self.curBlue = self.curBlue .. string.char (keyCharacter)
@@ -386,7 +386,7 @@ function c:onKeyClicked (keyCode, keyCharacter, keyModifiers, menus)
 
 	elseif self.colorCurrentFocus == 4 then
 
-		if keyCode >= keyCodes ["0"] and keyCode <= keyCodes ["9"] then
+		if keyCode and keyCode >= keyCodes ["0"] and keyCode <= keyCodes ["9"] then
 
 			if string.len (self.curAlpha) < 3 then
 				self.curAlpha = self.curAlpha .. string.char (keyCharacter)

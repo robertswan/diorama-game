@@ -216,7 +216,7 @@ function c:render ()
 end
 
 --------------------------------------------------
-function c:onKeyClicked (keyCode, keyCharacter, keyModifiers, menus)
+function c:onKeyClicked (keyCode, keyModifiers, keyCharacter, menus)
     
     if self.isGameOver then
 

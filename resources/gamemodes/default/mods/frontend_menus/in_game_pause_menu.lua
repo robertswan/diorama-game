@@ -59,11 +59,11 @@ function c:onExit (allMenus)
 end
 
 --------------------------------------------------
-function c:onKeyClicked (keyCode, keyCharacter, keyModifiers, menus)
+function c:onKeyClicked (keyCode, keyModifiers, keyCharacter, menus)
 
     local keyCodes = dio.inputs.keyCodes
 
-    if keyCode == keyCodes.ESCAPE then
+    if keyCode and keyCode == keyCodes.ESCAPE then
         menus:changeMenu ("playing_game_menu")
     end
 

@@ -209,7 +209,7 @@ local function addToChatHistory (text)
 end
 
 --------------------------------------------------
-local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
+local function onKeyClicked (keyCode, keyModifiers, keyCharacter)
 
     local self = instance
     local keyCodes = dio.inputs.keyCodes
@@ -281,24 +281,27 @@ local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
 
         return true
 
-    elseif keyCode == keyCodes.KP_SUBTRACT then
+    elseif keyCode then
+
+        if keyCode == keyCodes.KP_SUBTRACT then
         
-        dio.drawing.disableDrawing ()
+            dio.drawing.disableDrawing ()
 
-    elseif keyCode == keyCodes.KP_ADD then
+        elseif keyCode == keyCodes.KP_ADD then
 
-        dio.drawing.enableDrawing ()
+            dio.drawing.enableDrawing ()
 
-    elseif keyCode == self.chatAppearKeyCode then
+        elseif keyCode == self.chatAppearKeyCode then
 
-        self.isVisible = true
-        dio.inputs.mouse.setExclusive (false)
-        dio.inputs.setExclusiveKeys (true)
-        dio.inputs.setArePlayingControlsEnabled (false)
-        resetTextEntry (self)
+            self.isVisible = true
+            dio.inputs.mouse.setExclusive (false)
+            dio.inputs.setExclusiveKeys (true)
+            dio.inputs.setArePlayingControlsEnabled (false)
+            resetTextEntry (self)
 
-        return true
+            return true
 
+        end
     end
 
     return false

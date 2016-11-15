@@ -51,9 +51,9 @@ function c:onRender ()
 end
 
 --------------------------------------------------
-function c:onKeyClicked (keyCode, keyCharacter, keyModifiers, menus)
+function c:onKeyClicked (keyCode, keyModifiers, keyCharacter, menus)
     if self.tetris then
-        self.tetris:onKeyClicked (keyCode, keyCharacter, keyModifiers, menus)
+        self.tetris:onKeyClicked (keyCode, keyModifiers, keyCharacter, menus)
     end
 end
 

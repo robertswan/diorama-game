@@ -43,7 +43,7 @@ function c:onExit (allMenus)
 end
 
 --------------------------------------------------
-function c:onKeyClicked (keyCode, keyCharacter, keyModifiers)
+function c:onKeyClicked (keyCode, keyModifiers, keyCharacter)
 
     local keyCodes = dio.inputs.keyCodes
 

@@ -104,7 +104,7 @@ local function onChatReceived (event)
 end
 
 --------------------------------------------------
-local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
+local function onKeyClicked (keyCode, keyModifiers, keyCharacter)
 
     local self = instance
     local keyCodes = dio.inputs.keyCodes

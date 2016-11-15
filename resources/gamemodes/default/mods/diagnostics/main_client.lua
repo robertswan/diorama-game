@@ -63,12 +63,12 @@ local function onLateRender (self)
 end
 
 --------------------------------------------------
-local function onKeyClicked (keyCode, keyCharacter, keyModifiers)
+local function onKeyClicked (keyCode, keyModifiers, keyCharacter)
 
 	local self = instance
 	local keyCodes = dio.inputs.keyCodes
 
-	if keyCode == keyCodes.F3 then
+	if keyCode and keyCode == keyCodes.F3 then
 
 		self.isVisible = not self.isVisible
 

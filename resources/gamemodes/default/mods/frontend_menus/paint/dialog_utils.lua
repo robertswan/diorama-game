@@ -67,9 +67,9 @@ function d.update (x, y, was_left_clicked)
 end
 
 --------------------------------------------------
-function d.onKeyClicked (keyCode, keyCharacter, keyModifiers, menus)
+function d.onKeyClicked (keyCode, keyModifiers, keyCharacter, menus)
     for elIdx = 1, #dialogElements do
-        dialogElements [elIdx]:onKeyClicked (keyCode, keyCharacter, keyModifiers, menus)
+        dialogElements [elIdx]:onKeyClicked (keyCode, keyModifiers, keyCharacter, menus)
     end
 end
 
