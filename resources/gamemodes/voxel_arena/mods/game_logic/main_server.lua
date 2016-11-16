@@ -441,7 +441,7 @@ local function onPlayerPrimaryAction (event)
 
     else
 
-        if event.isBlockValid and event.destinationBlockId == 18 then -- READY button
+        if event.isBlockValid and event.pickedBlockId == 18 then -- READY button
             if connection.isReady then
 
                 dio.network.sendChat (connection.connectionId, "SERVER", "You are already READY")
@@ -468,7 +468,7 @@ end
 --------------------------------------------------
 local function onPlayerSecondaryAction (event)
     -- if event.isBlockValid then
-    --     event.sourceBlockId = 10 -- jump pad
+    --     event.replacementBlockId = 10 -- jump pad
     -- end
 end
 

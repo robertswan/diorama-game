@@ -215,11 +215,11 @@ local function onEntityPlaced (event)
         local connection = connections [event.connectionId]
         local group = groups [connection.groupId]
 
-        local isPlacingSpongeBlock = (event.sourceBlockId == 28)
+        local isPlacingSpongeBlock = (event.replacementBlockId == 28)
         if isPlacingSpongeBlock then
             event.cancel = not (group.canPlaceTeleporters and connection.isInPlaceTeleporterMode)
         else
-            local isClickingOnSpongeBlock = (event.destinationBlockId == 28)
+            local isClickingOnSpongeBlock = (event.pickedBlockId == 28)
             if isClickingOnSpongeBlock then
                 teleportPlayerToRoom (connection)
                 event.cancel = true
@@ -238,7 +238,7 @@ local function onEntityDestroyed (event)
         local connection = connections [event.connectionId]
         local group = groups [connection.groupId]
 
-        local isSpongeBlock = (event.destinationBlockId == 28) -- true
+        local isSpongeBlock = (event.pickedBlockId == 28) -- true
         if isSpongeBlock then
 
             if group.canPlaceTeleporters and connection.isInPlaceTeleporterMode then
