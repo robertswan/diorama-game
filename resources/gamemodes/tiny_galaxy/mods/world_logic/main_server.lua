@@ -386,7 +386,7 @@ function blockCallbacks.itemChest (event, connection)
 
         instance.inventory [item.id] = true
         instance.nextItemIdx = instance.nextItemIdx + 1
-        event.sourceBlockId = event.destinationBlockId + 8
+        event.replacementBlockId = event.pickedBlockId + 8
 
         if item.jumpSpeed then
             local component = dio.entities.getComponent (connection.entityId, dio.entities.components.SERVER_CHARACTER_CONTROLLER)
@@ -408,7 +408,7 @@ function blockCallbacks.artifactChest (event, connection)
         instance.artifactsCollectedCount = instance.artifactsCollectedCount + 1
         local count = tostring (instance.artifactsCollectedCount);
         dio.network.sendChat (connection.connectionId, "ARTEFACT", count .. " collected!")
-        event.sourceBlockId = event.destinationBlockId + 4
+        event.replacementBlockId = event.pickedBlockId + 4
 
         local artifactBlock = instance.artifactBlocks [instance.artifactsCollectedCount]
         dio.world.setBlock (
@@ -447,7 +447,7 @@ function blockCallbacks.specialChest (event, connection)
     if event.distance <= instance.regularItemReach then
 
         dio.network.sendChat (connection.connectionId, "SPECIAL", "Special item collected!")
-        event.sourceBlockId = event.destinationBlockId - 15
+        event.replacementBlockId = event.pickedBlockId - 15
 
         dio.network.sendEvent (event.connectionId, "tinyGalaxy.DIALOGS", "SPECIAL")
 
@@ -462,7 +462,7 @@ end
 function blockCallbacks.smallAxe (event, connection) 
 
     if instance.inventory.smallAxe and event.distance <= instance.regularItemReach then
-        event.sourceBlockId = 0
+        event.replacementBlockId = 0
         return false
     end
     return true
@@ -472,7 +472,7 @@ end
 function blockCallbacks.belt (event, connection) 
 
     if instance.inventory.belt and event.distance <= instance.regularItemReach then
-        event.sourceBlockId = 0
+        event.replacementBlockId = 0
         return false
     end
     return true
@@ -482,7 +482,7 @@ end
 function blockCallbacks.bean (event, connection) 
 
     if instance.inventory.bean and event.distance <= instance.regularItemReach then
-        event.sourceBlockId = event.destinationBlockId + 1
+        event.replacementBlockId = event.pickedBlockId + 1
         return false
     end
     return true
@@ -492,7 +492,7 @@ end
 function blockCallbacks.bigAxe (event, connection)
     
     if instance.inventory.bigAxe and event.distance <= instance.regularItemReach then
-        event.sourceBlockId = 0
+        event.replacementBlockId = 0
         return false
     end
     return true
@@ -562,7 +562,7 @@ local function onEntityPlaced (event)
 
     if event.isBlockValid then
 
-        local blockTag = instance.blocks [event.destinationBlockId].tag
+        local blockTag = instance.blocks [event.pickedBlockId].tag
         if blockTag then
             local connection = connections [event.connectionId]
             event.cancel = blockCallbacks [blockTag] (event, connection)
