@@ -95,7 +95,7 @@ local function createPlayerEntity (connectionId, accountId, settings, isPassword
         {
             connectionId = connectionId,
             accountId = accountId,
-            eyeHeight = 1.65,
+            standEyeHeight = 1.65,
             crouchEyeHeight = 0.25,
         },
         [components.TEMP_PLAYER] =          {connectionId = connectionId, accountId = accountId},
