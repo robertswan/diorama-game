@@ -25,13 +25,13 @@ local instance =
 
     inventory = 
     {
-         -- smallAxe = true, 
-         -- iceShield = true,
-         -- belt = true,
-         -- fireShield = true,
-         -- teleporter = true,
-         -- bean = true,
-         -- bigAxe = true,
+        -- smallAxe = true, 
+        -- iceShield = true,
+        -- belt = true,
+        -- fireShield = true,
+        -- teleporter = true,
+        -- bean = true,
+        -- bigAxe = true,
     },
     artifactsCollectedCount = 0,
     regularItemReach = 2.1,
@@ -565,6 +565,7 @@ local function onEntityPlaced (event)
         local blockTag = instance.blocks [event.pickedBlockId].tag
         if blockTag then
             local connection = connections [event.connectionId]
+            event.isReplacing = true
             event.cancel = blockCallbacks [blockTag] (event, connection)
             return
         end
@@ -575,7 +576,7 @@ end
 
 --------------------------------------------------
 local function onEntityDestroyed (event)
-    event.cancel = true
+    onEntityPlaced (event)
 end
 
 --------------------------------------------------
