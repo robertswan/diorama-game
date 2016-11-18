@@ -249,6 +249,7 @@ local blocks =
     {name = "black fence",          icon = {1, 1},      models = fences ("pole", {1, 1})},
     {name = "wall",                 icon = {15, 1},     models = fences ("wall", {15, 1}, {15, 2})},
     {name = "head",                 icon = {15, 1},     model = "rob"},
+    {name = "motor block",          icon = {15, 4},     textures = {neswtb = {15, 4}}, isMotor = true},
 }
 
 return {blocks = blocks, entities = entities, models = models}
