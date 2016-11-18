@@ -15,12 +15,12 @@ local messages =
     DIED =              "You died. And you were warned this game only gives you one life per attempt. Don't like it? Add the code yourself.",
 
     smallAxe =          "You have found an AXE. You can chop thin tree trunks with the left mouse button!",
-    smallJumpBoots =    "You have found JUMPS BOOTS. You can jump just a little bit higher!",
+    smallJumpBoots =    "You have found JUMP BOOTS. You can now jump two blocks high!",
     iceShield =         "You have found an ICE SHIELD. You can get close to ice worlds!",
     belt =              "You have found a BELT OF STRENGTH. You can now crush broken rocks with the left mouse button!",
     fireShield =        "You have found a HEAT SHIELD. You can get closer to the sun and pass the asteroid belt!",
     teleporter =        "You have found a TELEPORTER. Look at a red target and the left mouse button to teleport!",
-    largeJumpBoots =    "You have found SUPER JUMP BOOTS. You can jump even higher still!",
+    largeJumpBoots =    "You have found SUPER JUMP BOOTS. You can now jump three blocks high!",
     bean =              "You have found SOME MAGIC BEANS. Plant on BEAN squares with the left mouse button to grow a jump pad plant!",
     bigAxe =            "You have found the BIG AXE. Chop down bigger tree trunks! You have all the items. Now collect all the artifacts!",
 
