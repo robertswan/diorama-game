@@ -1,13 +1,76 @@
-local definitions = require ("resources/gamemodes/default/mods/blocks/block_definitions")
+local BlockDefinitions = require ("resources/gamemodes/default/mods/blocks/block_definitions")
+
+--------------------------------------------------
+local blockCallbacks = {}
+
+--------------------------------------------------
+function blockCallbacks.spanner (event) 
+
+    if event.isBlockValid then
+        if BlockDefinitions.blocks [event.pickedBlockId].isMotor then
+            -- this should only work if we click on the rotating motor block, not that base motor block
+            -- how to decide which one???? AARGH
+
+            -- bodge - check its cell_id
+
+            if event.cellId [1] == 0 and event.cellId [2] == 0 and event.cellId [3] == 0 then
+
+                -- now what? we need to get the motor entity from the chunk... eek!
+                -- can we get the parent?
+
+                local c = dio.entities.components
+                
+                local motorEntityId = dio.entities.getComponent (event.chunkEntityId, c.PARENT).parentEntityId
+                local transform = dio.entities.getComponent (motorEntityId, c.TRANSFORM)
+                local rotatingMotor = dio.entities.getComponent (motorEntityId, c.ROTATING_MOTOR)
+
+                -- need to find its rotating speed, and then modify it ?
+                -- so lets hard code this, and toggle between rotating and off in X
+
+                if rotatingMotor.rotationSpeed [1] == 0 then
+                    transform.ypr [1] = -0.2
+                    rotatingMotor.rotationSpeed [1] = -0.2
+                else
+                    transform.ypr [1] = 0
+                    rotatingMotor.rotationSpeed [1] = 0
+                end
+
+                dio.entities.setComponent (motorEntityId, c.TRANSFORM, transform)
+                dio.entities.setComponent (motorEntityId, c.ROTATING_MOTOR, rotatingMotor)
+            end
+        end
+    end
+
+    return true
+end
+
+--------------------------------------------------
+local function onEntityPlaced (event)
+
+    if event.isBlockValid then
+
+        local blockTag = BlockDefinitions.blocks [event.replacementBlockId].tag
+        if blockTag then
+            event.cancel = blockCallbacks [blockTag] (event)
+            return
+        end
+    end
+end
+
 
 --------------------------------------------------
 local function onLoad ()
 
-    for _, definition in ipairs (definitions.blocks) do
+    for _, definition in ipairs (BlockDefinitions.blocks) do
         local definitionId = dio.blocks.createNewDefinitionId ()
         definition.definitionId = definitionId
         dio.blocks.setDefinition (definition)
     end
+
+    local types = dio.types.serverEvents
+    dio.events.addListener (types.ENTITY_PLACED, onEntityPlaced)
+    -- dio.events.addListener (types.ENTITY_DESTROYED, onEntityDestroyed)
+
 end
 
 --------------------------------------------------
@@ -20,6 +83,7 @@ local modSettings =
     permissionsRequired =
     {
         blocks = true,
+        entities = true,
     },
 
     callbacks = 
