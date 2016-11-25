@@ -23,16 +23,21 @@ function blockCallbacks.spanner (event, isPlacing)
                 local motorEntityId = dio.entities.getComponent (event.chunkEntityId, c.PARENT).parentEntityId
                 local rotatingMotor = dio.entities.getComponent (motorEntityId, c.ROTATING_MOTOR)
 
+                print ("spanner " .. tostring (motorEntityId))
+
                 if isPlacing then
                     rotatingMotor.isActive = not rotatingMotor.isActive
                 else
                     if rotatingMotor.isActive then
-                        local rotationSpeedInc = 0.02
-                        local maxRotationSpeed = 0.2
+                        local rotationSpeedInc = 0.2
+                        local maxRotationSpeed = 10.0
 
-                        rotatingMotor.rotationSpeed [1] = rotatingMotor.rotationSpeed [1] + rotationSpeedInc
-                        if rotatingMotor.rotationSpeed [1] > maxRotationSpeed then
-                            rotatingMotor.rotationSpeed [1] = rotationSpeedInc
+                        if rotatingMotor.rotationSpeed > maxRotationSpeed or 
+                                rotatingMotor.rotationSpeed < rotationSpeedInc then
+
+                            rotatingMotor.rotationSpeed = rotationSpeedInc
+                        else
+                            rotatingMotor.rotationSpeed = rotatingMotor.rotationSpeed * 2
                         end
                     end
                 end
@@ -52,6 +57,10 @@ function blockCallbacks.spanner (event, isPlacing)
 
                 -- dio.entities.setComponent (motorEntityId, c.TRANSFORM, transform)
                 dio.entities.setComponent (motorEntityId, c.ROTATING_MOTOR, rotatingMotor)
+
+            else
+                print ("spanner fail")
+
             end
         end
     end
