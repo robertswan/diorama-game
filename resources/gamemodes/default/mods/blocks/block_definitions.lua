@@ -1,5 +1,5 @@
 --------------------------------------------------
-local function makeModelEntry (model, options)
+local function makeMediumModel (model, options)
     return
     {
         id = model,
@@ -8,24 +8,41 @@ local function makeModelEntry (model, options)
     }
 end
 
-local models =
+--------------------------------------------------
+local mediumModels =
 {
-    makeModelEntry ("rob", {isDetailedModel = true}),
-    makeModelEntry ("stairs"),
-    makeModelEntry ("cube"),
-    makeModelEntry ("cross"),
-    makeModelEntry ("pole"),
-    makeModelEntry ("pole_n"),
-    makeModelEntry ("pole_ne"),
-    makeModelEntry ("pole_ns"),
-    makeModelEntry ("pole_nes"),
-    makeModelEntry ("pole_nesw"),
-    makeModelEntry ("wall"),
-    makeModelEntry ("wall_n"),
-    makeModelEntry ("wall_ne"),
-    makeModelEntry ("wall_ns"),
-    makeModelEntry ("wall_nes"),
-    makeModelEntry ("wall_nesw"),    
+    makeMediumModel ("rob", {isDetailedModel = true}),
+    makeMediumModel ("stairs"),
+    makeMediumModel ("cube"),
+    makeMediumModel ("cross"),
+    makeMediumModel ("pole"),
+    makeMediumModel ("pole_n"),
+    makeMediumModel ("pole_ne"),
+    makeMediumModel ("pole_ns"),
+    makeMediumModel ("pole_nes"),
+    makeMediumModel ("pole_nesw"),
+    makeMediumModel ("wall"),
+    makeMediumModel ("wall_n"),
+    makeMediumModel ("wall_ne"),
+    makeMediumModel ("wall_ns"),
+    makeMediumModel ("wall_nes"),
+    makeMediumModel ("wall_nesw"),
+}
+
+--------------------------------------------------
+local function makeEntityModel (model, options)
+    return
+    {
+        id = model,
+        filename = "models/" .. model .. ".vox",
+        options = options,
+    }
+end
+
+--------------------------------------------------
+local entityModels = 
+{
+    makeEntityModel ("entity_model_test"),
 }
 
 --------------------------------------------------
@@ -251,6 +268,10 @@ local blocks =
     {name = "head",                 icon = {15, 1},     model = "rob"},
     {name = "motor block",          icon = {15, 4},     textures = {neswtb = {15, 4}}, isMotor = true},
     {name = "spanner",              icon = {14, 4},     textures = {neswtb = {15, 4}}, tag = "spanner"},
+
+    {name = "test entity",          icon = {14, 4},     entityModel = "entity_model_test"},
+
+    --{name = "test entity",          icon = {14, 4},     custom = {type = "ENTITY_MODEL", id = "entity_model_test"}},
 }
 
-return {blocks = blocks, entities = entities, models = models}
+return {blocks = blocks, entities = entities, mediumModels = mediumModels, entityModels = entityModels}
