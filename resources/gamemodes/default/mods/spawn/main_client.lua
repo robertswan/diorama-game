@@ -127,8 +127,19 @@ local function onNamedEntityCreated (event)
         
             local camera = 
             {
-                [c.CAMERA] =                {fov = 90},
-                [c.PARENT] =                {parentEntityId = event.entityId},
+                [c.CAMERA] =
+                {
+                    cameraType = dio.types.cameraTypes.FPS,
+                    fov = 90,
+                    attachTo = event.entityId,
+                },
+                -- {
+                --     cameraType = dio.types.cameraTypes.LOOK_AT,
+                --     fov = 90,
+                --     attachTo = event.entityId,
+                --     offset = {-16, 16, -16},
+                -- },
+                [c.PARENT] =                {parentEntityId = event.roomEntityId},
                 [c.TRANSFORM] =             {},
             }
 

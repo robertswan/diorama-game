@@ -51,6 +51,42 @@ local function onServerEventReceived (event)
     end
 end
 
+-- --------------------------------------------------
+-- local function onNamedEntityCreated (event)
+
+--     if event.name == "PLAYER_EYE_POSITION" then
+
+--         local c = dio.entities.components
+        
+--         local parentEntityId = dio.entities.getComponent (event.entityId, c.PARENT).parentEntityId
+--         local player = dio.entities.getComponent (parentEntityId, c.TEMP_PLAYER)
+
+--         if player.connectionId == instance.myConnectionId then
+        
+--             local camera = 
+--             {
+--                 [c.CAMERA] =
+--                 {
+--                     cameraType = dio.types.cameraTypes.FPS,
+--                     fov = 90,
+--                     attachTo = event.entityId,
+--                 },
+--                 -- {
+--                 --     cameraType = dio.types.cameraTypes.LOOK_AT,
+--                 --     fov = 90,
+--                 --     attachTo = event.entityId,
+--                 --     offset = {-16, 16, -16},
+--                 -- },
+--                 [c.PARENT] =                {parentEntityId = event.roomEntityId},
+--                 [c.TRANSFORM] =             {},
+--             }
+
+--             local cameraEntityId = dio.entities.create (event.roomEntityId, camera)
+--             dio.drawing.setMainCamera (cameraEntityId)
+--         end
+--     end
+-- end
+
 --------------------------------------------------
 local function onLateRender (self)
 
@@ -73,7 +109,7 @@ local function onLoad ()
 
     local types = dio.types.clientEvents
     dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
-    dio.events.addListener (types.SERVER_EVENT_RECEIVED, onServerEventReceived) 
+    dio.events.addListener (types.SERVER_EVENT_RECEIVED, onServerEventReceived)
 
     instance.crosshairTexture =  dio.resources.loadTexture ("CROSSHAIR", "textures/crosshair_00.png"),
     dio.drawing.addRenderPassAfter (1, function () onLateRender () end)

@@ -1,5 +1,7 @@
 local settings =
 {
+    isMap = false,
+
     spawn = 
     {
         chunkId     = {0, 0, 0},
@@ -8,7 +10,12 @@ local settings =
         gravityDir  = 5,
     },
 
-    isMap = false,
+    cameraSettings =
+    {
+        cameraType = dio.types.cameraTypes.FPS,
+        fov = 90,
+    },
+
     itemsAvailable = 
     {
         {id = "smallAxe",               description = "Small Axe"},

@@ -2,6 +2,13 @@ local settings =
 {
     isMap = true,
 
+    cameraSettings =
+    {
+        cameraType = dio.types.cameraTypes.LOOK_AT,
+        fov = 40,
+        offset = {-4, 16, 16},
+    },
+
     spawn = 
     {
         chunkId =       {-1, 0, 0},

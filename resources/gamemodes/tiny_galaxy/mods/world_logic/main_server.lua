@@ -154,7 +154,8 @@ end
 
 --------------------------------------------------
 local function createPlayerEntity (connectionId, accountId)
-    
+
+    local cg = instance.currentGalaxy    
     local roomEntityId = dio.world.ensureRoomIsLoaded (instance.currentGalaxyId)
 
     local c = dio.entities.components
@@ -196,9 +197,22 @@ local function createPlayerEntity (connectionId, accountId)
         [c.TRANSFORM] =             {}
     }
 
-    local eyeEntityId = dio.entities.create (roomEntityId, eyeComponents)     
+    local eyeEntityId = dio.entities.create (roomEntityId, eyeComponents)
 
-    return playerEntityId, eyeEntityId
+    local cameraComponents = 
+    {
+        [c.BASE_NETWORK]            = {},
+        [c.CAMERA]                  = cg.cameraSettings,
+        [c.PARENT] =                {parentEntityId = roomEntityId},
+        [c.TRANSFORM] =             {},
+    }
+    cameraComponents [c.CAMERA].attachTo = eyeEntityId
+    cameraComponents [c.CAMERA].isMainCamera = true
+
+    local cameraEntityId = dio.entities.create (roomEntityId, cameraComponents)
+    --dio.drawing.setMainCamera (cameraEntityId)
+
+    return playerEntityId, eyeEntityId, cameraEntityId
 end
 
 --------------------------------------------------
@@ -674,6 +688,7 @@ local modSettings =
 
     permissionsRequired =
     {
+        drawing = true,
         entities = true,
         file = true,
         network = true,
