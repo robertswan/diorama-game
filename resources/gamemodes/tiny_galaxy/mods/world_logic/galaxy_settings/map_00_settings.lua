@@ -7,7 +7,6 @@ local settings =
         projectionType = dio.types.projectionTypes.ORTHO,
         cameraType = dio.types.cameraTypes.LOOK_AT,
         offset = {0, 16, 16},
-        --offset = {0, 0, 16},
     },
 
     spawn = 
