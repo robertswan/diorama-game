@@ -210,7 +210,20 @@ local function createPlayerEntity (connectionId, accountId)
     cameraComponents [c.CAMERA].isMainCamera = true
 
     local cameraEntityId = dio.entities.create (roomEntityId, cameraComponents)
-    --dio.drawing.setMainCamera (cameraEntityId)
+    
+    if cg.isMap then
+
+        local playerModelComponents =
+        {
+            [c.BASE_NETWORK] =             {},
+            [c.MESH_PLACEHOLDER] =         {blueprintId = "entity_model_test"},
+            [c.PARENT] =                   {parentEntityId = playerEntityId},
+            [c.TRANSFORM] =                {scale = {0.1, 0.1, 0.1}},
+        }
+
+        dio.entities.create (roomEntityId, playerModelComponents)
+
+    end
 
     return playerEntityId, eyeEntityId, cameraEntityId
 end

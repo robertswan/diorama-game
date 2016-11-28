@@ -130,6 +130,7 @@ local function onNamedEntityCreated (event)
                 [c.CAMERA] =
                 {
                     cameraType = dio.types.cameraTypes.FPS,
+                    projectionType = dio.types.projectionTypes.PERSPECTIVE,
                     fov = 90,
                     attachTo = event.entityId,
                 },

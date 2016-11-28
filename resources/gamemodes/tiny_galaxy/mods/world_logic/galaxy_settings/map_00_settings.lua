@@ -4,9 +4,10 @@ local settings =
 
     cameraSettings =
     {
+        projectionType = dio.types.projectionTypes.ORTHO,
         cameraType = dio.types.cameraTypes.LOOK_AT,
-        fov = 40,
-        offset = {-4, 16, 16},
+        offset = {0, 16, 16},
+        --offset = {0, 0, 16},
     },
 
     spawn = 
