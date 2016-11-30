@@ -291,17 +291,20 @@ end
 --------------------------------------------------
 local function onRoomDestroyed (event)
 
-    instance.roomEntityId = nil
+    -- if we are tracking a destroyed room, then mark it here
+    if instance.roomEntityId == event.roomEntityId then
+        instance.roomEntityId = nil
+    end
 
-    -- if instance.isRestartingGame then
-    --     instance.isRestartingGame = false
-    --     createNewLevel ()
-    --     for _, connection in pairs (connections) do
+    if instance.isRestartingGame then
+        instance.isRestartingGame = false
+        createNewLevel ()
+        for _, connection in pairs (connections) do
 
-    --         connection.entityId = createPlayerEntity (connection.connectionId, connection.accountId)
-    --         dio.network.sendEvent (connection.connectionId, "tinyGalaxy.DIALOGS", "BEGIN_GAME")
-    --     end
-    -- end
+            connection.entityId = createPlayerEntity (connection.connectionId, connection.accountId)
+            dio.network.sendEvent (connection.connectionId, "tinyGalaxy.DIALOGS", "BEGIN_GAME")
+        end
+    end
 end
 
 --------------------------------------------------
@@ -515,6 +518,8 @@ end
 --------------------------------------------------
 local function restartGame (connection)
 
+    local cg = instance.currentGalaxy
+
     instance.isGameOver = false
 
     dio.entities.destroy (connection.entityId)
@@ -533,7 +538,7 @@ local function restartGame (connection)
     instance.inventory = {}
     instance.artifactsCollectedCount = 0
     -- instance.mapTopLeftChunkOrigin = {-1, -1}
-    instance.ship = Mixin.cloneTable (instance.currentGalaxy.ship)
+    instance.ship = Mixin.cloneTable (cg.ship)
 end
 
 --------------------------------------------------
