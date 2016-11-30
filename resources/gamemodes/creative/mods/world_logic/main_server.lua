@@ -361,6 +361,47 @@ local function onRoomCreated (event)
 end
 
 --------------------------------------------------
+local function onNamedEntityCreated (event)
+    
+    if event.name == "MOTOR" then
+
+        -- need to add some movement callback to it...
+
+        local c = dio.entities.components
+
+        local instance = 
+        {
+            time = 0,
+            timeUntilDirChange = 2,
+            currentVelocity = 2,
+        }
+        
+        local components =
+        {
+            [c.VARIABLE_UPDATE] =
+            {
+                onUpdate = function (event) 
+
+                    instance.time = instance.time + event.timeDelta
+                    while instance.time >= instance.timeUntilDirChange do
+                        instance.currentVelocity = -instance.currentVelocity
+                        instance.time = instance.time - instance.timeUntilDirChange
+                    end
+
+                    local transform = dio.entities.getComponent (event.entityId, c.TRANSFORM)
+                    transform.xyz [2] = transform.xyz [2] + instance.currentVelocity * event.timeDelta
+                    dio.entities.setComponent (event.entityId, c.TRANSFORM, transform)
+
+                end,
+            },        
+        }
+
+        local cameraEntityId = dio.entities.addComponents (event.entityId, components)
+
+    end
+end
+
+--------------------------------------------------
 local function onLoad ()
 
     -- dio.players.setPlayerAction (player, actions.LEFT_CLICK, outcomes.DESTROY_BLOCK)
@@ -376,6 +417,7 @@ local function onLoad ()
     dio.events.addListener (types.ENTITY_DESTROYED, onEntityDestroyed)
     dio.events.addListener (types.CHAT_RECEIVED, onChatReceived)
     dio.events.addListener (types.ROOM_CREATED, onRoomCreated)
+    dio.events.addListener (types.NAMED_ENTITY_CREATED, onNamedEntityCreated)
 
 end
 
