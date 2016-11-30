@@ -369,34 +369,52 @@ local function onNamedEntityCreated (event)
 
         local c = dio.entities.components
 
+        local transform = dio.entities.getComponent (event.entityId, c.TRANSFORM)
         local instance = 
         {
-            time = 0,
-            timeUntilDirChange = 2,
+            -- also store the inital y position of the transform
+            bottom = transform.xyz [2],
+            top = transform.xyz [2] + 4,
+            y = transform.xyz [2],
             currentVelocity = 2,
         }
-        
+
+        if event.isLoading then
+            local diskSerializer = dio.entities.getComponent (event.entityId, c.SCRIPT_DISK_SERIALIZER)
+            instance = diskSerializer.data;
+        end
+
         local components =
         {
             [c.VARIABLE_UPDATE] =
             {
                 onUpdate = function (event) 
 
-                    instance.time = instance.time + event.timeDelta
-                    while instance.time >= instance.timeUntilDirChange do
+                    instance.y = instance.y + instance.currentVelocity * event.timeDelta
+                    if instance.currentVelocity > 0 and instance.y > instance.top then
+                        instance.y = instance.top
                         instance.currentVelocity = -instance.currentVelocity
-                        instance.time = instance.time - instance.timeUntilDirChange
+                    elseif instance.currentVelocity < 0 and instance.y < instance.bottom then
+                        instance.y = instance.bottom
+                        instance.currentVelocity = -instance.currentVelocity
                     end
 
-                    local transform = dio.entities.getComponent (event.entityId, c.TRANSFORM)
-                    transform.xyz [2] = transform.xyz [2] + instance.currentVelocity * event.timeDelta
-                    dio.entities.setComponent (event.entityId, c.TRANSFORM, transform)
+                    local t = dio.entities.getComponent (event.entityId, c.TRANSFORM)
+                    t.xyz [2] = instance.y
+                    dio.entities.setComponent (event.entityId, c.TRANSFORM, t)
 
                 end,
             },        
         }
 
-        local cameraEntityId = dio.entities.addComponents (event.entityId, components)
+        if not event.isLoading then
+            components [c.SCRIPT_DISK_SERIALIZER] =
+            {
+                data = instance
+            }
+        end
+
+        dio.entities.addComponents (event.entityId, components)
 
     end
 end
@@ -418,7 +436,6 @@ local function onLoad ()
     dio.events.addListener (types.CHAT_RECEIVED, onChatReceived)
     dio.events.addListener (types.ROOM_CREATED, onRoomCreated)
     dio.events.addListener (types.NAMED_ENTITY_CREATED, onNamedEntityCreated)
-
 end
 
 --------------------------------------------------
