@@ -31,6 +31,7 @@ local instance =
 
     artifactsCollectedCount = 0,
     regularItemReach = 2.1,
+    openChestBlockId = 70,
 }
 
 --------------------------------------------------
@@ -216,7 +217,7 @@ local function createPlayerEntity (connectionId, accountId)
         local playerModelComponents =
         {
             [c.BASE_NETWORK] =             {},
-            [c.MESH_PLACEHOLDER] =         {blueprintId = "entity_model_test"},
+            [c.MESH_PLACEHOLDER] =         {blueprintId = "player_model"},
             [c.PARENT] =                   {parentEntityId = playerEntityId},
             [c.TRANSFORM] =                {scale = {0.1, 0.1, 0.1}},
         }
@@ -366,7 +367,7 @@ function blockCallbacks.itemChest (event, connection)
 
         instance.inventory [item.id] = true
         instance.nextItemIdx = instance.nextItemIdx + 1
-        event.replacementBlockId = event.pickedBlockId + 8
+        event.replacementBlockId = instance.openChestBlockId
 
         if item.jumpSpeed then
             local component = dio.entities.getComponent (connection.entityId, dio.entities.components.SERVER_CHARACTER_CONTROLLER)
@@ -381,7 +382,7 @@ function blockCallbacks.itemChest (event, connection)
 end
 
 --------------------------------------------------
-function blockCallbacks.artifactChest (event, connection)
+function blockCallbacks.artefactChest (event, connection)
 
     if event.distance <= instance.regularItemReach then
 
@@ -390,7 +391,7 @@ function blockCallbacks.artifactChest (event, connection)
         instance.artifactsCollectedCount = instance.artifactsCollectedCount + 1
         local count = tostring (instance.artifactsCollectedCount);
         dio.network.sendChat (connection.connectionId, "ARTEFACT", count .. " collected!")
-        event.replacementBlockId = event.pickedBlockId + 4
+        event.replacementBlockId = instance.openChestBlockId
 
         local artifactBlock = cg.artifactBlocks [instance.artifactsCollectedCount]
         dio.world.setBlock (
@@ -429,7 +430,7 @@ function blockCallbacks.specialChest (event, connection)
     if event.distance <= instance.regularItemReach then
 
         dio.network.sendChat (connection.connectionId, "SPECIAL", "Special item collected!")
-        event.replacementBlockId = event.pickedBlockId - 15
+        event.replacementBlockId = instance.openChestBlockId
 
         dio.network.sendEvent (event.connectionId, "tinyGalaxy.DIALOGS", "SPECIAL")
 

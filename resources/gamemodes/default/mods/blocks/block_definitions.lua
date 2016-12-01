@@ -42,7 +42,7 @@ end
 --------------------------------------------------
 local entityModels = 
 {
-    makeEntityModel ("entity_model_test"),
+    makeEntityModel ("test_entity_model"),
 }
 
 --------------------------------------------------
