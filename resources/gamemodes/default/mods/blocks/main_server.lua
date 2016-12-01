@@ -7,61 +7,32 @@ local blockCallbacks = {}
 function blockCallbacks.spanner (event, isPlacing) 
 
     if event.isBlockValid then
-        if BlockDefinitions.blocks [event.pickedBlockId].isMotor then
-            -- this should only work if we click on the rotating motor block, not that base motor block
-            -- how to decide which one???? AARGH
 
-            -- bodge - check its cell_id
+        if event.isAxle then
 
-            if event.cellId [1] == 0 and event.cellId [2] == 0 and event.cellId [3] == 0 then
+            local c = dio.entities.components
+            local motorEntityId = dio.entities.getComponent (event.chunkEntityId, c.PARENT).parentEntityId
+            local axle = dio.entities.getComponent (motorEntityId, c.AXLE)
 
-                -- now what? we need to get the motor entity from the chunk... eek!
-                -- can we get the parent?
+            if isPlacing then
+                axle.isActive = not axle.isActive
+            else
+                if axle.isActive then
+                    local rotationSpeedInc = 0.2
+                    local maxRotationSpeed = 10.0
 
-                local c = dio.entities.components
+                    if axle.rotationSpeed > maxRotationSpeed or 
+                            axle.rotationSpeed < rotationSpeedInc then
 
-                local motorEntityId = dio.entities.getComponent (event.chunkEntityId, c.PARENT).parentEntityId
-                local rotatingMotor = dio.entities.getComponent (motorEntityId, c.ROTATING_MOTOR)
-
-                print ("spanner " .. tostring (motorEntityId))
-
-                if isPlacing then
-                    rotatingMotor.isActive = not rotatingMotor.isActive
-                else
-                    if rotatingMotor.isActive then
-                        local rotationSpeedInc = 0.2
-                        local maxRotationSpeed = 10.0
-
-                        if rotatingMotor.rotationSpeed > maxRotationSpeed or 
-                                rotatingMotor.rotationSpeed < rotationSpeedInc then
-
-                            rotatingMotor.rotationSpeed = rotationSpeedInc
-                        else
-                            rotatingMotor.rotationSpeed = rotatingMotor.rotationSpeed * 2
-                        end
+                        axle.rotationSpeed = rotationSpeedInc
+                    else
+                        axle.rotationSpeed = axle.rotationSpeed * 2
                     end
                 end
-                
-                -- -- local transform = dio.entities.getComponent (motorEntityId, c.TRANSFORM)
-
-                -- -- need to find its rotating speed, and then modify it ?
-                -- -- so lets hard code this, and toggle between rotating and off in X
-
-                -- if rotatingMotor.rotationSpeed [1] == 0 then
-                --     -- transform.ypr [1] = -0.2
-                --     rotatingMotor.rotationSpeed [1] = -0.2
-                -- else
-                --     -- transform.ypr [1] = 0
-                --     rotatingMotor.rotationSpeed [1] = 0
-                -- end
-
-                -- dio.entities.setComponent (motorEntityId, c.TRANSFORM, transform)
-                dio.entities.setComponent (motorEntityId, c.ROTATING_MOTOR, rotatingMotor)
-
-            else
-                print ("spanner fail")
-
             end
+            
+            dio.entities.setComponent (motorEntityId, c.AXLE, axle)
+
         end
     end
 

@@ -361,6 +361,65 @@ local function onRoomCreated (event)
 end
 
 --------------------------------------------------
+local function onNamedEntityCreated (event)
+    
+    if event.name == "MOTOR" then
+
+        -- need to add some movement callback to it...
+
+        local c = dio.entities.components
+
+        local transform = dio.entities.getComponent (event.entityId, c.TRANSFORM)
+        local instance = 
+        {
+            -- also store the inital y position of the transform
+            bottom = transform.xyz [2],
+            top = transform.xyz [2] + 4,
+            y = transform.xyz [2],
+            currentVelocity = 2,
+        }
+
+        if event.isLoading then
+            local diskSerializer = dio.entities.getComponent (event.entityId, c.SCRIPT_DISK_SERIALIZER)
+            instance = diskSerializer.data;
+        end
+
+        local components =
+        {
+            [c.VARIABLE_UPDATE] =
+            {
+                onUpdate = function (event) 
+
+                    instance.y = instance.y + (instance.currentVelocity * event.timeDelta)
+                    if instance.currentVelocity > 0 and instance.y > instance.top then
+                        instance.y = instance.top
+                        instance.currentVelocity = -instance.currentVelocity
+                    elseif instance.currentVelocity < 0 and instance.y < instance.bottom then
+                        instance.y = instance.bottom
+                        instance.currentVelocity = -instance.currentVelocity
+                    end
+
+                    local t = dio.entities.getComponent (event.entityId, c.TRANSFORM)
+                    t.xyz [2] = instance.y
+                    dio.entities.setComponent (event.entityId, c.TRANSFORM, t)
+
+                end,
+            },        
+        }
+
+        if not event.isLoading then
+            components [c.SCRIPT_DISK_SERIALIZER] =
+            {
+                data = instance
+            }
+        end
+
+        dio.entities.addComponents (event.entityId, components)
+
+    end
+end
+
+--------------------------------------------------
 local function onLoad ()
 
     -- dio.players.setPlayerAction (player, actions.LEFT_CLICK, outcomes.DESTROY_BLOCK)
@@ -376,7 +435,7 @@ local function onLoad ()
     dio.events.addListener (types.ENTITY_DESTROYED, onEntityDestroyed)
     dio.events.addListener (types.CHAT_RECEIVED, onChatReceived)
     dio.events.addListener (types.ROOM_CREATED, onRoomCreated)
-
+    dio.events.addListener (types.NAMED_ENTITY_CREATED, onNamedEntityCreated)
 end
 
 --------------------------------------------------

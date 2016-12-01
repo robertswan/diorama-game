@@ -1,5 +1,5 @@
 --------------------------------------------------
-local function makeModelEntry (model, options)
+local function makeMediumModel (model, options)
     return
     {
         id = model,
@@ -8,13 +8,29 @@ local function makeModelEntry (model, options)
     }
 end
 
-local models =
+local mediumModels =
 {
-    makeModelEntry ("chest_item_closed", {isDetailedModel = true}),
---    makeModelEntry ("breakable_vector", {isDetailedModel = true}),
-    makeModelEntry ("cube"),
-    makeModelEntry ("grass"),
-    makeModelEntry ("pole"),
+    makeMediumModel ("chest_item_closed", {isDetailedModel = true}),
+--    makeMediumModel ("breakable_vector", {isDetailedModel = true}),
+    makeMediumModel ("cube"),
+    makeMediumModel ("grass"),
+    makeMediumModel ("pole"),
+}
+
+--------------------------------------------------
+local function makeEntityModel (model, options)
+    return
+    {
+        id = model,
+        filename = "models/" .. model .. ".vox",
+        options = options,
+    }
+end
+
+--------------------------------------------------
+local entityModels = 
+{
+    makeEntityModel ("entity_model_test"),
 }
 
 --------------------------------------------------
@@ -176,6 +192,7 @@ local blocks =
     {name = "special chest E",          icon = {13, 9},    textures = expandAllFaces (14, 9, 13, 9, 14, 9, 15, 9, 11, 9, 8, 9), tag = "specialChest"},
     {name = "special chest S",          icon = {13, 9},    textures = expandAllFaces (15, 9, 14, 9, 13, 9, 14, 9, 9, 9, 8, 9), tag = "specialChest"},
     {name = "special chest W",          icon = {13, 9},    textures = expandAllFaces (14, 9, 15, 9, 14, 9, 13, 9, 12, 9, 8, 9), tag = "specialChest"},
+    {name = "special chest W",          icon = {13, 9},    textures = expandAllFaces (14, 9, 15, 9, 14, 9, 13, 9, 12, 9, 8, 9), tag = "specialChest"},
 }
 
-return {blocks = blocks, entities = entities, models = models}
+return {blocks = blocks, entities = entities, mediumModels = mediumModels, entityModels = entityModels}

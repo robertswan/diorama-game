@@ -13,10 +13,10 @@ local modsToLoad =
         gameMode = "tiny_galaxy",
         modFolder = "osd",
     },
-    {
-        gameMode = "default",
-        modFolder = "spawn",
-    },
+    -- {
+    --     gameMode = "default",
+    --     modFolder = "spawn",
+    -- },
     {
         gameMode = "tiny_galaxy",
         modFolder = "dialogs",

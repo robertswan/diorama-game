@@ -3,8 +3,12 @@ local BlockDefinitions = require ("resources/gamemodes/default/mods/blocks/block
 --------------------------------------------------
 local function onLoad ()
 
-    for _, model in ipairs (BlockDefinitions.models) do
+    for _, model in ipairs (BlockDefinitions.mediumModels) do
         dio.resources.loadMediumModel (model.id, model.filename, model.options)
+    end
+
+    for _, model in ipairs (BlockDefinitions.entityModels) do
+        dio.resources.loadEntityModel (model.id, model.filename, model.options)
     end
 
     for _, definition in ipairs (BlockDefinitions.blocks) do
@@ -18,8 +22,12 @@ end
 --------------------------------------------------
 local function onUnload ()
 
-    for _, model in ipairs (BlockDefinitions.models) do
+    for _, model in ipairs (BlockDefinitions.mediumModels) do
         dio.resources.destroyMediumModel (model.id)
+    end
+
+    for _, model in ipairs (BlockDefinitions.entityModels) do
+        dio.resources.destroyEntityModel (model.id)
     end
 
 end
