@@ -390,7 +390,7 @@ local function onNamedEntityCreated (event)
             {
                 onUpdate = function (event) 
 
-                    instance.y = instance.y + instance.currentVelocity * event.timeDelta
+                    instance.y = instance.y + (instance.currentVelocity * event.timeDelta)
                     if instance.currentVelocity > 0 and instance.y > instance.top then
                         instance.y = instance.top
                         instance.currentVelocity = -instance.currentVelocity
