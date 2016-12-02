@@ -380,8 +380,10 @@ local function onNamedEntityCreated (event)
         }
 
         if event.isLoading then
-            local diskSerializer = dio.entities.getComponent (event.entityId, c.SCRIPT_DISK_SERIALIZER)
-            instance = diskSerializer.data;
+            if dio.entities.hasComponent (event.entityId, c.SCRIPT_DISK_SERIALIZER) then
+                local diskSerializer = dio.entities.getComponent (event.entityId, c.SCRIPT_DISK_SERIALIZER)
+                instance = diskSerializer.data;
+            end
         end
 
         local components =
@@ -435,7 +437,7 @@ local function onLoad ()
     dio.events.addListener (types.ENTITY_DESTROYED, onEntityDestroyed)
     dio.events.addListener (types.CHAT_RECEIVED, onChatReceived)
     dio.events.addListener (types.ROOM_CREATED, onRoomCreated)
-    dio.events.addListener (types.NAMED_ENTITY_CREATED, onNamedEntityCreated)
+    --dio.events.addListener (types.NAMED_ENTITY_CREATED, onNamedEntityCreated)
 end
 
 --------------------------------------------------
