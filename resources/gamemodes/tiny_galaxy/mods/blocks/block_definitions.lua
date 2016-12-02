@@ -93,14 +93,14 @@ local blocks =
 
     -- 10    
     {name = "thin grass",               icon = {8, 0},     textures = {neswtb = {13, 0}}, isSolid = false},
-    {name = "concrete",                 icon = {1, 0},     textures = {neswtb = concrete}},
+    {name = "concrete",                 icon = {12, 0},    textures = {neswtb = concrete}},
     {name = "concrete breakable",       icon = {9, 3},     textures = {neswtb = {9, 3}}, tag = "belt"},
     {name = "vector tile",              icon = {1, 6},     textures = {neswtb = {1, 6}}},
     {name = "vector brick",             icon = {2, 6},     textures = {nesw = {2, 6}, tb = {1, 6}}},
     {name = "vector breakable brick",   icon = {3, 6},     textures = {neswtb = {3, 6}}, tag = "belt"},
     --{name = "vector breakable brick",   icon = {3, 6},     model = "breakable_vector", tag = "belt"},
     {name = "vector pole",              icon = {5, 6},     textures = {nesw = {5, 6}, tb = {14, 6}}, model = "pole"},
-    {name = "vector grass",             icon = {6, 6},     textures = {neswtb = {0, 7}}},
+    {name = "UNUSED",                   icon = {15, 15},   textures = {neswtb = {15, 15}}},
     {name = "vector glass",             icon = {4, 6},     textures = {neswtb = {4, 6}}, isTransparent = true},
     {name = "vector circle",            icon = {7, 6},     textures = {neswtb = {7, 6}}},
 
@@ -130,8 +130,8 @@ local blocks =
 
     -- 40
     {name = "rot brick roots",          icon = {2, 4},     textures = {neswtb = {2, 4}}},
-    {name = "rot vines X",              icon = {4, 4},     textures = {neswtb = {7, 0}}},
-    {name = "rot vines []",             icon = {4, 4},     textures = {neswtb = {4, 4}},    isTransparent = true, isSolid = false},
+    {name = "UNUSED",                   icon = {15, 15},   textures = {neswtb = {15, 15}}},
+    {name = "rot vines nonsolid",       icon = {4, 4},     textures = {neswtb = {4, 4}},    isTransparent = true, isSolid = false},
     {name = "rot trunk",                icon = {12, 4},    textures = {neswtb = {12, 4}},   tag = "bigAxe"},
     {name = "rot trunk thin",           icon = {11, 4},    textures = {neswtb = {11, 4}},   model = "pole", tag = "smallAxe"},
     {name = "rot leaves clean",         icon = {13, 4},    textures = {neswtb = {13, 4}}},
@@ -153,27 +153,27 @@ local blocks =
     {name = "nuke teleporter",          icon = {8, 5},     textures = {nesw = {0, 5}, t = {8, 5}, b = {0, 5}}, tag = "teleporter"},
 
     -- 60
-    {name = "DO NOT USE (item)",        icon = {15, 15},   textures = {nesw = {15, 15}, t = {0, 8}, b = {15, 15}}},
-    {name = "DO NOT USE (art)",         icon = {15, 15},   textures = {nesw = {15, 15}, t = {0, 9}, b = {15, 15}}},
+    {name = "UNUSED",                   icon = {15, 15},   textures = {neswtb = {15, 15}}},
+    {name = "UNUSED",                   icon = {15, 15},   textures = {neswtb = {15, 15}}},
     {name = "small rocks",              icon = {9, 5},     textures = {neswtb = {9, 5}}},
     {name = "rock teleporter",          icon = {6, 1},     textures = {neswb = concrete, t = {6, 1}}, tag = "teleporter"},
-    {name = "rock pole",                icon = {10, 6},    textures = {neswtb = {12, 0}}, model = "pole"},
-    {name = "DO NOT USE (empty)",       icon = {15, 15},   textures = {neswb = {15, 15}, t = {5, 8}}},
+    {name = "rock pole",                icon = {12, 0},    textures = {neswtb = {12, 0}}, model = "pole"},
+    {name = "UNUSED",                   icon = {15, 15},   textures = {neswtb = {15, 15}}},
     {name = "ship teleporter",          icon = {8, 6},     textures = {nesw = {4, 1}, t = {8, 6}, b = {4, 1}}, tag = "teleporter"},
     {name = "item chest",               icon = {5, 8},     model = "chest_item_closed", tag = "itemChest"},
-    {name = "artefact chest",           icon = {5, 8},     model = "chest_artefact_closed", tag = "artefactChest"},
-    {name = "special chest",            icon = {5, 8},     model = "chest_special_closed", tag = "specialChest"},
+    {name = "artefact chest",           icon = {5, 9},     model = "chest_artefact_closed", tag = "artefactChest"},
+    {name = "special chest",            icon = {13, 9},    model = "chest_special_closed", tag = "specialChest"},
 
     -- 70
-    {name = "open chest",               icon = {5, 8},     model = "chest_open"},
-    {name = "BLAH",         icon = {5, 9},     textures = expandAllFaces (5, 9, 6, 9, 7, 9, 6, 9, 2, 9, 0, 9), tag = "artifactChest"}, -- 71
-    {name = "BLAH",         icon = {5, 9},     textures = expandAllFaces (6, 9, 5, 9, 6, 9, 7, 9, 3, 9, 0, 9), tag = "artifactChest"},
-    {name = "BLAH",         icon = {5, 9},     textures = expandAllFaces (7, 9, 6, 9, 5, 9, 6, 9, 1, 9, 0, 9), tag = "artifactChest"},
-    {name = "BLAH",         icon = {5, 9},     textures = expandAllFaces (6, 9, 7, 9, 6, 9, 5, 9, 4, 9, 0, 9), tag = "artifactChest"},
-    {name = "BLAH",        icon = {13, 8},    textures = expandAllFaces (13, 8, 14, 8, 15, 8, 14, 8, 10, 8, 8, 8)}, -- 75
-    {name = "BLAH",        icon = {13, 8},    textures = expandAllFaces (14, 8, 13, 8, 14, 8, 15, 8, 11, 8, 8, 8)},
-    {name = "BLAH",        icon = {13, 8},    textures = expandAllFaces (15, 8, 14, 8, 13, 8, 14, 8, 9, 8, 8, 8)},
-    {name = "BLAH",        icon = {13, 8},    textures = expandAllFaces (14, 8, 15, 8, 14, 8, 13, 8, 12, 8, 8, 8)},
+    {name = "open chest",               icon = {13, 8},    model = "chest_open"},
+    {name = "UNUSED",                   icon = {15, 15},   textures = {neswtb = {15, 15}}},
+    {name = "UNUSED",                   icon = {15, 15},   textures = {neswtb = {15, 15}}},
+    {name = "UNUSED",                   icon = {15, 15},   textures = {neswtb = {15, 15}}},
+    {name = "UNUSED",                   icon = {15, 15},   textures = {neswtb = {15, 15}}},
+    {name = "UNUSED",                   icon = {15, 15},   textures = {neswtb = {15, 15}}},
+    {name = "UNUSED",                   icon = {15, 15},   textures = {neswtb = {15, 15}}},
+    {name = "UNUSED",                   icon = {15, 15},   textures = {neswtb = {15, 15}}},
+    {name = "ship motor",               icon = {15, 0},     textures = {neswtb = {15, 0}}, isMotor = true},
     {name = "grass jump",               icon = {10, 5},    textures = {nesw = {10, 0}, t = {10, 5}, b = {11, 0}}, isJumpPad = true},
     
     -- 80
@@ -189,11 +189,6 @@ local blocks =
     {name = "vector teleport",          icon = {13, 6},    textures = {nesw = {2, 6}, t = {13, 6}, b = {1, 6}}, tag = "teleporter"},
 
     -- 90
-    {name = "BLAH",          icon = {13, 9},    textures = expandAllFaces (13, 9, 14, 9, 15, 9, 14, 9, 10, 9, 8, 9), tag = "specialChest"},
-    {name = "BLAH",          icon = {13, 9},    textures = expandAllFaces (14, 9, 13, 9, 14, 9, 15, 9, 11, 9, 8, 9), tag = "specialChest"},
-    {name = "BLAH",          icon = {13, 9},    textures = expandAllFaces (15, 9, 14, 9, 13, 9, 14, 9, 9, 9, 8, 9), tag = "specialChest"},
-    {name = "BLAH",          icon = {13, 9},    textures = expandAllFaces (14, 9, 15, 9, 14, 9, 13, 9, 12, 9, 8, 9), tag = "specialChest"},
-    {name = "BLAH",          icon = {13, 9},    textures = expandAllFaces (14, 9, 15, 9, 14, 9, 13, 9, 12, 9, 8, 9), tag = "specialChest"},
 }
 
 return {blocks = blocks, entities = entities, mediumModels = mediumModels, entityModels = entityModels}

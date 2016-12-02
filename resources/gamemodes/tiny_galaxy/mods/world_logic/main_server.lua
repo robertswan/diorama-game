@@ -32,6 +32,9 @@ local instance =
     artifactsCollectedCount = 0,
     regularItemReach = 2.1,
     openChestBlockId = 70,
+
+    isMotorAtTarget = true,
+    motorTarget = {},
 }
 
 --------------------------------------------------
@@ -77,11 +80,64 @@ local function convertHourToTime (hour)
     return time
 end
 
+-- --------------------------------------------------
+-- local function shipUpdate (event, ship)
+
+--     ship.target = Mixin.cloneTable (instance.motorTarget)
+
+--     if not ship.isAtTarget or not instance.isMotorAtTarget then
+
+--         local speed = ship.speed * event.timeDelta * 0.1
+
+--         for idx, value in ipairs (ship.xyz) do
+--             local target = ship.target [idx]
+--             if value < target then
+--                 value = value + speed
+--                 if value > target then
+--                     value = target
+--                 end
+--                 ship.xyz [idx] = value
+--             elseif value > target then
+--                 value = value - speed
+--                 if value < target then
+--                     value = target
+--                 end
+--                 ship.xyz [idx] = value
+--             end
+--         end
+
+--         local c = dio.entities.components
+--         local t = dio.entities.getComponent (event.entityId, c.TRANSFORM)
+--         t.xyz [1] = ship.xyz [1]
+--         t.xyz [2] = ship.xyz [2]
+--         t.xyz [3] = ship.xyz [3]
+--         dio.entities.setComponent (event.entityId, c.TRANSFORM, t)
+
+--         if ship.xyz [1] == ship.target [1] and
+--                 ship.xyz [2] == ship.target [2] and
+--                 ship.xyz [3] == ship.target [3] then
+
+--             ship.isAtTarget = true
+--             instance.isMotorAtTarget = true
+--         end
+
+--     end
+-- end
+
 --------------------------------------------------
 local function moveShipAndPlayer (connectionId, xyz, moveDelta)
 
     local isSafe, dialog = calcIsSafeMove (moveDelta)
+    -- local isSafe, dialog = true, nil
     if isSafe then
+
+        -- update NEW
+
+        -- instance.motorTarget [1] = instance.motorTarget [1] + moveDelta [1] * 8
+        -- instance.motorTarget [3] = instance.motorTarget [3] + moveDelta [2] * 8
+        -- instance.isMotorAtTarget = false
+
+        -- update OLD
 
         local cg = instance.currentGalaxy
 
@@ -334,21 +390,27 @@ end
 function blockCallbacks.computer (event, connection) 
         
     if event.distance <= instance.regularItemReach then
-        local xyz = dio.world.getPlayerXyz (connection.accountId)
-        local yaw = xyz.ypr [2]
 
-        local delta = {0, -1}
-        if yaw < (math.pi * 0.25) then
+        if instance.isMotorAtTarget then
             
-        elseif yaw < (math.pi * (0.25 + 0.5 * 1)) then
-            delta = {-1, 0}
-        elseif yaw < (math.pi * (0.25 + 0.5 * 2)) then
-            delta = {0, 1}
-        elseif yaw < (math.pi * (0.25 + 0.5 * 3)) then
-            delta = {1, 0}
-        end
+            local xyz = dio.world.getPlayerXyz (connection.accountId)
+            local yaw = xyz.ypr [2]
 
-        moveShipAndPlayer (event.connectionId, xyz, delta)        
+            local delta = {0, -1}
+            if yaw < (math.pi * 0.25) then
+                
+            elseif yaw < (math.pi * (0.25 + 0.5 * 1)) then
+                delta = {-1, 0}
+            elseif yaw < (math.pi * (0.25 + 0.5 * 2)) then
+                delta = {0, 1}
+            elseif yaw < (math.pi * (0.25 + 0.5 * 3)) then
+                delta = {1, 0}
+            end
+
+            -- how to connect to the ship instance data?
+
+            moveShipAndPlayer (event.connectionId, xyz, delta)        
+        end
     end
     return true
 end
@@ -677,6 +739,53 @@ local function onChatReceived (event)
     end
 end
 
+-- --------------------------------------------------
+-- local function onNamedEntityCreated (event)
+
+--     if event.name == "MOTOR" then
+
+--         -- need to add some movement callback to it...
+
+--         local c = dio.entities.components
+
+--         local transform = dio.entities.getComponent (event.entityId, c.TRANSFORM)
+--         local entityInstance = 
+--         {
+--             xyz         = Mixin.cloneTable (transform.xyz),
+--             target      = Mixin.cloneTable (transform.xyz),
+--             speed       = 8,
+--             isAtTarget  = true,
+--         }
+
+--         local hasSerialized = (event.isLoading and dio.entities.hasComponent (event.entityId, c.SCRIPT_DISK_SERIALIZER))
+
+--         if hasSerialized then
+--             local diskSerializer = dio.entities.getComponent (event.entityId, c.SCRIPT_DISK_SERIALIZER)
+--             entityInstance = diskSerializer.data;
+--         end
+
+--         instance.motorTarget = Mixin.cloneTable (entityInstance.target)
+
+--         local components =
+--         {
+--             [c.VARIABLE_UPDATE] =
+--             {
+--                 onUpdate = function (event) shipUpdate (event, entityInstance) end,
+--             },        
+--         }
+
+--         if not hasSerialized then
+--             components [c.SCRIPT_DISK_SERIALIZER] =
+--             {
+--                 data = entityInstance
+--             }
+--         end
+
+--         dio.entities.addComponents (event.entityId, components)
+
+--     end    
+-- end
+
 --------------------------------------------------
 local function onLoad ()
 
@@ -689,6 +798,7 @@ local function onLoad ()
     dio.events.addListener (types.ENTITY_DESTROYED, onEntityDestroyed)
     dio.events.addListener (types.TICK, onTick)
     dio.events.addListener (types.CHAT_RECEIVED, onChatReceived)
+    --dio.events.addListener (types.NAMED_ENTITY_CREATED, onNamedEntityCreated)
 
     instance.currentGalaxyId = "map_00/"
     instance.currentGalaxy = galaxies [instance.currentGalaxyId]
