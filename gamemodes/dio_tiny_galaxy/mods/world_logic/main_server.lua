@@ -33,6 +33,7 @@ local instance =
     regularItemReach = 2.1,
     openChestBlockId = 70,
 
+    isControllingShip = false,
     isMotorAtTarget = true,
     motorTarget = {},
 }
@@ -125,7 +126,7 @@ end
 -- end
 
 --------------------------------------------------
-local function moveShipAndPlayer (connectionId, xyz, moveDelta)
+local function moveShipAndPlayer (connectionId, moveDelta)
 
     local isSafe, dialog = calcIsSafeMove (moveDelta)
     -- local isSafe, dialog = true, nil
@@ -135,56 +136,56 @@ local function moveShipAndPlayer (connectionId, xyz, moveDelta)
 
         -- instance.motorTarget [1] = instance.motorTarget [1] + moveDelta [1] * 8
         -- instance.motorTarget [3] = instance.motorTarget [3] + moveDelta [2] * 8
-        -- instance.isMotorAtTarget = false
+        instance.isMotorAtTarget = false
 
-        -- update OLD
+        -- -- update OLD
 
-        local cg = instance.currentGalaxy
+        -- local cg = instance.currentGalaxy
 
-        local origin = cg.mapTopLeftChunkOrigin
-        local ship = instance.ship
-        local minY = -8
+        -- local origin = cg.mapTopLeftChunkOrigin
+        -- local ship = instance.ship
+        -- local minY = -8
 
-        local newShipXyz =
-        {
-            (ship [1] + moveDelta [1]) * 8,
-            minY,
-            (ship [2] + moveDelta [2]) * 8,
-        }
+        -- local newShipXyz =
+        -- {
+        --     (ship [1] + moveDelta [1]) * 8,
+        --     minY,
+        --     (ship [2] + moveDelta [2]) * 8,
+        -- }
 
-        local shipTo = 
-        {
-            chunkId = {origin [1], 0, origin [2]},
-            xyz = newShipXyz,
-        }
+        -- local shipTo = 
+        -- {
+        --     chunkId = {origin [1], 0, origin [2]},
+        --     xyz = newShipXyz,
+        -- }
 
-        local shipFrom = 
-        {
-            chunkId = {origin [1], 0, origin [2]},
-            xyz = {ship [1] * 8, minY, ship [2] * 8},
-            size = {8, 16, 8},
-        }
+        -- local shipFrom = 
+        -- {
+        --     chunkId = {origin [1], 0, origin [2]},
+        --     xyz = {ship [1] * 8, minY, ship [2] * 8},
+        --     size = {8, 16, 8},
+        -- }
 
-        local clearAir = 
-        {
-            chunkId = {0, 0, 0},
-            xyz = {-32, 32, 88},
-            size = {8, 16, 8},
-        }    
+        -- local clearAir = 
+        -- {
+        --     chunkId = {0, 0, 0},
+        --     xyz = {-32, 32, 88},
+        --     size = {8, 16, 8},
+        -- }    
 
-        dio.world.copyCells (instance.roomEntityId, shipTo, shipFrom)
-        dio.world.copyCells (instance.roomEntityId, shipFrom, clearAir)
+        -- dio.world.copyCells (instance.roomEntityId, shipTo, shipFrom)
+        -- dio.world.copyCells (instance.roomEntityId, shipFrom, clearAir)
 
-        local teleport = 
-                "delta " .. 
-                tostring (moveDelta [1] * 8) .. " " ..
-                tostring (2) .. " " ..
-                tostring (moveDelta [2] * 8)
+        -- local teleport = 
+        --         "delta " .. 
+        --         tostring (moveDelta [1] * 8) .. " " ..
+        --         tostring (2) .. " " ..
+        --         tostring (moveDelta [2] * 8)
 
-        dio.network.sendEvent (connectionId, "tinyGalaxy.TP", teleport)
+        -- dio.network.sendEvent (connectionId, "tinyGalaxy.TP", teleport)
 
-        instance.ship [1] = instance.ship [1] + moveDelta [1]
-        instance.ship [2] = instance.ship [2] + moveDelta [2]
+        -- instance.ship [1] = instance.ship [1] + moveDelta [1]
+        -- instance.ship [2] = instance.ship [2] + moveDelta [2]
 
     elseif dialog then
 
@@ -207,6 +208,39 @@ local function createNewLevel ()
             dio.file.locations.MOD_RESOURCES, 
             "new_saves/default/" .. instance.currentGalaxyId)
 
+end
+
+--------------------------------------------------
+local function onPlayerUpdate (event)
+
+    if instance.isControllingShip then
+
+        if instance.isMotorAtTarget then
+
+            if event.isLeftMouseClicked or event.isRightMouseClicked then
+                instance.isControllingShip = false                
+            else
+
+                local delta
+                if event.isUpPressed then
+                    delta = {0, -1}
+                elseif event.isDownPressed then
+                    delta = {0, 1}
+                elseif event.isLeftPressed then
+                    delta = {-1, 0}
+                elseif event.isRightPressed then
+                    delta = {1, 0}
+                end
+
+                if delta then
+                    moveShipAndPlayer (event.connectionId, delta)
+                end
+            end
+        end
+            
+        event.cancel = true
+
+    end
 end
 
 --------------------------------------------------
@@ -239,6 +273,7 @@ local function createPlayerEntity (connectionId, accountId)
             jumpSpeed = instance.initialJumpSpeed,
             selectionDistance = 20,
             hasHighlight = false,
+            onUpdate = onPlayerUpdate,
         },
         [c.TEMP_PLAYER] =           {connectionId = connectionId, accountId = accountId},
     }
@@ -392,24 +427,7 @@ function blockCallbacks.computer (event, connection)
     if event.distance <= instance.regularItemReach then
 
         if instance.isMotorAtTarget then
-            
-            local xyz = dio.world.getPlayerXyz (connection.accountId)
-            local yaw = xyz.ypr [2]
-
-            local delta = {0, -1}
-            if yaw < (math.pi * 0.25) then
-                
-            elseif yaw < (math.pi * (0.25 + 0.5 * 1)) then
-                delta = {-1, 0}
-            elseif yaw < (math.pi * (0.25 + 0.5 * 2)) then
-                delta = {0, 1}
-            elseif yaw < (math.pi * (0.25 + 0.5 * 3)) then
-                delta = {1, 0}
-            end
-
-            -- how to connect to the ship instance data?
-
-            moveShipAndPlayer (event.connectionId, xyz, delta)        
+            instance.isControllingShip = true
         end
     end
     return true
