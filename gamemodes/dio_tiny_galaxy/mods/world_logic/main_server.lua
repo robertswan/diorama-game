@@ -81,49 +81,49 @@ local function convertHourToTime (hour)
     return time
 end
 
--- --------------------------------------------------
--- local function shipUpdate (event, ship)
+--------------------------------------------------
+local function shipUpdate (event, ship)
 
---     ship.target = Mixin.cloneTable (instance.motorTarget)
+    ship.target = Mixin.cloneTable (instance.motorTarget)
 
---     if not ship.isAtTarget or not instance.isMotorAtTarget then
+    if not ship.isAtTarget or not instance.isMotorAtTarget then
 
---         local speed = ship.speed * event.timeDelta * 0.1
+        local speed = ship.speed * event.timeDelta * 0.5
 
---         for idx, value in ipairs (ship.xyz) do
---             local target = ship.target [idx]
---             if value < target then
---                 value = value + speed
---                 if value > target then
---                     value = target
---                 end
---                 ship.xyz [idx] = value
---             elseif value > target then
---                 value = value - speed
---                 if value < target then
---                     value = target
---                 end
---                 ship.xyz [idx] = value
---             end
---         end
+        for idx, value in ipairs (ship.xyz) do
+            local target = ship.target [idx]
+            if value < target then
+                value = value + speed
+                if value > target then
+                    value = target
+                end
+                ship.xyz [idx] = value
+            elseif value > target then
+                value = value - speed
+                if value < target then
+                    value = target
+                end
+                ship.xyz [idx] = value
+            end
+        end
 
---         local c = dio.entities.components
---         local t = dio.entities.getComponent (event.entityId, c.TRANSFORM)
---         t.xyz [1] = ship.xyz [1]
---         t.xyz [2] = ship.xyz [2]
---         t.xyz [3] = ship.xyz [3]
---         dio.entities.setComponent (event.entityId, c.TRANSFORM, t)
+        local c = dio.entities.components
+        local t = dio.entities.getComponent (event.entityId, c.TRANSFORM)
+        t.xyz [1] = ship.xyz [1]
+        t.xyz [2] = ship.xyz [2]
+        t.xyz [3] = ship.xyz [3]
+        dio.entities.setComponent (event.entityId, c.TRANSFORM, t)
 
---         if ship.xyz [1] == ship.target [1] and
---                 ship.xyz [2] == ship.target [2] and
---                 ship.xyz [3] == ship.target [3] then
+        if ship.xyz [1] == ship.target [1] and
+                ship.xyz [2] == ship.target [2] and
+                ship.xyz [3] == ship.target [3] then
 
---             ship.isAtTarget = true
---             instance.isMotorAtTarget = true
---         end
+            ship.isAtTarget = true
+            instance.isMotorAtTarget = true
+        end
 
---     end
--- end
+    end
+end
 
 --------------------------------------------------
 local function moveShipAndPlayer (connectionId, moveDelta)
@@ -134,8 +134,12 @@ local function moveShipAndPlayer (connectionId, moveDelta)
 
         -- update NEW
 
-        -- instance.motorTarget [1] = instance.motorTarget [1] + moveDelta [1] * 8
-        -- instance.motorTarget [3] = instance.motorTarget [3] + moveDelta [2] * 8
+        instance.motorTarget [1] = instance.motorTarget [1] + moveDelta [1] * 8
+        instance.motorTarget [3] = instance.motorTarget [3] + moveDelta [2] * 8
+
+        instance.ship [1] = instance.ship [1] + moveDelta [1]
+        instance.ship [2] = instance.ship [2] + moveDelta [2]        
+
         instance.isMotorAtTarget = false
 
         -- -- update OLD
@@ -757,52 +761,56 @@ local function onChatReceived (event)
     end
 end
 
--- --------------------------------------------------
--- local function onNamedEntityCreated (event)
+--------------------------------------------------
+local function onNamedEntityCreated (event)
 
---     if event.name == "MOTOR" then
+    if event.name == "MOTOR" then
 
---         -- need to add some movement callback to it...
+        -- need to add some movement callback to it...
 
---         local c = dio.entities.components
+        local c = dio.entities.components
 
---         local transform = dio.entities.getComponent (event.entityId, c.TRANSFORM)
---         local entityInstance = 
---         {
---             xyz         = Mixin.cloneTable (transform.xyz),
---             target      = Mixin.cloneTable (transform.xyz),
---             speed       = 8,
---             isAtTarget  = true,
---         }
+        local transform = dio.entities.getComponent (event.entityId, c.TRANSFORM)
+        local entityInstance = 
+        {
+            xyz         = Mixin.cloneTable (transform.xyz),
+            target      = Mixin.cloneTable (transform.xyz),
+            speed       = 8,
+            isAtTarget  = true,
+        }
 
---         local hasSerialized = (event.isLoading and dio.entities.hasComponent (event.entityId, c.SCRIPT_DISK_SERIALIZER))
+        local hasSerialized = (event.isLoading and dio.entities.hasComponent (event.entityId, c.SCRIPT_DISK_SERIALIZER))
 
---         if hasSerialized then
---             local diskSerializer = dio.entities.getComponent (event.entityId, c.SCRIPT_DISK_SERIALIZER)
---             entityInstance = diskSerializer.data;
---         end
+        if hasSerialized then
+            local diskSerializer = dio.entities.getComponent (event.entityId, c.SCRIPT_DISK_SERIALIZER)
+            entityInstance = diskSerializer.data;
+        end
 
---         instance.motorTarget = Mixin.cloneTable (entityInstance.target)
+        instance.motorTarget = Mixin.cloneTable (entityInstance.target)
 
---         local components =
---         {
---             [c.VARIABLE_UPDATE] =
---             {
---                 onUpdate = function (event) shipUpdate (event, entityInstance) end,
---             },        
---         }
+        local components =
+        {
+            -- [c.FIXED_UPDATE] =
+            -- {
+            --     onUpdate = function (event) shipUpdate (event, entityInstance) end,
+            -- }, 
+            [c.VARIABLE_UPDATE] =
+            {
+                onUpdate = function (event) shipUpdate (event, entityInstance) end,
+            },        
+        }
 
---         if not hasSerialized then
---             components [c.SCRIPT_DISK_SERIALIZER] =
---             {
---                 data = entityInstance
---             }
---         end
+        if not hasSerialized then
+            components [c.SCRIPT_DISK_SERIALIZER] =
+            {
+                data = entityInstance
+            }
+        end
 
---         dio.entities.addComponents (event.entityId, components)
+        dio.entities.addComponents (event.entityId, components)
 
---     end    
--- end
+    end    
+end
 
 --------------------------------------------------
 local function onLoad ()
@@ -816,7 +824,7 @@ local function onLoad ()
     dio.events.addListener (types.ENTITY_DESTROYED, onEntityDestroyed)
     dio.events.addListener (types.TICK, onTick)
     dio.events.addListener (types.CHAT_RECEIVED, onChatReceived)
-    --dio.events.addListener (types.NAMED_ENTITY_CREATED, onNamedEntityCreated)
+    dio.events.addListener (types.NAMED_ENTITY_CREATED, onNamedEntityCreated)
 
     instance.currentGalaxyId = "map_00/"
     instance.currentGalaxy = galaxies [instance.currentGalaxyId]
