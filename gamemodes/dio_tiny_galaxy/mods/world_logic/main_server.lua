@@ -16,7 +16,7 @@ local instance =
 
     timeOfDay = 0,
     currentWorldIdx = nil,
-    initialJumpSpeed = 15.0,
+    initialJumpSpeed = 10.0,
     nextItemIdx = 1,
     inventory = 
     {
