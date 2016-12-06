@@ -196,6 +196,8 @@ local function moveShipAndPlayer (connectionId, moveDelta)
         dio.network.sendEvent (connectionId, "tinyGalaxy.DIALOGS", dialog)
 
     end
+
+    return isSafe
 end
 
 --------------------------------------------------
@@ -221,29 +223,26 @@ local function onPlayerUpdate (event)
 
         if instance.isMotorAtTarget then
 
-            if event.isLeftMouseClicked or event.isRightMouseClicked then
-                instance.isControllingShip = false                
-            else
+            local delta
+            if event.isUpPressed then
+                delta = {0, -1}
+            elseif event.isDownPressed then
+                delta = {0, 1}
+            elseif event.isLeftPressed then
+                delta = {-1, 0}
+            elseif event.isRightPressed then
+                delta = {1, 0}
+            end
 
-                local delta
-                if event.isUpPressed then
-                    delta = {0, -1}
-                elseif event.isDownPressed then
-                    delta = {0, 1}
-                elseif event.isLeftPressed then
-                    delta = {-1, 0}
-                elseif event.isRightPressed then
-                    delta = {1, 0}
-                end
-
-                if delta then
-                    moveShipAndPlayer (event.connectionId, delta)
+            if delta then
+                local hasMoved = moveShipAndPlayer (event.connectionId, delta)
+                if hasMoved then
+                    instance.isControllingShip = false
                 end
             end
         end
             
         event.cancel = true
-
     end
 end
 
