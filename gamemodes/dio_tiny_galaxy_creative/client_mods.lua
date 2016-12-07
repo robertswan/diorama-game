@@ -2,7 +2,7 @@
 local modsToLoad =
 {
     {
-        gameMode = "tiny_galaxy_creative",
+        gameMode = "dio_tiny_galaxy_creative",
         modFolder = "world_logic",
     },  
     {
@@ -14,7 +14,7 @@ local modsToLoad =
         modFolder = "player_list",
     },
     {
-        gameMode = "tiny_galaxy_creative",
+        gameMode = "dio_tiny_galaxy_creative",
         modFolder = "inventory",
     },
     {

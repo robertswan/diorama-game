@@ -6,8 +6,8 @@ local function teleportTo (x, y, z, yaw, pitch, roll)
     setting =
     {
         chunkId = {0, 0, 0},
-        xyz = {x, y, z},
-        ypr = {yaw, pitch, roll},
+        xyz = {x + 0.5, y + 0.5, z + 0.5},
+        ypr = {yaw or 0, pitch or 0, roll or 0},
     }
 
     dio.world.setPlayerXyz (instance.myAccountId, setting)

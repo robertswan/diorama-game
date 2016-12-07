@@ -187,8 +187,6 @@ local blocks =
     {name = "artifact cookie",          icon = {11, 6},    textures = {neswtb = {11, 6}}, tag = "cookie"},
     {name = "vector jump",              icon = {12, 6},    textures = {nesw = {2, 6}, t = {12, 6}, b = {1, 6}}, isJumpPad = true},
     {name = "vector teleport",          icon = {13, 6},    textures = {nesw = {2, 6}, t = {13, 6}, b = {1, 6}}, tag = "teleporter"},
-
-    -- 90
 }
 
 return {blocks = blocks, entities = entities, mediumModels = mediumModels, entityModels = entityModels}

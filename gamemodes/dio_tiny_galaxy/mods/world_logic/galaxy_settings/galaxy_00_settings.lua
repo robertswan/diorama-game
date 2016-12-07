@@ -5,15 +5,25 @@ local settings =
     spawn = 
     {
         chunkId     = {0, 0, 0},
-        xyz         = {-31, 4, 95},
+        xyz         = {-28, 4, 95},
         ypr         = {0, 0, 0},
         gravityDir  = 5,
     },
 
     cameraSettings =
     {
-        cameraType = dio.types.cameraTypes.FPS,
-        fov = 90,
+        fps =
+        {
+            cameraType = dio.types.cameraTypes.FPS,
+            fov = 90,
+        },
+        overhead =
+        {
+            projectionType = dio.types.projectionTypes.PERSPECTIVE,
+            cameraType = dio.types.cameraTypes.LOOK_AT,
+            fov = 60,
+            offset = {0, 32, 16},
+        },
     },
 
     itemsAvailable = 

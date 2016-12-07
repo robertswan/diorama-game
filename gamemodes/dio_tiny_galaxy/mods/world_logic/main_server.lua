@@ -33,6 +33,7 @@ local instance =
     regularItemReach = 2.1,
     openChestBlockId = 70,
 
+    isControllingShip = false,
     isMotorAtTarget = true,
     motorTarget = {},
 }
@@ -80,52 +81,52 @@ local function convertHourToTime (hour)
     return time
 end
 
--- --------------------------------------------------
--- local function shipUpdate (event, ship)
+--------------------------------------------------
+local function shipUpdate (event, ship)
 
---     ship.target = Mixin.cloneTable (instance.motorTarget)
+    ship.target = Mixin.cloneTable (instance.motorTarget)
 
---     if not ship.isAtTarget or not instance.isMotorAtTarget then
+    if not ship.isAtTarget or not instance.isMotorAtTarget then
 
---         local speed = ship.speed * event.timeDelta * 0.1
+        local speed = ship.speed * event.timeDelta
 
---         for idx, value in ipairs (ship.xyz) do
---             local target = ship.target [idx]
---             if value < target then
---                 value = value + speed
---                 if value > target then
---                     value = target
---                 end
---                 ship.xyz [idx] = value
---             elseif value > target then
---                 value = value - speed
---                 if value < target then
---                     value = target
---                 end
---                 ship.xyz [idx] = value
---             end
---         end
+        for idx, value in ipairs (ship.xyz) do
+            local target = ship.target [idx]
+            if value < target then
+                value = value + speed
+                if value > target then
+                    value = target
+                end
+                ship.xyz [idx] = value
+            elseif value > target then
+                value = value - speed
+                if value < target then
+                    value = target
+                end
+                ship.xyz [idx] = value
+            end
+        end
 
---         local c = dio.entities.components
---         local t = dio.entities.getComponent (event.entityId, c.TRANSFORM)
---         t.xyz [1] = ship.xyz [1]
---         t.xyz [2] = ship.xyz [2]
---         t.xyz [3] = ship.xyz [3]
---         dio.entities.setComponent (event.entityId, c.TRANSFORM, t)
+        local c = dio.entities.components
+        local t = dio.entities.getComponent (event.entityId, c.TRANSFORM)
+        t.xyz [1] = ship.xyz [1]
+        t.xyz [2] = ship.xyz [2]
+        t.xyz [3] = ship.xyz [3]
+        dio.entities.setComponent (event.entityId, c.TRANSFORM, t)
 
---         if ship.xyz [1] == ship.target [1] and
---                 ship.xyz [2] == ship.target [2] and
---                 ship.xyz [3] == ship.target [3] then
+        if ship.xyz [1] == ship.target [1] and
+                ship.xyz [2] == ship.target [2] and
+                ship.xyz [3] == ship.target [3] then
 
---             ship.isAtTarget = true
---             instance.isMotorAtTarget = true
---         end
+            ship.isAtTarget = true
+            instance.isMotorAtTarget = true
+        end
 
---     end
--- end
+    end
+end
 
 --------------------------------------------------
-local function moveShipAndPlayer (connectionId, xyz, moveDelta)
+local function moveShipAndPlayer (connectionId, moveDelta)
 
     local isSafe, dialog = calcIsSafeMove (moveDelta)
     -- local isSafe, dialog = true, nil
@@ -133,64 +134,70 @@ local function moveShipAndPlayer (connectionId, xyz, moveDelta)
 
         -- update NEW
 
-        -- instance.motorTarget [1] = instance.motorTarget [1] + moveDelta [1] * 8
-        -- instance.motorTarget [3] = instance.motorTarget [3] + moveDelta [2] * 8
-        -- instance.isMotorAtTarget = false
-
-        -- update OLD
-
-        local cg = instance.currentGalaxy
-
-        local origin = cg.mapTopLeftChunkOrigin
-        local ship = instance.ship
-        local minY = -8
-
-        local newShipXyz =
-        {
-            (ship [1] + moveDelta [1]) * 8,
-            minY,
-            (ship [2] + moveDelta [2]) * 8,
-        }
-
-        local shipTo = 
-        {
-            chunkId = {origin [1], 0, origin [2]},
-            xyz = newShipXyz,
-        }
-
-        local shipFrom = 
-        {
-            chunkId = {origin [1], 0, origin [2]},
-            xyz = {ship [1] * 8, minY, ship [2] * 8},
-            size = {8, 16, 8},
-        }
-
-        local clearAir = 
-        {
-            chunkId = {0, 0, 0},
-            xyz = {-32, 32, 88},
-            size = {8, 16, 8},
-        }    
-
-        dio.world.copyCells (instance.roomEntityId, shipTo, shipFrom)
-        dio.world.copyCells (instance.roomEntityId, shipFrom, clearAir)
-
-        local teleport = 
-                "delta " .. 
-                tostring (moveDelta [1] * 8) .. " " ..
-                tostring (2) .. " " ..
-                tostring (moveDelta [2] * 8)
-
-        dio.network.sendEvent (connectionId, "tinyGalaxy.TP", teleport)
+        instance.motorTarget [1] = instance.motorTarget [1] + moveDelta [1] * 8
+        instance.motorTarget [3] = instance.motorTarget [3] + moveDelta [2] * 8
 
         instance.ship [1] = instance.ship [1] + moveDelta [1]
-        instance.ship [2] = instance.ship [2] + moveDelta [2]
+        instance.ship [2] = instance.ship [2] + moveDelta [2]        
+
+        instance.isMotorAtTarget = false
+
+        -- -- update OLD
+
+        -- local cg = instance.currentGalaxy
+
+        -- local origin = cg.mapTopLeftChunkOrigin
+        -- local ship = instance.ship
+        -- local minY = -8
+
+        -- local newShipXyz =
+        -- {
+        --     (ship [1] + moveDelta [1]) * 8,
+        --     minY,
+        --     (ship [2] + moveDelta [2]) * 8,
+        -- }
+
+        -- local shipTo = 
+        -- {
+        --     chunkId = {origin [1], 0, origin [2]},
+        --     xyz = newShipXyz,
+        -- }
+
+        -- local shipFrom = 
+        -- {
+        --     chunkId = {origin [1], 0, origin [2]},
+        --     xyz = {ship [1] * 8, minY, ship [2] * 8},
+        --     size = {8, 16, 8},
+        -- }
+
+        -- local clearAir = 
+        -- {
+        --     chunkId = {0, 0, 0},
+        --     xyz = {-32, 32, 88},
+        --     size = {8, 16, 8},
+        -- }    
+
+        -- dio.world.copyCells (instance.roomEntityId, shipTo, shipFrom)
+        -- dio.world.copyCells (instance.roomEntityId, shipFrom, clearAir)
+
+        -- local teleport = 
+        --         "delta " .. 
+        --         tostring (moveDelta [1] * 8) .. " " ..
+        --         tostring (2) .. " " ..
+        --         tostring (moveDelta [2] * 8)
+
+        -- dio.network.sendEvent (connectionId, "tinyGalaxy.TP", teleport)
+
+        -- instance.ship [1] = instance.ship [1] + moveDelta [1]
+        -- instance.ship [2] = instance.ship [2] + moveDelta [2]
 
     elseif dialog then
 
         dio.network.sendEvent (connectionId, "tinyGalaxy.DIALOGS", dialog)
 
     end
+
+    return isSafe
 end
 
 --------------------------------------------------
@@ -210,7 +217,65 @@ local function createNewLevel ()
 end
 
 --------------------------------------------------
-local function createPlayerEntity (connectionId, accountId)
+local function createCameraEntity (eyeEntityId, roomEntityId, cameraSettings)
+
+    local c = dio.entities.components
+    local cameraComponents = 
+    {
+        [c.BASE_NETWORK]            = {},
+        [c.CAMERA]                  = cameraSettings,
+        [c.PARENT]                  = {parentEntityId = roomEntityId},
+        [c.TRANSFORM]               = {},
+    }
+    cameraComponents [c.CAMERA].attachTo = eyeEntityId
+    cameraComponents [c.CAMERA].isMainCamera = true
+
+    local cameraEntityId = dio.entities.create (roomEntityId, cameraComponents)
+
+    return cameraEntityId    
+
+end
+
+--------------------------------------------------
+local switchCameraToFps
+local function onPlayerUpdate (event)
+
+    if instance.isControllingShip then
+
+        if instance.isMotorAtTarget then
+
+            if event.isLeftMouseClicked or event.isRightMouseClicked then
+
+                instance.isControllingShip = false
+
+                local connection = connections [event.connectionId]
+                switchCameraToFps (connection)
+
+            else
+
+                local delta
+                if event.isUpPressed then
+                    delta = {0, -1}
+                elseif event.isDownPressed then
+                    delta = {0, 1}
+                elseif event.isLeftPressed then
+                    delta = {-1, 0}
+                elseif event.isRightPressed then
+                    delta = {1, 0}
+                end
+
+                if delta then
+                    moveShipAndPlayer (event.connectionId, delta)
+                end
+            end
+        end
+            
+        event.cancel = true
+    end
+end
+
+--------------------------------------------------
+local function createPlayerEntity (connectionId, accountId, playerXyz)
 
     local cg = instance.currentGalaxy    
     local roomEntityId = dio.world.ensureRoomIsLoaded (instance.currentGalaxyId)
@@ -226,7 +291,7 @@ local function createPlayerEntity (connectionId, accountId)
         [c.BASE_NETWORK] =          {},
         [c.CHILD_IDS] =             {},
         [c.FOCUS] =                 {connectionId = connectionId, radius = 4},
-        [c.GRAVITY_TRANSFORM] =     instance.currentGalaxy.spawn,
+        [c.GRAVITY_TRANSFORM] =     playerXyz and playerXyz or cg.spawn,
         [c.NAME] =                  {name = "PLAYER"},
         [c.PARENT] =                {parentEntityId = roomEntityId},
         [c.SERVER_CHARACTER_CONTROLLER] =
@@ -239,6 +304,7 @@ local function createPlayerEntity (connectionId, accountId)
             jumpSpeed = instance.initialJumpSpeed,
             selectionDistance = 20,
             hasHighlight = false,
+            onUpdate = onPlayerUpdate,
         },
         [c.TEMP_PLAYER] =           {connectionId = connectionId, accountId = accountId},
     }
@@ -256,18 +322,9 @@ local function createPlayerEntity (connectionId, accountId)
 
     local eyeEntityId = dio.entities.create (roomEntityId, eyeComponents)
 
-    local cameraComponents = 
-    {
-        [c.BASE_NETWORK]            = {},
-        [c.CAMERA]                  = cg.cameraSettings,
-        [c.PARENT] =                {parentEntityId = roomEntityId},
-        [c.TRANSFORM] =             {},
-    }
-    cameraComponents [c.CAMERA].attachTo = eyeEntityId
-    cameraComponents [c.CAMERA].isMainCamera = true
+    local cameraSettings = cg.isMap and cg.cameraSettings.overhead or cg.cameraSettings.fps
+    local cameraEntityId = createCameraEntity (eyeEntityId, roomEntityId, cameraSettings)
 
-    local cameraEntityId = dio.entities.create (roomEntityId, cameraComponents)
-    
     if cg.isMap then
 
         local playerModelComponents =
@@ -282,7 +339,51 @@ local function createPlayerEntity (connectionId, accountId)
 
     end
 
-    return playerEntityId, eyeEntityId, cameraEntityId
+    return playerEntityId, eyeEntityId, cameraEntityId, roomEntityId
+end
+
+--------------------------------------------------
+switchCameraToFps = function (connection)
+
+    -- actually we will KILL the player now and respawn it in the correct position
+
+    dio.entities.destroy (connection.entityId)
+    dio.entities.destroy (connection.cameraEntityId)
+
+    local c = dio.entities.components
+    local motorXyz = dio.entities.getComponent (instance.motorEntityId, c.TRANSFORM)
+    local xyz = connection.storedXyz
+    xyz.chunkId = motorXyz.chunkId
+    xyz.xyz [1] = xyz.xyz [1] + motorXyz.xyz [1]
+    xyz.xyz [2] = xyz.xyz [2] + motorXyz.xyz [2]
+    xyz.xyz [3] = xyz.xyz [3] + motorXyz.xyz [3]
+
+    local playerEntityId, eyeEntityId, cameraEntityId, roomEntityId = createPlayerEntity (connection.connectionId, connection.accountId, xyz)
+    connection.storedXyz = nil    
+
+    connection.entityId = playerEntityId
+    connection.eyeEntityId = playerEntityId
+    connection.cameraEntityId = cameraEntityId
+    connection.roomEntityId = roomEntityId
+end
+
+--------------------------------------------------
+local function switchCameraToOverhead (connection)
+
+    -- record player xyz relative to the ship
+    local c = dio.entities.components
+    local motorXyz = dio.entities.getComponent (instance.motorEntityId, c.TRANSFORM)
+    local playerXyz = dio.entities.getComponent (connection.entityId, c.GRAVITY_TRANSFORM)
+
+    connection.storedXyz = playerXyz
+    connection.storedXyz.xyz [1] = (playerXyz.chunkId [1] - motorXyz.chunkId [1]) * 32 + playerXyz.xyz [1] - motorXyz.xyz [1]
+    connection.storedXyz.xyz [2] = (playerXyz.chunkId [2] - motorXyz.chunkId [2]) * 32 + playerXyz.xyz [2] - motorXyz.xyz [2]
+    connection.storedXyz.xyz [3] = (playerXyz.chunkId [3] - motorXyz.chunkId [3]) * 32 + playerXyz.xyz [3] - motorXyz.xyz [3]
+    connection.storedXyz.chunkId = {0, 0, 0}
+
+    dio.entities.destroy (connection.cameraEntityId)
+    local cameraSettings = instance.currentGalaxy.cameraSettings.overhead
+    connection.cameraEntityId = createCameraEntity (instance.motorEntityId, connection.roomEntityId, cameraSettings)
 end
 
 --------------------------------------------------
@@ -290,11 +391,16 @@ local function onClientConnected (event)
 
     createNewLevel ()
 
+    local playerEntityId, eyeEntityId, cameraEntityId, roomEntityId = createPlayerEntity (event.connectionId, event.accountId)
+
     local connection =
     {
         connectionId = event.connectionId,
         accountId = event.accountId,
-        entityId = createPlayerEntity (event.connectionId, event.accountId),
+        entityId = playerEntityId,
+        eyeEntityId = eyeEntityId,
+        cameraEntityId = cameraEntityId,
+        roomEntityId = roomEntityId,
     }
 
     connections [event.connectionId] = connection
@@ -351,6 +457,10 @@ local function onRoomDestroyed (event)
     -- if we are tracking a destroyed room, then mark it here
     if instance.roomEntityId == event.roomEntityId then
         instance.roomEntityId = nil
+        instance.eyeEntityId = nil
+        instance.cameraEntityId = nil
+        instance.roomEntityId = nil
+        instance.motorEntityId = nil
     end
 
     if instance.isRestartingGame then
@@ -358,7 +468,11 @@ local function onRoomDestroyed (event)
         createNewLevel ()
         for _, connection in pairs (connections) do
 
-            connection.entityId = createPlayerEntity (connection.connectionId, connection.accountId)
+            local playerEntityId, eyeEntityId, cameraEntityId, roomEntityId = createPlayerEntity (connection.connectionId, connection.accountId)
+            connection.entityId = playerEntityId
+            connection.eyeEntityId = playerEntityId
+            connection.cameraEntityId = cameraEntityId
+            connection.roomEntityId = roomEntityId
             dio.network.sendEvent (connection.connectionId, "tinyGalaxy.DIALOGS", "BEGIN_GAME")
         end
     end
@@ -391,25 +505,10 @@ function blockCallbacks.computer (event, connection)
         
     if event.distance <= instance.regularItemReach then
 
-        if instance.isMotorAtTarget then
-            
-            local xyz = dio.world.getPlayerXyz (connection.accountId)
-            local yaw = xyz.ypr [2]
+        if instance.isMotorAtTarget and not instance.isControllingShip then
 
-            local delta = {0, -1}
-            if yaw < (math.pi * 0.25) then
-                
-            elseif yaw < (math.pi * (0.25 + 0.5 * 1)) then
-                delta = {-1, 0}
-            elseif yaw < (math.pi * (0.25 + 0.5 * 2)) then
-                delta = {0, 1}
-            elseif yaw < (math.pi * (0.25 + 0.5 * 3)) then
-                delta = {1, 0}
-            end
-
-            -- how to connect to the ship instance data?
-
-            moveShipAndPlayer (event.connectionId, xyz, delta)        
+            switchCameraToOverhead (connection)
+            instance.isControllingShip = true
         end
     end
     return true
@@ -586,7 +685,11 @@ local function restartGame (connection)
     instance.isGameOver = false
 
     dio.entities.destroy (connection.entityId)
+    dio.entities.destroy (connection.cameraEntityId)
     connection.entityId = nil
+    connection.eyeEntityId = nil
+    connection.cameraEntityId = nil
+    connection.roomEntityId = nil
 
     instance.roomEntityId = nil
     instance.calendarEntityId = nil
@@ -607,14 +710,17 @@ end
 --------------------------------------------------
 local function onEntityPlaced (event)
 
-    if event.isBlockValid then
+    if not instance.isControllingShip then
 
-        local blockTag = instance.blocks [event.pickedBlockId].tag
-        if blockTag then
-            local connection = connections [event.connectionId]
-            event.isReplacing = true
-            event.cancel = blockCallbacks [blockTag] (event, connection)
-            return
+        if event.isBlockValid then
+
+            local blockTag = instance.blocks [event.pickedBlockId].tag
+            if blockTag then
+                local connection = connections [event.connectionId]
+                event.isReplacing = true
+                event.cancel = blockCallbacks [blockTag] (event, connection)
+                return
+            end
         end
     end
 
@@ -650,13 +756,18 @@ end
 local function teleportPlayerToRoom (connection, targetGalaxyId)
 
     dio.entities.destroy (connection.entityId)
+    dio.entities.destroy (connection.cameraEntityId)
 
     instance.currentGalaxyId = targetGalaxyId
     instance.currentGalaxy = galaxies [instance.currentGalaxyId]
 
     createNewLevel ()
     
-    connection.entityId = createPlayerEntity (connection.connectionId, connection.accountId)
+    local playerEntityId, eyeEntityId, cameraEntityId, roomEntityId = createPlayerEntity (connection.connectionId, connection.accountId)
+    connection.entityId = playerEntityId
+    connection.eyeEntityId = eyeEntityId
+    connection.cameraEntityId = cameraEntityId
+    connection.roomEntityId = roomEntityId
     
 end
 
@@ -721,8 +832,10 @@ local function onTick (event)
                 dio.entities.setComponent (instance.calendarEntityId, dio.entities.components.CALENDAR, component)
             end
 
-            if xyz.chunkId [2] == -1 and xyz.xyz [2] < 2 then
-                doGameOver (connection, false)
+            if not instance.isControllingShip then
+                if xyz.chunkId [2] == -1 and xyz.xyz [2] < 2 then
+                    doGameOver (connection, false)
+                end
             end
         end
     end
@@ -739,52 +852,58 @@ local function onChatReceived (event)
     end
 end
 
--- --------------------------------------------------
--- local function onNamedEntityCreated (event)
+--------------------------------------------------
+local function onNamedEntityCreated (event)
 
---     if event.name == "MOTOR" then
+    if event.name == "MOTOR" then
 
---         -- need to add some movement callback to it...
+        -- need to add some movement callback to it...
 
---         local c = dio.entities.components
+        local c = dio.entities.components
 
---         local transform = dio.entities.getComponent (event.entityId, c.TRANSFORM)
---         local entityInstance = 
---         {
---             xyz         = Mixin.cloneTable (transform.xyz),
---             target      = Mixin.cloneTable (transform.xyz),
---             speed       = 8,
---             isAtTarget  = true,
---         }
+        local transform = dio.entities.getComponent (event.entityId, c.TRANSFORM)
+        local entityInstance = 
+        {
+            xyz         = Mixin.cloneTable (transform.xyz),
+            target      = Mixin.cloneTable (transform.xyz),
+            speed       = 24,
+            isAtTarget  = true,
+        }
 
---         local hasSerialized = (event.isLoading and dio.entities.hasComponent (event.entityId, c.SCRIPT_DISK_SERIALIZER))
+        local hasSerialized = (event.isLoading and dio.entities.hasComponent (event.entityId, c.SCRIPT_DISK_SERIALIZER))
 
---         if hasSerialized then
---             local diskSerializer = dio.entities.getComponent (event.entityId, c.SCRIPT_DISK_SERIALIZER)
---             entityInstance = diskSerializer.data;
---         end
+        if hasSerialized then
+            local diskSerializer = dio.entities.getComponent (event.entityId, c.SCRIPT_DISK_SERIALIZER)
+            entityInstance = diskSerializer.data;
+        end
 
---         instance.motorTarget = Mixin.cloneTable (entityInstance.target)
+        instance.motorTarget = Mixin.cloneTable (entityInstance.target)
 
---         local components =
---         {
---             [c.VARIABLE_UPDATE] =
---             {
---                 onUpdate = function (event) shipUpdate (event, entityInstance) end,
---             },        
---         }
+        local components =
+        {
+            -- [c.FIXED_UPDATE] =
+            -- {
+            --     onUpdate = function (event) shipUpdate (event, entityInstance) end,
+            -- }, 
+            [c.VARIABLE_UPDATE] =
+            {
+                onUpdate = function (event) shipUpdate (event, entityInstance) end,
+            },        
+        }
 
---         if not hasSerialized then
---             components [c.SCRIPT_DISK_SERIALIZER] =
---             {
---                 data = entityInstance
---             }
---         end
+        if not hasSerialized then
+            components [c.SCRIPT_DISK_SERIALIZER] =
+            {
+                data = entityInstance
+            }
+        end
 
---         dio.entities.addComponents (event.entityId, components)
+        dio.entities.addComponents (event.entityId, components)
 
---     end    
--- end
+        instance.motorEntityId = event.entityId
+
+    end    
+end
 
 --------------------------------------------------
 local function onLoad ()
@@ -798,7 +917,7 @@ local function onLoad ()
     dio.events.addListener (types.ENTITY_DESTROYED, onEntityDestroyed)
     dio.events.addListener (types.TICK, onTick)
     dio.events.addListener (types.CHAT_RECEIVED, onChatReceived)
-    --dio.events.addListener (types.NAMED_ENTITY_CREATED, onNamedEntityCreated)
+    dio.events.addListener (types.NAMED_ENTITY_CREATED, onNamedEntityCreated)
 
     instance.currentGalaxyId = "map_00/"
     instance.currentGalaxy = galaxies [instance.currentGalaxyId]

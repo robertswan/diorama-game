@@ -267,11 +267,9 @@ local blocks =
     {name = "wall",                 icon = {15, 1},     models = fences ("wall", {15, 1}, {15, 2})},
     {name = "head",                 icon = {15, 1},     model = "rob"},
     {name = "axle block",           icon = {15, 4},     textures = {neswtb = {15, 4}}, isAxle = true},
-    {name = "motor block",          icon = {15, 4},     textures = {neswtb = {15, 4}}, isMotor = true},
-    {name = "spanner",              icon = {14, 4},     textures = {neswtb = {15, 4}}, tag = "spanner"},
-    {name = "test entity",          icon = {14, 4},     entityModel = "test_entity_model"},
 
-    --{name = "test entity",          icon = {14, 4},     custom = {type = "ENTITY_MODEL", id = "test_entity_model"}},
+    -- 82
+    {name = "spanner",              icon = {14, 4},     textures = {neswtb = {15, 4}}, tag = "spanner"},
 }
 
 return {blocks = blocks, entities = entities, mediumModels = mediumModels, entityModels = entityModels}
