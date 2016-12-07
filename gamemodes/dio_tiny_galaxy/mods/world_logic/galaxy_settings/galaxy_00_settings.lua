@@ -19,7 +19,7 @@ local settings =
         },
         overhead =
         {
-            projectionType = dio.types.projectionTypes.FPS,
+            projectionType = dio.types.projectionTypes.PERSPECTIVE,
             cameraType = dio.types.cameraTypes.LOOK_AT,
             fov = 60,
             offset = {0, 32, 16},
