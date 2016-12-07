@@ -4,10 +4,13 @@ local settings =
 
     cameraSettings =
     {
-        projectionType = dio.types.projectionTypes.FPS,
-        cameraType = dio.types.cameraTypes.LOOK_AT,
-        fov = 30,
-        offset = {-4, 16, 16},
+        overhead =
+        {
+            projectionType = dio.types.projectionTypes.FPS,
+            cameraType = dio.types.cameraTypes.LOOK_AT,
+            fov = 30,
+            offset = {-4, 16, 16},
+        },
     },
 
     spawn = 

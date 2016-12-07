@@ -12,8 +12,18 @@ local settings =
 
     cameraSettings =
     {
-        cameraType = dio.types.cameraTypes.FPS,
-        fov = 90,
+        fps =
+        {
+            cameraType = dio.types.cameraTypes.FPS,
+            fov = 90,
+        },
+        overhead =
+        {
+            projectionType = dio.types.projectionTypes.FPS,
+            cameraType = dio.types.cameraTypes.LOOK_AT,
+            fov = 60,
+            offset = {0, 32, 16},
+        },
     },
 
     itemsAvailable = 
