@@ -10,23 +10,26 @@ local galaxies =
 }
 
 --------------------------------------------------
+local connections = {}
+
+--------------------------------------------------
 local instance =
 {
     blocks = BlockDefinitions.blocks,
 
     timeOfDay = 0,
     currentWorldIdx = nil,
-    initialJumpSpeed = 10.0,
+    initialJumpSpeed = 15.0,
     nextItemIdx = 1,
     inventory = 
     {
-        -- smallAxe = true, 
-        -- iceShield = true,
-        -- belt = true,
-        -- fireShield = true,
-        -- teleporter = true,
-        -- bean = true,
-        -- bigAxe = true,
+        smallAxe = true, 
+        iceShield = true,
+        belt = true,
+        fireShield = true,
+        teleporter = true,
+        bean = true,
+        bigAxe = true,
     },
 
     artifactsCollectedCount = 0,
@@ -39,7 +42,39 @@ local instance =
 }
 
 --------------------------------------------------
-local connections = {}
+local function restartGame (connection)
+
+    local cg = instance.currentGalaxy
+
+    instance.isGameOver = false
+
+    dio.entities.destroy (connection.entityId)
+    dio.entities.destroy (connection.cameraEntityId)
+    connection.entityId = nil
+    connection.eyeEntityId = nil
+    connection.cameraEntityId = nil
+    connection.roomEntityId = nil
+
+    instance.roomEntityId = nil
+    instance.calendarEntityId = nil
+
+    instance.isRestartingGame = true
+
+    -- reset game vars
+    instance.timeOfDay = 0
+    instance.currentWorldIdx = nil
+    instance.initialJumpSpeed = 10.0
+    instance.nextItemIdx = 1
+    instance.inventory = {}
+    instance.artifactsCollectedCount = 0
+    -- instance.mapTopLeftChunkOrigin = {-1, -1}
+    instance.ship = Mixin.cloneTable (cg.ship)
+
+    instance.isControllingShip = false
+    instance.isMotorAtTarget = true
+    motorTarget = {}
+
+end
 
 --------------------------------------------------
 local function calcIsSafeMove (moveDelta)
@@ -657,9 +692,9 @@ function blockCallbacks.teleporter (event, connection)
         if event.face == 4 then
             local teleport = 
                     "absolute " .. 
-                    tostring (event.chunkId [1] * 32 + event.cellId [1] + 0.5) .. " " ..
-                    tostring (event.chunkId [2] * 32 + event.cellId [2] + 1.5) .. " " ..
-                    tostring (event.chunkId [3] * 32 + event.cellId [3] + 0.5)
+                    tostring (event.globalChunkId [1] * 32 + event.globalCellId [1] + 0.5) .. " " ..
+                    tostring (event.globalChunkId [2] * 32 + event.globalCellId [2] + 1.5) .. " " ..
+                    tostring (event.globalChunkId [3] * 32 + event.globalCellId [3] + 0.5)
 
             dio.network.sendEvent (connection.connectionId, "tinyGalaxy.TP", teleport)
         end
@@ -675,36 +710,6 @@ local function convertPlayerXyxToMapCell (xyz)
         math.floor (((xyz.chunkId [1] - cg.mapTopLeftChunkOrigin [1]) * 32 + xyz.xyz [1]) / 8),
         math.floor (((xyz.chunkId [3] - cg.mapTopLeftChunkOrigin [2]) * 32 + xyz.xyz [3]) / 8),
     }
-end
-
---------------------------------------------------
-local function restartGame (connection)
-
-    local cg = instance.currentGalaxy
-
-    instance.isGameOver = false
-
-    dio.entities.destroy (connection.entityId)
-    dio.entities.destroy (connection.cameraEntityId)
-    connection.entityId = nil
-    connection.eyeEntityId = nil
-    connection.cameraEntityId = nil
-    connection.roomEntityId = nil
-
-    instance.roomEntityId = nil
-    instance.calendarEntityId = nil
-
-    instance.isRestartingGame = true
-
-    -- reset game vars
-    instance.timeOfDay = 0
-    instance.currentWorldIdx = nil
-    instance.initialJumpSpeed = 10.0
-    instance.nextItemIdx = 1
-    instance.inventory = {}
-    instance.artifactsCollectedCount = 0
-    -- instance.mapTopLeftChunkOrigin = {-1, -1}
-    instance.ship = Mixin.cloneTable (cg.ship)
 end
 
 --------------------------------------------------
