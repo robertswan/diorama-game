@@ -23,13 +23,13 @@ local instance =
     nextItemIdx = 1,
     inventory = 
     {
-        -- smallAxe = true, 
-        -- iceShield = true,
-        -- belt = true,
-        -- fireShield = true,
-        -- teleporter = true,
-        -- bean = true,
-        -- bigAxe = true,
+    --     smallAxe = true, 
+    --     iceShield = true,
+    --     belt = true,
+    --     fireShield = true,
+    --     teleporter = true,
+    --     bean = true,
+    --     bigAxe = true,
     },
 
     artifactsCollectedCount = 0,
@@ -73,6 +73,8 @@ local function restartGame (connection)
     instance.isControllingShip = false
     instance.isMotorAtTarget = true
     motorTarget = {}
+
+    connection.jumpSpeed = instance.initialJumpSpeed
 
 end
 
@@ -177,55 +179,6 @@ local function moveShipAndPlayer (connectionId, moveDelta)
 
         instance.isMotorAtTarget = false
 
-        -- -- update OLD
-
-        -- local cg = instance.currentGalaxy
-
-        -- local origin = cg.mapTopLeftChunkOrigin
-        -- local ship = instance.ship
-        -- local minY = -8
-
-        -- local newShipXyz =
-        -- {
-        --     (ship [1] + moveDelta [1]) * 8,
-        --     minY,
-        --     (ship [2] + moveDelta [2]) * 8,
-        -- }
-
-        -- local shipTo = 
-        -- {
-        --     chunkId = {origin [1], 0, origin [2]},
-        --     xyz = newShipXyz,
-        -- }
-
-        -- local shipFrom = 
-        -- {
-        --     chunkId = {origin [1], 0, origin [2]},
-        --     xyz = {ship [1] * 8, minY, ship [2] * 8},
-        --     size = {8, 16, 8},
-        -- }
-
-        -- local clearAir = 
-        -- {
-        --     chunkId = {0, 0, 0},
-        --     xyz = {-32, 32, 88},
-        --     size = {8, 16, 8},
-        -- }    
-
-        -- dio.world.copyCells (instance.roomEntityId, shipTo, shipFrom)
-        -- dio.world.copyCells (instance.roomEntityId, shipFrom, clearAir)
-
-        -- local teleport = 
-        --         "delta " .. 
-        --         tostring (moveDelta [1] * 8) .. " " ..
-        --         tostring (2) .. " " ..
-        --         tostring (moveDelta [2] * 8)
-
-        -- dio.network.sendEvent (connectionId, "tinyGalaxy.TP", teleport)
-
-        -- instance.ship [1] = instance.ship [1] + moveDelta [1]
-        -- instance.ship [2] = instance.ship [2] + moveDelta [2]
-
     elseif dialog then
 
         dio.network.sendEvent (connectionId, "tinyGalaxy.DIALOGS", dialog)
@@ -310,7 +263,7 @@ local function onPlayerUpdate (event)
 end
 
 --------------------------------------------------
-local function createPlayerEntity (connectionId, accountId, playerXyz)
+local function createPlayerEntity (connectionId, accountId, jumpSpeed, playerXyz)
 
     local cg = instance.currentGalaxy    
     local roomEntityId = dio.world.ensureRoomIsLoaded (instance.currentGalaxyId)
@@ -336,7 +289,7 @@ local function createPlayerEntity (connectionId, accountId, playerXyz)
             crouchSpeed = 1.0,
             walkSpeed = 4.0,
             sprintSpeed = 4.0,
-            jumpSpeed = instance.initialJumpSpeed,
+            jumpSpeed = jumpSpeed,
             selectionDistance = 20,
             hasHighlight = false,
             onUpdate = onPlayerUpdate,
@@ -393,7 +346,12 @@ switchCameraToFps = function (connection)
     xyz.xyz [2] = xyz.xyz [2] + motorXyz.xyz [2]
     xyz.xyz [3] = xyz.xyz [3] + motorXyz.xyz [3]
 
-    local playerEntityId, eyeEntityId, cameraEntityId, roomEntityId = createPlayerEntity (connection.connectionId, connection.accountId, xyz)
+    local playerEntityId, eyeEntityId, cameraEntityId, roomEntityId = createPlayerEntity (
+            connection.connectionId, 
+            connection.accountId,
+            connection.jumpSpeed,
+            xyz)
+
     connection.storedXyz = nil    
 
     connection.entityId = playerEntityId
@@ -426,16 +384,20 @@ local function onClientConnected (event)
 
     createNewLevel ()
 
-    local playerEntityId, eyeEntityId, cameraEntityId, roomEntityId = createPlayerEntity (event.connectionId, event.accountId)
+    local playerEntityId, eyeEntityId, cameraEntityId, roomEntityId = createPlayerEntity (
+            event.connectionId, 
+            event.accountId,
+            instance.initialJumpSpeed)
 
     local connection =
     {
-        connectionId = event.connectionId,
-        accountId = event.accountId,
-        entityId = playerEntityId,
-        eyeEntityId = eyeEntityId,
-        cameraEntityId = cameraEntityId,
-        roomEntityId = roomEntityId,
+        connectionId    = event.connectionId,
+        accountId       = event.accountId,
+        entityId        = playerEntityId,
+        eyeEntityId     = eyeEntityId,
+        cameraEntityId  = cameraEntityId,
+        roomEntityId    = roomEntityId,
+        jumpSpeed       = instance.initialJumpSpeed,
     }
 
     connections [event.connectionId] = connection
@@ -503,7 +465,11 @@ local function onRoomDestroyed (event)
         createNewLevel ()
         for _, connection in pairs (connections) do
 
-            local playerEntityId, eyeEntityId, cameraEntityId, roomEntityId = createPlayerEntity (connection.connectionId, connection.accountId)
+            local playerEntityId, eyeEntityId, cameraEntityId, roomEntityId = createPlayerEntity (
+                    connection.connectionId, 
+                    connection.accountId,
+                    connection.jumpSpeed)
+
             connection.entityId = playerEntityId
             connection.eyeEntityId = playerEntityId
             connection.cameraEntityId = cameraEntityId
@@ -533,6 +499,7 @@ local blockCallbacks = {}
 --------------------------------------------------
 function blockCallbacks.cookie (event, connection) 
     doGameOver (connection, true)
+    return true
 end
 
 --------------------------------------------------
@@ -566,8 +533,9 @@ function blockCallbacks.itemChest (event, connection)
         event.replacementBlockId = instance.openChestBlockId
 
         if item.jumpSpeed then
+            connection.jumpSpeed = item.jumpSpeed
             local component = dio.entities.getComponent (connection.entityId, dio.entities.components.SERVER_CHARACTER_CONTROLLER)
-            component.jumpSpeed = item.jumpSpeed
+            component.jumpSpeed = connection.jumpSpeed
             dio.entities.setComponent (connection.entityId, dio.entities.components.SERVER_CHARACTER_CONTROLLER, component)
         end
 
@@ -768,7 +736,11 @@ local function teleportPlayerToRoom (connection, targetGalaxyId)
 
     createNewLevel ()
     
-    local playerEntityId, eyeEntityId, cameraEntityId, roomEntityId = createPlayerEntity (connection.connectionId, connection.accountId)
+    local playerEntityId, eyeEntityId, cameraEntityId, roomEntityId = createPlayerEntity (
+            connection.connectionId, 
+            connection.accountId,
+            connection.jumpSpeed)
+
     connection.entityId = playerEntityId
     connection.eyeEntityId = eyeEntityId
     connection.cameraEntityId = cameraEntityId

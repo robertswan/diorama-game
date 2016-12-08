@@ -21,8 +21,9 @@ local settings =
         {
             projectionType = dio.types.projectionTypes.PERSPECTIVE,
             cameraType = dio.types.cameraTypes.LOOK_AT,
-            fov = 60,
-            offset = {0, 32, 16},
+            fov = 80,
+            lookAt = {6, 0, -8},
+            offset = {0, 16, 8},
         },
     },
 
