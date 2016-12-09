@@ -56,7 +56,6 @@ local function restartGame (connection)
     connection.roomEntityId = nil
 
     instance.roomEntityId = nil
-    instance.calendarEntityId = nil
 
     instance.isRestartingGame = true
 
@@ -421,31 +420,6 @@ local function onRoomCreated (event)
 
     instance.roomEntityId = event.roomEntityId
 
-    local components = dio.entities.components
-    local calendarEntity =
-    {
-        [components.BASE_NETWORK] =
-        {
-        },
-        [components.CALENDAR] =
-        {
-            time = convertHourToTime (instance.timeOfDay),
-            timeMultiplier = 0,
-        },
-        [components.NAME] =
-        {
-            name = "CALENDAR",
-            debug = false,
-        },
-        [components.PARENT] =
-        {
-            parentEntityId = event.roomEntityId,
-        },
-    }
-    
-    instance.calendarEntityId = dio.entities.create (event.roomEntityId, calendarEntity)
-    print ("onRoomCreated " .. tostring (instance.calendarEntityId))
-
 end
 
 --------------------------------------------------
@@ -772,15 +746,13 @@ local function onTick (event)
                 end
             end
 
-        elseif instance.calendarEntityId then
+        else
 
             local mapCell = convertPlayerXyxToMapCell (xyz)
 
             local worldIdx = 0
-            local timeOfDay = 0
             for idx, world in ipairs (cg.worlds) do
                 if mapCell [1] == world.xz [1] and mapCell [2] == world.xz [2] then
-                    timeOfDay = world.timeOfDay
                     worldIdx = idx
                     break
                 end
@@ -800,13 +772,7 @@ local function onTick (event)
                 end
 
                 dio.network.sendEvent (connection.connectionId, "tinyGalaxy.WORLD", description)
-            end
-
-            if timeOfDay ~= instance.timeOfDay then
-                instance.timeOfDay = timeOfDay
-                local component = dio.entities.getComponent (instance.calendarEntityId, dio.entities.components.CALENDAR)
-                component.time = convertHourToTime (timeOfDay)
-                dio.entities.setComponent (instance.calendarEntityId, dio.entities.components.CALENDAR, component)
+                dio.network.sendEvent (connection.connectionId, "tinyGalaxy.SKY", description)
             end
 
             if not instance.isControllingShip then
