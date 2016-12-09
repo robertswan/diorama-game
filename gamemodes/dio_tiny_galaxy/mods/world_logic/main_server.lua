@@ -270,11 +270,6 @@ local function createPlayerEntity (connectionId, accountId, jumpSpeed, playerXyz
     local c = dio.entities.components
     local playerComponents =
     {
-            -- [components.AABB_COLLIDER] =        {min = {-0.01, -0.01, -0.01}, size = {0.02, 0.02, 0.02},},
-            -- [components.COLLISION_LISTENER] =   {onCollision = onRocketAndSceneryCollision,},
-            -- [components.MESH_PLACEHOLDER] =     {blueprintId = "ROCKET",},
-            -- [components.RIGID_BODY] =           {acceleration = {0.0, -9.806 * 1.0, 0.0},},
-        
         [c.BASE_NETWORK] =          {},
         [c.CHILD_IDS] =             {},
         [c.FOCUS] =                 {connectionId = connectionId, radius = 4},
@@ -435,6 +430,7 @@ local function onRoomDestroyed (event)
     end
 
     if instance.isRestartingGame then
+
         instance.isRestartingGame = false
         createNewLevel ()
         for _, connection in pairs (connections) do
@@ -734,11 +730,11 @@ local function onTick (event)
     if connection then
 
         local cg = instance.currentGalaxy
-        local xyz = dio.world.getPlayerXyz (connection.accountId)
 
         if cg.isMap then
             
             -- check players position. see if they are standing on a teleporter
+            local xyz = dio.world.getPlayerXyz (connection.accountId)
 
             for _, teleporter in ipairs (cg.teleporters) do
                 if isInCell (teleporter, xyz) then
@@ -746,8 +742,9 @@ local function onTick (event)
                 end
             end
 
-        else
+        elseif connection.entityId then
 
+            local xyz = dio.world.getPlayerXyz (connection.accountId)
             local mapCell = convertPlayerXyxToMapCell (xyz)
 
             local worldIdx = 0
