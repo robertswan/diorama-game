@@ -42,6 +42,7 @@ local function main ()
         entities = true,
         file = true,
         inputs = true,
+        materials = true,
         resources = true,
         world = true,
     }

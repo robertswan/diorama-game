@@ -11,22 +11,22 @@ void main()
 {
     color = final_rgba;
 
-    // vec3 fog_color = texture (ambient_map, ambient_uv).rgb;
+    vec3 fog_color = texture (ambient_map, ambient_uv).rgb;
 
-    // float fog_coeff = gl_FragCoord.z;
-    // fog_coeff *= fog_coeff;
-    // fog_coeff *= fog_coeff;
-    // fog_coeff *= fog_coeff;
-    // fog_coeff *= fog_coeff;
-    // fog_coeff *= fog_coeff;
-    // fog_coeff *= fog_coeff;
-    // fog_coeff *= fog_coeff;
-    // fog_coeff *= fog_coeff;
-    // fog_coeff *= fog_coeff;
-    // fog_coeff *= fog_coeff;
-    // fog_coeff *= fog_coeff;
-    // fog_coeff *= fog_coeff;
-    // fog_coeff *= fog_coeff;    
+    float fog_coeff = gl_FragCoord.z;
+    fog_coeff *= fog_coeff;
+    fog_coeff *= fog_coeff;
+    fog_coeff *= fog_coeff;
+    fog_coeff *= fog_coeff;
+    fog_coeff *= fog_coeff;
+    fog_coeff *= fog_coeff;
+    fog_coeff *= fog_coeff;
+    fog_coeff *= fog_coeff;
+    fog_coeff *= fog_coeff;
+    fog_coeff *= fog_coeff;
+    fog_coeff *= fog_coeff;
+    fog_coeff *= fog_coeff;
+    fog_coeff *= fog_coeff;    
 
-    // color.rgb = mix (color.rgb, fog_color, fog_coeff);
+    color.rgb = mix (color.rgb, fog_color, fog_coeff);
 }

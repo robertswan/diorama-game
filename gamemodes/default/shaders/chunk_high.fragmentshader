@@ -33,9 +33,4 @@ void main()
     fog_coeff *= fog_coeff;
 
     color.rgb = mix (color.rgb, fog_color, fog_coeff);
-    //color.rgb = mix (color.rgb, vec3 (1, 1, 1), 0.5);
-    //color.rgb = vec3 (1, 1, 1);
-
-    // color = final_rgba;
-    color.a = 1.0;
 }
