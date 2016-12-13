@@ -17,7 +17,6 @@ local instance =
 {
     blocks = BlockDefinitions.blocks,
 
-    timeOfDay = 0,
     currentWorldIdx = nil,
     initialJumpSpeed = 10.0,
     nextItemIdx = 1,
@@ -60,7 +59,6 @@ local function restartGame (connection)
     instance.isRestartingGame = true
 
     -- reset game vars
-    instance.timeOfDay = 0
     instance.currentWorldIdx = nil
     instance.initialJumpSpeed = 10.0
     instance.nextItemIdx = 1
@@ -760,16 +758,19 @@ local function onTick (event)
                 instance.currentWorldIdx = worldIdx
 
                 local description = "Tiny Nowhere"
+                local sky = "0 0 0"
                 if worldIdx == 0 then
                     if mapCell [1] == instance.ship [1] and mapCell [2] == instance.ship [2] then
                         description = "Tiny Space ship"
                     end
                 elseif cg.worlds [worldIdx] then
-                    description = cg.worlds [worldIdx].name
+                    local world = cg.worlds [worldIdx]
+                    description = world.name
+                    sky = world.timeOfDay
                 end
 
                 dio.network.sendEvent (connection.connectionId, "tinyGalaxy.WORLD", description)
-                dio.network.sendEvent (connection.connectionId, "tinyGalaxy.SKY", description)
+                dio.network.sendEvent (connection.connectionId, "tinyGalaxy.SKY", sky)
             end
 
             if not instance.isControllingShip then

@@ -51,10 +51,26 @@ local function onServerEventReceived (event)
 
     elseif event.id == "tinyGalaxy.SKY" then
 
-        -- setSky (event.payload)
+        local words = {}
+        for word in string.gmatch (event.payload, "[^ ]+") do
+            table.insert (words, word)
+        end
+
+        dio.materials.setValueVec3 (
+                instance.skyboxMaterial, 
+                "blend", 
+                tonumber (words [1]),
+                tonumber (words [2]),
+                tonumber (words [3]))
 
         event.cancel = true
     end
+end
+
+--------------------------------------------------
+local function onSkyboxVariableUpdate (event)
+
+    dio.materials.setValueFloat (instance.skyboxMaterial, "rotation", event.now * 0.001)
 end
 
 --------------------------------------------------
@@ -71,8 +87,10 @@ local function onNamedEntityCreated (event)
 
         -- local material = event.entity.components.materials.medium_lod_block
 
+        local roomEntityId = event.entityId
+
         local c = dio.entities.components
-        local materials = dio.entities.getComponent (event.entityId, c.MATERIALS)
+        local materials = dio.entities.getComponent (roomEntityId, c.MATERIALS)
 
         for _, value in ipairs (materialIds) do
             local material = materials [value]
@@ -80,6 +98,29 @@ local function onNamedEntityCreated (event)
             dio.materials.setValueVec3 (material, "lightRgb", 0.7, 0.7, 0.3)
             dio.materials.setValueVec3 (material, "ambientRgb", 0.3, 0.3, 0.7)
         end
+
+        local skyboxMaterial = materials.skybox2
+        dio.materials.setTextureId (skyboxMaterial, 0, "SKYBOX_STARS_BG")
+        dio.materials.setTextureId (skyboxMaterial, 1, "SKYBOX_CLOUDS_00")
+        dio.materials.setValueVec3 (skyboxMaterial, "blend", 1.0, 1.0, 1.0, 0.0)
+
+        local c = dio.entities.components
+        local skyboxComponents =
+        {
+            [c.CAMERA_TRACKING_TRANSFORM] = {},
+            [c.MESH_RENDERER] = 
+            {
+                renderOrder = 1,
+                blueprintId = "skybox",
+                material = skyboxMaterial,
+            },
+            [c.PARENT] =                    {parentEntityId = roomEntityId},
+            [c.VARIABLE_UPDATE] =           {onUpdate = onSkyboxVariableUpdate},
+        }
+
+        instance.skyboxEntityId = dio.entities.create (roomEntityId, skyboxComponents)
+        instance.skyboxMaterial = skyboxMaterial
+
     end
 end
 
@@ -114,6 +155,8 @@ local function onLoad ()
     dio.resources.loadTexture ("CHUNKS_DIFFUSE",    "textures/chunks_diffuse_tiny_galaxy.png")
     dio.resources.loadTexture ("LIQUIDS_DIFFUSE",   "textures/liquids_diffuse_00.png")
     dio.resources.loadTexture ("SKY_COLOUR",        "textures/sky_colour_tiny_galaxy.png", {isNearest = false})
+    dio.resources.loadTexture ("SKYBOX_STARS_BG",   "textures/skybox_stars_bg_00.png", {isCubeMap = true, isNearest = false})
+    dio.resources.loadTexture ("SKYBOX_CLOUDS_00",  "textures/skybox_clouds_00.png", {isCubeMap = true, isNearest = false})
 
     dio.resources.loadExtrudedTexture ("CHUNKS_EXTRUDED",    "textures/chunks_extruded_tiny_galaxy.png")
 end
@@ -127,6 +170,12 @@ local function onUnload ()
     dio.resources.destroyTexture ("LIQUIDS_DIFFUSE")
     dio.resources.destroyTexture ("SKY_COLOUR")
     dio.resources.destroyTexture ("CROSSHAIR")
+    dio.resources.destroyTexture ("SKYBOX_STARS_BG")
+    dio.resources.destroyTexture ("SKYBOX_CLOUDS_00")
+
+    -- why no unload?
+    --dio.resources.unloadModel ("SKYBOX")
+    --dio.resources.unloadExtrudedTexture ("CHUNKS_EXTRUDED")
 
 end
 
