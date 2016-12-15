@@ -2,22 +2,50 @@
 
 uniform sampler2D diffuse_map;
 uniform sampler2D ambient_map;
+//uniform sampler2DShadow shadow_map;
+uniform sampler2D shadow_map;
+
+uniform vec4 ambient_color;
 
 in vec2 final_uv;
-in vec4 final_rgba;
+in vec4 light_rgba;
 in vec2 ambient_uv;
+in vec4 shadow_coord;
 
 out vec4 color;
 
 void main()
 {
     color = texture (diffuse_map, final_uv).rgba;
-    if (color.a < 1.0f)
+    if (color.a < 1.0)
     {
         discard;
     }
 
-    color = color * final_rgba;
+    float bias = 0.005;
+
+    //float visibility = texture (shadow_map, vec3 (shadow_coord.xy, shadow_coord.z / shadow_coord.w));
+
+    
+
+    float depth = texture (shadow_map, shadow_coord.xy).r;
+    // depth = 1.0 - (1.0 - depth) * 25.0;
+    // float visibility = depth;
+
+    float visibility = 1.0;
+    if (depth < shadow_coord.z - bias)
+    {
+        visibility = 0.2;
+    }
+
+
+    // float visibility = 1.0;
+    // if (texture (shadow_map, vec3 (shadow_coord.xy, shadow_coord.z / shadow_coord.w)  < shadow_coord.z - bias)
+    // {
+    //     visibility = 0.2;
+    // }
+
+    color = color * (ambient_color + (light_rgba * visibility));
 
     vec3 fog_color = texture (ambient_map, ambient_uv).rgb;
 
@@ -37,4 +65,5 @@ void main()
     fog_coeff *= fog_coeff;    
 
     color.rgb = mix (color.rgb, fog_color, fog_coeff);
+    color.a = 1.0;
 }
