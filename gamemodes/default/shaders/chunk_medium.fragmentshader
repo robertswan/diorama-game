@@ -22,28 +22,13 @@ void main()
         discard;
     }
 
-    float bias = 0.005;
-
-    //float visibility = texture (shadow_map, vec3 (shadow_coord.xy, shadow_coord.z / shadow_coord.w));
-
-    
-
+    float bias = 0.001;
     float depth = texture (shadow_map, shadow_coord.xy).r;
-    // depth = 1.0 - (1.0 - depth) * 25.0;
-    // float visibility = depth;
-
     float visibility = 1.0;
     if (depth < shadow_coord.z - bias)
     {
         visibility = 0.2;
     }
-
-
-    // float visibility = 1.0;
-    // if (texture (shadow_map, vec3 (shadow_coord.xy, shadow_coord.z / shadow_coord.w)  < shadow_coord.z - bias)
-    // {
-    //     visibility = 0.2;
-    // }
 
     color = color * (ambient_color + (light_rgba * visibility));
 

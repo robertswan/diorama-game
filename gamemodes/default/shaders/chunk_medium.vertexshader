@@ -74,7 +74,7 @@ void main()
 
     float strength1 = clamp (dot (vertex_normal, light_direction), 0, 1);
     light_rgba = directional_color * strength1;
-    light_rgba = directional_color;
+    //light_rgba = directional_color;
 
     ambient_uv.x = time_float;
     ambient_uv.y = 0.5;
