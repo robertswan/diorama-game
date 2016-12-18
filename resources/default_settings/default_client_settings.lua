@@ -23,6 +23,8 @@ local clientSettings =
         raymarchSmoothingWeight = 0.5,
         mediumLodMeshes = true,
         highLodMeshes = true,
+        shadowMaps = true,
+        shadowMapResolution = 2048,        
     },
 }
 
