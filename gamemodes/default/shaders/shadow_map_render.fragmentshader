@@ -1,5 +1,9 @@
 #version 330 core
 
+uniform sampler2D diffuse_map;
+
+in vec2 final_uv;
+
 // Ouput data
 //layout (location = 0) out float fragmentdepth;
 out float gl_FragDepth;
@@ -7,6 +11,14 @@ out float gl_FragDepth;
 
 void main ()
 {
+    //color = texture (diffuse_map, final_uv).rgba;
+    float alpha = texture (diffuse_map, final_uv).a;
+    if (alpha < 1.0)
+    {
+        discard;
+    }
+    
+
     //float rgb_depth = (gl_FragCoord.w / 2.0);
     //float rgb_depth = (gl_FragCoord.z * gl_FragCoord.w);
     //rgb_depth = (rgb_depth / 2.0) + 0.5;
