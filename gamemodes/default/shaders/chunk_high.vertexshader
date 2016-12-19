@@ -28,7 +28,7 @@ out vec4 shadow_coord;
 
 void main()
 {
-    cos_theta = clamp (dot (vec4 (vertex_normal, 0.0), light_direction), 0.0, 1.0);
+    cos_theta = clamp (dot (vec4 (vertex_normal.xyz, 0.0), light_direction), 0.0, 1.0);
 
     vec3 instance_translation = vec3 (
             float((instance >> 0u) & 127u) - 32.0, 
@@ -61,8 +61,7 @@ void main()
     final_uv = vertex_uv;
 
     // directional light
-    float light_strength = clamp (dot (vec4 (normal_post_transform, 0.0), light_direction), 0, 1);
-    light_rgba = directional_color * light_strength;
+    light_rgba = directional_color * cos_theta;
 
     // ambient
     //final_rgba = final_rgba + ambient_color;

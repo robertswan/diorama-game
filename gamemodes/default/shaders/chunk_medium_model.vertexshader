@@ -4,27 +4,32 @@ layout (location = 0) in vec3 vertex_position;
 layout (location = 1) in vec3 vertex_rgb;
 layout (location = 2) in vec3 vertex_normal;
 
+uniform mat4 model_matrix;
 uniform mat4 mvp_matrix;
+// uniform mat4 depth_bias_mvp_matrix;
 uniform float time_float;
 
 uniform vec4 light_direction;
 uniform vec4 directional_color;
-uniform vec4 ambient_color;
 
-out vec4 final_rgba;
+out float cos_theta;
+out vec4 light_rgba;
+out vec4 diffuse_rgba;
 out vec2 ambient_uv;
+// out vec4 shadow_coord;
 
 void main()
 {
+    vec4 m_normal = model_matrix * vec4 (vertex_normal.xyz, 0.0);
+    cos_theta = clamp (dot (m_normal, light_direction), 0.0, 1.0);
+    light_rgba = directional_color * cos_theta;
+    light_rgba.a    = 1.0;
+
     gl_Position = mvp_matrix * vec4 (vertex_position, 1.0);
 
-    // directional light
-    float strength1     = clamp (dot (vec4 (vertex_normal, 0.0), light_direction), 0, 1);
+    // shadow_coord = depth_bias_mvp_matrix * vec4 (vertex_position, 1.0);
 
-    vec4 light      = directional_color * strength1;
-    light           = light + ambient_color;
-    final_rgba      = vec4 (vertex_rgb, 1.0) * light;
-    final_rgba.a    = 1.0;
+    diffuse_rgba    = vec4 (vertex_rgb, 1.0);
 
     ambient_uv.x = time_float;
     ambient_uv.y = 0.5;
