@@ -24,7 +24,8 @@ local clientSettings =
         mediumLodMeshes = true,
         highLodMeshes = true,
         shadowMaps = true,
-        shadowMapResolution = 2048,        
+        shadowMapResolution = 2048,
+        shadowMapRange = 128.0,     
     },
 }
 
