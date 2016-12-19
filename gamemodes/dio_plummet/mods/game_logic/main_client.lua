@@ -76,8 +76,13 @@ local function onNamedEntityCreated (event)
         
             local camera = 
             {
-                [c.CAMERA] =                {fov = 90},
-                [c.PARENT] =                {parentEntityId = event.entityId},
+                [c.CAMERA] =                
+                {   
+                    fov = 90, 
+                    attachTo = event.entityId, 
+                    isMainCamera = true
+                },
+                [c.PARENT] =                {parentEntityId = event.roomEntityId},
                 [c.TRANSFORM] =             {},
             }
 
