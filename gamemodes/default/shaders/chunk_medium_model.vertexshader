@@ -6,7 +6,7 @@ layout (location = 2) in vec3 vertex_normal;
 
 uniform mat4 model_matrix;
 uniform mat4 mvp_matrix;
-// uniform mat4 depth_bias_mvp_matrix;
+uniform mat4 depth_bias_mvp_matrix;
 uniform float time_float;
 
 uniform vec4 light_direction;
@@ -16,7 +16,7 @@ out float cos_theta;
 out vec4 light_rgba;
 out vec4 diffuse_rgba;
 out vec2 ambient_uv;
-// out vec4 shadow_coord;
+out vec4 shadow_coord;
 
 void main()
 {
@@ -27,7 +27,7 @@ void main()
 
     gl_Position = mvp_matrix * vec4 (vertex_position, 1.0);
 
-    // shadow_coord = depth_bias_mvp_matrix * vec4 (vertex_position, 1.0);
+    shadow_coord = depth_bias_mvp_matrix * vec4 (vertex_position, 1.0);
 
     diffuse_rgba    = vec4 (vertex_rgb, 1.0);
 

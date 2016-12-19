@@ -28,8 +28,6 @@ out vec4 shadow_coord;
 
 void main()
 {
-    cos_theta = clamp (dot (vec4 (vertex_normal.xyz, 0.0), light_direction), 0.0, 1.0);
-
     vec3 instance_translation = vec3 (
             float((instance >> 0u) & 127u) - 32.0, 
             float((instance >> 7u) & 127u) - 32.0, 
@@ -56,6 +54,7 @@ void main()
 
     // normal transform
     vec3 normal_post_transform = rotation * vertex_normal;
+    cos_theta = clamp (dot (vec4 (normal_post_transform.xyz, 0.0), light_direction), 0.0, 1.0);
 
     // uvs
     final_uv = vertex_uv;

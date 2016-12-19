@@ -18,9 +18,10 @@ void main()
 {
     color = texture (diffuse_map, final_uv).rgba;
 
-    // color = color * final_rgba;
-
     float bias = 0.001;
+
+    // float bias = 0.01 * tan (acos (cos_theta)); // cosTheta is dot( n,l ), clamped between 0 and 1
+    // bias = clamp (bias, 0, 0.02);
 
     float depth = texture (shadow_map, shadow_coord.xy).r;
     float visibility = 0.8;

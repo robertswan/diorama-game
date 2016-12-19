@@ -52,24 +52,24 @@ void main()
         discard;
     }
 
-    // float bias = 0.005 * tan (acos (cos_theta)); // cosTheta is dot( n,l ), clamped between 0 and 1
-    // bias = clamp (bias, 0, 0.01);
+    // float bias = 4.0 * tan (acos (cos_theta)); // cosTheta is dot( n,l ), clamped between 0 and 1
+    // bias = clamp (bias, 0, 4.0);
 
     float bias = 0.001;
 
-    // float visibility = 1.0;
-    // for (int i = 0; i < 1; ++i)
-    // {
-    //     int index = i;
-    //     //int index = int (16.0 * random (gl_FragCoord.xyy, i)) % 16;
-    //     // int index = int (16.0 * random (floor (Position_worldspace.xyz * 1000.0), i)) % 16;
+    float visibility = 1.0;
+    for (int i = 0; i < 4; ++i)
+    {
+        // int index = i;
+        int index = int (16.0 * random (gl_FragCoord.xyy, i)) % 16;
+        // int index = int (16.0 * random (floor (Position_worldspace.xyz * 1000.0), i)) % 16;
 
-    //     float depth = texture (shadow_map, shadow_coord.xy + poissonDisk [index] / 7000.0 ).r;
-    //     if (depth < shadow_coord.z - bias )
-    //     {
-    //         visibility -= 0.8;
-    //     }
-    // }
+        float depth = texture (shadow_map, shadow_coord.xy + poissonDisk [index] / 5000.0 ).r;
+        if (depth < shadow_coord.z - bias )
+        {
+            visibility -= 0.2;
+        }
+    }
 
     //float bias = 0.001;
     // float visibility = texture (shadow_map, vec3 (shadow_coord.xy, shadow_coord.z / shadow_coord.w), bias);
@@ -77,12 +77,12 @@ void main()
 
     //float visibility = texture (shadow_map, vec3 (shadow_coord.xy, (shadow_coord.z - bias) / shadow_coord.w));
 
-    float depth = texture (shadow_map, shadow_coord.xy).r;
-    float visibility = 0.8;
-    if (depth < shadow_coord.z - bias)
-    {
-        visibility = 0.2;
-    }
+    // float depth = texture (shadow_map, shadow_coord.xy).r;
+    // float visibility = 0.8;
+    // if (depth < shadow_coord.z - bias)
+    // {
+    //     visibility = 0.2;
+    // }
 
     color = diffuse_color * (ambient_color + (light_rgba * visibility));
     color.a = 1.0;
