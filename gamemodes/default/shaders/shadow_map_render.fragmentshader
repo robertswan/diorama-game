@@ -6,7 +6,7 @@ in vec2 final_uv;
 
 // Ouput data
 //layout (location = 0) out float fragmentdepth;
-out float gl_FragDepth;
+// out float gl_FragDepth;
 //out vec4 color;
 
 void main ()
