@@ -36,7 +36,7 @@ vec2 poissonDisk [16] = vec2 []
    vec2( 0.14383161, -0.14100790 ) 
 );
 
-float random(vec3 seed, int i)
+float random (vec3 seed, int i)
 {
     vec4 seed4 = vec4 (seed, i);
     float dot_product = dot (seed4, vec4 (12.9898,78.233,45.164,94.673));
