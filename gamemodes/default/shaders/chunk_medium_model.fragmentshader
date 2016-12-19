@@ -1,32 +1,31 @@
 #version 330
 
 uniform sampler2D ambient_map;
+uniform sampler2D shadow_map;
 
-in vec4 final_rgba;
+uniform vec4 ambient_color;
+
+in vec4 light_rgba;
+in vec4 diffuse_rgba;
 in vec2 ambient_uv;
+in vec4 shadow_coord;
+in float cos_theta;
 
 out vec4 color;
 
 void main()
 {
-    color = final_rgba;
+    // float bias = 0.01 * tan (acos (cos_theta)); // cosTheta is dot( n,l ), clamped between 0 and 1
+    // bias = clamp (bias, 0, 0.001);
 
-    vec3 fog_color = texture (ambient_map, ambient_uv).rgb;
+    float bias = 0.001;
+    float depth = texture (shadow_map, shadow_coord.xy).r;
+    float visibility = 0.8;
+    if (depth < shadow_coord.z - bias)
+    {
+        visibility = 0.2;
+    }
 
-    float fog_coeff = gl_FragCoord.z;
-    fog_coeff *= fog_coeff;
-    fog_coeff *= fog_coeff;
-    fog_coeff *= fog_coeff;
-    fog_coeff *= fog_coeff;
-    fog_coeff *= fog_coeff;
-    fog_coeff *= fog_coeff;
-    fog_coeff *= fog_coeff;
-    fog_coeff *= fog_coeff;
-    fog_coeff *= fog_coeff;
-    fog_coeff *= fog_coeff;
-    fog_coeff *= fog_coeff;
-    fog_coeff *= fog_coeff;
-    fog_coeff *= fog_coeff;    
-
-    color.rgb = mix (color.rgb, fog_color, fog_coeff);
+    color = diffuse_rgba * (ambient_color + (light_rgba * visibility));
+    color.a = 1.0;
 }

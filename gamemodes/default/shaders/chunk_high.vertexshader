@@ -7,6 +7,7 @@ layout (location = 2) in vec3 vertex_normal;
 layout (location = 3) in uint instance;
 
 uniform mat4 mvp_matrix;
+uniform mat4 depth_bias_mvp_matrix;
 uniform float time_float;
 
 uniform vec4 light_direction;
@@ -19,9 +20,11 @@ uniform vec3 camera_xyz;
 
 uniform mat4 transforms [6];
 
+out float cos_theta;
 out vec2 final_uv;
-out vec4 final_rgba;
+out vec4 light_rgba;
 out vec2 ambient_uv;
+out vec4 shadow_coord;
 
 void main()
 {
@@ -47,21 +50,21 @@ void main()
     gl_Position = mvp_matrix * vec4 (vertex_position3, 1.0);
     gl_Position.w -= 0.00001;
 
+    shadow_coord = depth_bias_mvp_matrix * vec4 (vertex_position3, 1.0);
+
     // normal transform
     vec3 normal_post_transform = rotation * vertex_normal;
+    cos_theta = clamp (dot (vec4 (normal_post_transform.xyz, 0.0), light_direction), 0.0, 1.0);
 
     // uvs
     final_uv = vertex_uv;
 
-    //final_rgba = vec4 (blend_scale, blend_scale, blend_scale, 1.0);
-
     // directional light
-    float light_strength = clamp (dot (vec4 (normal_post_transform, 0.0), light_direction), 0, 1);
-    final_rgba = directional_color * light_strength;
+    light_rgba = directional_color * cos_theta;
 
     // ambient
-    final_rgba = final_rgba + ambient_color;
-    final_rgba.a = 1.0;
+    //final_rgba = final_rgba + ambient_color;
+    light_rgba.a = 1.0;
 
     ambient_uv.x = time_float;
     ambient_uv.y = 0.5;
