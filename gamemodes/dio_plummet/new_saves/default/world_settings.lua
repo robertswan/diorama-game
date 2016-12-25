@@ -1,7 +1,7 @@
 -- auto generated file. safe to hand edit
 local worldSettings =
 {
-    gameMode = "plummet/",
+    gameMode = "dio_plummet/",
     shouldSave = true,
 }
 

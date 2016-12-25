@@ -12,7 +12,7 @@ local modsToLoad =
         versionRequired = {major = 1, minor = 0},
     },
     {
-        gameMode = "voxel_arena",
+        gameMode = "dio_voxel_arena",
         modFolder = "game_logic",
         versionRequired = {major = 1, minor = 0},
     },
@@ -22,13 +22,18 @@ local modsToLoad =
         versionRequired = {major = 1, minor = 0},
     },
     {
-        gameMode = "voxel_arena",
+        gameMode = "dio_voxel_arena",
         modFolder = "scoreboard",
         versionRequired = {major = 1, minor = 0},
     },  
     {
-        gameMode = "voxel_arena",
+        gameMode = "dio_voxel_arena",
         modFolder = "clock",
+        versionRequired = {major = 1, minor = 0},
+    },
+    {
+        gameMode = "default",
+        modFolder = "diagnostics",
         versionRequired = {major = 1, minor = 0},
     },  
 }

@@ -6,7 +6,7 @@ local modsToLoad =
         modFolder = "blocks",
     },
     {
-        gameMode = "plummet",
+        gameMode = "dio_plummet",
         modFolder = "game_logic",
     },
 }

@@ -270,6 +270,7 @@ local blocks =
 
     -- 82
     {name = "spanner",              icon = {14, 4},     textures = {neswtb = {15, 4}}, tag = "spanner"},
+    {name = "test_model",           icon = {3, 3},      entityModel = "test_entity_model"}
 }
 
 return {blocks = blocks, entities = entities, mediumModels = mediumModels, entityModels = entityModels}

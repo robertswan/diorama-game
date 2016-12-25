@@ -178,7 +178,7 @@ end
 local function createNewLevel ()
 
     -- create alternate room
-    dio.file.deleteRoom ("plummet/")
+    dio.file.deleteRoom ("dio_plummet/")
 
     local roomSettings =
     {
@@ -192,7 +192,7 @@ local function createNewLevel ()
         }
     }
 
-    dio.file.newRoom ("plummet/", roomSettings)
+    dio.file.newRoom ("dio_plummet/", roomSettings)
 
 end
 
@@ -225,7 +225,7 @@ end
 --------------------------------------------------
 local function createPlayerEntity (connectionId, accountId)
     
-    local roomEntityId = dio.world.ensureRoomIsLoaded ("plummet/")
+    local roomEntityId = dio.world.ensureRoomIsLoaded ("dio_plummet/")
 
     local components = dio.entities.components
     local playerComponents =

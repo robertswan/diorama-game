@@ -2,7 +2,7 @@
 local modsToLoad =
 {
     {
-        gameMode = "plummet",
+        gameMode = "dio_plummet",
         modFolder = "game_logic",
     },
     {
@@ -14,7 +14,7 @@ local modsToLoad =
         modFolder = "diagnostics",
     },
     {
-        gameMode = "plummet",
+        gameMode = "dio_plummet",
         modFolder = "scoreboard",
     },
     {
@@ -22,7 +22,7 @@ local modsToLoad =
         modFolder = "chat",
     },
     {
-        gameMode = "plummet",
+        gameMode = "dio_plummet",
         modFolder = "chat_shortcuts",
     },
 }
