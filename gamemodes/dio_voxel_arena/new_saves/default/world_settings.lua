@@ -1,7 +1,7 @@
 -- auto generated file. safe to hand edit
 local worldSettings =
 {
-    gameMode = "voxel_arena/",
+    gameMode = "dio_voxel_arena/",
     shouldSave = true,
 }
 

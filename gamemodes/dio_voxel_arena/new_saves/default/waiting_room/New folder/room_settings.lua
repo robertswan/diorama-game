@@ -7,15 +7,6 @@ local roomSettings =
 		{
 			voxelPass = 
 			{
-				
-				{
-					chanceOfTree = 0.005,
-					sizeMin = 2,
-					sizeRange = 3,
-					trunkHeight = 2,
-					type = "addTrees",
-				},
-				
 				{
 					mudHeight = 4,
 					type = "addGrass",
@@ -26,41 +17,42 @@ local roomSettings =
 				
 				{
 					baseVoxel = -64,
-					heightInVoxels = 128,
+					heightInVoxels = 96,
 					mode = "replace",
 					type = "gradient",
 				},
 				
 				{
 					mode = "lessThan",
-					octaves = 4,
+					octaves = 2,
 					perOctaveAmplitude = 0.5,
 					perOctaveFrequency = 2,
-					scale = 64,
+					scale = 8,
 					type = "perlinNoise",
 				},
 			},
 		},
 	},
-	randomSeedAsString = "seed0.7337565233314",
-	roomShape = 
-	{
-		x = 
-		{
-			max = 1,
-			min = 0,
-		},
-		y = 
-		{
-			max = 0,
-			min = 0,
-		},
-		z = 
-		{
-			max = 0,
-			min = 0,
-		},
-	},
+    roomShape = 
+    {
+        x = 
+        {
+            max = 1,
+            min = -1,
+        },
+        y = 
+        {
+            max = 1,
+            min = -1,
+        },
+        z = 
+        {
+            max = 1,
+            min = -1,
+        },
+    },
+    path = "waiting_room",
+	randomSeedAsString = "skik",
 	terrainId = "paramaterized",
 }
 

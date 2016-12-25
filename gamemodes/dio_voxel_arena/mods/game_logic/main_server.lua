@@ -35,8 +35,8 @@ local generators =
         weightPass = 
         {
             {
-                baseVoxel = -64,
-                heightInVoxels = 128,
+                baseVoxel = 2,
+                heightInVoxels = 16,
                 mode = "replace",
                 type = "gradient",
             },
@@ -130,9 +130,9 @@ local function createPlayerEntity (connectionId, accountId)
     local xyz = {0.5, 0, 0.5}
 
     if instance.isPlaying then
-        local chunkRadius = 2
+        local chunkRadius = 0
         chunkId = {math.random (-chunkRadius, chunkRadius), 0, math.random (-chunkRadius, chunkRadius)}
-        xyz = {math.random (0, 31) + 0.5, chunkRadius * 32 - 5, math.random (0, 31) + 0.5}
+        xyz = {math.random (0, 31) + 0.5, chunkRadius * 32 + 24, math.random (0, 31) + 0.5}
     end
 
 
@@ -271,6 +271,7 @@ end
 --------------------------------------------------
 local function createRocketEntity (roomEntityId, chunkId, xyz, ypr)
 
+    local scale = 1.0 / 16.0
     local components = dio.entities.components
     local rocket =
     {
@@ -281,7 +282,7 @@ local function createRocketEntity (roomEntityId, chunkId, xyz, ypr)
         [components.NAME] =                     {name = "ROCKET", debug = true,},
         [components.PARENT] =                   {parentEntityId = roomEntityId},
         [components.RIGID_BODY] =               {acceleration = {0.0, -9.806 * 1.0, 0.0}, forwardSpeed = 30.0},
-        [components.TRANSFORM] =                {chunkId = chunkId, xyz = xyz, ypr = ypr},
+        [components.TRANSFORM] =                {chunkId = chunkId, xyz = xyz, ypr = ypr, scale = {scale, scale, scale}},
     }
 
     return dio.entities.create (roomEntityId, rocket)
@@ -440,7 +441,6 @@ local function onPlayerPrimaryAction (event)
         fireWeapon (connection)
 
     else
-
         if event.isBlockValid and event.pickedBlockId == 18 then -- READY button
             if connection.isReady then
 
@@ -470,6 +470,7 @@ local function onPlayerSecondaryAction (event)
     -- if event.isBlockValid then
     --     event.replacementBlockId = 10 -- jump pad
     -- end
+    event.cancel = true
 end
 
 --------------------------------------------------
@@ -532,7 +533,7 @@ local function onLoad ()
     dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
     dio.events.addListener (types.CLIENT_DISCONNECTED, onClientDisconnected)
     dio.events.addListener (types.ENTITY_PLACED, onPlayerPrimaryAction)
-    -- dio.events.addListener (types.ENTITY_DESTROYED, onPlayerSecondaryAction)
+    dio.events.addListener (types.ENTITY_DESTROYED, onPlayerSecondaryAction)
     dio.events.addListener (types.ROOM_CREATED, onRoomCreated)
     dio.events.addListener (types.ROOM_DESTROYED, onRoomDestroyed)
     dio.events.addListener (types.TICK, onServerTick)

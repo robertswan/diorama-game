@@ -63,7 +63,6 @@ out vec2 final_uv;
 out vec4 light_rgba;
 out vec2 ambient_uv;
 out vec4 shadow_coord;
-flat out vec3 normal_obj;
 
 void main()
 {
@@ -73,8 +72,7 @@ void main()
 
     gl_Position = mvp_matrix * vec4 (vertex_position, 1.0);
 
-    shadow_coord = vec4 (vertex_position, 1.0); // depth_bias_mvp_matrix * ...
-    normal_obj = vertex_normal.xyz;
+    shadow_coord = depth_bias_mvp_matrix * vec4 (vertex_position, 1.0);
 
     final_uv = vertex_uv;
 

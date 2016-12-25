@@ -78,8 +78,13 @@ local function onNamedEntityCreated (event)
         
             local camera = 
             {
-                [c.CAMERA] =                {fov = 90},
-                [c.PARENT] =                {parentEntityId = event.entityId},
+                [c.CAMERA] =                
+                {
+                    fov = 90,
+                    attachTo = event.entityId,
+                    isMainCamera = true,
+                },
+                [c.PARENT] =                {parentEntityId = event.roomEntityId},
                 [c.TRANSFORM] =             {},
             }
 
@@ -110,6 +115,8 @@ local function onLoad ()
 
     dio.resources.loadExtrudedTexture ("CHUNKS_EXTRUDED",    "textures/chunks_extruded_00.png")
 
+    dio.resources.loadEntityModel ("ROCKET", "models/test_entity_model.vox")
+
 end
 
 --------------------------------------------------
@@ -121,6 +128,8 @@ local function onUnload ()
     dio.resources.destroyTexture ("LIQUIDS_DIFFUSE")
     dio.resources.destroyTexture ("SKY_COLOUR")
     dio.resources.destroyTexture ("CROSSHAIR")
+
+    dio.resources.destroyEntityModel ("ROCKET")
 
 end
 
