@@ -7,11 +7,10 @@ layout (location = 2) in vec3 vertex_normal;
 layout (location = 3) in uint instance;
 
 uniform mat4 mvp_matrix;
-uniform mat4 depth_bias_mvp_matrix;
-uniform float time_float;
+uniform mat4 shadow_mvp_matrix;
 
 uniform vec4 light_direction;
-uniform vec4 directional_color;
+uniform vec4 light_rgba;
 uniform vec4 ambient_color;
 
 uniform float begin_blend_in_distance;
@@ -20,14 +19,15 @@ uniform vec3 camera_xyz;
 
 uniform mat4 transforms [6];
 
-out float cos_theta;
-out vec2 final_uv;
-out vec4 light_rgba;
-out vec2 ambient_uv;
-out vec4 shadow_coord;
+out vec2 f_uv;
+out vec4 f_light_rgba;
+out vec4 f_shadow_xyz;
+flat out vec3 f_normal_model;
 
-void main()
+void main ()
 {
+    // vertex transform
+
     vec3 instance_translation = vec3 (
             float((instance >> 0u) & 127u) - 32.0, 
             float((instance >> 7u) & 127u) - 32.0, 
@@ -38,7 +38,7 @@ void main()
     vec3 translation = transforms [transform_idx][3].xyz;
 
     // blending scale
-    float distance_to_camera = length (instance_translation + vec3 (0.5, 0.5, 0.5) - camera_xyz);
+    float distance_to_camera = length (instance_translation + vec3 (0.5) - camera_xyz);
     float blend_range = (begin_blend_in_distance - end_blend_in_distance);
     float blend_scale = 1.0 - (clamp (distance_to_camera, end_blend_in_distance, begin_blend_in_distance) - end_blend_in_distance) / blend_range;
 
@@ -50,22 +50,18 @@ void main()
     gl_Position = mvp_matrix * vec4 (vertex_position3, 1.0);
     gl_Position.w -= 0.00001;
 
-    shadow_coord = depth_bias_mvp_matrix * vec4 (vertex_position3, 1.0);
+    // diffuse lighting
 
-    // normal transform
     vec3 normal_post_transform = rotation * vertex_normal;
-    cos_theta = clamp (dot (vec4 (normal_post_transform.xyz, 0.0), light_direction), 0.0, 1.0);
+    float cos_theta = clamp (dot (vec4 (normal_post_transform.xyz, 0.0), light_direction), 0.0, 1.0);
+    f_light_rgba = light_rgba * cos_theta;
 
     // uvs
-    final_uv = vertex_uv;
 
-    // directional light
-    light_rgba = directional_color * cos_theta;
+    f_uv = vertex_uv;
 
-    // ambient
-    //final_rgba = final_rgba + ambient_color;
-    light_rgba.a = 1.0;
+    // shadow data
 
-    ambient_uv.x = time_float;
-    ambient_uv.y = 0.5;
+    f_shadow_xyz = vec4 (vertex_position3, 1.0);
+    f_normal_model = normal_post_transform.xyz;    
 }

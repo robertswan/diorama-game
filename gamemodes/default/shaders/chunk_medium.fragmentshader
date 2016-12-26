@@ -15,6 +15,7 @@ out vec4 color;
 void main()
 {
     // diffuse contribution
+    
     vec4 diffuse_color = texture (diffuse_map, f_uv).rgba;
     if (diffuse_color.a < 1.0)
     {
@@ -32,7 +33,6 @@ void main()
     shadow_grid_pos.xyz += f_normal_model * texel_scale * 0.5;
     shadow_grid_pos.xyz = texel_scale * (floor (shadow_grid_pos.xyz * texels_per_world_unit));
 
-    // multi sample
     float visibility = 1.0;
     vec4 shadow_xyz = shadow_mvp_matrix * shadow_grid_pos;
     float depth = texture (shadow_map, shadow_xyz.xy).r;
