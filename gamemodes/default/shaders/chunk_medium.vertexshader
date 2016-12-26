@@ -17,17 +17,21 @@ flat out vec3 f_normal_model;
 void main()
 {
     // vertex transform
+
     gl_Position = mvp_matrix * vec4 (v_xyz, 1.0);
 
     // uvs
+
     f_uv = v_uv;
 
     // diffuse lighting
+
     vec4 m_normal = model_matrix * vec4 (v_normal.xyz, 0.0);
     float cos_theta = clamp (dot (m_normal, light_direction), 0.0, 1.0);
     f_light_rgba = light_rgba * cos_theta;
 
     // shadow data
+    
     f_shadow_xyz = vec4 (v_xyz, 1.0);
     f_normal_model = v_normal.xyz;
 }
