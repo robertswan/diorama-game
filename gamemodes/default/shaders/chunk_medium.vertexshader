@@ -1,83 +1,33 @@
 #version 330
 
-//  vertex_position
-//      has a range of 0->32 (inclusive) 5 + 5 = 10 bits
-
-    //      not applicable to normal mesh rendering :(
-    //      apply it to the medium specific model shader
-
-    //      NOTE: blocks in a chunk range from 0-31 (inc) per axis. 
-    //      we could naively think that our subblocks are only 0-16 (inc)
-    //      however, it would be nice if we could make blocks bigger than the normal cube (for special detailing)
-    //      i wouldnt normally consider this, but if we have range to spare in our packing, why not use it?
-
-    //      block 0-31 (5 bits)
-    //      subblock 0-16 (5 bits) however we have values 17-31 unused... lets used them to offset it.
-    //      so instead of range is 0-16 it becomes -8 -> + 23 which would allow an overlap of 7 blocks 
-
-    //      9 bits per axis 0-511 
-    //      3 * 10 = 30 bits
-
-// vertex_uv
-//      Q: could we deduce uvs from the vertex_position? 
-//      A: YES, if we also can deal with face rotations :(
-//      A: otherwise NO, bake them in...
-//      currently our texture map is 16x16, and we have to match uv resolution to that of the higher detail models
-//      256x256 (8bits + 8bits)
-//      ...BUT bear in mind we want to atlas these because of needing to generate autotile textures later on
-//      1024x1024 (10bits + 10bits)
-//      = 20 bits
-
-// normal
-//      IF we just had the 6 axis directions it could be 3 bits (look up table)
-//      but we do want slopes later on... so eithe r we specify non-unit length normal
-//      in which case its 2 bits per axis, for 3*3*3 combinations in total
-//      either we do 6 bits (with seperate axes)
-//      OR 5 bits (use partial bits)
-
-// currently its 9*4 bytes per vertex = 36 bytes
-// naive first attempt = 8 bytes (combine normal + position)
-
-// Q: can we make this even smaller! and even faster to generate on CPU side?
-// Q: index bufffers? we have quads, and there 2 out 6 verts are repeats
-
-// total of 30 + 20 + 5 = 55 bits = 7 bytes
-
-
-
-
-layout (location = 0) in vec3 vertex_position; 
-layout (location = 1) in vec2 vertex_uv;
-layout (location = 2) in vec4 vertex_normal;
+layout (location = 0) in vec3 v_xyz; 
+layout (location = 1) in vec2 v_uv;
+layout (location = 2) in vec4 v_normal;
 
 uniform mat4 model_matrix;
 uniform mat4 mvp_matrix;
-uniform mat4 depth_bias_mvp_matrix;
-uniform float time_float;
-
 uniform vec4 light_direction;
-uniform vec4 directional_color;
+uniform vec4 light_rgba;
 
-out float cos_theta;
-out vec2 final_uv;
-out vec4 light_rgba;
-out vec2 ambient_uv;
-out vec4 shadow_coord;
-flat out vec3 normal_obj;
+out vec2 f_uv;
+out vec4 f_light_rgba;
+out vec4 f_shadow_xyz;
+flat out vec3 f_normal_model;
 
 void main()
 {
-    vec4 m_normal = model_matrix * vec4 (vertex_normal.xyz, 0.0);
-    cos_theta = clamp (dot (m_normal, light_direction), 0.0, 1.0);
-    light_rgba = directional_color * cos_theta;
+    // vertex transform
+    gl_Position = mvp_matrix * vec4 (v_xyz, 1.0);
 
-    gl_Position = mvp_matrix * vec4 (vertex_position, 1.0);
+    // uvs
+    f_uv = v_uv;
 
-    shadow_coord = vec4 (vertex_position, 1.0); // depth_bias_mvp_matrix * ...
-    normal_obj = vertex_normal.xyz;
+    // diffuse lighting
+    vec4 m_normal = model_matrix * vec4 (v_normal.xyz, 0.0);
+    float cos_theta = clamp (dot (m_normal, light_direction), 0.0, 1.0);
+    f_light_rgba = light_rgba * cos_theta;
 
-    final_uv = vertex_uv;
-
-    ambient_uv.x = time_float;
-    ambient_uv.y = 0.5;
+    // shadow data
+    f_shadow_xyz = vec4 (v_xyz, 1.0);
+    f_normal_model = v_normal.xyz;
 }
