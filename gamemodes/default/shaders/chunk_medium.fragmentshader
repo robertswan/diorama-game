@@ -70,26 +70,26 @@ void main()
     shadow_grid_pos.xyz += normal_obj * 0.1;
 
     shadow_grid_pos.xyz = (1. / snapScale) * (floor(shadow_grid_pos.xyz * snapScale + pco0 )- pco1);
-    shadow_grid_pos2.xyz= (1. / snapScale) * (ceil(shadow_grid_pos2.xyz * snapScale + pco0 ) - pco1);
+    // shadow_grid_pos2.xyz= (1. / snapScale) * (ceil(shadow_grid_pos2.xyz * snapScale + pco0 ) - pco1);
 
     shadow_grid_pos.xyz += normal_obj * 0.1;
-    shadow_grid_pos2.xyz += normal_obj * 0.1;
+    // shadow_grid_pos2.xyz += normal_obj * 0.1;
 
     shadow_grid_pos = depth_bias_mvp_matrix * shadow_grid_pos;
-    shadow_grid_pos2 = depth_bias_mvp_matrix * shadow_grid_pos2;
+    // shadow_grid_pos2 = depth_bias_mvp_matrix * shadow_grid_pos2;
     //shadow_grid_pos.xyz = shadow_grid_pos.xyz / shadow_grid_pos.w;
 
     float visibility = 1.0;
 
     float depth = texture (shadow_map, shadow_grid_pos.xy).r;
-    float depth2 = texture (shadow_map, shadow_grid_pos2.xy).r;
+    //float depth2 = texture (shadow_map, shadow_grid_pos2.xy).r;
     if (depth < shadow_grid_pos.z - bias)
     {
-      visibility -= 0.4;
+      visibility -= 0.6;
     }
-    if (depth2 < shadow_grid_pos2.z - bias) {
-      visibility -= 0.4;
-    }
+    // if (depth2 < shadow_grid_pos2.z - bias) {
+    //   visibility -= 0.4;
+    // }
     
 //    for (int i = 0; i < 4; ++i)
 //    {

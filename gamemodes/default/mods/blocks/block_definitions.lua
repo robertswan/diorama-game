@@ -13,7 +13,6 @@ local mediumModels =
 {
     makeMediumModel ("rob", {isDetailedModel = true}),
     makeMediumModel ("stairs"),
-    makeMediumModel ("cube"),
     makeMediumModel ("cross"),
     makeMediumModel ("pole"),
     makeMediumModel ("pole_n"),

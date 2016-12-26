@@ -15,7 +15,6 @@ local mediumModels =
     makeMediumModel ("chest_special_closed",    {isDetailedModel = true}),
     makeMediumModel ("chest_open",              {isDetailedModel = true}),
     makeMediumModel ("cactus",                  {isDetailedModel = true}),
-    makeMediumModel ("cube"),
     makeMediumModel ("pole"),
 }
 
