@@ -1,3 +1,5 @@
+local BlockDefinitions = require ("gamemodes/default/mods/blocks/block_definitions")
+
 --------------------------------------------------
 local groups =
 {
@@ -10,26 +12,26 @@ local groups =
     builder =
     {
         color = "%fff",
-        canBuild = true,
-        canDestroy = true,
+        canBuildAndDestroy = true,
         canChat = true,
         canColourText = true,
     },
     mod =
     {
         color = "%f44",
-        canBuild = true,
-        canDestroy = true,
+        canBuildAndDestroy = true,
         canChat = true,
+        canUseAxlesAndHammer = true,
         canColourText = true,
         canPromoteTo = {tourist = true, builder = true},
     },
     admin =
     {
         color = "%ff4",
-        canBuild = true,
-        canDestroy = true,
+        canBuildAndDestroy = true,
         canChat = true,
+        canUseAxlesAndHammer = true,
+        canUseModels = true,
         canColourText = true,
         canPromoteTo = {tourist = true, builder = true, mod = true},
     }
@@ -205,15 +207,24 @@ end
 --------------------------------------------------
 local function onEntityPlaced (event)
     local connection = connections [event.connectionId]
-    local canBuild = groups [connection.groupId].canBuild
-    event.cancel = not canBuild
+    local group = groups [connection.groupId]
+    local willCancel = not group.canBuildAndDestroy
+
+    if event.isBlockValid and not willCancel then
+        local block = BlockDefinitions.blocks [event.usingBlockId]
+        if (block.tag == "axle" or block.tag == "hammer") and not group.canUseAxlesAndHammer then
+            willCancel = true
+        elseif block.entityModel and not group.canUseModels then
+            willCancel = true
+        end
+    end
+
+    event.cancel = willCancel
 end
 
 --------------------------------------------------
 local function onEntityDestroyed (event)
-    local connection = connections [event.connectionId]
-    local canDestroy = groups [connection.groupId].canDestroy
-    event.cancel = not canDestroy
+    onEntityPlaced (event)
 end
 
 --------------------------------------------------
