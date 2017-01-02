@@ -21,6 +21,8 @@ local groups =
         canBuild = true,
         canDestroy = true,
         canChat = true,
+        canUseAxles = true,
+        canUseModels = true,
         canColourText = true,
         canPromoteTo = {tourist = true, builder = true},
     },
@@ -30,6 +32,8 @@ local groups =
         canBuild = true,
         canDestroy = true,
         canChat = true,
+        canUseAxles = true,
+        canUseModels = true,
         canColourText = true,
         canPromoteTo = {tourist = true, builder = true, mod = true},
     }

@@ -32,22 +32,16 @@ function blockCallbacks.axle (event, isPlacing)
 
     if isPlacing and event.isBlockValid then
 
-        if not event.isAxle then
-
-            if event.pickedBlockId == event.usingBlockId then
-
-                event.specialProperties = "axle"
-
-            end
-
-        else
+        if not event.isTopLevelChunk then
 
             return true
-            
         end
 
-    end
+        if event.pickedBlockId == event.usingBlockId then
 
+            event.specialProperties = "axle"
+        end
+    end
 end
 
 --------------------------------------------------
