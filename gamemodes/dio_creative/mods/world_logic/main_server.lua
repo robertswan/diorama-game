@@ -12,27 +12,23 @@ local groups =
     builder =
     {
         color = "%fff",
-        canBuild = true,
-        canDestroy = true,
+        canBuildAndDestroy = true,
         canChat = true,
         canColourText = true,
     },
     mod =
     {
         color = "%f44",
-        canBuild = true,
-        canDestroy = true,
+        canBuildAndDestroy = true,
         canChat = true,
         canUseAxlesAndHammer = true,
-        canUseModels = true,
         canColourText = true,
         canPromoteTo = {tourist = true, builder = true},
     },
     admin =
     {
         color = "%ff4",
-        canBuild = true,
-        canDestroy = true,
+        canBuildAndDestroy = true,
         canChat = true,
         canUseAxlesAndHammer = true,
         canUseModels = true,
@@ -212,32 +208,23 @@ end
 local function onEntityPlaced (event)
     local connection = connections [event.connectionId]
     local group = groups [connection.groupId]
-    local canBuild = group.canBuild
+    local willCancel = not group.canBuildAndDestroy
 
-    if event.isBlockValid and canBuild then
-        local tag = BlockDefinitions.blocks [event.usingBlockId].tag
-        if (tag == "axle" or tag == "hammer") and not group.canUseAxlesAndHammer then
-            canBuild = false
+    if event.isBlockValid and not willCancel then
+        local block = BlockDefinitions.blocks [event.usingBlockId]
+        if (block.tag == "axle" or block.tag == "hammer") and not group.canUseAxlesAndHammer then
+            willCancel = true
+        elseif block.entityModel and not group.canUseModels then
+            willCancel = true
         end
     end
 
-    event.cancel = not canBuild
+    event.cancel = willCancel
 end
 
 --------------------------------------------------
 local function onEntityDestroyed (event)
-    local connection = connections [event.connectionId]
-    local group = groups [connection.groupId]
-    local canDestroy = group.canDestroy
-
-    if event.isBlockValid and canDestroy then
-        local tag = BlockDefinitions.blocks [event.usingBlockId].tag
-        if (tag == "axle" or tag == "hammer") and not group.canUseAxlesAndHammer then
-            canDestroy = false
-        end
-    end
-
-    event.cancel = not canDestroy
+    onEntityPlaced (event)
 end
 
 --------------------------------------------------
