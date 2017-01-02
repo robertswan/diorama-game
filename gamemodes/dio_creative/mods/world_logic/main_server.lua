@@ -1,3 +1,5 @@
+local BlockDefinitions = require ("gamemodes/default/mods/blocks/block_definitions")
+
 --------------------------------------------------
 local groups =
 {
@@ -21,7 +23,7 @@ local groups =
         canBuild = true,
         canDestroy = true,
         canChat = true,
-        canUseAxles = true,
+        canUseAxlesAndHammer = true,
         canUseModels = true,
         canColourText = true,
         canPromoteTo = {tourist = true, builder = true},
@@ -32,7 +34,7 @@ local groups =
         canBuild = true,
         canDestroy = true,
         canChat = true,
-        canUseAxles = true,
+        canUseAxlesAndHammer = true,
         canUseModels = true,
         canColourText = true,
         canPromoteTo = {tourist = true, builder = true, mod = true},
@@ -209,14 +211,32 @@ end
 --------------------------------------------------
 local function onEntityPlaced (event)
     local connection = connections [event.connectionId]
-    local canBuild = groups [connection.groupId].canBuild
+    local group = groups [connection.groupId]
+    local canBuild = group.canBuild
+
+    if event.isBlockValid and canBuild then
+        local tag = BlockDefinitions.blocks [event.usingBlockId].tag
+        if (tag == "axle" or tag == "hammer") and not group.canUseAxlesAndHammer then
+            canBuild = false
+        end
+    end
+
     event.cancel = not canBuild
 end
 
 --------------------------------------------------
 local function onEntityDestroyed (event)
     local connection = connections [event.connectionId]
-    local canDestroy = groups [connection.groupId].canDestroy
+    local group = groups [connection.groupId]
+    local canDestroy = group.canDestroy
+
+    if event.isBlockValid and canDestroy then
+        local tag = BlockDefinitions.blocks [event.usingBlockId].tag
+        if (tag == "axle" or tag == "hammer") and not group.canUseAxlesAndHammer then
+            canDestroy = false
+        end
+    end
+
     event.cancel = not canDestroy
 end
 
