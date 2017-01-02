@@ -26,6 +26,17 @@ local mediumModels =
     makeMediumModel ("wall_ns"),
     makeMediumModel ("wall_nes"),
     makeMediumModel ("wall_nesw"),
+
+    makeMediumModel ("tall_grass", {isDetailedModel = true}),
+    makeMediumModel ("flower_red", {isDetailedModel = true}),
+    makeMediumModel ("flower_yellow", {isDetailedModel = true}),
+    makeMediumModel ("mushroom_red", {isDetailedModel = true}),
+    makeMediumModel ("mushroom_brown", {isDetailedModel = true}),
+    makeMediumModel ("sapling", {isDetailedModel = true}),
+    makeMediumModel ("wheat", {isDetailedModel = true}),
+    makeMediumModel ("bamboo", {isDetailedModel = true}),
+    makeMediumModel ("bush", {isDetailedModel = true}),
+    makeMediumModel ("stem", {isDetailedModel = true}),  
 }
 
 --------------------------------------------------
@@ -225,18 +236,18 @@ local blocks =
 
     -- 46
     {name = "floating sign",        icon = {15, 13},    textures = {neswtb = {15, 13}},         entity = "sign"},
-    {name = "grass",                icon = {7, 2},      textures = {neswtb = {7, 2}},           model = "cross",    isSolid = false},
-    {name = "red flower",           icon = {12, 0},     textures = {neswtb = {12, 0}},          model = "cross",    isSolid = false},
-    {name = "yellow flower",        icon = {13, 0},     textures = {neswtb = {13, 0}},          model = "cross",    isSolid = false},
-    {name = "red mushroom",         icon = {12, 1},     textures = {neswtb = {12, 1}},          model = "cross",    isSolid = false},
-    {name = "brown mushroom",       icon = {13, 1},     textures = {neswtb = {13, 1}},          model = "cross",    isSolid = false},
-    {name = "sapling",              icon = {15, 0},     textures = {neswtb = {15, 0}},          model = "cross",    isSolid = false},
-    {name = "bamboo",               icon = {9, 4},      textures = {neswtb = {9, 4}},           model = "cross",    isSolid = false},
-    {name = "wheat",                icon = {15, 5},     textures = {neswtb = {15, 5}},          model = "cross",    isSolid = false},
+    {name = "tall grass",           icon = {7, 2},      model = "tall_grass", isSolid = false},
+    {name = "red flower",           icon = {12, 0},     model = "flower_red", isSolid = false},
+    {name = "yellow flower",        icon = {13, 0},     model = "flower_yellow", isSolid = false},
+    {name = "red mushroom",         icon = {12, 1},     model = "mushroom_red", isSolid = false},
+    {name = "brown mushroom",       icon = {13, 1},     model = "mushroom_brown", isSolid = false},
+    {name = "sapling",              icon = {15, 0},     model = "sapling", isSolid = false},
+    {name = "bamboo",               icon = {9, 4},      model = "bamboo", isSolid = false},
+    {name = "wheat",                icon = {15, 5},     model = "wheat", isSolid = false},
 
     -- 55
-    {name = "bush",                 icon = {7, 3},      textures = {neswtb = {7, 3}},           model = "cross",    isSolid = false},
-    {name = "stem",                 icon = {15, 6},     textures = {neswtb = {15, 6}},          model = "cross",    isSolid = false},
+    {name = "bush",                 icon = {7, 3},      model = "bush", isSolid = false},
+    {name = "stem",                 icon = {15, 6},     model = "stem", isSolid = false},
     {name = "cactus top",           icon = {6, 4},      textures = {t = {5, 4}, b = {7, 4}, nesw = {6, 4}}},
     {name = "cactus body",          icon = {7, 4},      textures = {tb = {7, 4}, nesw = {6, 4}}},
     {name = "gravity block",        icon = {13, 6},     textures = {t = {10, 6}, b = {13, 6}, nesw = {12, 6}}},
