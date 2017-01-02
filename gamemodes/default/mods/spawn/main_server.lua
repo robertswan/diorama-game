@@ -15,7 +15,7 @@ local function onClientConnected (event)
     local connection =
     {
         connectionId = event.connectionId,
-        groupId = event.isSinglePlayer and "builder" or "tourist",
+        groupId = event.isSinglePlayer and "admin" or "tourist",
         isPasswordCorrect = isPasswordCorrect,
     }
 
