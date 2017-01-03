@@ -153,23 +153,23 @@ local function fences (model, textures, textures2)
         mode = 1,--dio.types.blockModes.AUTOTILE_4,
         models = 
         {   
-            {model = model,        textures = {neswtb = textures}, isTransparent = true},
-            {model = model .. "_n",      textures = {neswtb = textures}, isTransparent = true},
-            {model = model .. "_n",      textures = {neswtb = textures}, isTransparent = true, rotateY = 3},
-            {model = model .. "_ne",     textures = {neswtb = textures}, isTransparent = true},
-            {model = model .. "_n",      textures = {neswtb = textures}, isTransparent = true, rotateY = 2},
-            {model = model .. "_ns",     textures = {neswtb = textures2 or textures}, isTransparent = true},
-            {model = model .. "_ne",     textures = {neswtb = textures}, isTransparent = true, rotateY = 3},
-            {model = model .. "_nes",    textures = {neswtb = textures}, isTransparent = true},
+            {model = model,              textures = {neswtb = textures}, isTilingBlocker = false},
+            {model = model .. "_n",      textures = {neswtb = textures}, isTilingBlocker = false},
+            {model = model .. "_n",      textures = {neswtb = textures}, isTilingBlocker = false, rotateY = 3},
+            {model = model .. "_ne",     textures = {neswtb = textures}, isTilingBlocker = false},
+            {model = model .. "_n",      textures = {neswtb = textures}, isTilingBlocker = false, rotateY = 2},
+            {model = model .. "_ns",     textures = {neswtb = textures2 or textures}, isTilingBlocker = false},
+            {model = model .. "_ne",     textures = {neswtb = textures}, isTilingBlocker = false, rotateY = 3},
+            {model = model .. "_nes",    textures = {neswtb = textures}, isTilingBlocker = false},
 
-            {model = model .. "_n",      textures = {neswtb = textures}, isTransparent = true, rotateY = 1},
-            {model = model .. "_ne",     textures = {neswtb = textures}, isTransparent = true, rotateY = 1},
-            {model = model .. "_ns",     textures = {neswtb = textures2 or textures}, isTransparent = true, rotateY = 1},
-            {model = model .. "_nes",    textures = {neswtb = textures}, isTransparent = true, rotateY = 1},
-            {model = model .. "_ne",     textures = {neswtb = textures}, isTransparent = true, rotateY = 2},
-            {model = model .. "_nes",    textures = {neswtb = textures}, isTransparent = true, rotateY = 2},
-            {model = model .. "_nes",    textures = {neswtb = textures}, isTransparent = true, rotateY = 3},
-            {model = model .. "_nesw",   textures = {neswtb = textures}, isTransparent = true},
+            {model = model .. "_n",      textures = {neswtb = textures}, isTilingBlocker = false, rotateY = 1},
+            {model = model .. "_ne",     textures = {neswtb = textures}, isTilingBlocker = false, rotateY = 1},
+            {model = model .. "_ns",     textures = {neswtb = textures2 or textures}, isTilingBlocker = false, rotateY = 1},
+            {model = model .. "_nes",    textures = {neswtb = textures}, isTilingBlocker = false, rotateY = 1},
+            {model = model .. "_ne",     textures = {neswtb = textures}, isTilingBlocker = false, rotateY = 2},
+            {model = model .. "_nes",    textures = {neswtb = textures}, isTilingBlocker = false, rotateY = 2},
+            {model = model .. "_nes",    textures = {neswtb = textures}, isTilingBlocker = false, rotateY = 3},
+            {model = model .. "_nesw",   textures = {neswtb = textures}, isTilingBlocker = false},
         }
     }
 
@@ -236,18 +236,18 @@ local blocks =
 
     -- 46
     {name = "floating sign",        icon = {15, 13},    textures = {neswtb = {15, 13}},         entity = "sign"},
-    {name = "tall grass",           icon = {7, 2},      model = "tall_grass", isSolid = false},
-    {name = "red flower",           icon = {12, 0},     model = "flower_red", isSolid = false},
-    {name = "yellow flower",        icon = {13, 0},     model = "flower_yellow", isSolid = false},
-    {name = "red mushroom",         icon = {12, 1},     model = "mushroom_red", isSolid = false},
-    {name = "brown mushroom",       icon = {13, 1},     model = "mushroom_brown", isSolid = false},
-    {name = "sapling",              icon = {15, 0},     model = "sapling", isSolid = false},
-    {name = "bamboo",               icon = {9, 4},      model = "bamboo", isSolid = false},
-    {name = "wheat",                icon = {15, 5},     model = "wheat", isSolid = false},
+    {name = "tall grass",           icon = {7, 2},      model = "tall_grass", isSolid = false, isTilingBlocker = false},
+    {name = "red flower",           icon = {12, 0},     model = "flower_red", isSolid = false, isTilingBlocker = false},
+    {name = "yellow flower",        icon = {13, 0},     model = "flower_yellow", isSolid = false, isTilingBlocker = false},
+    {name = "red mushroom",         icon = {12, 1},     model = "mushroom_red", isSolid = false, isTilingBlocker = false},
+    {name = "brown mushroom",       icon = {13, 1},     model = "mushroom_brown", isSolid = false, isTilingBlocker = false},
+    {name = "sapling",              icon = {15, 0},     model = "sapling", isSolid = false, isTilingBlocker = false},
+    {name = "bamboo",               icon = {9, 4},      model = "bamboo", isTilingBlocker = false},
+    {name = "wheat",                icon = {15, 5},     model = "wheat", isSolid = false, isTilingBlocker = false},
 
     -- 55
-    {name = "bush",                 icon = {7, 3},      model = "bush", isSolid = false},
-    {name = "stem",                 icon = {15, 6},     model = "stem", isSolid = false},
+    {name = "bush",                 icon = {7, 3},      model = "bush", isSolid = false, isTilingBlocker = false},
+    {name = "stem",                 icon = {15, 6},     model = "stem", isSolid = false, isTilingBlocker = false},
     {name = "cactus top",           icon = {6, 4},      textures = {t = {5, 4}, b = {7, 4}, nesw = {6, 4}}},
     {name = "cactus body",          icon = {7, 4},      textures = {tb = {7, 4}, nesw = {6, 4}}},
     {name = "gravity block",        icon = {13, 6},     textures = {t = {10, 6}, b = {13, 6}, nesw = {12, 6}}},
@@ -275,7 +275,7 @@ local blocks =
     {name = "stone fence",          icon = {0, 12},     models = fences ("pole", {0, 12})},
     {name = "black fence",          icon = {1, 1},      models = fences ("pole", {1, 1})},
     {name = "wall",                 icon = {15, 1},     models = fences ("wall", {15, 1}, {15, 2})},
-    {name = "head",                 icon = {15, 1},     model = "rob"},
+    {name = "head",                 icon = {15, 1},     model = "rob", isTilingBlocker = false},
     {name = "axle block",           icon = {15, 4},     textures = {neswtb = {15, 4}}, tag = "axle"},
 
     -- 82
