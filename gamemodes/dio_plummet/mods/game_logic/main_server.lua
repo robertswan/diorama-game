@@ -192,7 +192,8 @@ local function createNewLevel ()
         }
     }
 
-    dio.file.newRoom ("dio_plummet/", roomSettings)
+    dio.file.createFolder (dio.file.locations.WORLD, "dio_plummet/")
+    dio.file.saveLua (dio.file.locations.WORLD, "dio_plummet/room_settings.lua", roomSettings, "roomSettings")
 
 end
 
