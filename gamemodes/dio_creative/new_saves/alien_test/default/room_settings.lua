@@ -3,12 +3,21 @@ local roomSettings =
 {
     version = 
     {
-        id = "paramaterized",
-        major = 2,    
+        major = 1,    
+        minor = 0,
     },
+
 	generators = 
 	{
 		{
+            resources = 
+            {
+                blockObjectFiles =
+                {
+                    "test_objects_00",
+                },
+            },
+
             weightPass =
             {
                 {
@@ -32,15 +41,15 @@ local roomSettings =
             voxelPass =
             {
                 {
-                    type = "addObject",
+                    type = "addBlockObject",
                     id = "rockpile00",
-                    chance = 0.01,
+                    chance = 0.005,
                     randomModifier = 654324,
                 },                
                 {
-                    type = "addObject",
+                    type = "addBlockObject",
                     id = "rockpile01",
-                    chance = 0.01,
+                    chance = 0.005,
                     randomModifier = 213452,
                 },                
             },

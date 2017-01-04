@@ -4,6 +4,15 @@ local options =
     variations = 
     {
         {
+            title = "Alien Test",
+            folder = "alien_test/",
+            options = 
+            {
+                title = "Alient Test",
+                randomSeedAsString = "default_seed",
+            },
+        },
+        {
             title = "Back To Back World",
             folder = "back_to_back/",
             options = 
