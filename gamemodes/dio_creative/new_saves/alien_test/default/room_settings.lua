@@ -40,18 +40,18 @@ local roomSettings =
 
             voxelPass =
             {
-                {
-                    type = "addBlockObject",
-                    id = "rockpile00",
-                    chance = 0.005,
-                    randomModifier = 654324,
-                },                
-                {
-                    type = "addBlockObject",
-                    id = "rockpile01",
-                    chance = 0.005,
-                    randomModifier = 213452,
-                },                
+                -- {
+                --     type = "addBlockObject",
+                --     id = "rockpile00",
+                --     chance = 0.005,
+                --     randomModifier = 654324,
+                -- },                
+                -- {
+                --     type = "addBlockObject",
+                --     id = "rockpile01",
+                --     chance = 0.005,
+                --     randomModifier = 213452,
+                -- },                
             },
 		},
 	},
