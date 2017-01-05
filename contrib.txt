@@ -34,6 +34,7 @@
         - LazyKernel
         - QLcrisis
         - RayMarch
+        - rblstr
         - XForceP
 
         ===========
@@ -61,6 +62,7 @@
         - cod1ngJamm3r
         - CozyDino
         - CritCrank
+        - Datdude430
         - DatSparrow
         - Defusselkid
         - dgendreau
@@ -101,6 +103,7 @@
         - madkiwi
         - mandora391
         - McBrainiac
+        - mehxit
         - merrybike
         - Meowcat2851
         - Meursault
