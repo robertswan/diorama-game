@@ -3,18 +3,18 @@ local roomSettings =
 {
     version = 
     {
-        major = 1,    
+        major = 2,    
         minor = 0,
     },
 
-	generators = 
-	{
-		{
+    generators = 
+    {
+        {
             resources = 
             {
-                blockObjectFiles =
+                blockModelFiles =
                 {
-                    "test_objects_00",
+                    "test_models_00.lua",
                 },
             },
 
@@ -24,9 +24,24 @@ local roomSettings =
                     type = "gradient",
                     mode = "replace",
 
-                    baseVoxel = -16,
-                    heightInVoxels = 16,
+                    baseVoxel = -256,
+                    heightInVoxels = 256,
                 },
+                {
+                    type = "pillars",
+                    mode = "add",
+
+                    baseVoxel = -256,
+                    heightInVoxels = 256,
+                    --heightInVoxels = {min = 128, max = 256},
+                    min = 0,
+                    max = 0.8,
+                    outerRadius = 6,
+                    --outerRadius = {min = 4, max = 6},
+                    innerRadius = 2,
+                    chance = 0.0005,
+                    randomSeed = 12356,
+                },                
                 {
                     type = "perlinNoise",
                     mode = "lessThan",
@@ -40,22 +55,39 @@ local roomSettings =
 
             voxelPass =
             {
-                -- {
-                --     type = "addBlockObject",
-                --     id = "rockpile00",
-                --     chance = 0.005,
-                --     randomModifier = 654324,
-                -- },                
-                -- {
-                --     type = "addBlockObject",
-                --     id = "rockpile01",
-                --     chance = 0.005,
-                --     randomModifier = 213452,
-                -- },                
+                {
+                    type = "addBlockModel",
+                    id = "fence",
+                    chance = 0.01,
+                    randomSeed = 908322,
+                },               
+                {
+                    type = "addBlockModel",
+                    id = "rockpile00",
+                    chance = 0.002,
+                    randomSeed = 654324,
+                },    
+                {
+                    type = "addBlockModel",
+                    id = "rockpile01",
+                    chance = 0.004,
+                    randomSeed = 57483,
+                },    
+                {
+                    type = "addTrees",
+                    chanceOfTree = 0.005,
+                    sizeRange = 3,
+                    sizeMin = 2,
+                    trunkHeight = 2,
+                },
+                {
+                    type = "addGrass",
+                    mudHeight = 4,
+                },             
             },
-		},
-	},
-	randomSeedAsString = "jgfkdlosgjfkesd",
+        },
+    },
+    randomSeedAsString = "jgfkdlosgjfkesd",
 }
 
 return roomSettings

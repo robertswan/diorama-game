@@ -29,10 +29,10 @@ local modsToLoad =
         gameMode = "default",
         modFolder = "spawn",
     },
-    -- {
-    --     gameMode = "default",
-    --     modFolder = "diagnostics",
-    -- },
+    {
+        gameMode = "default",
+        modFolder = "diagnostics",
+    },
 }
 
 local mods = {}
