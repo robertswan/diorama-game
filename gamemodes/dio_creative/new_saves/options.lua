@@ -8,7 +8,7 @@ local options =
             folder = "alien_test/",
             options = 
             {
-                title = "Alient Test",
+                title = "Alien Test",
                 randomSeedAsString = "default_seed",
             },
         },
