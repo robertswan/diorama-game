@@ -13,6 +13,15 @@ local options =
             },
         },
         {
+            title = "Alien Test 2",
+            folder = "alien_test2/",
+            options = 
+            {
+                title = "Alien Test",
+                randomSeedAsString = "default_seed",
+            },
+        },        
+        {
             title = "Back To Back World",
             folder = "back_to_back/",
             options = 
