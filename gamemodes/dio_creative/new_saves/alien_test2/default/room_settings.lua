@@ -1,7 +1,7 @@
 -- repeatedly generated file. not safe to hand edit
 
 local operations = dio.types.csgOperations
-local operations = dio.types.csgPrimitives
+local primitives = dio.types.csgPrimitives
 
 local roomSettings =
 {
@@ -13,9 +13,26 @@ local roomSettings =
 
     generators = 
     {
-        primitive = primitives.SPHERE,
-        outerRadius = 100,
-        blockId = 12,
+        operation = operations.ADD,
+        operands =
+        {
+            {
+                primitive = primitives.SPHERE,
+                outerRadius = 30,
+                blockId = 3,
+                origin = {40, 40, 0},
+            },
+            {
+                primitive = primitives.SPHERE,
+                outerRadius = 30,
+                blockId = 4,
+            },
+            {
+                primitive = primitives.BOX,
+                size = {100, 10, 10},
+                blockId = 1,
+            },
+        },
     },
 
     -- generators = 
