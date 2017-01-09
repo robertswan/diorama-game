@@ -13,6 +13,8 @@ local roomSettings =
 
     generators = 
     {
+        rotate = {0.3, 0.0, -0.3},
+
         operation = operations.MORE_THAN,
         operands =
         {
@@ -35,17 +37,34 @@ local roomSettings =
 
                         translate = {48, 32, 48},
                         rotate = {0.5, 0, 0},
-                    },                    
+                    }, 
                     {
-                        primitive = primitives.BOX,
-                        innerSize = {200, 3, 3},
-                        shellSize = {5, 5, 5},
-                        innerWeight = 0.75,
-                        blockId = 1,
-
-                        translate = {50, 85, 0},
+                        translate = {40, 85, 0},
                         rotate = {0, 0, 0.2},
-                    },                    
+
+                        operation = operations.SUBTRACT,
+                        operands =
+                        {
+                            {
+                                primitive = primitives.BOX,
+                                innerSize = {80, 3, 80},
+                                shellSize = {5, 5, 5},
+                                innerWeight = 0.75,
+                                blockId = 1,
+
+                                translate = {40, 0, 0},
+                            },
+                            {
+                                primitive = primitives.BOX,
+                                innerSize = {60, 20, 60},
+                                shellSize = {5, 5, 5},
+                                innerWeight = 1.0,
+                                blockId = 1,
+
+                                translate = {40, 0, 0},
+                            },
+                        },                    
+                    },
                     {
                         primitive = primitives.SPHERE,
                         innerRadius = 20,
@@ -53,14 +72,15 @@ local roomSettings =
                         blockId = 3,
 
                         translate = {0, 85, 0},
+                        scale = {2.0, 0.5, 1.0},
                     },
                 },            
             },
             {
                 primitive = primitives.PERLIN_NOISE,
                 randomSeed = 5743829,
-                octaveScale = 16,
-                octaves = 3,
+                octaveScale = 32,
+                octaves = 4,
                 perOctaveAmplitude = 0.5,
                 perOctaveFrequency = 2.0,
             },            

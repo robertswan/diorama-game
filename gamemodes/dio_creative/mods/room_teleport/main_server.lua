@@ -134,7 +134,7 @@ local function onClientConnected (event)
         accountId = event.accountId,
         screenName = event.accountId,
         accountPassword = event.accountPassword,
-        groupId = event.isSinglePlayer and "builder" or "tourist",
+        groupId = event.isSinglePlayer and "mod" or "tourist",
         isPasswordCorrect = isPasswordCorrect,
         needsSaving = event.isSinglePlayer,
         roomFolderIdx = roomIndices [playerParams.avatar.roomFolder],
