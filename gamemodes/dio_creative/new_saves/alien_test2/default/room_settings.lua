@@ -13,50 +13,54 @@ local roomSettings =
 
     generators = 
     {
-        operation = operations.ADD,
+        operation = operations.MORE_THAN,
         operands =
         {
             {
-                primitive = primitives.SPHERE,
-                outerRadius = 30,
-                blockId = 3,
-                origin = {40, 40, 0},
+                operation = operations.ADD,
+                operands =
+                {
+                    {
+                        primitive = primitives.BOX,
+                        innerSize = {32, 32, 32},
+                        shellSize = {32, 32, 32},
+                        blockId = 1,
+                    },
+                    {
+                        primitive = primitives.BOX,
+                        innerSize = {1, 128, 1},
+                        shellSize = {5, 5, 5},
+                        origin = {48, 32, 48},
+                        innerWeight = 0.75,
+                        blockId = 1,
+                    },                    
+                    {
+                        primitive = primitives.BOX,
+                        innerSize = {100, 3, 3},
+                        shellSize = {5, 5, 5},
+                        origin = {50, 85, 0},
+                        innerWeight = 0.75,
+                        blockId = 1,
+                    },                    
+                    {
+                        primitive = primitives.SPHERE,
+                        innerRadius = 20,
+                        shellSize = 20,
+                        blockId = 3,
+                        origin = {0, 85, 0},
+                    },
+                },            
             },
             {
-                primitive = primitives.SPHERE,
-                outerRadius = 30,
-                blockId = 4,
-            },
-            {
-                primitive = primitives.BOX,
-                size = {100, 10, 10},
-                blockId = 1,
-            },
+                primitive = primitives.PERLIN_NOISE,
+                randomSeed = 5743829,
+                scale = 32,
+                octaves = 3,
+                perOctaveAmplitude = 0.5,
+                perOctaveFrequency = 2.0,
+            },            
         },
     },
-
-    -- generators = 
-    -- {
-
-    --     operation = operations.LESS_THAN,
-    --     operands =
-    --     {
-    --             {
-    --                 primitive = primitives.SPHERE,
-    --                 outerRadius = 100,
-    --                 blockId = 12,
-    --             },
-    --         {
-    --             primitive = primitives.PERLIN_NOISE,
-
-    --             scale = 128,
-    --             octaves = 5,
-    --             perOctaveAmplitude = 0.5,
-    --             perOctaveFrequency = 2.0,
-    --         },    
-    --     }
-    -- },
-
     randomSeedAsString = "jgfkdlosgjfkesd",
 }
 
