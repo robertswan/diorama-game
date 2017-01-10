@@ -31,7 +31,7 @@ local roomSettings =
                     {
                         primitive = primitives.BOX,
                         innerSize = {1, 128, 1},
-                        shellSize = {5, 5, 5},
+                        shellSize = {25, 25, 25},
                         innerWeight = 0.75,
                         blockId = 1,
 
@@ -48,7 +48,7 @@ local roomSettings =
                             {
                                 primitive = primitives.BOX,
                                 innerSize = {80, 3, 80},
-                                shellSize = {5, 5, 5},
+                                shellSize = {25, 25, 25},
                                 innerWeight = 0.75,
                                 blockId = 1,
 
@@ -57,7 +57,7 @@ local roomSettings =
                             {
                                 primitive = primitives.BOX,
                                 innerSize = {60, 20, 60},
-                                shellSize = {5, 5, 5},
+                                shellSize = {25, 25, 25},
                                 innerWeight = 1.0,
                                 blockId = 1,
 
@@ -68,7 +68,7 @@ local roomSettings =
                     {
                         primitive = primitives.SPHERE,
                         innerRadius = 20,
-                        shellSize = 20,
+                        shellSize = 60,
                         blockId = 3,
 
                         translate = {0, 85, 0},
@@ -79,8 +79,8 @@ local roomSettings =
             {
                 primitive = primitives.PERLIN_NOISE,
                 randomSeed = 5743829,
-                octaveScale = 32,
-                octaves = 4,
+                octaveScale = 16,
+                octaves = 3,
                 perOctaveAmplitude = 0.5,
                 perOctaveFrequency = 2.0,
             },            
