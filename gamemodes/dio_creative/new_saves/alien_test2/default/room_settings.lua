@@ -24,7 +24,7 @@ local roomSettings =
                     primitive = primitives.TORUS,
                     radius = 80,
                     innerRadius = 5,
-                    innerWeight = 1,
+                    innerWeight = 0.7,
                     shellSize = 20,
                     blockId = 1,
                 },
@@ -32,9 +32,9 @@ local roomSettings =
                     primitive = primitives.TORUS,
                     radius = 80,
                     innerRadius = 5,
-                    innerWeight = 1,
+                    innerWeight = 0.7,
                     shellSize = 20,
-                    blockId = 1,
+                    blockId = 33,
 
                     translate = {80, 0, 0},
                     rotate = {3.14 * 0.5, 0, 0},
@@ -70,7 +70,7 @@ local roomSettings =
                     primitive = primitives.BOX,
                     innerSize = {1, 128, 1},
                     shellSize = {25, 25, 25},
-                    innerWeight = 0.75,
+                    innerWeight = 1.0,
                     blockId = 1,
 
                     translate = {48, 32, 48},
@@ -87,7 +87,7 @@ local roomSettings =
                             primitive = primitives.BOX,
                             innerSize = {80, 3, 80},
                             shellSize = {25, 25, 25},
-                            innerWeight = 0.75,
+                            innerWeight = 1.0,
                             blockId = 1,
 
                             translate = {40, 0, 0},
@@ -105,8 +105,8 @@ local roomSettings =
                 },
                 {
                     primitive = primitives.SPHERE,
-                    innerRadius = 20,
-                    shellSize = 60,
+                    innerRadius = 50,
+                    shellSize = 30,
                     blockId = 3,
 
                     translate = {0, 85, 0},
@@ -132,8 +132,8 @@ local roomSettings =
                 {
                     primitive = primitives.PERLIN_NOISE,
                     randomSeed = 5743829,
-                    octaveScale = 16,
-                    octaves = 3,
+                    octaveScale = 32,
+                    octaves = 4,
                     perOctaveAmplitude = 0.5,
                     perOctaveFrequency = 2.0,
                 },            
@@ -147,6 +147,11 @@ local roomSettings =
                 srcBlockId = 1,
                 dstBlockIds = {1, 2, 2, 3},
             },
+            {
+                postProcess = postProcesses.APPLY_CRUST,
+                srcBlockId = 33,
+                dstBlockIds = {33, 32, 31, 30},
+            },            
         }
     },
     randomSeedAsString = "jgfkdlosgjfkesd",
