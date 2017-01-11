@@ -2,6 +2,8 @@
 
 local operations = dio.types.csgOperations
 local primitives = dio.types.csgPrimitives
+local postProcesses = {APPLY_CRUST = 0}
+--dio.types.terrainPostProcesses
 
 local roomSettings =
 {
@@ -13,8 +15,48 @@ local roomSettings =
 
     references = 
     {
-        bigObject =
         {
+            id = "torus",
+            operation = operations.ADD,
+            operands =
+            {
+                {
+                    primitive = primitives.TORUS,
+                    radius = 80,
+                    innerRadius = 5,
+                    innerWeight = 1,
+                    shellSize = 20,
+                    blockId = 1,
+                },
+                {
+                    primitive = primitives.TORUS,
+                    radius = 80,
+                    innerRadius = 5,
+                    innerWeight = 1,
+                    shellSize = 20,
+                    blockId = 1,
+
+                    translate = {80, 0, 0},
+                    rotate = {3.14 * 0.5, 0, 0},
+                },
+            },
+        },
+        {
+            id = "torii",
+            operation = operations.ADD,
+            operands =
+            {
+                {
+                    referenceId = "torus",
+                },
+                {
+                    referenceId = "torus",
+                    translate = {200, 0, 0},
+                }
+            },
+        },
+        {
+            id = "bigObject",
             operation = operations.ADD,
             operands =
             {
@@ -76,23 +118,36 @@ local roomSettings =
 
     generators = 
     {
-        rotate = {0.3, 0.0, -0.3},
-        operation = operations.MORE_THAN,
-        operands =
+        csg =
         {
-            {   
-                scale = {1.1, 0.7, 1.1},
-                referenceId = "bigObject",
-            },
+            rotate = {0.3, 0.0, -0.3},
+            scale = {0.3, 0.3, 0.3},
+            operation = operations.MORE_THAN,
+            operands =
             {
-                primitive = primitives.PERLIN_NOISE,
-                randomSeed = 5743829,
-                octaveScale = 16,
-                octaves = 3,
-                perOctaveAmplitude = 0.5,
-                perOctaveFrequency = 2.0,
-            },            
+                {   
+                    scale = {1.1, 0.7, 1.1},
+                    referenceId = "torii",
+                },
+                {
+                    primitive = primitives.PERLIN_NOISE,
+                    randomSeed = 5743829,
+                    octaveScale = 16,
+                    octaves = 3,
+                    perOctaveAmplitude = 0.5,
+                    perOctaveFrequency = 2.0,
+                },            
+            },
         },
+
+        postProcesses =
+        {
+            {
+                postProcess = postProcesses.APPLY_CRUST,
+                srcBlockId = 1,
+                dstBlockIds = {1, 2, 2, 3},
+            },
+        }
     },
     randomSeedAsString = "jgfkdlosgjfkesd",
 }
