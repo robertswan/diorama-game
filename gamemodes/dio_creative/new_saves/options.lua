@@ -20,7 +20,16 @@ local options =
                 title = "Alien Test",
                 randomSeedAsString = "default_seed",
             },
-        },        
+        },  
+        {
+            title = "Alien Test 3",
+            folder = "alien_test3/",
+            options = 
+            {
+                title = "Alien Test",
+                randomSeedAsString = "default_seed",
+            },
+        },  
         {
             title = "Back To Back World",
             folder = "back_to_back/",
