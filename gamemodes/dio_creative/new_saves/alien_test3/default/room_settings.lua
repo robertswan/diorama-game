@@ -23,9 +23,9 @@ local roomSettings =
             {
                 {
                     primitive = primitives.TORUS,
-                    radius = 20,
+                    radius = 40,
                     innerRadius = 5,
-                    shellSize = 10,
+                    shellSize = 15,
                     innerWeight = 0.8,
                     blockId = 1,
 
@@ -33,10 +33,10 @@ local roomSettings =
                 },
                 {
                     primitive = primitives.TORUS,
-                    radius = 20,
+                    radius = 40,
                     innerRadius = 0,
                     shellSize = 10,
-                    innerWeight = 0.5,
+                    innerWeight = 0.6,
                     blockId = 1,
 
                     translate = {0, 40, 0},
