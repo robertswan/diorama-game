@@ -74,6 +74,22 @@ local function stripColourCodes (text)
 end
 
 --------------------------------------------------
+local playerBlueprints =
+{
+    "chr_priest",
+    "alien_bot1",
+    "alien_infected1",
+    "chr_army2",
+    "chr_bridget",
+    "chr_headphones",
+    "chr_nun",
+    "chr_nurse",
+}
+local function selectRandomPlayerBlueprintId ()
+    return playerBlueprints [math.random (#playerBlueprints - 1)]
+end
+
+--------------------------------------------------
 local function createPlayerEntity (connectionId, accountId, settings, isPasswordCorrect)
     
     local roomFolder = (settings and isPasswordCorrect) and settings.xyz.roomFolder or "default/"
@@ -97,6 +113,7 @@ local function createPlayerEntity (connectionId, accountId, settings, isPassword
         {
             connectionId = connectionId,
             accountId = accountId,
+            hasHighlight = false,
 
             standEyeHeight = 1.65,
             crouchEyeHeight = 0.25,
@@ -146,7 +163,7 @@ local function createPlayerEntity (connectionId, accountId, settings, isPassword
     local playerModelComponents =
     {
         [c.BROADCAST_WITH_PARENT] =    {},
-        [c.MESH_PLACEHOLDER] =         {blueprintId = "player_model"},
+        [c.MESH_PLACEHOLDER] =         {blueprintId = selectRandomPlayerBlueprintId ()},
         [c.PARENT] =                   {parentEntityId = playerEntityId},
         [c.TRANSFORM] =                {},--scale = {1/8, 1/8, 1/8}, xyz = {-0.5, -0.25, -0.5}},
     }

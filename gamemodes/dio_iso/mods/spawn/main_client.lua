@@ -1,3 +1,5 @@
+local Resources = require ("resources/scripts/utils/resources")
+
 --------------------------------------------------
 local instance = nil
 
@@ -193,6 +195,43 @@ local function onNamedEntityCreated (event)
 end
 
 --------------------------------------------------
+local function addPlayerModel (id)
+    return
+    {
+        id = id,
+        filename = "models/characters/" .. id .. ".vox",
+        options = {scale = {1/8, 1/8, 1/8}, translate = {-0.5, 0, -0.5}},
+    }
+end
+
+--------------------------------------------------
+local entityModels =
+{
+    chr_priest = addPlayerModel ("chr_priest"),
+    alien_bot1 = addPlayerModel ("alien_bot1"),
+    alien_infected1 = addPlayerModel ("alien_infected1"),
+    chr_army2 = addPlayerModel ("chr_army2"),
+    chr_bridget = addPlayerModel ("chr_bridget"),
+    chr_headphones = addPlayerModel ("chr_headphones"),
+    chr_nun = addPlayerModel ("chr_nun"),
+    chr_nurse = addPlayerModel ("chr_nurse"),
+}
+local loadedEntityModels = {}
+
+--------------------------------------------------
+local function onResourceRequired (event)
+    --if event.resourceType == dio.types.resourceTypes.REGULAR_MODEL then
+        local toLoad =
+        {
+            entityModels [event.resourceId]
+        }
+        Resources.loadEntityModels (toLoad)
+        table.insert (loadedEntityModels, {id = event.resourceId})
+        event.cancel = true
+    --end
+end
+
+--------------------------------------------------
 local function onLoad ()
 
     instance =
@@ -206,14 +245,14 @@ local function onLoad ()
     dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
     dio.events.addListener (types.NAMED_ENTITY_CREATED, onNamedEntityCreated, "PLAYER")
     -- dio.events.addListener (types.NAMED_ENTITY_CREATED, onNamedEntityCreated, "PLAYER_EYE_POSITION")
-
-    
+    dio.events.addListener (types.RESOURCE_REQUIRED, onResourceRequired)
 
 end
 
 --------------------------------------------------
 local function onUnload ()
-    
+    Resources.unloadEntityModels (loadedEntityModels)
+    loadedEntityModels = {}
 end
 
 --------------------------------------------------
@@ -236,12 +275,14 @@ local modSettings =
     {
         drawing = true,
         entities = true,
+        resources = true,
         world = true,
     },
 
     callbacks = 
     {
         onLoad = onLoad,
+        onUnload = onUnload,
     },    
 }
 

@@ -19,10 +19,6 @@ local modsToLoad =
     },
     {
         gameMode = "default",
-        modFolder = "inventory",
-    },
-    {
-        gameMode = "default",
         modFolder = "chat",
     },
     {
