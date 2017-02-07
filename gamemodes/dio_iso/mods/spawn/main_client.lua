@@ -155,6 +155,37 @@ local function onNamedEntityCreated (event)
             dio.entities.setComponent (event.entityId, c.CHARACTER_CONTROLLER, controller)
         end
 
+        -- add a name tag (to everyone)
+        local name = "PLAYER"
+        --local materials = dio.entities.getComponent (event.roomEntityId, c.MATERIALS)
+        local nameComponents = 
+        {
+            [c.PARENT] =                    {parentEntityId = event.entityId},
+            [c.BILLBOARD_TRANSFORM] =       {xyz = {0, 2.25, 0}, scale = {50, 50, 50}},
+            [c.RENDER_TO_TEXTURE_RENDERER] =
+            {
+                -- text = name,
+                onCreateTexture = function (event)
+
+                    local font = dio.drawing.font
+                    local w = font.measureString ("PLAYER")
+                    local h = 20
+                    event.texture = dio.drawing.createRenderToTexture (w, h)
+
+                    dio.drawing.setRenderToTexture (event.texture)
+                    font.drawBox (0, 0, w, h, 0x80808080);
+                    font.drawString (0, 0, "PLAYER", 0xffffffff)
+                    dio.drawing.setRenderToTexture (nil)
+                end,
+            },
+        }
+
+        dio.entities.create (event.roomEntityId, nameComponents)
+
+        -- nameComponents [c.BILLBOARD_TRANSFORM].xyz [2] = 3.25
+        -- nameComponents [c.RENDER_TO_TEXTURE_RENDERER].text = "TEAZEL"
+        -- dio.entities.create (event.roomEntityId, nameComponents)
+
     elseif event.name == "PLAYER_EYE_POSITION" then
 
         local c = dio.entities.components
@@ -169,13 +200,22 @@ local function onNamedEntityCreated (event)
                 [c.CAMERA] =
                 {
                     cameraType = dio.types.cameraTypes.LOOK_AT,
-                    projectionType = dio.types.projectionTypes.ORTHO,
+                    projectionType = dio.types.projectionTypes.PERSPECTIVE,
                     attachTo = event.entityId,
                     lookAt = {0, 0, 0},
-                    offset = {80, 100, 80},
-                    orthoScale = {16, 16},
-                    nearClip = 10,
+                    offset = {20, 30, 20},
+                    fov = 20,
+                    nearClip = 1,
                     farClip = 1000,
+
+                    -- cameraType = dio.types.cameraTypes.LOOK_AT,
+                    -- projectionType = dio.types.projectionTypes.ORTHO,
+                    -- attachTo = event.entityId,
+                    -- lookAt = {0, 0, 0},
+                    -- offset = {80, 100, 80},
+                    -- orthoScale = {16, 16},
+                    -- nearClip = 10,
+                    -- farClip = 1000,
 
                 },
                 -- {
@@ -200,7 +240,7 @@ local function addPlayerModel (id)
     {
         id = id,
         filename = "models/characters/" .. id .. ".vox",
-        options = {scale = {1/8, 1/8, 1/8}, translate = {-0.5, 0, -0.5}},
+        options = {scale = {1/8, 1/8, 1/8}, translate = {-0.5, 0, -0.5}, rotate180 = true},
     }
 end
 
