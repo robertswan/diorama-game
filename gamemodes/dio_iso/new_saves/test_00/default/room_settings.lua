@@ -12,7 +12,7 @@ local roomSettings =
 
                     --axis = "y",
                     baseVoxel = -16,
-                    heightInVoxels = 16,
+                    heightInVoxels = 32,
                 },
                 {
                     type = "perlinNoise",

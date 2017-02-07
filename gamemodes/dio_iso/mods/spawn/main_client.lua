@@ -170,7 +170,10 @@ local function onNamedEntityCreated (event)
                     projectionType = dio.types.projectionTypes.ORTHO,
                     attachTo = event.entityId,
                     lookAt = {0, 0, 0},
-                    offset = {8, 8, 8},
+                    offset = {80, 100, 80},
+                    orthoScale = {16, 16},
+                    nearClip = 10,
+                    farClip = 1000,
 
                 },
                 -- {

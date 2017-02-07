@@ -5,8 +5,8 @@ local entityModels =
 {
     {
         id = "player_model",
-        filename = "models/player_model.vox",
-        options = {},        
+        filename = "models/characters/chr_priest.vox",
+        options = {scale = {1/8, 1/8, 1/8}, translate = {-0.5, 0, -0.5}},
     },
 }
 

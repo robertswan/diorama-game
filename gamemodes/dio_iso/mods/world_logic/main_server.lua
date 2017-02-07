@@ -148,7 +148,7 @@ local function createPlayerEntity (connectionId, accountId, settings, isPassword
         [c.BROADCAST_WITH_PARENT] =    {},
         [c.MESH_PLACEHOLDER] =         {blueprintId = "player_model"},
         [c.PARENT] =                   {parentEntityId = playerEntityId},
-        [c.TRANSFORM] =                {scale = {0.1, 0.1, 0.1}, xyz = {-1, 0, -1}},
+        [c.TRANSFORM] =                {},--scale = {1/8, 1/8, 1/8}, xyz = {-0.5, -0.25, -0.5}},
     }
 
     local playerModelEntityId = dio.entities.create (roomEntityId, playerModelComponents)
