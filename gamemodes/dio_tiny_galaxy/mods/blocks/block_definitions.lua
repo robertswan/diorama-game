@@ -31,7 +31,7 @@ end
 --------------------------------------------------
 local entityModels = 
 {
-    makeEntityModel ("player_model"),
+    makeEntityModel ("player_model", {scale = {4, 4, 4}, rotate180 = true, translate = {-4.5, 0.0, -4.5}}),
 }
 
 --------------------------------------------------

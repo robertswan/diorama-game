@@ -93,7 +93,6 @@ local function onClientUpdated (event)
     end
 end
 
-
 --------------------------------------------------
 local function onLoad ()
 

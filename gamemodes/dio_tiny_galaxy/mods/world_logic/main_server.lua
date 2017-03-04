@@ -305,19 +305,15 @@ local function createPlayerEntity (connectionId, accountId, jumpSpeed, playerXyz
     local cameraSettings = cg.isMap and cg.cameraSettings.overhead or cg.cameraSettings.fps
     local cameraEntityId = createCameraEntity (eyeEntityId, roomEntityId, cameraSettings)
 
-    if cg.isMap then
+    local playerModelComponents =
+    {
+        [c.BASE_NETWORK] =              {},
+        [c.MESH_PLACEHOLDER] =          {blueprintId = "player_model", isInMainPass = cg.isMap},
+        [c.PARENT] =                    {parentEntityId = playerEntityId},
+        [c.TRANSFORM] =                 {scale = {1/16, 1/16, 1/16}, xyz = {0, -0.25, 0}},
+    }
 
-        local playerModelComponents =
-        {
-            [c.BASE_NETWORK] =             {},
-            [c.MESH_PLACEHOLDER] =         {blueprintId = "player_model"},
-            [c.PARENT] =                   {parentEntityId = playerEntityId},
-            [c.TRANSFORM] =                {scale = {0.1, 0.1, 0.1}},
-        }
-
-        dio.entities.create (roomEntityId, playerModelComponents)
-
-    end
+    dio.entities.create (roomEntityId, playerModelComponents)
 
     return playerEntityId, eyeEntityId, cameraEntityId, roomEntityId
 end
