@@ -130,7 +130,7 @@ local blocks =
     -- 40
     {name = "rot brick roots",          icon = {2, 4},     textures = {neswtb = {2, 4}}},
     {name = "UNUSED",                   icon = {15, 15},   textures = {neswtb = {15, 15}}},
-    {name = "rot vines nonsolid",       icon = {4, 4},     textures = {neswtb = {4, 4}},    isTransparent = true, isSolid = false},
+    {name = "rot vines nonsolid",       icon = {4, 4},     textures = {neswtb = {4, 4}},    isTransparent = true, isSolid = false, hidesMatching = false},
     {name = "rot trunk",                icon = {12, 4},    textures = {neswtb = {12, 4}},   tag = "bigAxe"},
     {name = "rot trunk thin",           icon = {11, 4},    textures = {neswtb = {11, 4}},   model = "pole", tag = "smallAxe"},
     {name = "rot leaves clean",         icon = {13, 4},    textures = {neswtb = {13, 4}}},
