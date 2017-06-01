@@ -52,17 +52,16 @@ local function createMobEntity (chunkEntityId, roomEntityId)
     local components =
     {
         [c.BASE_NETWORK] =         {},
-        [c.GRAVITY_TRANSFORM] =
+        [c.TRANSFORM] = -- should be GRAVITY_TRANSFORM
         {
             chunkId =       {0, 0, 0},
             xyz =           {2, 2, 2},
             ypr =           {0, 0, 0},
             gravityDir =    5,
         },
-        [c.MESH_PLACEHOLDER] =     {blueprintId = "test_entity_model"},
-        [c.NAME] =                 {name = "MOB"},
-        [c.PARENT] =               {parentEntityId = chunkEntityId},
-
+        [c.MESH_PLACEHOLDER] =      {blueprintId = "test_entity_model"},
+        [c.NAME] =                  {name = "MOB"},
+        [c.PARENT] =                {parentEntityId = chunkEntityId},
     }
 
     local mobEntityId = dio.entities.create (roomEntityId, components)
@@ -110,12 +109,75 @@ local function onChunkGenerated (event)
 end
 
 --------------------------------------------------
+local function onNamedEntityCreated (event)
+    if event.name == "MOB" then
+        mob = event.entityId
+        event.cancel = true
+    end
+end
+
+-- --------------------------------------------------
+-- local function onNamedEntityDestroyed (event)
+--     if event.name == "MOB" then
+--         mob = nil
+--         event.cancel = true
+--     end
+-- end
+
+--------------------------------------------------
+local function getDelta (t1, t2)
+    return 
+    {
+        (t2.xyz [1] - t1.xyz [1]) + (t2.chunkId [1] - t1.chunkId [1]) * 32,
+        (t2.xyz [2] - t1.xyz [2]) + (t2.chunkId [2] - t1.chunkId [2]) * 32,
+        (t2.xyz [3] - t1.xyz [3]) + (t2.chunkId [3] - t1.chunkId [3]) * 32,
+    }
+end
+
+--------------------------------------------------
+local function onMobTick (entityId)
+    
+    for _, connection in pairs (connections) do
+
+        local c = dio.entities.components
+
+        local speed = 0.1
+        local tolerance = 1
+
+        local transform = dio.entities.getComponent (entityId, c.TRANSFORM)
+        local playerTransform = dio.entities.getComponent (connection.entityId, c.TRANSFORM)
+
+        local delta = getDelta (transform, playerTransform)
+        if delta [1] < -tolerance then transform.xyz [1] = transform.xyz [1] - speed end
+        if delta [1] > tolerance then transform.xyz [1] = transform.xyz [1] + speed end
+        if delta [3] < -tolerance then transform.xyz [3] = transform.xyz [3] - speed end
+        if delta [3] > tolerance then transform.xyz [3] = transform.xyz [3] + speed end
+
+        dio.entities.setComponent (entityId, c.TRANSFORM, transform)
+
+        break
+
+    end
+end
+
+-------------------------------------------------
+local function onTick ()
+
+    if mob then
+        onMobTick (mob)
+    end
+end
+
+--------------------------------------------------
 local function onLoad ()
 
     local types = dio.types.serverEvents
     dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
     dio.events.addListener (types.CLIENT_DISCONNECTED, onClientDisconnected)
     dio.events.addListener (types.CHUNK_GENERATED, onChunkGenerated)
+    dio.events.addListener (types.NAMED_ENTITY_CREATED, onNamedEntityCreated)
+    --dio.events.addListener (types.NAMED_ENTITY_DESTROYED, onNamedEntityDestroyed)
+    dio.events.addListener (types.TICK, onTick)
 end
 
 --------------------------------------------------
