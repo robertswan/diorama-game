@@ -1,5 +1,24 @@
+local Resources = require ("resources/scripts/utils/resources")
+
 --------------------------------------------------
 local instance = nil
+
+--------------------------------------------------
+local function addPlayerModel (id)
+    return
+    {
+        id = id,
+        filename = "models/characters/" .. id .. ".vox",
+        options = {scale = {1/8, 1/8, 1/8}, translate = {-0.5, 0, -0.5}, rotate180 = true},
+    }
+end
+
+--------------------------------------------------
+local entityModels =
+{
+    chr_nurse = addPlayerModel ("chr_nurse"),
+}
+local loadedEntityModels = {}
 
 --------------------------------------------------
 local function onLateRender (self)
@@ -57,6 +76,19 @@ local function onNamedEntityCreated (event)
 end
 
 --------------------------------------------------
+local function onResourceRequired (event)
+    --if event.resourceType == dio.types.resourceTypes.REGULAR_MODEL then
+        local toLoad =
+        {
+            entityModels [event.resourceId]
+        }
+        Resources.loadEntityModels (toLoad)
+        table.insert (loadedEntityModels, {id = event.resourceId})
+        event.cancel = true
+    --end
+end
+
+--------------------------------------------------
 local function onLoad ()
 
     instance =
@@ -71,6 +103,7 @@ local function onLoad ()
     local types = dio.types.clientEvents
     dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
     dio.events.addListener (types.NAMED_ENTITY_CREATED, onNamedEntityCreated)
+    --dio.events.addListener (types.RESOURCE_REQUIRED, onResourceRequired)
 
     dio.resources.loadTexture ("CHUNKS_DIFFUSE",    "textures/chunks_diffuse_00.png")
     dio.resources.loadTexture ("LIQUIDS_DIFFUSE",   "textures/liquids_diffuse_00.png")
