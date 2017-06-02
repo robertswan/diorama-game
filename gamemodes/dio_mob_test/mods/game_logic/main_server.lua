@@ -120,7 +120,7 @@ local function getDelta (t1, t2)
 end
 
 --------------------------------------------------
-local function onMobTick (event)
+local function onMobTick (entityId)
     
     for _, connection in pairs (connections) do
 
@@ -129,7 +129,7 @@ local function onMobTick (event)
         local speed = 0.1
         local tolerance = 1
 
-        local transform = dio.entities.getComponent (event.entityId, c.TRANSFORM)
+        local transform = dio.entities.getComponent (entityId, c.TRANSFORM)
         local playerTransform = dio.entities.getComponent (connection.entityId, c.TRANSFORM)
 
         local delta = getDelta (transform, playerTransform)
@@ -139,7 +139,7 @@ local function onMobTick (event)
         if delta [3] > tolerance then transform.xyz [3] = transform.xyz [3] + speed end
 
         -- if dio.entities.isLoadedChunk (transform) then
-             dio.entities.setComponent (event.entityId, c.TRANSFORM, transform)
+             dio.entities.setComponent (entityId, c.TRANSFORM, transform)
         -- end
 
         break
