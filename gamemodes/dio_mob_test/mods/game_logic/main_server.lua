@@ -46,13 +46,51 @@ local function createPlayerEntity (connectionId, accountId)
 end
 
 --------------------------------------------------
+local function getDelta (t1, t2)
+    return 
+    {
+        (t2.xyz [1] - t1.xyz [1]) + (t2.chunkId [1] - t1.chunkId [1]) * 32,
+        (t2.xyz [2] - t1.xyz [2]) + (t2.chunkId [2] - t1.chunkId [2]) * 32,
+        (t2.xyz [3] - t1.xyz [3]) + (t2.chunkId [3] - t1.chunkId [3]) * 32,
+    }
+end
+
+--------------------------------------------------
+local function onMobTick (entityId)
+    
+    for _, connection in pairs (connections) do
+
+        local c = dio.entities.components
+
+        local speed = 0.1
+        local tolerance = 1
+
+        local transform = dio.entities.getComponent (entityId, c.TRANSFORM)
+        local playerTransform = dio.entities.getComponent (connection.entityId, c.TRANSFORM)
+
+        local delta = getDelta (transform, playerTransform)
+        if delta [1] < -tolerance then transform.xyz [1] = transform.xyz [1] - speed end
+        if delta [1] > tolerance then transform.xyz [1] = transform.xyz [1] + speed end
+        if delta [3] < -tolerance then transform.xyz [3] = transform.xyz [3] - speed end
+        if delta [3] > tolerance then transform.xyz [3] = transform.xyz [3] + speed end
+
+        -- if dio.entities.isLoadedChunk (transform) then
+             dio.entities.setComponent (entityId, c.TRANSFORM, transform)
+        -- end
+
+        break
+
+    end
+end
+
+--------------------------------------------------
 local function createMobEntity (chunkEntityId, roomEntityId)
     local c = dio.entities.components
     local e = dio.entities.events
     local components =
     {
         [c.BASE_NETWORK] =          {},
-        [c.EVENTS] =                {{event = e.ON_TICK, callbackId = "MOB_ON_TICK", shouldBroadcast = false}},
+        --[c.EVENTS] =                {{event = e.ON_TICK, callbackId = "UNUSED_REMOVE_ME", shouldBroadcast = false}},
         [c.MESH_PLACEHOLDER] =      {blueprintId = "test_entity_model"},
         [c.NAME] =                  {name = "MOB"},
         [c.PARENT] =                {parentEntityId = chunkEntityId},
@@ -110,57 +148,26 @@ local function onChunkGenerated (event)
 end
 
 --------------------------------------------------
-local function getDelta (t1, t2)
-    return 
-    {
-        (t2.xyz [1] - t1.xyz [1]) + (t2.chunkId [1] - t1.chunkId [1]) * 32,
-        (t2.xyz [2] - t1.xyz [2]) + (t2.chunkId [2] - t1.chunkId [2]) * 32,
-        (t2.xyz [3] - t1.xyz [3]) + (t2.chunkId [3] - t1.chunkId [3]) * 32,
-    }
-end
+local function onNamedEntityCreated (event)
+    if event.name == "MOB" then
+        local e = dio.entities.entityEvents
 
---------------------------------------------------
-local function onMobTick (entityId)
-    
-    for _, connection in pairs (connections) do
-
-        local c = dio.entities.components
-
-        local speed = 0.1
-        local tolerance = 1
-
-        local transform = dio.entities.getComponent (entityId, c.TRANSFORM)
-        local playerTransform = dio.entities.getComponent (connection.entityId, c.TRANSFORM)
-
-        local delta = getDelta (transform, playerTransform)
-        if delta [1] < -tolerance then transform.xyz [1] = transform.xyz [1] - speed end
-        if delta [1] > tolerance then transform.xyz [1] = transform.xyz [1] + speed end
-        if delta [3] < -tolerance then transform.xyz [3] = transform.xyz [3] - speed end
-        if delta [3] > tolerance then transform.xyz [3] = transform.xyz [3] + speed end
-
-        -- if dio.entities.isLoadedChunk (transform) then
-             dio.entities.setComponent (entityId, c.TRANSFORM, transform)
-        -- end
-
-        break
-
+        -- dio.entities.addListener (event.entityId, e.ON_TICK, onMobTick)
+        dio.entities.addListener (event.entityId, onMobTick)
     end
 end
 
 --------------------------------------------------
 local function onLoad ()
 
-    local types = dio.types.serverEvents
-    dio.events.addListener (types.CLIENT_CONNECTED, onClientConnected)
-    dio.events.addListener (types.CLIENT_DISCONNECTED, onClientDisconnected)
-    dio.events.addListener (types.CHUNK_GENERATED, onChunkGenerated)
+    local e = dio.types.serverEvents
+    dio.events.addListener (e.CLIENT_CONNECTED, onClientConnected)
+    dio.events.addListener (e.CLIENT_DISCONNECTED, onClientDisconnected)
+    dio.events.addListener (e.CHUNK_GENERATED, onChunkGenerated)
+    dio.events.addListener (e.NAMED_ENTITY_CREATED, onNamedEntityCreated)
 
-    local callbacks =
-    {
-        MOB_ON_TICK =       onMobTick,
-    }
-
-    dio.entities.registerEventCallbacks (callbacks)
+    -- remove this!
+    --dio.events.registerEntityCreatedCallbacks ("MOB", onMobTick)
 end
 
 --------------------------------------------------
