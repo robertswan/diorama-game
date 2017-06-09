@@ -74,9 +74,9 @@ local function onMobTick (entityId)
         if delta [3] < -tolerance then transform.xyz [3] = transform.xyz [3] - speed end
         if delta [3] > tolerance then transform.xyz [3] = transform.xyz [3] + speed end
 
-        -- if dio.entities.isLoadedChunk (transform) then
-             dio.entities.setComponent (entityId, c.TRANSFORM, transform)
-        -- end
+        --if dio.world.isChunkAroundPointLoaded (transform) then
+            local res, err = dio.entities.setComponent (entityId, c.TRANSFORM, transform)
+        --end
 
         break
 
@@ -87,9 +87,11 @@ end
 local function createMobEntity (chunkEntityId, roomEntityId)
     local c = dio.entities.components
     local e = dio.entities.events
-    local components =
+    
+    local mob =
     {
         [c.BASE_NETWORK] =          {},
+        [c.CHILD_IDS] =             {},
         --[c.EVENTS] =                {{event = e.ON_TICK, callbackId = "UNUSED_REMOVE_ME", shouldBroadcast = false}},
         [c.MESH_PLACEHOLDER] =      {blueprintId = "test_entity_model"},
         [c.NAME] =                  {name = "MOB"},
@@ -99,11 +101,12 @@ local function createMobEntity (chunkEntityId, roomEntityId)
             chunkId =       {0, 0, 0},
             xyz =           {2, 2, 2},
             ypr =           {0, 0, 0},
+            scale =         {0.1, 0.1, 0.1},
             gravityDir =    5,
         },
     }
 
-    local mobEntityId = dio.entities.create (roomEntityId, components)
+    local mobEntityId = dio.entities.create (roomEntityId, mob)
     return mobEntityId
 end
 
