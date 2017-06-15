@@ -22,9 +22,9 @@ local function onEarlyRender (self)
 
     		if xyz then
 
-                local xCoord = tostring (xyz.chunkId [1]) .. "," .. tostring (math.floor (xyz.xyz [1]))
-    			local yCoord = tostring (xyz.chunkId [2]) .. "," .. tostring (math.floor (xyz.xyz [2]))
-    			local zCoord = tostring (xyz.chunkId [3]) .. "," .. tostring (math.floor (xyz.xyz [3]))
+                local xCoord = tostring (math.floor (xyz.xyz [1]))
+    			local yCoord = tostring (math.floor (xyz.xyz [2]))
+    			local zCoord = tostring (math.floor (xyz.xyz [3]))
 
                 local x = self.border
                 local y = self.border

@@ -14,8 +14,7 @@ local function createPlayerEntity (connectionId, accountId)
         [components.FOCUS] =                {connectionId = connectionId, radius = 4},
         [components.GRAVITY_TRANSFORM] =
         {
-            chunkId =       {0, 0, 0},
-            xyz =           {15, 4, 15},
+            xyz =           {0.5, 4.5, 0.5},
             ypr =           {0, 0, 0},
             gravityDir =    5,
         },
@@ -46,16 +45,6 @@ local function createPlayerEntity (connectionId, accountId)
 end
 
 --------------------------------------------------
-local function getDelta (t1, t2)
-    return 
-    {
-        (t2.xyz [1] - t1.xyz [1]) + (t2.chunkId [1] - t1.chunkId [1]) * 32,
-        (t2.xyz [2] - t1.xyz [2]) + (t2.chunkId [2] - t1.chunkId [2]) * 32,
-        (t2.xyz [3] - t1.xyz [3]) + (t2.chunkId [3] - t1.chunkId [3]) * 32,
-    }
-end
-
---------------------------------------------------
 local function onMobTick (entityId)
     
     for _, connection in pairs (connections) do
@@ -65,17 +54,19 @@ local function onMobTick (entityId)
         local speed = 0.1
         local tolerance = 1
 
-        local transform = dio.entities.getComponent (entityId, c.TRANSFORM)
-        local playerTransform = dio.entities.getComponent (connection.entityId, c.TRANSFORM)
+        local et = dio.entities.getComponent (entityId, c.TRANSFORM)
+        local pt = dio.entities.getComponent (connection.entityId, c.TRANSFORM)
 
-        local delta = getDelta (transform, playerTransform)
-        if delta [1] < -tolerance then transform.xyz [1] = transform.xyz [1] - speed end
-        if delta [1] > tolerance then transform.xyz [1] = transform.xyz [1] + speed end
-        if delta [3] < -tolerance then transform.xyz [3] = transform.xyz [3] - speed end
-        if delta [3] > tolerance then transform.xyz [3] = transform.xyz [3] + speed end
+        local deltaX = pt.xyz [1] - et.xyz [1]
+        local deltaZ = pt.xyz [3] - et.xyz [3]
+
+        if deltaX < -tolerance then et.xyz [1] = et.xyz [1] - speed end
+        if deltaX > tolerance then et.xyz [1] = et.xyz [1] + speed end
+        if deltaZ < -tolerance then et.xyz [3] = et.xyz [3] - speed end
+        if deltaZ > tolerance then et.xyz [3] = et.xyz [3] + speed end
 
         --if dio.world.isChunkAroundPointLoaded (transform) then
-            local res, err = dio.entities.setComponent (entityId, c.TRANSFORM, transform)
+            local res, err = dio.entities.setComponent (entityId, c.TRANSFORM, et)
         --end
 
         break
@@ -98,7 +89,6 @@ local function createMobEntity (chunkEntityId, roomEntityId)
         [c.PARENT] =                {parentEntityId = chunkEntityId},
         [c.TRANSFORM] = -- should be GRAVITY_TRANSFORM
         {
-            chunkId =       {0, 0, 0},
             xyz =           {2, 2, 2},
             ypr =           {0, 0, 0},
             scale =         {0.1, 0.1, 0.1},

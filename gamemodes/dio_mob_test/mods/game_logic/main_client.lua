@@ -83,7 +83,7 @@ local function onNamedEntityCreated (event)
         local onDirty = function (event)
             local parent = dio.entities.getComponent (event.entityId, c.PARENT)
             local t = dio.entities.getComponent (parent.parentEntityId, c.TRANSFORM)
-            local text = tostring (t.chunkId [1]) .. "," .. tostring (t.chunkId [2]) .. "," .. tostring (t.chunkId [3])
+            local text = "HELLO BISCUITS" --tostring (t.chunkId [1]) .. "," .. tostring (t.chunkId [2]) .. "," .. tostring (t.chunkId [3])
             local font = dio.drawing.font
 
             dio.drawing.setRenderToTexture (event.texture)
