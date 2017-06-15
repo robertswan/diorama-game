@@ -50,23 +50,17 @@ local function onMobTick (entityId)
     for _, connection in pairs (connections) do
 
         local c = dio.entities.components
+        local mob = dio.entities.getComponent (entityId, c.TRANSFORM)
+        local player = dio.entities.getComponent (connection.entityId, c.TRANSFORM)
+        local speed = 0.04
 
-        local speed = 0.1
-        local tolerance = 1
-
-        local et = dio.entities.getComponent (entityId, c.TRANSFORM)
-        local pt = dio.entities.getComponent (connection.entityId, c.TRANSFORM)
-
-        local deltaX = pt.xyz [1] - et.xyz [1]
-        local deltaZ = pt.xyz [3] - et.xyz [3]
-
-        if deltaX < -tolerance then et.xyz [1] = et.xyz [1] - speed end
-        if deltaX > tolerance then et.xyz [1] = et.xyz [1] + speed end
-        if deltaZ < -tolerance then et.xyz [3] = et.xyz [3] - speed end
-        if deltaZ > tolerance then et.xyz [3] = et.xyz [3] + speed end
+        if mob.xyz [1] < player.xyz [1] then mob.xyz [1] = math.min (mob.xyz [1] + speed, player.xyz [1]) end
+        if mob.xyz [1] > player.xyz [1] then mob.xyz [1] = math.max (mob.xyz [1] - speed, player.xyz [1]) end
+        if mob.xyz [3] < player.xyz [3] then mob.xyz [3] = math.min (mob.xyz [3] + speed, player.xyz [3]) end
+        if mob.xyz [3] > player.xyz [3] then mob.xyz [3] = math.max (mob.xyz [3] - speed, player.xyz [3]) end
 
         --if dio.world.isChunkAroundPointLoaded (transform) then
-            local res, err = dio.entities.setComponent (entityId, c.TRANSFORM, et)
+            local res, err = dio.entities.setComponent (entityId, c.TRANSFORM, mob)
         --end
 
         break
@@ -89,7 +83,7 @@ local function createMobEntity (chunkEntityId, roomEntityId)
         [c.PARENT] =                {parentEntityId = chunkEntityId},
         [c.TRANSFORM] = -- should be GRAVITY_TRANSFORM
         {
-            xyz =           {2, 2, 2},
+            xyz =           {2, 12, 2},
             ypr =           {0, 0, 0},
             scale =         {0.1, 0.1, 0.1},
             gravityDir =    5,
@@ -146,7 +140,7 @@ local function onNamedEntityCreated (event)
         local e = dio.entities.entityEvents
 
         -- dio.entities.addListener (event.entityId, e.ON_TICK, onMobTick)
-        --dio.entities.addListener (event.entityId, onMobTick)
+        dio.entities.addListener (event.entityId, onMobTick)
     end
 end
 
