@@ -14,7 +14,7 @@ local function createPlayerEntity (connectionId, accountId)
         [components.FOCUS] =                {connectionId = connectionId, radius = 4},
         [components.GRAVITY_TRANSFORM] =
         {
-            xyz =           {0.5, 4.5, 0.5},
+            xyz =           {2.5, 22.5, 2.5},
             ypr =           {0, 0, 0},
             gravityDir =    5,
         },
@@ -146,7 +146,7 @@ local function onNamedEntityCreated (event)
         local e = dio.entities.entityEvents
 
         -- dio.entities.addListener (event.entityId, e.ON_TICK, onMobTick)
-        dio.entities.addListener (event.entityId, onMobTick)
+        --dio.entities.addListener (event.entityId, onMobTick)
     end
 end
 
