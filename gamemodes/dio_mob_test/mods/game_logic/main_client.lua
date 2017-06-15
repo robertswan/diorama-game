@@ -66,6 +66,7 @@ local function onNamedEntityCreated (event)
                     isMainCamera = true,
                 },
                 [c.PARENT] =                {parentEntityId = event.roomEntityId},
+                [c.ROOM_SCOPE] =            {},
                 [c.TRANSFORM] =             {},
             }
 

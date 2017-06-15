@@ -20,6 +20,7 @@ local function createPlayerEntity (connectionId, accountId)
         },
         [components.NAME] =                 {name = "PLAYER"},
         [components.PARENT] =               {parentEntityId = roomEntityId},
+        [components.ROOM_SCOPE] =           {},
         [components.SERVER_CHARACTER_CONTROLLER] =               
         {
             connectionId = connectionId,
@@ -80,7 +81,7 @@ local function createMobEntity (chunkEntityId, roomEntityId)
         --[c.EVENTS] =                {{event = e.ON_TICK, callbackId = "UNUSED_REMOVE_ME", shouldBroadcast = false}},
         [c.MESH_PLACEHOLDER] =      {blueprintId = "test_entity_model"},
         [c.NAME] =                  {name = "MOB"},
-        [c.PARENT] =                {parentEntityId = chunkEntityId},
+        [c.PARENT] =                {parentEntityId = roomEntityId},
         [c.TRANSFORM] = -- should be GRAVITY_TRANSFORM
         {
             xyz =           {2, 12, 2},
