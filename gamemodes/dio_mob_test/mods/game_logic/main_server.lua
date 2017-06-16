@@ -53,7 +53,7 @@ local function onMobTick (entityId)
         local c = dio.entities.components
         local mob = dio.entities.getComponent (entityId, c.TRANSFORM)
         local player = dio.entities.getComponent (connection.entityId, c.TRANSFORM)
-        local speed = 0.07
+        local speed = 0.2
 
         if mob.xyz [1] < player.xyz [1] then mob.xyz [1] = math.min (mob.xyz [1] + speed, player.xyz [1]) end
         if mob.xyz [1] > player.xyz [1] then mob.xyz [1] = math.max (mob.xyz [1] - speed, player.xyz [1]) end
