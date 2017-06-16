@@ -82,7 +82,7 @@ local gameVars =
     playersReadyCount = 0,
     playersPlayingCount = 0,
     tickCount = 0,
-    gameOverScore = 4000,
+    gameOverScore = 100,
     chunksToModify =
     {
         lobby =
@@ -241,7 +241,6 @@ local function createPlayerEntity (connectionId, accountId)
         [components.FOCUS] =                {connectionId = connectionId, radius = 4},
         [components.GRAVITY_TRANSFORM] =
         {
-            chunkId =       {0, 0, 0},
             xyz =           {15, 4, 15},
             ypr =           {0, 0, 0},
             gravityDir =    5,
@@ -532,7 +531,7 @@ local function onTick ()
             if record.groupId == "playing" then
                 local player = dio.world.getPlayerXyz (record.accountId)
                 if player then
-                    local newY = player.chunkId [2] * 32 + player.xyz [2]
+                    local newY = player.xyz [2]
                     record.score = record.score - (newY - record.currentY)
                     record.currentY = newY
                 end

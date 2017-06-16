@@ -29,7 +29,6 @@ local function teleportTo (x, y, z)
 
     local setting = dio.world.getPlayerXyz (instance.myAccountId)
 
-    setting.chunkId = {0, 0, 0}
     setting.xyz = {tonumber (x), tonumber (y), tonumber (z)}
     setting.ypr = {0, 0, 0}
 
