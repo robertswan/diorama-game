@@ -1,64 +1,76 @@
 local t = dio.types.updateTypes
 local c = dio.types.components
+local s = dio.types.sizeTerminators
 
---------------------------------------------------
 local layout =
 {
-    version =
-    {
-        major = 8,
-        minor = 2,
-    },
+    create = function (versions)
 
-    update =
-    {
-        record = function (previous)
-            return 
+        return
+        {
+            version =
             {
-                entities = {previous.chunkEntity},
-            }
-        end,
+                major = 8,
+                minor = 2,
+            },
 
-        components = 
-        {
-            c.TRANSFORM = function (previous)
-                previous.xyz [1] = previous.xyz [1] + previous.chunkId [1] * 32
-                previous.xyz [2] = previous.xyz [2] + previous.chunkId [2] * 32
-                previous.xyz [3] = previous.xyz [3] + previous.chunkId [3] * 32
-                previous.chunkId = nil
-                return previous
-            end
-        }
-    },
+            update =
+            {
+                record = function (previous)
+                    return 
+                    {
+                        entities = {previous.chunkEntity},
+                    }
+                end,
 
-    structs = 
-    {
-        record =
-        {
-            {entities       = {element = t.ENTITY}},
+                components = 
+                {
+                    c.TRANSFORM = function (previous)
+                        previous.xyz [1] = previous.xyz [1] + previous.chunkId [1] * 32
+                        previous.xyz [2] = previous.xyz [2] + previous.chunkId [2] * 32
+                        previous.xyz [3] = previous.xyz [3] + previous.chunkId [3] * 32
+                        previous.chunkId = nil
+                        return previous
+                    end
+                }
+            },
+
+            structs = 
+            {
+                record =
+                {
+                    entities = {element = t.ENTITY}
+                },
+
+                entity =
+                {
+                    {components = {element = t.COMPONENT}},
+                },
+
+                components =
+                {
+                    BLOCK_LAYER =
+                    {
+                        {cells = {element = {{blockId = t.U8}, {gravityDir = t.U8}}, size = 32 * 32 * 32}}
+                        --{cells = {element = t.BINARY, size = 32 * 32 * 32 * 2}}
+                    },
+                    BLOCKS_COLLIDER = {},
+                    CHILD_IDS = {{children = {element = t.ENTITY}}},
+                    CHUNK_ID = {{chunkId = t.IVEC3}},
+                    FRAME_OF_REFERENCE_TRANSFORM = {{chunkId = t.IVEC3}, {xyz = t.VEC3}, {pyr = t.VEC3}, {scale = t.VEC3}},
+                    NAME = {{name = t.STRING}},
+                    PARENT = {},
+                    TRANSFORM = {{chunkId = t.IVEC3}, {xyz = t.VEC3}, {pyr = t.VEC3}, {scale = t.VEC3}},
+                    WATER_LAYER = 
+                    {
+                        {cells = {element = {{data = t.U16}}, size = 32 * 32 * 32}},
+                        {activeCellCount = t.U32}
+                    },
+                },
+            },
         },
 
-        entity =
-        {
-            {id                     = t.U32},
-            {roomEntityId           = t.U32},
-            {components             = {element = t.COMPONENT, size = s.NULL_COMPONENT}},
-            {componentTerminator    = t.STRING}
-        },
-
-        components =
-        {
-            c.TRANSFORM =
-            {
-                {xyz = t.DVEC3},
-                {pyr = t.DVEC3},
-                {scale = t.DVEC3},
-            }
-
-            c.CHUNK_ID = versions.v1.structs.components [c.CHUNK_ID],
-
-        }
-    }
+    end
 }
 
 return layout
