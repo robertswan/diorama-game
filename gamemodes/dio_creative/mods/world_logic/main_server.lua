@@ -346,26 +346,14 @@ end
 --------------------------------------------------
 local function onRoomCreated (event)
 
-    local components = dio.entities.components
+    local c = dio.entities.components
     local calendarEntity =
     {
-        [components.BASE_NETWORK] =
-        {
-        },
-        [components.CALENDAR] =
-        {
-            time = 9 * 60 * 60, -- midday
-            timeMultiplier = 3000,
-        },
-        [components.NAME] =
-        {
-            name = "CALENDAR",
-            debug = false,
-        },
-        [components.PARENT] =
-        {
-            parentEntityId = event.roomEntityId,
-        },
+        [c.BASE_NETWORK]    = {},
+        [c.CALENDAR]        = {time = 9 * 60 * 60, timeMultiplier = 3000}, -- midday
+        [c.NAME]            = {name = "CALENDAR"},
+        [c.PARENT]          = {parentEntityId = event.roomEntityId},
+        [c.ROOM_SCOPE]      = {},
     }
     
     local calendarEntityId = dio.entities.create (event.roomEntityId, calendarEntity)

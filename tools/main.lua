@@ -13,6 +13,6 @@ for _, filename in ipairs (versionFilenames) do
     table.insert (versions, versionModule.create (version))
 end
 
-local room = dio.levelUpdater.updateRoom (versions, "input/", #versions, "output/")
+local room = dio.levelUpdater.updateRoom (versions, "input/8_2/", #versions, "output/8_2/")
 
 
