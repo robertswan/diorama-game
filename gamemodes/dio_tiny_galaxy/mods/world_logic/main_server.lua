@@ -318,6 +318,16 @@ local function createPlayerEntity (connectionId, accountId, jumpSpeed, playerXyz
     return playerEntityId, eyeEntityId, cameraEntityId, roomEntityId
 end
 
+-- --------------------------------------------------
+-- local chunkIdFromXyz = function (xyz)
+--     return 
+--     {
+--         math.floor (xyz [1] / 32),
+--         math.floor (xyz [2] / 32),
+--         math.floor (xyz [3] / 32)
+--     }
+-- end
+
 --------------------------------------------------
 switchCameraToFps = function (connection)
 
@@ -329,7 +339,6 @@ switchCameraToFps = function (connection)
     local c = dio.entities.components
     local motorXyz = dio.entities.getComponent (instance.motorEntityId, c.TRANSFORM)
     local xyz = connection.storedXyz
-    xyz.chunkId = motorXyz.chunkId
     xyz.xyz [1] = xyz.xyz [1] + motorXyz.xyz [1]
     xyz.xyz [2] = xyz.xyz [2] + motorXyz.xyz [2]
     xyz.xyz [3] = xyz.xyz [3] + motorXyz.xyz [3]
@@ -357,10 +366,9 @@ local function switchCameraToOverhead (connection)
     local playerXyz = dio.entities.getComponent (connection.entityId, c.GRAVITY_TRANSFORM)
 
     connection.storedXyz = playerXyz
-    connection.storedXyz.xyz [1] = (playerXyz.chunkId [1] - motorXyz.chunkId [1]) * 32 + playerXyz.xyz [1] - motorXyz.xyz [1]
-    connection.storedXyz.xyz [2] = (playerXyz.chunkId [2] - motorXyz.chunkId [2]) * 32 + playerXyz.xyz [2] - motorXyz.xyz [2]
-    connection.storedXyz.xyz [3] = (playerXyz.chunkId [3] - motorXyz.chunkId [3]) * 32 + playerXyz.xyz [3] - motorXyz.xyz [3]
-    connection.storedXyz.chunkId = {0, 0, 0}
+    connection.storedXyz.xyz [1] = playerXyz.xyz [1] - motorXyz.xyz [1]
+    connection.storedXyz.xyz [2] = playerXyz.xyz [2] - motorXyz.xyz [2]
+    connection.storedXyz.xyz [3] = playerXyz.xyz [3] - motorXyz.xyz [3]
 
     dio.entities.destroy (connection.cameraEntityId)
     local cameraSettings = instance.currentGalaxy.cameraSettings.overhead
@@ -639,8 +647,8 @@ local function convertPlayerXyxToMapCell (xyz)
     local cg = instance.currentGalaxy
     return 
     {
-        math.floor (((xyz.chunkId [1] - cg.mapTopLeftChunkOrigin [1]) * 32 + xyz.xyz [1]) / 8),
-        math.floor (((xyz.chunkId [3] - cg.mapTopLeftChunkOrigin [2]) * 32 + xyz.xyz [3]) / 8),
+        math.floor ((xyz.xyz [1]) / 8 - cg.mapTopLeftChunkOrigin [1] * 32),
+        math.floor ((xyz.xyz [3]) / 8 - cg.mapTopLeftChunkOrigin [2] * 32),
     }
 end
 
@@ -672,21 +680,15 @@ end
 --------------------------------------------------
 local function isInCell (teleporter, xyz)
 
-    if xyz.chunkId [1] == teleporter.chunkId [1] and
-            xyz.chunkId [2] == teleporter.chunkId [2] and
-            xyz.chunkId [3] == teleporter.chunkId [3] then
+    if math.floor (xyz.xyz [1]) == teleporter.xyz [1] and
+            math.floor (xyz.xyz [2]) == teleporter.xyz [2] and
+            math.floor (xyz.xyz [3]) == teleporter.xyz [3] then
 
-        if math.floor (xyz.xyz [1]) == teleporter.xyz [1] and
-                math.floor (xyz.xyz [2]) == teleporter.xyz [2] and
-                math.floor (xyz.xyz [3]) == teleporter.xyz [3] then
-
-            return true
-
-        end
+        return true
 
     end
-    return false
 
+    return false
 end
 
 --------------------------------------------------
@@ -770,7 +772,7 @@ local function onTick (event)
             end
 
             if not instance.isControllingShip then
-                if xyz.chunkId [2] == -1 and xyz.xyz [2] < 2 then
+                if xyz.xyz [2] < (2 - 32) then
                     doGameOver (connection, false)
                 end
             end

@@ -15,8 +15,7 @@ local settings =
 
     spawn = 
     {
-        chunkId =       {-1, 0, 0},
-        xyz =           {15, 4, 20},
+        xyz =           {15 - 32, 4, 20},
         ypr =           {0, 0, 0},
         gravityDir =    5,
     },
@@ -24,8 +23,7 @@ local settings =
     teleporters =
     {
         {
-            chunkId =       {-1, 0, 0},
-            xyz =           {9, 3, 19},
+            xyz =           {9 - 32, 3, 19},
             targetGalaxy = "galaxy_00/",
         }
     },

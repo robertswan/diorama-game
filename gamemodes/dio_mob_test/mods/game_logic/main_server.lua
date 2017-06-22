@@ -70,7 +70,7 @@ local function onMobTick (entityId)
 end
 
 --------------------------------------------------
-local function createMobEntity (chunkEntityId, roomEntityId)
+local function createMobEntity (chunkEntityId, roomEntityId, xyz)
     local c = dio.entities.components
     local e = dio.entities.events
     
@@ -84,7 +84,7 @@ local function createMobEntity (chunkEntityId, roomEntityId)
         [c.PARENT] =                {parentEntityId = roomEntityId},
         [c.TRANSFORM] = -- should be GRAVITY_TRANSFORM
         {
-            xyz =           {2, 12, 2},
+            xyz =           xyz,
             ypr =           {0, 0, 0},
             scale =         {0.1, 0.1, 0.1},
             gravityDir =    5,
@@ -131,7 +131,8 @@ local function onChunkGenerated (event)
             event.chunkId [2] == 0 and
             event.chunkId [3] == 0 then
 
-        createMobEntity (event.chunkEntityId, event.roomEntityId)
+        local xyz = {event.chunkId [1] * 32 + 16, event.chunkId [2] * 32 + 16, event.chunkId [3] * 32 + 16}
+        createMobEntity (event.chunkEntityId, event.roomEntityId, xyz)
     end
 end
 

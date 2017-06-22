@@ -28,7 +28,6 @@ local function teleport (data)
         settings.xyz [2] = settings.xyz [2] + data [3]
         settings.xyz [3] = settings.xyz [3] + data [4]
     else
-        settings.chunkId = {0, 0, 0}
         settings.xyz = {data [2], data [3], data [4]}
     end
     
