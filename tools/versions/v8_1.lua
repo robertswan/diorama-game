@@ -14,26 +14,6 @@ local layout =
                 minor = 1,
             },
 
-
-            record = 
-            {
-                chunkEntity =
-                {
-                    components =
-                    {
-                        BLOCK_LAYER = {cells = {}},
-                        CHILD_IDS = 
-                        {
-                            children = 
-                            {
-                                {},
-                                {},
-                            }
-                        },
-                    }
-                }
-            },
-
             structs = 
             {
                 record = {{chunkEntity = t.ENTITY},},
