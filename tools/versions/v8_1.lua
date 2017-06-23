@@ -22,8 +22,8 @@ local layout =
                 -- components
                 BLOCK_LAYER =
                 {
-                    {cells = {element = {{blockId = t.U8}, {gravityDir = t.U8}}, size = 32 * 32 * 32}}
-                    --{cells = {element = t.BINARY, size = 32 * 32 * 32 * 2}}
+                    --{cells = {element = {{blockId = t.U8}, {gravityDir = t.U8}}, size = 32 * 32 * 32}}
+                    {cells = {element = t.BINARY, size = 32 * 32 * 32 * 2}}
                 },
                 BLOCKS_COLLIDER = {},
                 CHILD_IDS = {{children = {element = t.ENTITY}}},
@@ -34,7 +34,8 @@ local layout =
                 TRANSFORM = {{chunkId = t.IVEC3}, {xyz = t.VEC3}, {pyr = t.VEC3}, {scale = t.VEC3}},
                 WATER_LAYER = 
                 {
-                    {cells = {element = {{data = t.U16}}, size = 32 * 32 * 32}},
+                    --{cells = {element = {{data = t.U16}}, size = 32 * 32 * 32}},
+                    {cells = {element = t.BINARY, size = 32 * 32 * 32 * 2}},
                     {activeCellCount = t.U32}
                 },
             }

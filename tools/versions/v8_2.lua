@@ -1,3 +1,5 @@
+local Inspect = require ("versions/inspect")
+
 local t = dio.types.updateTypes
 local c = dio.types.components
 local s = dio.types.sizeTerminators
@@ -19,6 +21,7 @@ local layout =
                 record = function (struct)
                     struct.entities = {struct.chunkEntity}
                     struct.chunkEntity = nil
+                    print (Inspect (struct))
                 end,
 
                 TRANSFORM = function (struct)
@@ -44,8 +47,8 @@ local layout =
                 -- components
                 BLOCK_LAYER =
                 {
-                    {cells = {element = {{blockId = t.U8}, {gravityDir = t.U8}}, size = 32 * 32 * 32}}
-                    --{cells = {element = t.BINARY, size = 32 * 32 * 32 * 2}}
+                    --{cells = {element = {{blockId = t.U8}, {gravityDir = t.U8}}, size = 32 * 32 * 32}}
+                    {cells = {element = t.BINARY, size = 32 * 32 * 32 * 2}}
                 },
                 BLOCKS_COLLIDER                 = {},
                 CALENDAR                        = {{time = t.F32}, {deltaMultiplier = t.F32}},
@@ -57,7 +60,8 @@ local layout =
                 TRANSFORM                       = {{xyz = t.DVEC3}, {pyr = t.VEC3}, {scale = t.VEC3}},
                 WATER_LAYER = 
                 {
-                    {cells = {element = {{data = t.U16}}, size = 32 * 32 * 32}},
+                    --{cells = {element = {{data = t.U16}}, size = 32 * 32 * 32}},
+                    {cells = {element = t.BINARY, size = 32 * 32 * 32 * 2}},
                     {activeCellCount = t.U32}
                 },
             },
