@@ -53,16 +53,16 @@ local function onMobTick (entityId)
         local c = dio.entities.components
         local mob = dio.entities.getComponent (entityId, c.TRANSFORM)
         local player = dio.entities.getComponent (connection.entityId, c.TRANSFORM)
-        local speed = 0.2
+        local speed = 0.1
 
-        if mob.xyz [1] < player.xyz [1] then mob.xyz [1] = math.min (mob.xyz [1] + speed, player.xyz [1]) end
-        if mob.xyz [1] > player.xyz [1] then mob.xyz [1] = math.max (mob.xyz [1] - speed, player.xyz [1]) end
-        if mob.xyz [3] < player.xyz [3] then mob.xyz [3] = math.min (mob.xyz [3] + speed, player.xyz [3]) end
-        if mob.xyz [3] > player.xyz [3] then mob.xyz [3] = math.max (mob.xyz [3] - speed, player.xyz [3]) end
+        local r = dio.entities.getComponent (entityId, c.RIGID_BODY)
 
-        --if dio.world.isChunkAroundPointLoaded (transform) then
-            local res, err = dio.entities.setComponent (entityId, c.TRANSFORM, mob)
-        --end
+        if mob.xyz [1] < player.xyz [1] then r.velocityOverlay [1] = speed end
+        if mob.xyz [1] > player.xyz [1] then r.velocityOverlay [1] = -speed end
+        if mob.xyz [3] < player.xyz [3] then r.velocityOverlay [3] = speed end
+        if mob.xyz [3] > player.xyz [3] then r.velocityOverlay [3] = -speed end
+
+        local res, err = dio.entities.setComponent (entityId, c.RIGID_BODY, r)
 
         break
 
@@ -76,12 +76,14 @@ local function createMobEntity (chunkEntityId, roomEntityId, xyz)
     
     local mob =
     {
+        [c.AABB_COLLIDER] =         {min = {-0.01, -0.01, -0.01}, size = {0.02, 0.02, 0.02},},
         [c.BASE_NETWORK] =          {},
         [c.CHILD_IDS] =             {},
         --[c.EVENTS] =                {{event = e.ON_TICK, callbackId = "UNUSED_REMOVE_ME", shouldBroadcast = false}},
         [c.MESH_PLACEHOLDER] =      {blueprintId = "test_entity_model"},
         [c.NAME] =                  {name = "MOB"},
         [c.PARENT] =                {parentEntityId = roomEntityId},
+        [c.RIGID_BODY] =            {acceleration = {0.0, -9.806 * 1.0, 0.0}},
         [c.TRANSFORM] = -- should be GRAVITY_TRANSFORM
         {
             xyz =           xyz,
@@ -131,7 +133,7 @@ local function onChunkGenerated (event)
             event.chunkId [2] == 0 and
             event.chunkId [3] == 0 then
 
-        local xyz = {event.chunkId [1] * 32 + 16, event.chunkId [2] * 32 + 16, event.chunkId [3] * 32 + 16}
+        local xyz = {event.chunkId [1] * 32 + 16, event.chunkId [2] * 32, event.chunkId [3] * 32 + 16}
         createMobEntity (event.chunkEntityId, event.roomEntityId, xyz)
     end
 end
@@ -141,7 +143,6 @@ local function onNamedEntityCreated (event)
     if event.name == "MOB" then
         local e = dio.entities.entityEvents
 
-        -- dio.entities.addListener (event.entityId, e.ON_TICK, onMobTick)
         dio.entities.addListener (event.entityId, onMobTick)
     end
 end
