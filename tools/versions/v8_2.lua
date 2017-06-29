@@ -59,6 +59,12 @@ local layout =
                     struct.xyz [2] = struct.xyz [2] + struct.chunkId [2] * 32
                     struct.xyz [3] = struct.xyz [3] + struct.chunkId [3] * 32
                     struct.chunkId = nil
+                end,
+
+                NAME = function (struct)
+                    if (struct.name == "MOTOR") then
+                        struct.name = "MOTOR_ENTITY"
+                    end
                 end
             },
 
