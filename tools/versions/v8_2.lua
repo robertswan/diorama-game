@@ -4,6 +4,15 @@ local t = dio.types.updateTypes
 local c = dio.types.components
 local s = dio.types.sizeTerminators
 
+local function getComponent (entity, componentName)
+    for _, component in ipairs (entity.components) do
+        if (component._id == componentName) then
+            return component
+        end
+    end
+    fjdsklfdjslk ()
+end
+
 local layout =
 {
     create = function (versions)
@@ -19,8 +28,22 @@ local layout =
             update =
             {
                 record = function (struct)
+                    
                     struct.entities = {struct.chunkEntity}
+
+                    local parentTransform = getComponent (struct.chunkEntity, "FRAME_OF_REFERENCE_TRANSFORM")
+                    
+                    local child_ids_component = getComponent (struct.chunkEntity, "CHILD_IDS")
+                    for _, childEntity in ipairs (child_ids_component.children) do
+
+                        local childTransform = getComponent (childEntity, "TRANSFORM")
+                        childTransform.chunkId = parentTransform.chunkId;
+                        table.insert (struct.entities, childEntity)
+                    end
+                    
                     struct.chunkEntity = nil
+                    child_ids_component.children = {}
+                    
                     print (Inspect (struct))
                 end,
 
@@ -53,8 +76,18 @@ local layout =
                 BLOCKS_COLLIDER                 = {},
                 CALENDAR                        = {{time = t.F32}, {deltaMultiplier = t.F32}},
                 CHILD_IDS                       = {{children = {element = t.ENTITY}}},
+                CHILD_IDS_WITH_CHUNKS           = {{children = {element = t.ENTITY}}},
                 CHUNK_ID                        = {{chunkId = t.IVEC3}},
+                CHUNKS                          = {},
                 FRAME_OF_REFERENCE_TRANSFORM    = {{xyz = t.DVEC3}, {pyr = t.VEC3}, {scale = t.VEC3}},
+                MOTOR_RIGID_BODY = 
+                {
+                    {impulse            = t.DVEC3},
+                    {velocity_overlay   = t.DVEC3},
+                    {velocity           = t.DVEC3},
+                    {acceleration       = t.DVEC3},
+                    {stickyFace         = t.U8}
+                },
                 NAME                            = {{name = t.STRING}},
                 PARENT                          = {},
                 TRANSFORM                       = {{xyz = t.DVEC3}, {pyr = t.VEC3}, {scale = t.VEC3}},

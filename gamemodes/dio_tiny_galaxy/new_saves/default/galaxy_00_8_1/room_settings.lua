@@ -11,14 +11,14 @@ local roomSettings =
                     mode = "replace",
 
                     --axis = "y",
-                    baseVoxel = 2,
+                    baseVoxel = -31,
                     heightInVoxels = 0,
                 },
                 {
                     type = "perlinNoise",
                     mode = "lessThan",
 
-                    scale = 64,
+                    scale = 128,
                     octaves = 5,
                     perOctaveAmplitude = 0.5,
                     perOctaveFrequency = 2.0,
@@ -40,17 +40,17 @@ local roomSettings =
     {
         x = 
         {
-            max = 0,
+            max = 2,
             min = -1,
         },
         y = 
         {
-            max = 0,
-            min = 0,
+            max = 1,
+            min = -1,
         },        
         z = 
         {
-            max = 0,
+            max = 2,
             min = -1,
         },
     },    
