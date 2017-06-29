@@ -794,7 +794,7 @@ end
 --------------------------------------------------
 local function onNamedEntityCreated (event)
 
-    if event.name == "MOTOR" then
+    if event.name == "MOTOR_ENTITY" then
 
         -- need to add some movement callback to it...
 
