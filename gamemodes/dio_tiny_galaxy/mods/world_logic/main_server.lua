@@ -22,13 +22,13 @@ local instance =
     nextItemIdx = 1,
     inventory = 
     {
-    --     smallAxe = true, 
-    --     iceShield = true,
-    --     belt = true,
-    --     fireShield = true,
-    --     teleporter = true,
-    --     bean = true,
-    --     bigAxe = true,
+        -- smallAxe = true, 
+        -- iceShield = true,
+        -- belt = true,
+        -- fireShield = true,
+        -- teleporter = true,
+        -- bean = true,
+        -- bigAxe = true,
     },
 
     artifactsCollectedCount = 0,
@@ -632,9 +632,9 @@ function blockCallbacks.teleporter (event, connection)
         if event.face == 4 then
             local teleport = 
                     "absolute " .. 
-                    tostring (event.globalChunkId [1] * 32 + event.globalCellId [1] + 0.5) .. " " ..
-                    tostring (event.globalChunkId [2] * 32 + event.globalCellId [2] + 1.5) .. " " ..
-                    tostring (event.globalChunkId [3] * 32 + event.globalCellId [3] + 0.5)
+                    tostring (event.globalCellId [1] + 0.5) .. " " ..
+                    tostring (event.globalCellId [2] + 1.5) .. " " ..
+                    tostring (event.globalCellId [3] + 0.5)
 
             dio.network.sendEvent (connection.connectionId, "tinyGalaxy.TP", teleport)
         end
