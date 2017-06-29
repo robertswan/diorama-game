@@ -2,7 +2,8 @@
 local versionFilenames = 
 {
     "versions/v8_1",
-    "versions/v8_2"
+    "versions/v8_2",
+    "versions/v8_3",
 }
 
 local versions = {}
@@ -13,6 +14,17 @@ for _, filename in ipairs (versionFilenames) do
     table.insert (versions, versionModule.create (version))
 end
 
-local room = dio.levelUpdater.updateRoom (versions, "../gamemodes/dio_tiny_galaxy/new_saves/default/galaxy_00_8_1/", #versions, "../gamemodes/dio_tiny_galaxy/new_saves/default/galaxy_00/")
+dio.levelUpdater.updateRoom (
+        versions, 
+        "../gamemodes/dio_tiny_galaxy/new_saves/default/galaxy_00_8_1/", 
+        #versions, 
+        "../gamemodes/dio_tiny_galaxy/new_saves/default/galaxy_00/")
+
+-- dio.levelUpdater.updateRoom (
+--         versions, 
+--         "../gamemodes/dio_tiny_galaxy/new_saves/default/map_00_8_2/", 
+--         #versions, 
+--         "../gamemodes/dio_tiny_galaxy/new_saves/default/map_00/")
+
 
 

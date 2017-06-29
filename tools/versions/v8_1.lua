@@ -1,5 +1,4 @@
 local t = dio.types.updateTypes
-local c = dio.types.components
 local s = dio.types.sizeTerminators
 
 local layout =
