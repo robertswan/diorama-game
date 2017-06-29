@@ -7,7 +7,6 @@ local instance = nil
 local function teleportTo (x, y, z, yaw, pitch, roll)
     setting =
     {
-        chunkId = {0, 0, 0},
         xyz = {x + 0.5, y + 0.5, z + 0.5},
         ypr = {yaw or 0, pitch or 0, roll or 0},
     }
@@ -38,9 +37,9 @@ local function onChatMessagePreSent (text)
         if #words == 2 then
             local xyz, error = dio.world.getPlayerXyz (words [2])
             if xyz then
-                local x = math.floor (xyz.chunkId [1] * 32 + xyz.xyz [1])
-                local y = math.floor (xyz.chunkId [2] * 32 + xyz.xyz [2])
-                local z = math.floor (xyz.chunkId [3] * 32 + xyz.xyz [3])
+                local x = math.floor (xyz.xyz [1])
+                local y = math.floor (xyz.xyz [2])
+                local z = math.floor (xyz.xyz [3])
                 teleportTo (math.floor(x), math.floor(y), math.floor(z))
             end
 
@@ -58,9 +57,9 @@ local function onChatMessagePreSent (text)
             if nameCount > 1 then
                 local xyz, error = dio.world.getPlayerXyz (accountId)
                 if xyz then
-                    local x = math.floor (xyz.chunkId [1] * 32 + xyz.xyz [1])
-                    local y = math.floor (xyz.chunkId [2] * 32 + xyz.xyz [2])
-                    local z = math.floor (xyz.chunkId [3] * 32 + xyz.xyz [3])
+                    local x = math.floor (xyz.xyz [1])
+                    local y = math.floor (xyz.xyz [2])
+                    local z = math.floor (xyz.xyz [3])
                     dio.clientChat.send ("Coords for " .. accountId .. " = (" .. x .. ", " .. y .. ", " .. z .. ")")
                 end
             end
@@ -69,9 +68,9 @@ local function onChatMessagePreSent (text)
         if nameCount == 1 then
             local xyz, error = dio.world.getPlayerXyz (instance.myAccountId)
             if xyz then
-                local x = math.floor (xyz.chunkId [1] * 32 + xyz.xyz [1])
-                local y = math.floor (xyz.chunkId [2] * 32 + xyz.xyz [2])
-                local z = math.floor (xyz.chunkId [3] * 32 + xyz.xyz [3])
+                local x = math.floor (xyz.xyz [1])
+                local y = math.floor (xyz.xyz [2])
+                local z = math.floor (xyz.xyz [3])
                 dio.clientChat.send ("Coords for " .. instance.myAccountId .. " = (" .. x .. ", " .. y .. ", " .. z .. ")")
             end
         end

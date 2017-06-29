@@ -114,15 +114,8 @@ local function createPlayerEntity (connectionId, accountId, settings, isPassword
             connectionId = connectionId,
             accountId = accountId,
             hasHighlight = false,
-
             standEyeHeight = 1.65,
             crouchEyeHeight = 0.25,
-
-            onServerUpdate = function (event)
-                -- would deal with button presses such as add / remove
-                -- ultimately would deal with everything!
-                -- NOTE not authoritaive server yet :(
-            end,
         },
         [c.TEMP_PLAYER] =          {connectionId = connectionId, accountId = accountId},
     }
@@ -131,7 +124,6 @@ local function createPlayerEntity (connectionId, accountId, settings, isPassword
 
         playerComponents [c.GRAVITY_TRANSFORM] =
         {
-            chunkId =       settings.xyz.chunkId,
             xyz =           settings.xyz.xyz,
             ypr =           settings.xyz.ypr,
             gravityDir =    gravityDirIndices [settings.gravityDir],
@@ -140,8 +132,7 @@ local function createPlayerEntity (connectionId, accountId, settings, isPassword
     else
         playerComponents [c.GRAVITY_TRANSFORM] =
         {
-            chunkId =       {0, 0, 0},
-            xyz =           {0, 0, 0},
+            xyz =           {0, 16, 0},
             ypr =           {0, 0, 0},
             gravityDir =    gravityDirIndices.DOWN,
         }

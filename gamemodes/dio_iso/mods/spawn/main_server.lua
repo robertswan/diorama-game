@@ -59,9 +59,9 @@ local function onChatReceived (event)
         if connection.homeLocation then
             local t = connection.homeLocation
             local text =
-                tostring (t.chunkId [1] * 32 + t.xyz [1]) .. " " ..
-                tostring (t.chunkId [2] * 32 + t.xyz [2]) .. " " ..
-                tostring (t.chunkId [3] * 32 + t.xyz [3]) .. " " ..
+                tostring (t.xyz [1]) .. " " ..
+                tostring (t.xyz [2]) .. " " ..
+                tostring (t.xyz [3]) .. " " ..
                 tostring (t.ypr [1]) .. " " ..
                 tostring (t.ypr [2]) .. " " ..
                 tostring (t.ypr [3])

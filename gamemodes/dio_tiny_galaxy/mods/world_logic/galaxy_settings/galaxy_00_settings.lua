@@ -4,7 +4,6 @@ local settings =
 
     spawn = 
     {
-        chunkId     = {0, 0, 0},
         xyz         = {-28, 8, 95},
         ypr         = {0, 0, 0},
         gravityDir  = 5,

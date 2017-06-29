@@ -117,8 +117,7 @@ local function onClientConnected (event)
             avatar =
             {
                 roomFolder = roomFolders [1],
-                chunkId = {0, 0, 0},
-                xyz = {0, 0, 0},
+                xyz = {0, 16, 0},
                 ypr = {0, 0, 0},
             },
             gravityDir = gravityDirIndices.DOWN,
@@ -197,8 +196,7 @@ local function teleportPlayerToRoom (connection)
         avatar =
         {
             roomFolder = roomFolders [connection.roomFolderIdx],
-            chunkId = {0, 0, 0},
-            xyz = {0, 0, 0},
+            xyz = {0, 16, 0},
             ypr = {0, 0, 0},
         },
         gravityDir = gravityDirIndices.DOWN,
