@@ -41,6 +41,7 @@ void main ()
     float distance_to_camera = length (instance_translation + vec3 (0.5) - camera_xyz);
     float blend_range = (begin_blend_in_distance - end_blend_in_distance);
     float blend_scale = 1.0 - (clamp (distance_to_camera, end_blend_in_distance, begin_blend_in_distance) - end_blend_in_distance) / blend_range;
+    blend_scale *= 0.5;
 
     // position
     vec3 vertex_position1 = vertex_position;
@@ -63,5 +64,6 @@ void main ()
     // shadow data
 
     f_shadow_xyz = vec4 (vertex_position3, 1.0);
+    //f_shadow_xyz = mvp_matrix * vec4 (vertex_position3, 1.0);
     f_normal_model = normal_post_transform.xyz;    
 }

@@ -1,16 +1,18 @@
 local Inspect = require ("versions/inspect")
 
 local t = dio.types.updateTypes
-local s = dio.types.sizeTerminators
 
 --------------------------------------------------
-local function getComponent (entity, componentName)
-    for _, component in ipairs (entity.components) do
-        if (component._id == componentName) then
-            return component
+local function getComponent (entity, componentNames)
+    for _, componentName in ipairs (componentNames) do
+        for _, component in ipairs (entity.components) do
+            if (component._id == componentName) then
+                return component
+            end
         end
     end
-    fjdsklfdjslk ()
+    print ("FAILED TO IDENTIFY COMPONENT: " .. componentNames [1])
+    function8_2 ()
 end
 
 --------------------------------------------------
@@ -32,26 +34,26 @@ local layout =
             update =
             {
                 record = function (struct)
+
+                    --print (Inspect (struct))
                     
                     struct.entities = {struct.chunkEntity}
 
-                    local parentTransform = getComponent (struct.chunkEntity, "FRAME_OF_REFERENCE_TRANSFORM")
+                    local parentTransform = getComponent (struct.chunkEntity, {"FRAME_OF_REFERENCE_TRANSFORM"})
                     
-                    local child_ids_component = getComponent (struct.chunkEntity, "CHILD_IDS")
+                    local child_ids_component = getComponent (struct.chunkEntity, {"CHILD_IDS"})
                     for _, childEntity in ipairs (child_ids_component.children) do
 
-                        local childTransform = getComponent (childEntity, "TRANSFORM")
+                        local childTransform = getComponent (childEntity, {"TRANSFORM", "BILLBOARD_TRANSFORM"})
                         childTransform.chunkId = parentTransform.chunkId;
                         table.insert (struct.entities, childEntity)
                     end
                     
                     struct.chunkEntity = nil
                     child_ids_component.children = {}
-                    
-                    print (Inspect (struct))
                 end,
 
-                TRANSFORM = function (struct)
+                BILLBOARD_TRANSFORM = function (struct)
                     struct.xyz [1] = struct.xyz [1] + struct.chunkId [1] * 32
                     struct.xyz [2] = struct.xyz [2] + struct.chunkId [2] * 32
                     struct.xyz [3] = struct.xyz [3] + struct.chunkId [3] * 32
@@ -66,10 +68,17 @@ local layout =
                 end,
 
                 NAME = function (struct)
-                    if (struct.name == "MOTOR") then
+                    if struct.name == "MOTOR" then
                         struct.name = "MOTOR_ENTITY"
                     end
-                end
+                end,
+
+                TRANSFORM = function (struct)
+                    struct.xyz [1] = struct.xyz [1] + struct.chunkId [1] * 32
+                    struct.xyz [2] = struct.xyz [2] + struct.chunkId [2] * 32
+                    struct.xyz [3] = struct.xyz [3] + struct.chunkId [3] * 32
+                    struct.chunkId = nil
+                end,
             },
 
             --------------------------------------------------
@@ -79,13 +88,15 @@ local layout =
                 entity = {{components = {element = t.COMPONENT}}},
 
                 -- components
+                BILLBOARD_TRANSFORM             = {{xyz = t.DVEC3}, {pyr = t.VEC3}, {scale = t.VEC3}},
                 BLOCK_LAYER =
                 {
                     --{cells = {element = {{blockId = t.U8}, {gravityDir = t.U8}}, size = 32 * 32 * 32}}
                     {cells = {element = t.BINARY, size = 32 * 32 * 32 * 2}}
                 },
                 BLOCKS_COLLIDER                 = {},
-                CALENDAR                        = {{time = t.F32}, {deltaMultiplier = t.F32}},
+                --CALENDAR                        = {{time = t.F32}, {deltaMultiplier = t.F32}},
+                CELL_ID                         = {{xyz = t.IVEC3}},
                 CHILD_IDS                       = {{children = {element = t.ENTITY}}},
                 CHILD_IDS_WITH_CHUNKS           = {{children = {element = t.ENTITY}}},
                 CHUNK_ID                        = {{chunkId = t.IVEC3}},

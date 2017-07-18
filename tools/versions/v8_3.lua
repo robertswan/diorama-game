@@ -1,7 +1,6 @@
 local Inspect = require ("versions/inspect")
 
 local t = dio.types.updateTypes
--- local c = dio.types.components
 
 --------------------------------------------------
 local layout =
@@ -21,6 +20,10 @@ local layout =
             --------------------------------------------------
             update =
             {
+                record = function (struct)
+                    --print (Inspect (struct))
+                end,
+
                 FRAME_OF_REFERENCE_TRANSFORM = function (struct)
                     struct._id = "TRANSFORM"
                 end,
@@ -33,6 +36,7 @@ local layout =
                 entity = {{components = {element = t.COMPONENT}}},
 
                 -- components
+                BILLBOARD_TRANSFORM             = {{xyz = t.DVEC3}, {pyr = t.VEC3}, {scale = t.VEC3}},
                 BLOCK_LAYER =
                 {
                     --{cells = {element = {{blockId = t.U8}, {gravityDir = t.U8}}, size = 32 * 32 * 32}}
@@ -40,6 +44,7 @@ local layout =
                 },
                 BLOCKS_COLLIDER                 = {},
                 CALENDAR                        = {{time = t.F32}, {deltaMultiplier = t.F32}},
+                CELL_ID                         = {{xyz = t.IVEC3}},
                 CHILD_IDS                       = {{children = {element = t.ENTITY}}},
                 CHILD_IDS_WITH_CHUNKS           = {{children = {element = t.ENTITY}}},
                 CHUNK_ID                        = {{chunkId = t.IVEC3}},
@@ -54,6 +59,7 @@ local layout =
                     {stickyFace         = t.U8}
                 },
                 NAME                            = {{name = t.STRING}},
+                NAME_TAG                        = {{text = t.STRING}},
                 PARENT                          = {},
                 TRANSFORM                       = {{xyz = t.DVEC3}, {pyr = t.VEC3}, {scale = t.VEC3}},
                 WATER_LAYER = 
