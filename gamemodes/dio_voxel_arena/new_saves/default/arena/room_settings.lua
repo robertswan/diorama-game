@@ -47,18 +47,18 @@ local roomSettings =
 	{
 		x = 
 		{
-			max = 1,
-			min = 0,
+			max = 2,
+			min = -2,
 		},
 		y = 
 		{
-			max = 0,
-			min = 0,
+			max = 2,
+			min = -2,
 		},
 		z = 
 		{
-			max = 0,
-			min = 0,
+			max = 2,
+			min = -2,
 		},
 	},
 	terrainId = "paramaterized",

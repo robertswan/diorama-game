@@ -126,12 +126,11 @@ local function createPlayerEntity (connectionId, accountId)
     local roomFolder = getCurrentRoomFolder ()
     local roomEntityId = dio.world.ensureRoomIsLoaded (roomFolder)
 
-    local chunkId = {0, 0, 0}
     local xyz = {0.5, 0, 0.5}
 
     if instance.isPlaying then
         local chunkRadius = 0
-        chunkId = {math.random (-chunkRadius, chunkRadius), 0, math.random (-chunkRadius, chunkRadius)}
+        --chunkId = {math.random (-chunkRadius, chunkRadius), 0, math.random (-chunkRadius, chunkRadius)}
         xyz = {math.random (0, 31) + 0.5, chunkRadius * 32 + 24, math.random (0, 31) + 0.5}
     end
 
@@ -149,7 +148,6 @@ local function createPlayerEntity (connectionId, accountId)
         [components.FOCUS] =                {connectionId = connectionId, radius = 4},
         [components.GRAVITY_TRANSFORM] =
         {
-            chunkId =       chunkId,
             xyz =           xyz,
             ypr =           {0, 0, 0},
             gravityDir =    5,
@@ -181,11 +179,10 @@ local function createPlayerEntity (connectionId, accountId)
 end
 
 --------------------------------------------------
-local function calcDistanceSqr (chunkIdA, xyzA, chunkIdB, xyzB)
-    local chunkSize = 32
-    local x = (chunkIdA [1] * chunkSize + xyzA [1]) - (chunkIdB [1] * 32 + xyzB [1])
-    local y = (chunkIdA [2] * chunkSize + xyzA [2]) - (chunkIdB [2] * 32 + xyzB [2])
-    local z = (chunkIdA [3] * chunkSize + xyzA [3]) - (chunkIdB [3] * 32 + xyzB [3])
+local function calcDistanceSqr (xyzA, xyzB)
+    local x = xyzA [1] - xyzB [1]
+    local y = xyzA [2] - xyzB [2]
+    local z = xyzA [3] - xyzB [3]
     return x * x + y * y + z * z
 end
 
@@ -196,9 +193,6 @@ local function onRocketAndSceneryCollision (event)
 
     local payload = 
             tostring (event.roomEntityId) .. ":" ..
-            tostring (event.chunkId [1]) .. ":" ..
-            tostring (event.chunkId [2]) .. ":" ..
-            tostring (event.chunkId [3]) .. ":" ..
             tostring (event.xyz [1]) .. ":" ..
             tostring (event.xyz [2]) .. ":" ..
             tostring (event.xyz [3])
@@ -218,7 +212,7 @@ local function onRocketAndSceneryCollision (event)
 
         for _, connection in pairs (instance.connections) do
             local player = dio.world.getPlayerXyz (connection.accountId)
-            local distanceSqr = calcDistanceSqr (event.chunkId, event.xyz, player.chunkId, player.xyz)
+            local distanceSqr = calcDistanceSqr (event.xyz, player.xyz)
 
             if distanceSqr < (4 * 4) then
 
@@ -269,7 +263,7 @@ local function onRocketAndSceneryCollision (event)
 end
 
 --------------------------------------------------
-local function createRocketEntity (roomEntityId, chunkId, xyz, ypr)
+local function createRocketEntity (roomEntityId, xyz, ypr)
 
     local scale = 1.0 / 16.0
     local components = dio.entities.components
@@ -282,7 +276,7 @@ local function createRocketEntity (roomEntityId, chunkId, xyz, ypr)
         [components.NAME] =                     {name = "ROCKET", debug = true,},
         [components.PARENT] =                   {parentEntityId = roomEntityId},
         [components.RIGID_BODY] =               {acceleration = {0.0, -9.806 * 1.0, 0.0}, forwardSpeed = 30.0},
-        [components.TRANSFORM] =                {chunkId = chunkId, xyz = xyz, ypr = ypr, scale = {scale, scale, scale}},
+        [components.TRANSFORM] =                {xyz = xyz, ypr = ypr, scale = {scale, scale, scale}},
     }
 
     return dio.entities.create (roomEntityId, rocket)
@@ -419,7 +413,6 @@ local function fireWeapon (connection)
     local roomEntityId = instance.roomEntityIds [getCurrentRoomFolder ()]
     
     local avatar = dio.world.getPlayerXyz (connection.accountId)
-    local chunkId = avatar.chunkId
     local xyz = avatar.xyz
     local ypr = avatar.ypr
 
@@ -427,7 +420,7 @@ local function fireWeapon (connection)
     xyz [2] = xyz [2] + eyeTransform.xyz [2]
     ypr [1] = eyeTransform.ypr [1]
     
-    local rocketEntityId = createRocketEntity (roomEntityId, chunkId, xyz, ypr)
+    local rocketEntityId = createRocketEntity (roomEntityId, xyz, ypr)
     instance.rocketEntityIds [rocketEntityId] = connection
 end
 
